@@ -1,5 +1,5 @@
-# Configuration for Dash app
-# Copy or adapt settings from ../config.py as needed
+# config.py
+# Centralized configuration for figure and map sizes
 
 # Map display size
 MAP_HEIGHT = 400

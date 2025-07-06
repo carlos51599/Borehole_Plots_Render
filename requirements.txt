@@ -1,9 +1,12 @@
-streamlit>=1.34.0
-pandas>=2.0.0
-folium>=0.15.0
-streamlit-folium>=0.15.0
-matplotlib>=3.7.0
-numpy>=1.23.0
-scikit-learn>=1.3.0
-pyproj>=3.6.0
-shapely>=2.0.0
+# Requirements for Dash version - Updated for Dash 3.x compatibility
+# Core packages
+dash>=3.0.0,<4.0.0
+pandas>=1.3.0
+plotly>=5.0.0
+dash-leaflet>=1.0.0,<2.0.0  # Latest stable version with full EditControl support
+matplotlib>=3.0.0
+numpy>=1.20.0
+pyproj>=3.0.0  # For coordinate system transformations (BNG to WGS84)
+
+# Optional but recommended for better performance
+dash-bootstrap-components>=1.0.0  # For better styling (optional)

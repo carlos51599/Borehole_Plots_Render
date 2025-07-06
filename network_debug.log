@@ -1,0 +1,20 @@
+Network diagnostics started at 2025-07-04 23:10:19.598330
+Python version: 3.12.7 | packaged by Anaconda, Inc. | (main, Oct  4 2024, 13:17:27) [MSC v.1929 64 bit (AMD64)]
+Platform: Windows-10-10.0.19045-SP0
+2025-07-04 23:10:19,642 INFO: Hostname: EUDLHXHBKS3
+2025-07-04 23:10:19,658 INFO: Primary IP: 192.168.1.189
+2025-07-04 23:10:19,677 INFO: Network interfaces:
+2025-07-04 23:10:19,688 INFO:   Local Area Connection* 1: 169.254.196.145
+2025-07-04 23:10:19,688 INFO:   Local Area Connection* 2: 169.254.175.27
+2025-07-04 23:10:19,688 INFO:   Wi-Fi: 192.168.1.189
+2025-07-04 23:10:19,692 INFO:   Bluetooth Network Connection: 169.254.121.160
+2025-07-04 23:10:19,692 INFO:   Loopback Pseudo-Interface 1: 127.0.0.1
+2025-07-04 23:10:20,708 INFO: Port 8050 is available
+2025-07-04 23:10:21,734 INFO: Port 8080 is available
+2025-07-04 23:10:21,736 INFO: Successfully bound to 0.0.0.0:8051 - your app should be able to listen on all interfaces
+2025-07-04 23:10:21,775 INFO: Starting test HTTP server on port 8052
+2025-07-04 23:10:22,788 INFO: Successfully connected to localhost:8052
+2025-07-04 23:10:22,788 INFO: Test server stopped
+2025-07-04 23:10:23,808 ERROR: Failed to connect to 127.0.0.1:8052: timed out
+2025-07-04 23:10:24,834 ERROR: Failed to connect to 192.168.1.189:8052: timed out
+2025-07-04 23:10:24,834 INFO: Network diagnostics complete

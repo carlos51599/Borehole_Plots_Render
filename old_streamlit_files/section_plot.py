@@ -1,21 +1,28 @@
+# Required libraries: matplotlib, pandas
 import matplotlib.pyplot as plt
 import pandas as pd
-import csv
-import os
-import re
-import numpy as np
 from config import (
     SECTION_BASE_HEIGHT,
     SECTION_MAX_HEIGHT,
     SECTION_MIN_WIDTH,
     SECTION_WIDTH_PER_BH,
 )
+import csv
+import numpy as np
+import os
+import re
+
+# Path to AGS file (robust to script location)
+SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
+AGS_FILE = r"C:\Users\dea29431.RSKGAD\OneDrive - Rsk Group Limited\Documents\Geotech\AGS Section\FLRG - 2025-05-20 1711 - Preliminary data - 4.ags"
 
 
-def parse_ags_geol_section_from_string(content):
-    """Parse AGS content string and extract GEOL, LOCA, and ABBR group data as DataFrames."""
-    lines = content.splitlines()
+def parse_ags_geol_section(filepath):
+    """Parse the AGS file and extract GEOL, LOCA, and ABBR group data as DataFrames."""
+    with open(filepath, "r", encoding="utf-8") as f:
+        lines = f.readlines()
 
+    # Use csv.reader for robust parsing
     def parse_lines(lines):
         return list(csv.reader(lines, delimiter=",", quotechar='"'))
 
@@ -42,6 +49,7 @@ def parse_ags_geol_section_from_string(content):
     for col in ["GEOL_TOP", "GEOL_BASE"]:
         if col in geol_df.columns:
             geol_df[col] = pd.to_numeric(geol_df[col], errors="coerce")
+
     # Parse LOCA
     loca_headings = []
     loca_data = []
@@ -64,6 +72,7 @@ def parse_ags_geol_section_from_string(content):
     for col in ["LOCA_NATE", "LOCA_NATN"]:
         if col in loca_df.columns:
             loca_df[col] = pd.to_numeric(loca_df[col], errors="coerce")
+
     # Parse ABBR
     abbr_headings = []
     abbr_data = []
@@ -110,7 +119,7 @@ def plot_borehole_sections(
     merged = merged.dropna(subset=["LOCA_NATE", "LOCA_NATN"])
     if merged.empty:
         print("No boreholes with valid coordinates to plot.")
-        return None
+        return
     # Merge ground level (LOCA_GL) into merged DataFrame
     if "LOCA_GL" in loca_df.columns:
         merged = merged.merge(loca_df[["LOCA_ID", "LOCA_GL"]], on="LOCA_ID", how="left")
@@ -135,7 +144,7 @@ def plot_borehole_sections(
             from shapely.geometry import LineString, Point
         except ImportError:
             print("You need to install the 'shapely' library. Run: pip install shapely")
-            return None
+            exit(1)
         # section_line: either ((x0, y0), (x1, y1)) or [(x0, y0), (x1, y1), ...]
         if isinstance(section_line, (list, tuple)) and len(section_line) > 2:
             # Polyline: project each borehole onto the closest point along the polyline
@@ -147,6 +156,8 @@ def plot_borehole_sections(
             bh_x_map = dict(zip(boreholes, rel_x))
         else:
             # Two-point line: keep old logic
+            import numpy as np
+
             (x0, y0), (x1, y1) = section_line
             dx = x1 - x0
             dy = y1 - y0
@@ -315,6 +326,8 @@ def plot_borehole_sections(
                     f"    Group: GEOL_LEG={g[0]}, Depth {g[1]} to {g[2]}, Elev {g[3]:.2f}, X={g[4]}"
                 )
     # Draw ground level line connecting the tops of boreholes, ordered by rel_x (section axis)
+    import numpy as np
+
     # Sort boreholes by rel_x (section axis)
     rel_x = np.array(rel_x)
     sorted_indices = np.argsort(rel_x)
@@ -339,6 +352,8 @@ def plot_borehole_sections(
     # Estimate vertical space needed for labels (in axes fraction)
     label_height = 0.04 + 0.01 * min(max_label_len, 20)  # scale for long labels
     # Ensure rel_x is a numpy array for .min()/.max() support
+    import numpy as np
+
     rel_x = np.array(rel_x)
     for i, bh in enumerate(boreholes):
         bh_x = bh_x_map[bh]
@@ -354,12 +369,17 @@ def plot_borehole_sections(
             annotation_clip=False,
         )
 
-    # Set the plot title above the borehole labels
+    # Set the plot title above the borehole labels, using the AGS filename (without .ags)
     if ags_title is None:
-        ags_title = "Borehole Section"
+        ags_filename = os.path.basename(AGS_FILE)
+        if ags_filename.lower().endswith(".ags"):
+            ags_title = ags_filename[:-4]
+        else:
+            ags_title = ags_filename
     # Place the title above the labels, with extra padding
     ax.set_title(f"{ags_title}", pad=60 + label_height * 100)
 
+    # Remove connecting lines and hatches (skip that code)
     # Set uniform x-axis (distance) labels at multiples of 5 or 10
     total_length = rel_x.max() - rel_x.min()
     # Choose step size: 10 if total_length > 50, else 5, else 1
@@ -401,20 +421,47 @@ def plot_borehole_sections(
     return fig
 
 
-def plot_section_from_ags_content(
-    ags_content, filter_loca_ids=None, section_line=None, show_labels=True
+def plot_section_from_ags(
+    ags_file, filter_loca_ids=None, section_line=None, show_labels=True
 ):
-    geol_df, loca_df, abbr_df = parse_ags_geol_section_from_string(ags_content)
+    """Parse AGS file and plot section for optionally filtered LOCA_IDs. Returns the matplotlib figure."""
+    geol_df, loca_df, abbr_df = parse_ags_geol_section(ags_file)
     if filter_loca_ids is not None:
+        # Filter both dataframes to only include selected LOCA_IDs
         geol_df = geol_df[geol_df["LOCA_ID"].isin(filter_loca_ids)]
         loca_df = loca_df[loca_df["LOCA_ID"].isin(filter_loca_ids)]
     if geol_df.empty or loca_df.empty:
+        print("No boreholes to plot after filtering.")
         return None
+    ags_filename = os.path.basename(ags_file)
+    if ags_filename.lower().endswith(".ags"):
+        ags_title = ags_filename[:-4]
+    else:
+        ags_title = ags_filename
     return plot_borehole_sections(
         geol_df,
         loca_df,
         abbr_df,
-        ags_title=None,
+        ags_title=ags_title,
         section_line=section_line,
         show_labels=show_labels,
     )
+
+
+if __name__ == "__main__":
+    from contextlib import redirect_stdout, redirect_stderr
+
+    output_file = os.path.join(SCRIPT_DIR, "section_output.txt")
+    try:
+        with open(output_file, "w", encoding="utf-8") as f:
+            with redirect_stdout(f), redirect_stderr(f):
+                try:
+                    # You can pass a list of LOCA_IDs to plot only selected boreholes
+                    plot_section_from_ags(AGS_FILE)
+                except Exception:
+                    import traceback
+
+                    traceback.print_exc()
+    except Exception as e:
+        # If an error occurs before the file is opened, print to terminal
+        print(f"Error: {e}")
