@@ -17,14 +17,12 @@ except Exception as e:
 
 # Create the simplest possible Dash app
 app = dash.Dash(__name__)
-app.layout = html.Div(
-    [
-        html.H1("Minimal Dash Test"),
-        html.P("If you can see this, everything is working!"),
-        html.P(f"Server hostname: {hostname}"),
-        html.P(f"Server IP: {host_ip}"),
-    ]
-)
+app.layout = html.Div([
+    html.H1("Minimal Dash Test"),
+    html.P("If you can see this, everything is working!"),
+    html.P(f"Server hostname: {hostname}"),
+    html.P(f"Server IP: {host_ip}"),
+])
 
 if __name__ == "__main__":
     print("=" * 50)
@@ -35,6 +33,6 @@ if __name__ == "__main__":
     if host_ip:
         print(f"   http://{host_ip}:8050")
     print("=" * 50)
-
+    
     # Use debug=False for this test to minimize complexity
     app.run(debug=False, host="0.0.0.0", port=8050)

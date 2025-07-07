@@ -255,6 +255,7 @@ logging.info("Registering main callback with draw-control input...")
         Input("show-labels-checkbox", "value"),
         Input("download-section-btn", "n_clicks"),
         Input({"type": "borehole-marker", "index": ALL}, "n_clicks"),
+        Input("subselection-checkbox-grid", "value"),  # Checkbox changes trigger
         # Remove map center/zoom inputs to prevent constant re-centering
     ],
     [
@@ -262,7 +263,6 @@ logging.info("Registering main callback with draw-control input...")
         State("section-plot-output", "children"),
         State("borehole-map", "center"),
         State("borehole-map", "zoom"),
-        State("subselection-checkbox-grid", "value"),
         State("borehole-data-store", "data"),  # Add stored borehole data
     ],
 )
@@ -272,16 +272,21 @@ def handle_upload_and_draw(
     show_labels_value,  # Input("show-labels-checkbox", "value")
     download_n_clicks,  # Input("download-section-btn", "n_clicks")
     marker_clicks,  # Input({"type": "borehole-marker", "index": ALL}, "n_clicks")
+    checked_ids,  # Input("subselection-checkbox-grid", "value") - Checkbox changes trigger
     marker_children,  # State("borehole-markers", "children")
     section_plot_img,  # State("section-plot-output", "children")
     map_center_state,  # State("borehole-map", "center")
     map_zoom_state,  # State("borehole-map", "zoom")
-    checked_ids,  # State("subselection-checkbox-grid", "value")
     stored_borehole_data,  # State("borehole-data-store", "data")
 ):
     # Log successful callback registration
     logging.info("Main callback successfully registered and called!")
     logging.info(f"Callback parameters - upload data type: {type(stored_data)}")
+
+    # Determine what triggered this callback
+    ctx = dash.callback_context
+    triggered_input = ctx.triggered[0]["prop_id"] if ctx.triggered else None
+    logging.info(f"Callback triggered by: {triggered_input}")
 
     selected_info = None
     section_plot_img_out = None
@@ -391,16 +396,20 @@ def handle_upload_and_draw(
 
             if loca_df is not None and filename_map is not None:
                 # Convert stored data back to DataFrame if needed
-                if isinstance(loca_df, dict):
+                if isinstance(loca_df, (dict, list)):
                     import pandas as pd
 
-                    logging.info("Converting stored dict back to DataFrame...")
+                    logging.info("Converting stored data back to DataFrame...")
                     loca_df = pd.DataFrame(loca_df)
                     logging.info(f"Converted DataFrame shape: {loca_df.shape}")
                     logging.info(f"DataFrame columns: {list(loca_df.columns)}")
 
                 # Check if DataFrame has required coordinate columns
-                required_cols = ["LOCA_ID", "easting", "northing"]
+                required_cols = [
+                    "LOCA_ID",
+                    "LOCA_NATE",
+                    "LOCA_NATN",
+                ]  # Fixed column names
                 missing_cols = [
                     col for col in required_cols if col not in loca_df.columns
                 ]
@@ -553,8 +562,54 @@ def handle_upload_and_draw(
                         f"✓ Selected {len(borehole_ids)} boreholes: {borehole_ids}"
                     )
 
-                    # Create section plot
-                    logging.info("Creating section plot...")
+                    # Create checkbox grid for selected boreholes (subselection)
+                    current_checked = checked_ids if checked_ids else borehole_ids
+                    checkbox_grid = html.Div(
+                        [
+                            html.H4(
+                                "Selected Boreholes:",
+                                style={"marginTop": "1em", "marginBottom": "0.5em"},
+                            ),
+                            html.P(
+                                f"Found {len(borehole_ids)} boreholes in the selected area. Uncheck any you want to exclude from plots:",
+                                style={
+                                    "fontSize": "14px",
+                                    "color": "#666",
+                                    "marginBottom": "0.5em",
+                                },
+                            ),
+                            dcc.Checklist(
+                                id="subselection-checkbox-grid",
+                                options=[
+                                    {"label": f" {bh_id}", "value": bh_id}
+                                    for bh_id in borehole_ids  # Only selected boreholes!
+                                ],
+                                value=current_checked,
+                                labelStyle={
+                                    "display": "inline-block",
+                                    "marginRight": "1em",
+                                    "marginBottom": "0.3em",
+                                    "fontSize": "14px",
+                                },
+                                style={
+                                    "marginTop": "0.5em",
+                                    "marginBottom": "1em",
+                                    "padding": "10px",
+                                    "backgroundColor": "#e8f5e8",
+                                    "borderRadius": "5px",
+                                    "border": "1px solid #28a745",
+                                },
+                            ),
+                        ]
+                    )
+
+                    # Create section plot using checked boreholes (subset of selected)
+                    boreholes_to_plot = (
+                        current_checked if current_checked else borehole_ids
+                    )
+                    logging.info(
+                        f"Creating section plot for {len(boreholes_to_plot)} checked boreholes: {boreholes_to_plot}"
+                    )
 
                     # Find which AGS file contains the most boreholes for section plotting
                     # For now, combine all AGS content into a single string
@@ -570,7 +625,7 @@ def handle_upload_and_draw(
 
                     try:
                         fig = plot_section_from_ags_content(
-                            combined_content, borehole_ids, show_labels=show_labels
+                            combined_content, boreholes_to_plot, show_labels=show_labels
                         )
                         logging.info(
                             f"plot_section_from_ags_content returned: {type(fig)}"
@@ -648,6 +703,14 @@ def handle_upload_and_draw(
         logging.info(f"ui_feedback: {ui_feedback}")
         logging.info("===== END DRAWING OPERATION RETURN =====")
 
+        # Update stored borehole data to include the last selection for checkbox updates
+        updated_borehole_data = (
+            stored_borehole_data.copy() if stored_borehole_data else {}
+        )
+        if borehole_ids:  # Only update if we have a valid selection
+            updated_borehole_data["last_selection"] = borehole_ids
+            logging.info(f"Stored last selection: {borehole_ids}")
+
         return (
             None,  # output-upload (no change)
             marker_children,  # Keep existing markers
@@ -659,7 +722,7 @@ def handle_upload_and_draw(
             download_data,
             ui_feedback,
             checkbox_grid,
-            stored_borehole_data,  # Keep existing borehole data
+            updated_borehole_data,  # Updated with last selection
         )
     if stored_data and "contents" in stored_data:
         list_of_contents = stored_data["contents"]
@@ -799,305 +862,44 @@ def handle_upload_and_draw(
                     )
                     continue
 
-            # Calculate auto-zoom center and zoom level based on median coordinates
             if valid_coords:
-                logging.info("====== CALCULATING AUTO-ZOOM ======")
-                logging.info(f"Number of valid coordinates: {len(valid_coords)}")
-
-                # Add coordinate transformation summary to UI
+                # Calculate bounds for auto-zoom to show all markers
                 lats = [coord[0] for coord in valid_coords]
                 lons = [coord[1] for coord in valid_coords]
-                file_status.append(
-                    html.Div(
-                        [
-                            html.H4(
-                                "🔄 Coordinate Transformation Summary",
-                                style={"color": "#cc6600"},
-                            ),
-                            html.P(
-                                [
-                                    f"✅ Successfully transformed {len(valid_coords)} coordinates from BNG to WGS84",
-                                    html.Br(),
-                                    f"📊 Latitude range: {min(lats):.6f}° to {max(lats):.6f}° (span: {max(lats)-min(lats):.6f}°)",
-                                    html.Br(),
-                                    f"📊 Longitude range: {min(lons):.6f}° to {max(lons):.6f}° (span: {max(lons)-min(lons):.6f}°)",
-                                    html.Br(),
-                                    "🎯 Center coordinates will be calculated from median values",
-                                ]
-                            ),
-                        ],
-                        style={
-                            "background": "#fff8e6",
-                            "padding": "10px",
-                            "margin": "10px",
-                            "border": "1px solid #cc6600",
-                            "borderRadius": "5px",
-                        },
-                    )
-                )
-
-                lats = [coord[0] for coord in valid_coords]
-                lons = [coord[1] for coord in valid_coords]
-
-                logging.info(
-                    f"All latitudes: {[f'{lat:.6f}' for lat in lats[:10]]}{'...' if len(lats) > 10 else ''}"
-                )
-                logging.info(
-                    f"All longitudes: {[f'{lon:.6f}' for lon in lons[:10]]}{'...' if len(lons) > 10 else ''}"
-                )
-
-                # Use median for more robust centering
-                center_lat = statistics.median(lats)
-                center_lon = statistics.median(lons)
-
-                logging.info(
-                    f"Calculated median center: [{center_lat:.6f}, {center_lon:.6f}]"
-                )
-
-                if not (49.0 <= center_lat <= 61.0 and -8.0 <= center_lon <= 2.0):
-                    logging.warning(
-                        "Calculated center outside UK bounds! Using default center."
-                    )
-                    logging.warning(
-                        f"Calculated: lat={center_lat:.6f}, lon={center_lon:.6f}"
-                    )
-                    # Don't change map_center if coordinates are invalid
-                else:
-                    map_center = [center_lat, center_lon]
-                    logging.info(
-                        f"✓ Valid center coordinates, setting map_center to: {map_center}"
-                    )
-
-                # Calculate appropriate zoom level based on coordinate spread
-                lat_range = max(lats) - min(lats)
-                lon_range = max(lons) - min(lons)
-                max_range = max(lat_range, lon_range)
-
-                logging.info(f"Coordinate ranges: lat_range={lat_range:.6f}")
-                logging.info(f"  lon_range={lon_range:.6f}, max_range={max_range:.6f}")
-
-                # Zoom level calculation (approximate)
-                if max_range > 1.0:  # Very spread out
-                    map_zoom = 8
-                    zoom_reason = "very spread out"
-                elif max_range > 0.1:  # Regional spread
-                    map_zoom = 11
-                    zoom_reason = "regional spread"
-                elif max_range > 0.01:  # Local area
-                    map_zoom = 14
-                    zoom_reason = "local area"
-                else:  # Very close together
-                    map_zoom = 16
-                    zoom_reason = "very close together"
-
-                logging.info(
-                    f"Zoom calculation: max_range={max_range:.6f} -> zoom={map_zoom} ({zoom_reason})"
-                )
-                logging.info(
-                    f"Final map settings: center={map_center}, zoom={map_zoom}"
-                )
-
-                # Additional validation
-                if not (6 <= map_zoom <= 18):
-                    logging.warning(
-                        f"Calculated zoom {map_zoom} is outside reasonable range, using default"
-                    )
-                    map_zoom = 10
-
-                # Update map key to force re-render with new center/zoom
-                map_key = f"map-key-autozoom-{datetime.now().timestamp()}"
-                logging.info(f"Setting map_key to: {map_key} to force re-render")
-
-                logging.info(
-                    f"✓ Auto-zoom: Created {len(markers)} markers, "
-                    f"centering at median coords: [{center_lat:.6f}, {center_lon:.6f}], zoom: {map_zoom}"
-                )
-                # Console feedback for auto-zoom
-                print(
-                    f"🎯 AUTO-ZOOM: Centering at ({center_lat:.6f}, {center_lon:.6f}), zoom {map_zoom}"
-                )
-
-                # Add detailed auto-zoom information to UI
-                file_status.append(
-                    html.Div(
-                        [
-                            html.H4(
-                                "📊 Auto-Zoom Calculation Details",
-                                style={"color": "#0066cc"},
-                            ),
-                            html.P(
-                                [
-                                    f"📍 Total markers created: {len(markers)}",
-                                    html.Br(),
-                                    f"🎯 Map center (median): ({center_lat:.6f}, {center_lon:.6f})",
-                                    html.Br(),
-                                    "📏 Coordinate ranges:",
-                                    html.Br(),
-                                    f"   • Latitude: {min(lats):.6f} to {max(lats):.6f} (range: {lat_range:.6f})",
-                                    html.Br(),
-                                    f"   • Longitude: {min(lons):.6f} to {max(lons):.6f} (range: {lon_range:.6f})",
-                                    html.Br(),
-                                    f"🔍 Max range: {max_range:.6f} → Zoom level: {map_zoom} ({zoom_reason})",
-                                    html.Br(),
-                                    "📐 Zoom calculation logic:",
-                                    html.Br(),
-                                    "   • > 1.0 = zoom 8 (very spread out)",
-                                    html.Br(),
-                                    "   • > 0.1 = zoom 11 (regional spread)",
-                                    html.Br(),
-                                    "   • > 0.01 = zoom 14 (local area)",
-                                    html.Br(),
-                                    "   • ≤ 0.01 = zoom 16 (very close together)",
-                                    html.Br(),
-                                    html.Hr(),
-                                    html.B("🔍 DEBUG INFO:", style={"color": "red"}),
-                                    html.Br(),
-                                    f"🎯 Calculated map_center being returned: {map_center}",
-                                    html.Br(),
-                                    f"🔍 Calculated map_zoom being returned: {map_zoom}",
-                                    html.Br(),
-                                    "📍 If map doesn't center here, there's a callback issue!",
-                                ]
-                            ),
-                        ],
-                        style={
-                            "background": "#e6f3ff",
-                            "padding": "15px",
-                            "margin": "10px",
-                            "border": "2px solid #0066cc",
-                            "borderRadius": "5px",
-                        },
-                    )
-                )
-                logging.info(
-                    f"Coordinate bounds: lat [{min(lats):.6f}, {max(lats):.6f}], "
-                    f"lon [{min(lons):.6f}, {max(lons):.6f}]"
-                )
+                center_lat = statistics.mean(lats)
+                center_lon = statistics.mean(lons)
+                map_center = [center_lat, center_lon]
+                map_zoom = 12  # Set appropriate zoom level
+                logging.info(f"Auto-zooming to center: {map_center}")
             else:
-                logging.warning(
-                    "No valid coordinates found for markers - using default map center/zoom"
-                )
-                logging.warning(
-                    f"Current map_center: {map_center}, map_zoom: {map_zoom}"
-                )
-                # Keep default center if no valid coordinates
-            # Marker click for log plot
-            if marker_clicks and any(marker_clicks):
-                idx = marker_clicks.index(max(marker_clicks))
-                row = loca_df.iloc[idx]
-                ags_content = filename_map[row["ags_file"]]
-                logging.info(f"Plotting borehole log for {row['LOCA_ID']}")
-                fig = plot_borehole_log_from_ags_content(
-                    ags_content, row["LOCA_ID"], show_labels=show_labels
-                )
-                if fig:
-                    buf = io.BytesIO()
-                    fig.savefig(buf, format="png", bbox_inches="tight")
-                    plt.close(fig)
-                    buf.seek(0)
-                    img_bytes = buf.read()
-                    img_b64 = base64.b64encode(img_bytes).decode("utf-8")
-                    log_plot_img = html.Img(
-                        src=f"data:image/png;base64,{img_b64}",
-                        style={"maxWidth": "100%", "marginTop": "2em"},
-                    )
-                    ui_feedback = html.Div("Log plot for selected borehole.")
+                logging.warning("No valid coordinates found for markers")
 
-            # Debug: Log what we're returning
-            logging.info("=== CALLBACK RETURN DEBUG ===")
-            logging.info(f"Returning {len(markers)} markers")
-            logging.info(f"Map center: {map_center}, zoom: {map_zoom}")
-            if markers:
-                logging.info(f"First marker position: {markers[0].position}")
-                logging.info(f"First marker id: {markers[0].id}")
-                # Add visible feedback for debugging
-                file_status.append(
-                    html.Div(
-                        [
-                            f"DEBUG: Created {len(markers)} markers (transformed from BNG to WGS84)",
-                            html.Br(),
-                            f"Map centered at: {map_center}, zoom level: {map_zoom}",
-                            html.Br(),
-                            f"First marker (WGS84): {markers[0].position if markers else 'None'}",
-                            html.Br(),
-                            "Coordinates transformed from British National Grid to latitude/longitude.",
-                            html.Br(),
-                            "Map should auto-zoom once and stay there when you pan.",
-                        ],
-                        style={
-                            "background": "#ffffcc",
-                            "padding": "10px",
-                            "margin": "5px",
-                            "border": "1px solid #888",
-                        },
-                    )
-                )
-            else:
-                file_status.append(
-                    html.Div(
-                        "DEBUG: No markers were created. Check data and logs.",
-                        style={
-                            "background": "#ffcccc",
-                            "padding": "10px",
-                            "margin": "5px",
-                            "border": "1px solid #888",
-                        },
-                    )
-                )
-
-            # Store borehole data for future drawing operations
+            # Store all borehole data for later use
+            all_borehole_ids = loca_df["LOCA_ID"].tolist()
             borehole_data_out = {
-                "loca_df": loca_df.to_dict(),  # Convert DataFrame to dict for JSON storage
-                "filename_map": filename_map,
-                "timestamp": datetime.now().isoformat(),
+                "loca_df": loca_df.to_dict(
+                    "records"
+                ),  # Convert DataFrame to dict for storage
+                "filename_map": {
+                    filename: content for filename, content in filename_map.items()
+                },
+                "all_borehole_ids": all_borehole_ids,
             }
-            logging.info("Stored borehole data for future drawing operations")
 
-            # Log that we're storing lat/lon coordinates
-            valid_lats = loca_df["lat"].dropna()
-            valid_lons = loca_df["lon"].dropna()
-            logging.info(
-                f"Storing {len(valid_lats)} valid lat/lon coordinates in DataFrame"
-            )
-            if len(valid_lats) > 0:
-                logging.info(
-                    f"Sample stored coordinates: lat={valid_lats.iloc[0]:.6f}, lon={valid_lons.iloc[0]:.6f}"
-                )
-                logging.info(
-                    f"Stored coordinate ranges: lat [{valid_lats.min():.6f}, {valid_lats.max():.6f}]"
-                )
-                logging.info(
-                    f"Stored coordinate ranges: lon [{valid_lons.min():.6f}, {valid_lons.max():.6f}]"
-                )
-
-            # Log what we're returning for file upload
-            logging.info("====== FILE UPLOAD RETURN ======")
-            logging.info(f"Returning {len(markers)} markers")
-            logging.info(f"Map center: {map_center}, zoom: {map_zoom}")
-            logging.info(f"borehole_data_out keys: {list(borehole_data_out.keys())}")
-
-            # CRITICAL DEBUG: Verify map_center values before return
-            print(f"🔍 CRITICAL DEBUG: About to return map_center = {map_center}")
-            print(f"🔍 CRITICAL DEBUG: About to return map_zoom = {map_zoom}")
-            print(f"🔍 CRITICAL DEBUG: About to return map_key = {map_key}")
-            print(
-                "🔍 CRITICAL DEBUG: Expected center coordinates: North England ~(53.87, -2.18)"
-            )
-
-            logging.info("===== END FILE UPLOAD RETURN =====")
+            # No checkboxes during initial upload - only after drawing selection
 
             return (
                 file_status,
                 markers,
-                selected_info,
+                None,
                 map_center,
-                map_zoom,  # Add zoom level
-                section_plot_img_out,
-                log_plot_img,
-                download_data,
-                ui_feedback,
-                checkbox_grid,
-                borehole_data_out,  # Store the borehole data
+                map_zoom,
+                None,  # section_plot_output
+                None,  # log_plot_output
+                None,  # download_data
+                None,  # ui_feedback
+                None,  # checkbox_grid (empty on upload)
+                borehole_data_out,
             )
         except Exception as e:
             logging.error(f"Error parsing AGS files: {str(e)}", exc_info=True)
@@ -1113,13 +915,10 @@ def handle_upload_and_draw(
                 None,
                 None,
                 None,
-                None,
+                stored_borehole_data,
             )
-    logging.info("====== DEFAULT RETURN (NO UPLOAD) ======")
-    logging.info(
-        f"No AGS file uploaded yet - using default map center: {map_center}, zoom: {map_zoom}"
-    )
-    logging.info("===== END DEFAULT RETURN =====")
+
+    logging.info("No AGS file uploaded yet.")
     return (
         None,
         [],
@@ -1131,103 +930,8 @@ def handle_upload_and_draw(
         None,
         None,
         None,
-        None,
+        borehole_data_out,
     )
-
-
-@app.callback(
-    Output("test-upload-output", "children"),
-    Input("upload-ags", "contents"),
-    State("upload-ags", "filename"),
-)
-def test_upload(contents, filenames):
-    """Test callback specifically for debugging file upload issues"""
-    # Log detailed information about the upload
-    try:
-        logging.info("===== TEST UPLOAD CALLBACK TRIGGERED =====")
-        logging.info(f"Current time: {datetime.now()}")
-        logging.info(f"Filenames received: {filenames}")
-
-        # Log content details
-        if contents:
-            if isinstance(contents, list):
-                logging.info(f"Number of files received: {len(contents)}")
-                for i, content in enumerate(contents):
-                    content_type = (
-                        content.split(",")[0] if "," in content else "unknown"
-                    )
-                    content_length = len(content) if content else 0
-                    logging.info(
-                        f"File {i+1}: {filenames[i]} - Type: {content_type} - Length: {content_length}"
-                    )
-            else:
-                content_type = contents.split(",")[0] if "," in contents else "unknown"
-                logging.info(
-                    f"Single file received - Type: {content_type} - Length: {len(contents)}"
-                )
-        else:
-            logging.info("No contents received in the test callback")
-
-        # Also write to a separate log file for easier debugging
-        try:
-            with open("upload_test.log", "w") as f:
-                f.write(f"Callback triggered at: {datetime.now()}\n")
-                f.write(f"Filenames received: {filenames}\n")
-                if contents:
-                    if isinstance(contents, list):
-                        f.write(f"Number of files: {len(contents)}\n")
-                        for i, content in enumerate(contents):
-                            content_type = (
-                                content.split(",")[0] if "," in content else "unknown"
-                            )
-                            f.write(
-                                f"File {i+1}: {filenames[i]} - Type: {content_type} - Length: {len(content) if content else 0}\n"
-                            )
-                    else:
-                        content_type = (
-                            contents.split(",")[0] if "," in contents else "unknown"
-                        )
-                        f.write(f"Content type: {content_type}\n")
-                        f.write(f"Content length: {len(contents)}\n")
-                else:
-                    f.write("No contents received\n")
-        except PermissionError:
-            logging.warning("Could not write to upload_test.log - file may be in use")
-    except Exception as e:
-        error_msg = f"Error in test_upload: {str(e)}\n{traceback.format_exc()}"
-        logging.error(error_msg)
-        try:
-            with open("upload_test.log", "w") as f:
-                f.write(error_msg)
-        except PermissionError:
-            logging.warning(
-                "Could not write error to upload_test.log - file may be in use"
-            )
-        return html.Div(f"Error processing upload: {str(e)}", style={"color": "red"})
-
-    # Return visible feedback
-    if contents is None:
-        return "No file uploaded yet. Select a file to test upload."
-
-    if isinstance(filenames, list):
-        return html.Div(
-            [
-                html.H5(f"Successfully received {len(filenames)} files:"),
-                html.Ul([html.Li(name) for name in filenames]),
-                html.P(
-                    "See upload_test.log for details", style={"fontStyle": "italic"}
-                ),
-            ]
-        )
-    else:
-        return html.Div(
-            [
-                html.H5(f"Uploaded: {filenames}"),
-                html.P(
-                    "See upload_test.log for details", style={"fontStyle": "italic"}
-                ),
-            ]
-        )
 
 
 @app.callback(
@@ -1272,56 +976,10 @@ def store_upload_data(contents, filenames):
         return None
 
 
-def clear_log_files():
-    """Clear log files at startup to make debugging easier"""
-    log_files = ["app_debug.log", "upload_test.log"]
-    for log_file in log_files:
-        try:
-            with open(log_file, "w") as f:
-                f.write(f"Log file cleared at {datetime.now()}\n")
-            logging.info(f"Cleared log file: {log_file}")
-        except PermissionError:
-            print(f"Warning: Could not clear log file {log_file} - file may be in use")
-        except Exception as e:
-            print(f"Error clearing log file {log_file}: {str(e)}")
-
-
 if __name__ == "__main__":
     try:
-        clear_log_files()  # Clear log files at startup
-        print("=== APP STARTUP SEQUENCE ===")
-        print("Opening browser and starting Dash server")
-
-        # Log which components should be available
-        print("Expected components in layout:")
-        print("- upload-ags, output-upload, borehole-map")
-        print("- draw-control (EditControl), borehole-markers (FeatureGroup)")
-        print("- All other standard components")
-
-        logging.info("=== APP STARTUP SEQUENCE ===")
         logging.info("Opening browser and starting Dash server")
-
-        # Log which components should be available
-        logging.info("Expected components in layout:")
-        logging.info("- upload-ags, output-upload, borehole-map")
-        logging.info("- draw-control (EditControl), borehole-markers (FeatureGroup)")
-        logging.info("- All other standard components")
-
-        # Attempt to launch browser (but don't fail if it doesn't work)
-        try:
-            webbrowser.open("http://127.0.0.1:8050/")
-            logging.info("Opened browser to http://127.0.0.1:8050/")
-        except Exception as e:
-            logging.warning(f"Failed to open browser: {str(e)}")
-
-        # Log more information about the server startup
-        logging.info("Starting Dash server on 0.0.0.0:8050")
-        print("=" * 50)
-        print(" Starting Dash server on http://127.0.0.1:8050")
-        print(" You can also try http://localhost:8050 or http://0.0.0.0:8050")
-        print("=" * 50)
-
-        # Start the server with explicit host/port to ensure it's accessible
+        webbrowser.open("http://127.0.0.1:8050/")
         app.run(debug=True, host="0.0.0.0", port=8050)
     except Exception as e:
         logging.error(f"Error starting app: {str(e)}")
