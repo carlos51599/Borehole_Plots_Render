@@ -9,6 +9,8 @@ from config import (
     SECTION_MAX_HEIGHT,
     SECTION_MIN_WIDTH,
     SECTION_WIDTH_PER_BH,
+    SECTION_PLOT_LABEL_FONTSIZE,
+    SECTION_PLOT_AXIS_FONTSIZE,
 )
 
 
@@ -245,7 +247,7 @@ def plot_borehole_sections(
                                 str(prev_leg),  # Only show the code
                                 ha="center",
                                 va="center",
-                                fontsize=8,
+                                fontsize=SECTION_PLOT_LABEL_FONTSIZE,
                                 color="k",
                                 rotation=90,
                             )
@@ -280,7 +282,7 @@ def plot_borehole_sections(
                         str(prev_leg),  # Only show the code
                         ha="center",
                         va="center",
-                        fontsize=8,
+                        fontsize=SECTION_PLOT_LABEL_FONTSIZE,
                         color="k",
                         rotation=90,
                     )
@@ -349,7 +351,7 @@ def plot_borehole_sections(
             xycoords=("axes fraction", "axes fraction"),
             ha="center",
             va="bottom",
-            fontsize=9,
+            fontsize=SECTION_PLOT_AXIS_FONTSIZE,
             rotation=90,
             annotation_clip=False,
         )

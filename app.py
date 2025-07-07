@@ -17,6 +17,7 @@ from pyproj import Transformer
 import matplotlib
 from data_loader import load_all_loca_data
 from map_utils import filter_selection_by_shape
+import config  # Import UI configuration
 
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
@@ -101,21 +102,12 @@ logging.info("Creating app layout...")
 
 app.layout = html.Div(
     [
-        html.H1("Geo Borehole Sections Render - Dash Version"),
-        html.P("Upload one or more AGS files to begin."),
+        html.H1(config.APP_TITLE, style=config.HEADER_H1_CENTER_STYLE),
+        html.P(config.APP_SUBTITLE, style=config.HEADER_H2_CENTER_STYLE),
         dcc.Upload(
             id="upload-ags",
-            children=html.Div(["Drag and Drop or ", html.A("Select AGS Files")]),
-            style={
-                "width": "100%",
-                "height": "60px",
-                "lineHeight": "60px",
-                "borderWidth": "1px",
-                "borderStyle": "dashed",
-                "borderRadius": "5px",
-                "textAlign": "center",
-                "margin": "10px",
-            },
+            children=html.Div(["Drag and Drop or ", html.A(config.UPLOAD_PROMPT)]),
+            style=config.UPLOAD_AREA_CENTER_STYLE,
             multiple=True,
             accept=".ags",
         ),
@@ -123,7 +115,7 @@ app.layout = html.Div(
         html.Hr(),
         html.Div(
             [
-                html.H2("Borehole Map"),
+                html.H2(config.MAP_SECTION_TITLE, style=config.HEADER_H2_LEFT_STYLE),
                 dl.Map(
                     [
                         dl.TileLayer(),
@@ -153,7 +145,7 @@ app.layout = html.Div(
                     id="borehole-map",
                     center=[51.5, -0.1],
                     zoom=6,
-                    style={"width": "100%", "height": "500px"},
+                    style=config.MAP_CENTER_STYLE,
                 ),
             ]
         ),
@@ -164,16 +156,18 @@ app.layout = html.Div(
             [
                 dcc.Checklist(
                     id="show-labels-checkbox",
-                    options=[{"label": "Labels", "value": "show_labels"}],
+                    options=[
+                        {"label": config.LABELS_CHECKBOX_LABEL, "value": "show_labels"}
+                    ],
                     value=["show_labels"],
                     inline=True,
-                    style={"marginTop": "1em"},
+                    style=config.CHECKBOX_CONTROL_STYLE,
                 ),
                 html.Button(
-                    "Download Section Plot",
+                    config.DOWNLOAD_BUTTON_LABEL,
                     id="download-section-btn",
                     n_clicks=0,
-                    style={"marginLeft": "1em"},
+                    style=config.BUTTON_RIGHT_STYLE,
                 ),
                 dcc.Download(id="download-section-plot"),
             ]
@@ -567,16 +561,12 @@ def handle_upload_and_draw(
                     checkbox_grid = html.Div(
                         [
                             html.H4(
-                                "Selected Boreholes:",
-                                style={"marginTop": "1em", "marginBottom": "0.5em"},
+                                config.CHECKBOX_SECTION_TITLE,
+                                style=config.HEADER_H4_LEFT_STYLE,
                             ),
                             html.P(
-                                f"Found {len(borehole_ids)} boreholes in the selected area. Uncheck any you want to exclude from plots:",
-                                style={
-                                    "fontSize": "14px",
-                                    "color": "#666",
-                                    "marginBottom": "0.5em",
-                                },
+                                config.CHECKBOX_INSTRUCTIONS,
+                                style=config.DESCRIPTION_TEXT_STYLE,
                             ),
                             dcc.Checklist(
                                 id="subselection-checkbox-grid",
@@ -585,20 +575,8 @@ def handle_upload_and_draw(
                                     for bh_id in borehole_ids  # Only selected boreholes!
                                 ],
                                 value=current_checked,
-                                labelStyle={
-                                    "display": "inline-block",
-                                    "marginRight": "1em",
-                                    "marginBottom": "0.3em",
-                                    "fontSize": "14px",
-                                },
-                                style={
-                                    "marginTop": "0.5em",
-                                    "marginBottom": "1em",
-                                    "padding": "10px",
-                                    "backgroundColor": "#e8f5e8",
-                                    "borderRadius": "5px",
-                                    "border": "1px solid #28a745",
-                                },
+                                labelStyle=config.CHECKBOX_LABEL_STYLE,
+                                style=config.CHECKBOX_LEFT_STYLE,
                             ),
                         ]
                     )
@@ -641,18 +619,18 @@ def handle_upload_and_draw(
                             img_b64 = base64.b64encode(img_bytes).decode("utf-8")
                             section_plot_img_out = html.Img(
                                 src=f"data:image/png;base64,{img_b64}",
-                                style={"maxWidth": "100%", "marginTop": "2em"},
+                                style=config.SECTION_PLOT_CENTER_STYLE,
                             )
                             ui_feedback = html.Div(
-                                f"✓ Section plot for {len(borehole_ids)} selected boreholes."
+                                f"{config.FILE_UPLOAD_SUCCESS_PREFIX} {len(borehole_ids)} {config.FILE_UPLOAD_SUCCESS_SUFFIX}"
                             )
                             logging.info(
                                 "✓ Successfully created section plot from drawing"
                             )
                         else:
                             ui_feedback = html.Div(
-                                "✗ Could not generate section plot.",
-                                style={"color": "red"},
+                                config.ERROR_PLOT_MESSAGE,
+                                style=config.ERROR_MESSAGE_STYLE,
                             )
                             logging.warning(
                                 "✗ plot_section_from_ags_content returned None"
@@ -662,16 +640,16 @@ def handle_upload_and_draw(
                             f"Error creating section plot: {plot_err}", exc_info=True
                         )
                         ui_feedback = html.Div(
-                            f"✗ Error creating section plot: {plot_err}",
-                            style={"color": "red"},
+                            f"{config.ERROR_SELECTION_MESSAGE}: {plot_err}",
+                            style=config.ERROR_MESSAGE_STYLE,
                         )
                 else:
                     print(
                         "❌ NO BOREHOLES FOUND - Check console/logs for details"
                     )  # Console debug
                     ui_feedback = html.Div(
-                        "No boreholes found in selected area.",
-                        style={"color": "orange"},
+                        config.NO_BOREHOLES_MESSAGE,
+                        style=config.WARNING_MESSAGE_STYLE,
                     )
                     logging.info("No boreholes found in drawn area")
             else:
@@ -680,7 +658,7 @@ def handle_upload_and_draw(
                 logging.error(f"filename_map is None: {filename_map is None}")
                 ui_feedback = html.Div(
                     "Error: Borehole data not available for drawing operations.",
-                    style={"color": "red"},
+                    style=config.ERROR_MESSAGE_STYLE,
                 )
 
         except Exception as e:
@@ -691,7 +669,8 @@ def handle_upload_and_draw(
             logging.error(f"Exception type: {type(e)}")
             logging.error(f"Exception args: {e.args}")
             ui_feedback = html.Div(
-                f"Error processing selection: {str(e)}", style={"color": "red"}
+                f"{config.ERROR_SELECTION_MESSAGE}: {str(e)}",
+                style=config.ERROR_MESSAGE_STYLE,
             )
 
         # Return early for drawing operations (keep existing markers and data)
@@ -777,15 +756,18 @@ def handle_upload_and_draw(
                 file_status.append(
                     html.Div(
                         [
-                            html.H4("📁 File Breakdown", style={"color": "#006600"}),
+                            html.H4(
+                                config.FILE_BREAKDOWN_TITLE,
+                                style=config.SUCCESS_MESSAGE_STYLE,
+                            ),
                             html.Ul(file_breakdown),
                         ],
                         style={
                             "background": "#f0fff0",
                             "padding": "10px",
                             "margin": "10px",
-                            "border": "1px solid #006600",
-                            "borderRadius": "5px",
+                            "border": f"{config.BORDER_WIDTH} {config.BORDER_STYLE_SOLID} {config.PRIMARY_COLOR}",
+                            "borderRadius": config.BORDER_RADIUS,
                         },
                     )
                 )

@@ -1,6 +1,7 @@
 import matplotlib.pyplot as plt
 import pandas as pd
 import io
+from config import LOG_PLOT_LABEL_FONTSIZE, LOG_FIG_HEIGHT, LOG_FIG_WIDTH
 
 
 def plot_borehole_log_from_ags_content(
@@ -48,7 +49,7 @@ def plot_borehole_log_from_ags_content(
                             str(prev_leg),
                             ha="center",
                             va="center",
-                            fontsize=8,
+                            fontsize=LOG_PLOT_LABEL_FONTSIZE,
                             color="k",
                             rotation=90,
                         )
@@ -80,7 +81,7 @@ def plot_borehole_log_from_ags_content(
                     str(prev_leg),
                     ha="center",
                     va="center",
-                    fontsize=8,
+                    fontsize=LOG_PLOT_LABEL_FONTSIZE,
                     color="k",
                     rotation=90,
                 )
