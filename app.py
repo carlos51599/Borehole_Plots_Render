@@ -688,6 +688,45 @@ def handle_upload_and_draw(
             loca_df, filename_map = load_all_loca_data(ags_files)
             logging.info(f"Loaded loca_df with {len(loca_df)} rows")
 
+            # Add per-file information to UI
+            file_breakdown = []
+            for filename, content in filename_map.items():
+                file_rows = loca_df[loca_df["ags_file"] == filename]
+                if len(file_rows) > 0:
+                    easting_range = (
+                        file_rows["LOCA_NATE"].max() - file_rows["LOCA_NATE"].min()
+                    )
+                    northing_range = (
+                        file_rows["LOCA_NATN"].max() - file_rows["LOCA_NATN"].min()
+                    )
+                    file_breakdown.append(
+                        html.Li(
+                            [
+                                html.B(filename),
+                                f": {len(file_rows)} boreholes",
+                                html.Br(),
+                                f"   BNG Easting range: {easting_range:.1f}m, Northing range: {northing_range:.1f}m",
+                            ]
+                        )
+                    )
+
+            if file_breakdown:
+                file_status.append(
+                    html.Div(
+                        [
+                            html.H4("📁 File Breakdown", style={"color": "#006600"}),
+                            html.Ul(file_breakdown),
+                        ],
+                        style={
+                            "background": "#f0fff0",
+                            "padding": "10px",
+                            "margin": "10px",
+                            "border": "1px solid #006600",
+                            "borderRadius": "5px",
+                        },
+                    )
+                )
+
             # Note: LOCA_NATN and LOCA_NATE are typically BNG coordinates, not lat/lon
             loca_df["easting"] = loca_df["LOCA_NATE"]  # BNG Easting
             loca_df["northing"] = loca_df["LOCA_NATN"]  # BNG Northing
@@ -765,6 +804,38 @@ def handle_upload_and_draw(
                 logging.info("====== CALCULATING AUTO-ZOOM ======")
                 logging.info(f"Number of valid coordinates: {len(valid_coords)}")
 
+                # Add coordinate transformation summary to UI
+                lats = [coord[0] for coord in valid_coords]
+                lons = [coord[1] for coord in valid_coords]
+                file_status.append(
+                    html.Div(
+                        [
+                            html.H4(
+                                "🔄 Coordinate Transformation Summary",
+                                style={"color": "#cc6600"},
+                            ),
+                            html.P(
+                                [
+                                    f"✅ Successfully transformed {len(valid_coords)} coordinates from BNG to WGS84",
+                                    html.Br(),
+                                    f"📊 Latitude range: {min(lats):.6f}° to {max(lats):.6f}° (span: {max(lats)-min(lats):.6f}°)",
+                                    html.Br(),
+                                    f"📊 Longitude range: {min(lons):.6f}° to {max(lons):.6f}° (span: {max(lons)-min(lons):.6f}°)",
+                                    html.Br(),
+                                    "🎯 Center coordinates will be calculated from median values",
+                                ]
+                            ),
+                        ],
+                        style={
+                            "background": "#fff8e6",
+                            "padding": "10px",
+                            "margin": "10px",
+                            "border": "1px solid #cc6600",
+                            "borderRadius": "5px",
+                        },
+                    )
+                )
+
                 lats = [coord[0] for coord in valid_coords]
                 lons = [coord[1] for coord in valid_coords]
 
@@ -833,9 +904,70 @@ def handle_upload_and_draw(
                     )
                     map_zoom = 10
 
+                # Update map key to force re-render with new center/zoom
+                map_key = f"map-key-autozoom-{datetime.now().timestamp()}"
+                logging.info(f"Setting map_key to: {map_key} to force re-render")
+
                 logging.info(
                     f"✓ Auto-zoom: Created {len(markers)} markers, "
                     f"centering at median coords: [{center_lat:.6f}, {center_lon:.6f}], zoom: {map_zoom}"
+                )
+                # Console feedback for auto-zoom
+                print(
+                    f"🎯 AUTO-ZOOM: Centering at ({center_lat:.6f}, {center_lon:.6f}), zoom {map_zoom}"
+                )
+
+                # Add detailed auto-zoom information to UI
+                file_status.append(
+                    html.Div(
+                        [
+                            html.H4(
+                                "📊 Auto-Zoom Calculation Details",
+                                style={"color": "#0066cc"},
+                            ),
+                            html.P(
+                                [
+                                    f"📍 Total markers created: {len(markers)}",
+                                    html.Br(),
+                                    f"🎯 Map center (median): ({center_lat:.6f}, {center_lon:.6f})",
+                                    html.Br(),
+                                    "📏 Coordinate ranges:",
+                                    html.Br(),
+                                    f"   • Latitude: {min(lats):.6f} to {max(lats):.6f} (range: {lat_range:.6f})",
+                                    html.Br(),
+                                    f"   • Longitude: {min(lons):.6f} to {max(lons):.6f} (range: {lon_range:.6f})",
+                                    html.Br(),
+                                    f"🔍 Max range: {max_range:.6f} → Zoom level: {map_zoom} ({zoom_reason})",
+                                    html.Br(),
+                                    "📐 Zoom calculation logic:",
+                                    html.Br(),
+                                    "   • > 1.0 = zoom 8 (very spread out)",
+                                    html.Br(),
+                                    "   • > 0.1 = zoom 11 (regional spread)",
+                                    html.Br(),
+                                    "   • > 0.01 = zoom 14 (local area)",
+                                    html.Br(),
+                                    "   • ≤ 0.01 = zoom 16 (very close together)",
+                                    html.Br(),
+                                    html.Hr(),
+                                    html.B("🔍 DEBUG INFO:", style={"color": "red"}),
+                                    html.Br(),
+                                    f"🎯 Calculated map_center being returned: {map_center}",
+                                    html.Br(),
+                                    f"🔍 Calculated map_zoom being returned: {map_zoom}",
+                                    html.Br(),
+                                    "📍 If map doesn't center here, there's a callback issue!",
+                                ]
+                            ),
+                        ],
+                        style={
+                            "background": "#e6f3ff",
+                            "padding": "15px",
+                            "margin": "10px",
+                            "border": "2px solid #0066cc",
+                            "borderRadius": "5px",
+                        },
+                    )
                 )
                 logging.info(
                     f"Coordinate bounds: lat [{min(lats):.6f}, {max(lats):.6f}], "
@@ -943,6 +1075,15 @@ def handle_upload_and_draw(
             logging.info(f"Returning {len(markers)} markers")
             logging.info(f"Map center: {map_center}, zoom: {map_zoom}")
             logging.info(f"borehole_data_out keys: {list(borehole_data_out.keys())}")
+
+            # CRITICAL DEBUG: Verify map_center values before return
+            print(f"🔍 CRITICAL DEBUG: About to return map_center = {map_center}")
+            print(f"🔍 CRITICAL DEBUG: About to return map_zoom = {map_zoom}")
+            print(f"🔍 CRITICAL DEBUG: About to return map_key = {map_key}")
+            print(
+                "🔍 CRITICAL DEBUG: Expected center coordinates: North England ~(53.87, -2.18)"
+            )
+
             logging.info("===== END FILE UPLOAD RETURN =====")
 
             return (
@@ -979,7 +1120,19 @@ def handle_upload_and_draw(
         f"No AGS file uploaded yet - using default map center: {map_center}, zoom: {map_zoom}"
     )
     logging.info("===== END DEFAULT RETURN =====")
-    return None, [], None, map_center, map_zoom, None, None, None, None, None, None
+    return (
+        None,
+        [],
+        None,
+        map_center,
+        map_zoom,
+        None,
+        None,
+        None,
+        None,
+        None,
+        None,
+    )
 
 
 @app.callback(

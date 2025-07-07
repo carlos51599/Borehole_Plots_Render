@@ -6,7 +6,7 @@ import io
 def plot_borehole_log_from_ags_content(
     ags_content, loca_id, show_labels=True, fig_height=4, fig_width=2.5
 ):
-    from dash_app.section_plot import parse_ags_geol_section_from_string
+    from section_plot import parse_ags_geol_section_from_string
 
     geol_df, loca_df, abbr_df = parse_ags_geol_section_from_string(ags_content)
     geol_bh = geol_df[geol_df["LOCA_ID"] == loca_id]
