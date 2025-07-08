@@ -151,6 +151,34 @@ app.layout = html.Div(
                 ),
             ]
         ),
+        html.Div(
+            [
+                html.H3("Buffer Settings", style={"margin-top": "20px", "margin-bottom": "10px"}),
+                html.Div(
+                    [
+                        html.Label("Polyline Buffer (meters):", style={"margin-right": "10px"}),
+                        dcc.Input(
+                            id="buffer-input",
+                            type="number",
+                            value=50,
+                            min=1,
+                            max=500,
+                            step=1,
+                            style={"width": "100px", "margin-right": "10px"}
+                        ),
+                        html.Button(
+                            "Update Buffer",
+                            id="update-buffer-btn",
+                            n_clicks=0,
+                            style={"margin-left": "10px"}
+                        ),
+                    ],
+                    style={"display": "flex", "align-items": "center", "margin-bottom": "10px"}
+                ),
+            ],
+            id="buffer-controls",
+            style={"display": "none"}  # Initially hidden, shown when polyline is drawn
+        ),
         html.Div(id="selected-borehole-info"),
         html.Div(id="section-plot-output"),
         html.Div(id="log-plot-output"),
