@@ -237,7 +237,7 @@ def update_server_info(n_clicks):
         Output("output-upload", "children"),
         Output("borehole-markers", "children"),
         Output("selected-borehole-info", "children"),
-        Output("borehole-map", "center"),
+        Output("borehole-map", "center", allow_duplicate=True),
         Output("section-plot-output", "children"),
         Output("log-plot-output", "children"),
         Output("download-section-plot", "data"),
@@ -256,12 +256,11 @@ def update_server_info(n_clicks):
         Input("borehole-map", "zoom"),
     ],
     [
-        State("borehole-markers", "children"),
-        State("section-plot-output", "children"),
         State("borehole-map", "center"),
         State("borehole-map", "zoom"),
         State("subselection-checkbox-grid", "value"),
     ],
+    prevent_initial_call=True,
 )
 def handle_upload_and_draw(
     stored_data,  # Input("upload-data-store", "data")

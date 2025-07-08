@@ -63,12 +63,16 @@ def register_callbacks(app):
         [
             Output("output-upload", "children"),
             Output("borehole-markers", "children"),
-            Output("borehole-map", "center"),
-            Output("borehole-map", "zoom"),
+            Output("borehole-map", "center", allow_duplicate=True),
+            Output("borehole-map", "zoom", allow_duplicate=True),
             Output("borehole-data-store", "data"),
+            Output(
+                "draw-control", "clear_all", allow_duplicate=True
+            ),  # Clear shapes on new upload
         ],
         [Input("upload-data-store", "data")],
         [State("borehole-map", "center"), State("borehole-map", "zoom")],
+        prevent_initial_call=True,  # Added to fix duplicate callback error
     )
     def handle_file_upload(stored_data, map_center_state, map_zoom_state):
         """Handle file upload and create markers"""
@@ -80,7 +84,7 @@ def register_callbacks(app):
 
         if not stored_data or "contents" not in stored_data:
             logging.info("No file uploaded yet")
-            return None, [], map_center, map_zoom, None
+            return None, [], map_center, map_zoom, None, None
 
         try:
             # Process uploaded files
@@ -187,8 +191,11 @@ def register_callbacks(app):
                     map_zoom = 16
 
                 logging.info(
-                    f"Map centering: Median coords ({median_lat:.6f}, {median_lon:.6f}), "
-                    f"Range: {coord_range:.6f}, Zoom: {map_zoom}"
+                    f"🎯 SETTING MAP CENTER: [{median_lat:.6f}, {median_lon:.6f}] with zoom {map_zoom}"
+                )
+                logging.info(
+                    f"📊 Coordinate analysis: Range={coord_range:.6f}, "
+                    f"Bounds: Lat[{min(lats):.6f}, {max(lats):.6f}], Lon[{min(lons):.6f}, {max(lons):.6f}]"
                 )
             else:
                 logging.warning("No valid coordinates found for map centering")
@@ -248,12 +255,38 @@ def register_callbacks(app):
 
             file_status.append(status_info)
 
-            return file_status, markers, map_center, map_zoom, borehole_data
+            # Ensure map center is correct before returning
+            logging.info(f"📍 Final map_center: {map_center}, zoom: {map_zoom}")
+
+            # Add a small unique value to the map center to force a re-render
+            # This is a workaround for Dash Leaflet not always updating properly
+            random_offset = 0.000001 * (datetime.now().microsecond % 10)
+            map_center = [map_center[0] + random_offset, map_center[1] + random_offset]
+
+            # Add additional server-side logging about the map center
+            logging.warning(
+                f"⚠️ MAP CENTER VERIFICATION: Returning center={map_center}, zoom={map_zoom}. "
+                f"If this doesn't match what you see in the UI, check browser console logs."
+            )
+
+            # Clear any existing shapes on file upload (timestamp for clear_all)
+            clear_shapes = datetime.now().timestamp()
+
+            return (
+                file_status,
+                markers,
+                map_center,
+                map_zoom,
+                borehole_data,
+                clear_shapes,
+            )
 
         except Exception as e:
             logging.error(f"Error in file upload: {e}")
             error_msg = html.Div([f"Error processing files: {e}"])
-            return [error_msg], [], map_center, map_zoom, None
+            # Also clear shapes on error
+            clear_shapes = datetime.now().timestamp()
+            return [error_msg], [], map_center, map_zoom, None, clear_shapes
 
     # ====================================================================
     # CALLBACK 2: MAP INTERACTIONS (Drawing, PCA, Marker Colors)
@@ -265,6 +298,7 @@ def register_callbacks(app):
             Output("subselection-checkbox-grid-container", "children"),
             Output("ui-feedback", "children"),
             Output("borehole-markers", "children", allow_duplicate=True),
+            Output("borehole-data-store", "data", allow_duplicate=True),
         ],
         [
             Input("draw-control", "geojson"),
@@ -288,7 +322,7 @@ def register_callbacks(app):
 
         if not stored_borehole_data:
             logging.warning("No stored borehole data available")
-            return [], None, None, None, []
+            return [], None, None, None, [], stored_borehole_data
 
         # Drawing triggered
         if (
@@ -305,7 +339,7 @@ def register_callbacks(app):
         elif "subselection-checkbox-grid.value" in triggered and checked_ids:
             return handle_checkbox_selection(checked_ids, stored_borehole_data)
 
-        return [], None, None, None, []
+        return [], None, None, None, [], stored_borehole_data
 
     def handle_shape_drawing(drawn_geojson, stored_borehole_data, marker_children):
         """Handle shape drawing and borehole selection"""
@@ -382,6 +416,14 @@ def register_callbacks(app):
                 # Create checkbox grid
                 checkbox_grid = create_checkbox_grid(borehole_ids, borehole_ids)
 
+                # Store the selected boreholes for reuse in checkbox selection callback
+                # Clone the data store and add our selection
+                data_with_selection = dict(stored_borehole_data)
+                data_with_selection["selection_boreholes"] = borehole_ids
+
+                # Update the global data store (this will be picked up by other callbacks)
+                stored_borehole_data = data_with_selection
+
                 # Create detailed feedback message with status info
                 total_boreholes = len(stored_borehole_data.get("all_borehole_ids", []))
                 blue_markers = total_boreholes - len(borehole_ids)
@@ -419,6 +461,7 @@ def register_callbacks(app):
                     checkbox_grid,
                     feedback,
                     updated_markers,
+                    data_with_selection,
                 )
             else:
                 feedback = html.Div(
@@ -433,6 +476,7 @@ def register_callbacks(app):
                     None,
                     feedback,
                     updated_markers,
+                    stored_borehole_data,  # Unchanged data store
                 )
 
         except Exception as e:
@@ -448,29 +492,51 @@ def register_callbacks(app):
                 None,
                 error_msg,
                 updated_markers,
+                stored_borehole_data,  # Unchanged data store
             )
 
     def handle_checkbox_selection(checked_ids, stored_borehole_data):
         """Handle checkbox selection changes"""
         try:
             loca_df = pd.DataFrame(stored_borehole_data["loca_df"])
+
+            # We need to use the current checkbox options rather than all boreholes
+            # Get the shape-selected boreholes from stored data
+            if "selection_boreholes" in stored_borehole_data:
+                # Use the stored selection from shape drawing
+                shape_selected_ids = stored_borehole_data["selection_boreholes"]
+            else:
+                # Fallback - use the checked IDs as a guide (not ideal but safer than all boreholes)
+                shape_selected_ids = checked_ids
+
+            # Filter to only the checked boreholes
             filtered_df = loca_df[loca_df["LOCA_ID"].isin(checked_ids)]
 
             # Calculate PCA line for checked boreholes
             pca_line = calculate_pca_line(filtered_df)
+
+            # Create checkbox grid with only the shape-selected boreholes
+            checkbox_grid = create_checkbox_grid(shape_selected_ids, checked_ids)
 
             feedback = html.Div(f"Using {len(checked_ids)} selected boreholes")
 
             # Update marker colors based on checkbox selection
             updated_markers = update_marker_colors(stored_borehole_data, checked_ids)
 
-            return pca_line, None, None, feedback, updated_markers
+            return (
+                pca_line,
+                None,
+                checkbox_grid,
+                feedback,
+                updated_markers,
+                stored_borehole_data,
+            )
 
         except Exception as e:
             logging.error(f"Error in checkbox selection: {e}")
             # Return markers with all blue (no selection) on error
             updated_markers = update_marker_colors(stored_borehole_data, [])
-            return [], None, None, None, updated_markers
+            return [], None, None, None, updated_markers, stored_borehole_data
 
     def calculate_pca_line(filtered_df):
         """Calculate and create PCA line for display - extended past markers"""
@@ -530,6 +596,22 @@ def register_callbacks(app):
 
     def create_checkbox_grid(borehole_ids, current_checked):
         """Create checkbox grid for borehole selection"""
+        if not borehole_ids:
+            # Return empty grid if no boreholes selected
+            logging.warning("No borehole IDs provided for checkbox grid")
+            return html.Div(
+                [
+                    html.H4("No boreholes selected", style=config.HEADER_H4_LEFT_STYLE),
+                    html.P(
+                        "Please select boreholes on the map",
+                        style=config.DESCRIPTION_TEXT_STYLE,
+                    ),
+                ]
+            )
+
+        # Ensure current_checked contains only valid IDs
+        valid_checked = [bh_id for bh_id in current_checked if bh_id in borehole_ids]
+
         return html.Div(
             [
                 html.H4(
@@ -543,7 +625,7 @@ def register_callbacks(app):
                     options=[
                         {"label": f" {bh_id}", "value": bh_id} for bh_id in borehole_ids
                     ],
-                    value=current_checked,
+                    value=valid_checked,
                     labelStyle=config.CHECKBOX_LABEL_STYLE,
                     style=config.CHECKBOX_LEFT_STYLE,
                 ),
@@ -685,5 +767,107 @@ def register_callbacks(app):
             # Return the current timestamp to trigger the clear_all action
             return datetime.now().timestamp()
         return dash.no_update
+
+    # Add a client-side callback to force map to update view using UI elements only
+    # Removed direct map center output to avoid duplicate callbacks
+    app.clientside_callback(
+        """
+        function(center, zoom) {
+            // Only execute if both center and zoom are valid
+            if (center && zoom) {
+                // Log for debugging
+                console.log('Client-side callback triggered for map update');
+                console.log('Center:', center, 'Zoom:', zoom);
+                
+                // Force Leaflet map to update by accessing the internal map instance
+                const mapDiv = document.getElementById('borehole-map');
+                
+                if (mapDiv && mapDiv._leaflet_map) {
+                    console.log('Found map div:', mapDiv.id);
+                    
+                    // Log before changing view
+                    const currentCenter = mapDiv._leaflet_map.getCenter();
+                    const currentZoom = mapDiv._leaflet_map.getZoom();
+                    console.log('Current map center:', [currentCenter.lat, currentCenter.lng], 'Current zoom:', currentZoom);
+                    
+                    // Try different methods to ensure update
+                    try {
+                        // Use setView with animation disabled
+                        mapDiv._leaflet_map.setView(center, zoom, {animate: false, duration: 0});
+                        console.log('Applied setView() method');
+                        
+                        // Invalidate map size to force a redraw
+                        mapDiv._leaflet_map.invalidateSize();
+                    } catch (e) {
+                        console.error('Error updating map view:', e);
+                    }
+                }
+            }
+            // This is a dummy output that doesn't change anything
+            return window.dash_clientside.no_update;
+        }
+        """,
+        # Use a placeholder output for the clientside callback
+        Output("ui-feedback", "children", allow_duplicate=True),
+        [Input("borehole-map", "center"), Input("borehole-map", "zoom")],
+        prevent_initial_call=True,
+    )
+
+    # Add an explicit callback triggered by file upload to center map
+    @app.callback(
+        [
+            Output("borehole-map", "center", allow_duplicate=True),
+            Output("borehole-map", "zoom", allow_duplicate=True),
+        ],
+        [Input("borehole-data-store", "data")],
+        prevent_initial_call=True,
+    )
+    def force_map_center_update(borehole_data):
+        """Force an update to map center after data store is populated"""
+        if not borehole_data:
+            return dash.no_update, dash.no_update
+
+        try:
+            # Get all stored valid coordinates
+            lats = [
+                row.get("lat") for row in borehole_data["loca_df"] if row.get("lat")
+            ]
+            lons = [
+                row.get("lon") for row in borehole_data["loca_df"] if row.get("lon")
+            ]
+
+            if not lats or not lons:
+                logging.warning("No valid coordinates for force_map_center_update")
+                return dash.no_update, dash.no_update
+
+            # Use median coordinates for centering
+            median_lat = statistics.median(lats)
+            median_lon = statistics.median(lons)
+
+            # Calculate appropriate zoom level
+            lat_range = max(lats) - min(lats)
+            lon_range = max(lons) - min(lons)
+            coord_range = max(lat_range, lon_range)
+
+            # Determine zoom based on range
+            if coord_range > 0.1:
+                zoom = 10
+            elif coord_range > 0.01:
+                zoom = 12
+            elif coord_range > 0.001:
+                zoom = 14
+            else:
+                zoom = 16
+
+            # Add a small random offset to force re-render
+            random_offset = 0.000001 * (datetime.now().microsecond % 10)
+            center = [median_lat + random_offset, median_lon + random_offset]
+
+            logging.warning(f"🎯 SECONDARY MAP CENTER TRIGGER: {center}, zoom: {zoom}")
+            return center, zoom
+
+        except Exception as e:
+            logging.error(f"Error in force_map_center_update: {e}")
+            return dash.no_update, dash.no_update
 
     logging.info("✅ All split callbacks registered successfully!")

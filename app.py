@@ -10,6 +10,7 @@ from datetime import datetime
 
 import config  # Import UI configuration
 from callbacks_split import register_callbacks  # Import callback registration
+from app_factory import create_app_with_duplicate_callbacks  # Import app factory
 
 # Set up enhanced logging format with detailed context
 logfile = "app_debug.log"
@@ -31,7 +32,8 @@ logging.info(f"App starting at {datetime.now()}")
 logging.info(f"Dash version: {dash.__version__}")
 logging.info(f"Dash-leaflet version: {dl.__version__}")
 
-app = dash.Dash(__name__, suppress_callback_exceptions=True)
+# Create the Dash app using the factory function for proper duplicate callback handling
+app = create_app_with_duplicate_callbacks()
 
 # Log layout creation
 logging.info("Creating app layout...")
@@ -63,7 +65,7 @@ app.layout = html.Div(
                                         attribution="&copy; OpenStreetMap contributors",
                                     ),
                                     name="OpenStreetMap",
-                                    checked=True,
+                                    checked=False,
                                 ),
                                 dl.BaseLayer(
                                     dl.TileLayer(
@@ -74,6 +76,33 @@ app.layout = html.Div(
                                         attribution="&copy; Esri",
                                     ),
                                     name="Satellite",
+                                    checked=False,
+                                ),
+                                # New Hybrid layer combining satellite imagery with labels
+                                dl.BaseLayer(
+                                    dl.LayerGroup(
+                                        [
+                                            # Base satellite layer
+                                            dl.TileLayer(
+                                                url=(
+                                                    "https://server.arcgisonline.com/ArcGIS/rest/services/"
+                                                    "World_Imagery/MapServer/tile/{z}/{y}/{x}"
+                                                ),
+                                                attribution="&copy; Esri",
+                                            ),
+                                            # Translucent labels layer on top
+                                            dl.TileLayer(
+                                                url=(
+                                                    "https://{s}.basemaps.cartocdn.com/rastertiles/"
+                                                    "voyager_only_labels/{z}/{x}/{y}{r}.png"
+                                                ),
+                                                attribution="&copy; CARTO",
+                                                opacity=0.9,
+                                            ),
+                                        ]
+                                    ),
+                                    name="Hybrid (Satellite + Labels)",
+                                    checked=True,  # Set as default
                                 ),
                             ],
                             position="topright",
@@ -284,6 +313,9 @@ app.clientside_callback(
     dash.Input("draw-state-store", "data"),
     prevent_initial_call=True,
 )
+
+# Direct map update callback - replace with a logging function only
+# Removed this callback to avoid duplicate center outputs
 
 
 if __name__ == "__main__":

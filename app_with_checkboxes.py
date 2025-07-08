@@ -214,8 +214,8 @@ logging.info("Registering callbacks...")
         Output("output-upload", "children"),
         Output("borehole-markers", "children"),
         Output("selected-borehole-info", "children"),
-        Output("borehole-map", "center"),
-        Output("borehole-map", "zoom"),  # Add zoom control
+        Output("borehole-map", "center", allow_duplicate=True),
+        Output("borehole-map", "zoom", allow_duplicate=True),  # Add zoom control
         Output("section-plot-output", "children"),
         Output("log-plot-output", "children"),
         Output("download-section-plot", "data"),
@@ -234,12 +234,11 @@ logging.info("Registering callbacks...")
         Input("subselection-checkbox-grid", "value"),  # Checkbox changes trigger
     ],
     [
-        State("borehole-markers", "children"),
-        State("section-plot-output", "children"),
         State("borehole-map", "center"),
         State("borehole-map", "zoom"),
         State("borehole-data-store", "data"),  # Add stored borehole data
     ],
+    prevent_initial_call=True,
 )
 def handle_upload_and_draw(
     stored_data,  # Input("upload-data-store", "data")
