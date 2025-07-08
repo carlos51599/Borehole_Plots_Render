@@ -57,57 +57,43 @@ def filter_selection_by_shape(loca_df, drawn_geojson):
         logging.warning("No features found in drawn_geojson")
         return []
 
-    # Process each feature
-    all_filtered_dfs = []  # Store DataFrames instead of just IDs
-    for i, feature in enumerate(features):
-        logging.info(f"Processing feature {i}...")
-        logging.info(f"Feature type: {type(feature)}")
+    # Process only the first feature (should be the only one)
+    feature = features[0]
+    logging.info("Processing feature...")
+    logging.info(f"Feature type: {type(feature)}")
 
-        if not isinstance(feature, dict):
-            logging.warning(f"Feature {i} is not a dict, skipping")
-            continue
+    if not isinstance(feature, dict):
+        logging.warning("Feature is not a dict, skipping")
+        return []
 
-        geometry = feature.get("geometry", {})
-        logging.info(f"Geometry: {geometry}")
+    geometry = feature.get("geometry", {})
+    logging.info(f"Geometry: {geometry}")
 
-        geom_type = geometry.get("type")
-        coordinates = geometry.get("coordinates", [])
+    geom_type = geometry.get("type")
+    coordinates = geometry.get("coordinates", [])
 
-        logging.info(f"Geometry type: {geom_type}")
-        logging.info(f"Coordinates length: {len(coordinates)}")
+    logging.info(f"Geometry type: {geom_type}")
+    logging.info(f"Coordinates length: {len(coordinates)}")
 
-        if coordinates:
-            logging.info(
-                f"First coordinate: {coordinates[0] if len(coordinates) > 0 else 'empty'}"
-            )
-
-        try:
-            filtered_df = filter_by_geometry(loca_df, geometry)
-            logging.info(
-                f"Filtered result for feature {i}: {len(filtered_df)} boreholes"
-            )
-            if len(filtered_df) > 0:
-                all_filtered_dfs.append(filtered_df)
-        except Exception as filter_err:
-            logging.error(
-                f"Error filtering by feature {i}: {filter_err}", exc_info=True
-            )
-
-    # Combine all filtered DataFrames and remove duplicates
-    if all_filtered_dfs:
-        import pandas as pd
-
-        combined_df = pd.concat(all_filtered_dfs, ignore_index=True)
-        # Remove duplicate rows based on LOCA_ID
-        unique_df = combined_df.drop_duplicates(subset=["LOCA_ID"], keep="first")
-        unique_ids = unique_df["LOCA_ID"].tolist()
+    if coordinates:
         logging.info(
-            f"Combined and deduplicated: {len(unique_ids)} unique borehole IDs"
+            f"First coordinate: {coordinates[0] if len(coordinates) > 0 else 'empty'}"
         )
-        logging.info(f"Final borehole IDs: {unique_ids}")
-        return unique_ids
-    else:
-        logging.info("No boreholes found in any features")
+
+    try:
+        filtered_df = filter_by_geometry(loca_df, geometry)
+        logging.info(f"Filtered result: {len(filtered_df)} boreholes")
+
+        if len(filtered_df) > 0:
+            # Return the selected borehole IDs
+            unique_ids = filtered_df["LOCA_ID"].tolist()
+            logging.info(f"Final borehole IDs: {unique_ids}")
+            return unique_ids
+        else:
+            logging.info("No boreholes found in the feature")
+            return []
+    except Exception as filter_err:
+        logging.error(f"Error filtering by feature: {filter_err}", exc_info=True)
         return []
 
 

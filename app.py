@@ -54,7 +54,30 @@ app.layout = html.Div(
                 html.H2(config.MAP_SECTION_TITLE, style=config.HEADER_H2_LEFT_STYLE),
                 dl.Map(
                     [
-                        dl.TileLayer(),
+                        # Layer control to switch between map types
+                        dl.LayersControl(
+                            [
+                                dl.BaseLayer(
+                                    dl.TileLayer(
+                                        url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
+                                        attribution="&copy; OpenStreetMap contributors",
+                                    ),
+                                    name="OpenStreetMap",
+                                    checked=True,
+                                ),
+                                dl.BaseLayer(
+                                    dl.TileLayer(
+                                        url=(
+                                            "https://server.arcgisonline.com/ArcGIS/rest/services/"
+                                            "World_Imagery/MapServer/tile/{z}/{y}/{x}"
+                                        ),
+                                        attribution="&copy; Esri",
+                                    ),
+                                    name="Satellite",
+                                ),
+                            ],
+                            position="topright",
+                        ),
                         dl.FeatureGroup(
                             [
                                 # Markers will be added dynamically
@@ -77,8 +100,15 @@ app.layout = html.Div(
                                         "circle": False,
                                         "rectangle": True,
                                         "marker": False,
+                                        # Add debugging info
+                                        "circlemarker": False,
                                     },
-                                    edit={"edit": True, "remove": True},
+                                    edit={
+                                        "edit": True,
+                                        "remove": True,
+                                        "removeAll": True,  # Enable remove all shapes
+                                        "poly": True,
+                                    },
                                     position="topleft",
                                 ),
                             ],
@@ -183,6 +213,77 @@ def store_upload_data(contents, filenames):
     except Exception as e:
         logging.error(f"Error storing upload data: {str(e)}")
         return None
+
+
+# Create a dcc.Store to track the draw state
+app.layout.children.append(dcc.Store(id="draw-state-store", data={"lastUpdate": 0}))
+
+
+# Primary callback: When a new shape is drawn, keep only the latest and update the draw-state-store
+app.clientside_callback(
+    """
+    function(geojson, oldState) {
+        console.log("==== SHAPE CALLBACK TRIGGERED ====");
+        if (!geojson || !geojson.features) {
+            console.log("No geojson or features available");
+            return [window.dash_clientside.no_update, window.dash_clientside.no_update];
+        }
+        const timestamp = new Date().getTime();
+        console.log(`Time: ${timestamp}, Features count: ${geojson.features.length}`);
+        if (geojson.features.length === 0) {
+            console.log("No features to process");
+            return [window.dash_clientside.no_update, oldState];
+        }
+        // Only process if it's actually a new shape (check timestamp)
+        if (oldState && (timestamp - oldState.lastUpdate < 500)) {
+            console.log("Ignoring rapid consecutive updates");
+            return [window.dash_clientside.no_update, oldState];
+        }
+        console.log("Processing new shape, clearing old shapes");
+        // Keep only the most recent feature
+        const latestFeature = geojson.features[geojson.features.length - 1];
+        console.log(`Latest feature type: ${latestFeature.geometry.type}`);
+        // Create new state
+        const newState = {
+            lastUpdate: timestamp,
+            featureCount: 1,
+            featureType: latestFeature.geometry.type
+        };
+        // Return the new state with the timestamp to trigger clear_all in the next callback
+        return [
+            {
+                type: 'FeatureCollection',
+                features: [latestFeature]
+            },
+            newState
+        ];
+    }
+    """,
+    [dash.Output("draw-control", "geojson"), dash.Output("draw-state-store", "data")],
+    [dash.Input("draw-control", "geojson")],
+    [dash.State("draw-state-store", "data")],
+    prevent_initial_call=True,
+)
+
+# Secondary callback: Use state changes to clear all layers
+app.clientside_callback(
+    """
+    function(state) {
+        console.log("==== CLEAR LAYERS CALLBACK ====");
+        if (!state || !state.lastUpdate) {
+            console.log("No state available");
+            return window.dash_clientside.no_update;
+        }
+        console.log(`Clearing all layers at time: ${state.lastUpdate}`);
+        
+        // Return a timestamp to trigger clear_all
+        return new Date().getTime();
+    }
+    """,
+    dash.Output("draw-control", "clear_all", allow_duplicate=True),
+    dash.Input("draw-state-store", "data"),
+    prevent_initial_call=True,
+)
 
 
 if __name__ == "__main__":
