@@ -9,7 +9,6 @@ import webbrowser
 from datetime import datetime
 
 import config  # Import UI configuration
-from callbacks_split import register_callbacks  # Import callback registration
 
 # Set up enhanced logging format with detailed context
 logfile = "app_debug.log"
@@ -79,7 +78,6 @@ app.layout = html.Div(
                                         "marker": False,
                                     },
                                     edit={"edit": True, "remove": True},
-                                    position="topleft",
                                 ),
                             ],
                             id="draw-feature-group",
@@ -156,6 +154,8 @@ logging.info("=== END LAYOUT IDs ===")
 
 # Import and register the split callbacks
 logging.info("Registering split callbacks...")
+from callbacks_split import register_callbacks
+
 register_callbacks(app)
 logging.info("✅ All callbacks registered successfully!")
 
