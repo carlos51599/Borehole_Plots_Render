@@ -10,7 +10,6 @@ import logging
 import statistics
 import base64
 import io
-import time
 from sklearn.decomposition import PCA
 import matplotlib
 import matplotlib.pyplot as plt
@@ -21,9 +20,6 @@ from map_utils import filter_selection_by_shape
 from section_plot import plot_section_from_ags_content
 
 matplotlib.use("Agg")
-
-# Global variable to track last shape processing time (debounce mechanism)
-last_shape_time = 0
 
 
 # Define marker icon URLs
@@ -181,7 +177,7 @@ def register_callbacks(app):
             Output("selected-borehole-info", "children"),
             Output("subselection-checkbox-grid-container", "children"),
             Output("ui-feedback", "children"),
-            Output("draw-control", "geojson"),  # Clear previous shapes
+            Output("draw-control", "geojson"),  # Add this back to clear previous shapes
         ],
         [
             Input("draw-control", "geojson"),
@@ -197,8 +193,6 @@ def register_callbacks(app):
         drawn_geojson, checked_ids, stored_borehole_data, marker_children
     ):
         """Handle map drawing and selection"""
-        global last_shape_time
-
         logging.info("=== MAP INTERACTION CALLBACK ===")
 
         ctx = dash.callback_context
@@ -207,76 +201,27 @@ def register_callbacks(app):
 
         if not stored_borehole_data:
             logging.warning("No stored borehole data available")
-            return [], None, None, None, None
+            return [], None, None, None, dash.no_update
 
-        # Drawing triggered - check for valid, complete shapes only
+        # Drawing triggered
         if (
             "draw-control.geojson" in triggered
             and drawn_geojson
             and drawn_geojson.get("features")
         ):
-            # Add debounce mechanism - prevent processing if less than 500ms since last shape
-            current_time = time.time()
-            if current_time - last_shape_time < 0.5:
-                logging.info("Debouncing - ignoring rapid successive drawing events")
-                return [], None, None, None, None
-
-            features = drawn_geojson.get("features", [])
-            logging.info(f"Drawing event: received {len(features)} features")
-
-            # Only process if we have exactly 1 feature (prevents double-trigger issue)
-            if len(features) == 1:
-                feature = features[0]
-                geom = feature.get("geometry", {})
-                geom_type = geom.get("type")
-                coords = geom.get("coordinates", [])
-
-                # More strict validation for completed shapes
-                is_valid = False
-                if geom_type == "Polygon" and coords and len(coords) > 0:
-                    # Polygon must have at least 4 points and be closed
-                    if len(coords[0]) >= 4 and coords[0][0] == coords[0][-1]:
-                        is_valid = True
-                        logging.info(
-                            f"Valid closed polygon with {len(coords[0])} points"
-                        )
-                elif geom_type == "Rectangle" and coords and len(coords) > 0:
-                    # Rectangle should have exactly 5 points (4 corners + closing point)
-                    if len(coords[0]) == 5:
-                        is_valid = True
-                        logging.info(f"Valid rectangle with {len(coords[0])} points")
-                elif geom_type == "LineString" and coords and len(coords) >= 2:
-                    is_valid = True
-                    logging.info(f"Valid linestring with {len(coords)} points")
-
-                if is_valid:
-                    last_shape_time = current_time  # Update debounce timer
-                    logging.info(f"Processing single valid {geom_type}")
-                    return handle_shape_drawing(
-                        drawn_geojson, stored_borehole_data, marker_children
-                    )
-                else:
-                    coord_count = len(coords[0]) if coords and len(coords) > 0 else 0
-                    logging.info(
-                        f"Invalid or incomplete {geom_type} (coords: {coord_count}), ignoring"
-                    )
-                    return [], None, None, None, None
-            elif len(features) == 0:
-                # No features - user cleared the drawing
-                logging.info("No features - drawing cleared")
-                return [], None, None, None, None
-            else:
-                # Multiple features indicate double-triggering or accumulation - ignore
-                logging.warning(
-                    f"Ignoring drawing event with {len(features)} features (likely double-trigger)"
-                )
-                return [], None, None, None, None
+            logging.info("Processing drawing event")
+            result = handle_shape_drawing(
+                drawn_geojson, stored_borehole_data, marker_children
+            )
+            # Add the cleared geojson to the result
+            return result + (get_latest_shape_geojson(drawn_geojson),)
 
         # Checkbox selection triggered
         elif "subselection-checkbox-grid.value" in triggered and checked_ids:
-            return handle_checkbox_selection(checked_ids, stored_borehole_data)
+            result = handle_checkbox_selection(checked_ids, stored_borehole_data)
+            return result + (dash.no_update,)
 
-        return [], None, None, None, None
+        return [], None, None, None, dash.no_update
 
     def handle_shape_drawing(drawn_geojson, stored_borehole_data, marker_children):
         """Handle shape drawing and borehole selection"""
@@ -289,21 +234,40 @@ def register_callbacks(app):
             features = drawn_geojson.get("features", [])
             if not features:
                 logging.warning("No features found in drawn GeoJSON")
-                return [], None, None, html.Div("No valid shapes found"), None
+                return [], None, None, html.Div("No valid shapes found")
 
             selected_feature = features[0]  # Use the single feature
             geom_type = selected_feature.get("geometry", {}).get("type", "unknown")
             logging.info(f"Processing {geom_type} for borehole selection")
 
             # Filter by the selected shape
-            filtered_df = filter_selection_by_shape(loca_df, drawn_geojson)
+            filtered_result = filter_selection_by_shape(loca_df, drawn_geojson)
+            logging.info(f"filter_selection_by_shape returned: {type(filtered_result)}")
 
-            if filtered_df is not None and not filtered_df.empty:
-                borehole_ids = filtered_df["LOCA_ID"].tolist()
+            # Handle both DataFrame and list return types (like in original megacallback)
+            borehole_ids = []
+            if isinstance(filtered_result, pd.DataFrame):
+                if not filtered_result.empty:
+                    borehole_ids = filtered_result["LOCA_ID"].tolist()
+                    logging.info(
+                        f"Extracted {len(borehole_ids)} LOCA_IDs from DataFrame"
+                    )
+            elif isinstance(filtered_result, list):
+                borehole_ids = filtered_result
+                logging.info(f"Got {len(borehole_ids)} LOCA_IDs directly from filter")
+            else:
+                logging.warning(f"Unexpected return type: {type(filtered_result)}")
+
+            if borehole_ids:
                 logging.info(f"Selected {len(borehole_ids)} boreholes: {borehole_ids}")
 
-                # Calculate PCA line
-                pca_line = calculate_pca_line(filtered_df)
+                # Calculate PCA line (need to get the filtered DataFrame for PCA)
+                if isinstance(filtered_result, pd.DataFrame):
+                    pca_line = calculate_pca_line(filtered_result)
+                else:
+                    # If we got a list, filter the original DataFrame
+                    filtered_df = loca_df[loca_df["LOCA_ID"].isin(borehole_ids)]
+                    pca_line = calculate_pca_line(filtered_df)
 
                 # Create checkbox grid
                 checkbox_grid = create_checkbox_grid(borehole_ids, borehole_ids)
@@ -317,10 +281,6 @@ def register_callbacks(app):
                     None,
                     checkbox_grid,
                     feedback,
-                    {
-                        "type": "FeatureCollection",
-                        "features": [],
-                    },  # Clear shapes aggressively
                 )
             else:
                 feedback = html.Div(
@@ -332,7 +292,6 @@ def register_callbacks(app):
                     None,
                     None,
                     feedback,
-                    {"type": "FeatureCollection", "features": []},
                 )
 
         except Exception as e:
@@ -345,7 +304,6 @@ def register_callbacks(app):
                 None,
                 None,
                 error_msg,
-                {"type": "FeatureCollection", "features": []},
             )
 
     def handle_checkbox_selection(checked_ids, stored_borehole_data):
@@ -359,11 +317,11 @@ def register_callbacks(app):
 
             feedback = html.Div(f"Using {len(checked_ids)} selected boreholes")
 
-            return pca_line, None, None, feedback, None
+            return pca_line, None, None, feedback
 
         except Exception as e:
             logging.error(f"Error in checkbox selection: {e}")
-            return [], None, None, None, None
+            return [], None, None, None
 
     def calculate_pca_line(filtered_df):
         """Calculate and create PCA line for display"""
@@ -508,3 +466,19 @@ def register_callbacks(app):
             return None, None, None
 
     logging.info("✅ All split callbacks registered successfully!")
+
+
+def get_latest_shape_geojson(drawn_geojson):
+    """Return GeoJSON with only the latest drawn shape to clear previous shapes"""
+    if not drawn_geojson or not drawn_geojson.get("features"):
+        return {"type": "FeatureCollection", "features": []}
+
+    features = drawn_geojson.get("features", [])
+    if not features:
+        return {"type": "FeatureCollection", "features": []}
+
+    # Find the most recently created feature (highest ID or most recent timestamp)
+    latest_feature = features[-1]  # Assume the last feature is the most recent
+
+    # Return GeoJSON with only the latest feature
+    return {"type": "FeatureCollection", "features": [latest_feature]}
