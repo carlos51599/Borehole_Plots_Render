@@ -43,6 +43,32 @@ logging.info("Creating app layout...")
 
 app.layout = html.Div(
     [
+        # Logo container positioned absolutely in top-left corner
+        html.Div(
+            html.Img(
+                src="assets/BinniesLogo.png", className="logo-image", id="logo-img"
+            ),
+            className="logo-container",
+            id="logo-container",
+        ),
+        # Theme toggle buttons positioned absolutely in top-right corner
+        html.Div(
+            [
+                html.Button(
+                    "☀️",  # Sun emoji
+                    id="light-theme-btn",
+                    className="theme-toggle-btn sun-icon",
+                    title="Switch to Light Theme",
+                ),
+                html.Button(
+                    "🌙",  # Moon emoji
+                    id="dark-theme-btn",
+                    className="theme-toggle-btn moon-icon active",
+                    title="Switch to Dark Theme",
+                ),
+            ],
+            className="theme-toggle-container",
+        ),
         html.H1(config.APP_TITLE, style=config.HEADER_H1_CENTER_STYLE),
         html.P(config.APP_SUBTITLE, style=config.HEADER_H2_CENTER_STYLE),
         dcc.Upload(
@@ -183,7 +209,7 @@ app.layout = html.Div(
                     ],
                     style={
                         "display": "flex",
-                        "align-items": "center",
+                        "alignItems": "center",
                         "margin-bottom": "10px",
                     },
                 ),
@@ -225,7 +251,8 @@ app.layout = html.Div(
         # Store components for data sharing between callbacks
         dcc.Store(id="upload-data-store"),
         dcc.Store(id="borehole-data-store"),
-    ]
+    ],
+    className="dash-container",  # Add a class for styling the main container
 )
 
 # Log layout components after creation
@@ -252,6 +279,84 @@ def log_layout_ids(component, prefix=""):
 logging.info("=== LAYOUT COMPONENT IDs ===")
 log_layout_ids(app.layout)
 logging.info("=== END LAYOUT IDs ===")
+
+# Theme switching callback
+app.clientside_callback(
+    """
+    function(light_clicks, dark_clicks) {
+        console.log('=== THEME CALLBACK TRIGGERED ===');
+        console.log('Light clicks:', light_clicks);
+        console.log('Dark clicks:', dark_clicks);
+        
+        // Determine which button was clicked
+        const ctx = window.dash_clientside.callback_context;
+        console.log('Callback context:', ctx);
+        
+        if (!ctx.triggered.length) {
+            console.log('No triggers found');
+            return [window.dash_clientside.no_update, window.dash_clientside.no_update];
+        }
+        
+        const button_id = ctx.triggered[0].prop_id.split('.')[0];
+        console.log('Button clicked:', button_id);
+        
+        if (button_id === 'light-theme-btn') {
+            // Switch to light theme
+            console.log('Switching to LIGHT theme');
+            document.body.className = 'light-theme';
+            console.log('Body className after change:', document.body.className);
+            console.log('Computed background image:', window.getComputedStyle(document.body).backgroundImage);
+            return ['theme-toggle-btn sun-icon active', 'theme-toggle-btn moon-icon'];
+        } else if (button_id === 'dark-theme-btn') {
+            // Switch to dark theme
+            console.log('Switching to DARK theme');
+            document.body.className = '';
+            console.log('Body className after change:', document.body.className);
+            console.log('Computed background image:', window.getComputedStyle(document.body).backgroundImage);
+            return ['theme-toggle-btn sun-icon', 'theme-toggle-btn moon-icon active'];
+        }
+        
+        console.log('Unknown button clicked');
+        return [window.dash_clientside.no_update, window.dash_clientside.no_update];
+    }
+    """,
+    [
+        dash.Output("light-theme-btn", "className"),
+        dash.Output("dark-theme-btn", "className"),
+    ],
+    [
+        dash.Input("light-theme-btn", "n_clicks"),
+        dash.Input("dark-theme-btn", "n_clicks"),
+    ],
+    prevent_initial_call=True,
+)
+
+# Theme logo swapper (clientside JS)
+app.clientside_callback(
+    """
+    function(light_clicks, dark_clicks) {
+        // Existing theme logic
+        const ctx = window.dash_clientside.callback_context;
+        if (!ctx.triggered.length) {
+            return window.dash_clientside.no_update;
+        }
+        const button_id = ctx.triggered[0].prop_id.split('.')[0];
+        var logo = document.querySelector('.logo-image');
+        if (button_id === 'light-theme-btn') {
+            if (logo) logo.src = 'assets/BinniesLogoDark.png';
+        } else if (button_id === 'dark-theme-btn') {
+            if (logo) logo.src = 'assets/BinniesLogo.png';
+        }
+        return window.dash_clientside.no_update;
+    }
+    """,
+    dash.Output("logo-container", "children"),
+    [
+        dash.Input("light-theme-btn", "n_clicks"),
+        dash.Input("dark-theme-btn", "n_clicks"),
+    ],
+    prevent_initial_call=True,
+)
 
 # Import and register the split callbacks
 logging.info("Registering split callbacks...")

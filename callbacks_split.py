@@ -1307,14 +1307,20 @@ def handle_marker_click(app):
         [
             State("borehole-data-store", "data"),
             State("borehole-markers", "children"),
+            State(
+                "show-labels-checkbox", "value"
+            ),  # Add state for show-labels checkbox
         ],
         prevent_initial_call=True,
     )
-    def marker_click_handler(marker_clicks, stored_borehole_data, current_markers):
+    def marker_click_handler(
+        marker_clicks, stored_borehole_data, current_markers, show_labels_value
+    ):
         """Handle marker clicks to generate borehole logs"""
         try:
             logging.info("=== MARKER CLICK CALLBACK ===")
             logging.info(f"Triggered by: {dash.callback_context.triggered}")
+            logging.info(f"Show labels checkbox value: {show_labels_value}")
 
             # Check if any marker was clicked
             if not marker_clicks or all(
@@ -1358,10 +1364,18 @@ def handle_marker_click(app):
             for filename, content in filename_map.items():
                 combined_content += content + "\n"
 
+            # Get if show_labels is enabled
+            show_labels = "show_labels" in (show_labels_value or [])
+            logging.info(f"Show labels for borehole log: {show_labels}")
+
             # Use larger figure size and proper aspect ratio for borehole logs
             # Borehole logs are typically taller than they are wide (portrait orientation)
             fig = plot_borehole_log_from_ags_content(
-                combined_content, borehole_id, fig_height=10, fig_width=4
+                combined_content,
+                borehole_id,
+                show_labels=show_labels,
+                fig_height=10,
+                fig_width=4,
             )
 
             if fig:

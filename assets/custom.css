@@ -1,0 +1,310 @@
+/* Custom CSS for Borehole Section Application - DARK THEME */
+
+/* Dark Theme Styling */
+body.dark-theme {
+    background-image: url("BackgroundBlue.jpg");
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    background-position: center center;
+    font-family: Arial, sans-serif;
+    color: #FFFFFF; /* Global text color - white */
+}
+
+/* Light Theme Styling */
+body.light-theme {
+    background-image: url("BackgroundWhite.jpg") !important;
+    background-size: cover !important;
+    background-repeat: no-repeat !important;
+    background-attachment: fixed !important;
+    background-position: center center !important;
+    font-family: Arial, sans-serif;
+    color: #000000 !important; /* Global text color - black */
+}
+
+/* Default to dark theme if no class specified */
+body:not(.light-theme) {
+    background-image: url("BackgroundBlue.jpg");
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    background-position: center center;
+    font-family: Arial, sans-serif;
+    color: #FFFFFF; /* Global text color - white */
+}
+
+/* Make Dash components transparent */
+.dash-spreadsheet, .dash-table-container,
+.dash-graph, .dash-core-components,
+.dash-html-components, .dash-default-index {
+    background-color: transparent !important;
+}
+
+/* Make text more readable against the background - Dark Theme */
+body.dark-theme h1, body.dark-theme h2, body.dark-theme h3, body.dark-theme h4, body.dark-theme p, body.dark-theme label,
+body:not(.light-theme) h1, body:not(.light-theme) h2, body:not(.light-theme) h3, body:not(.light-theme) h4, body:not(.light-theme) p, body:not(.light-theme) label {
+    text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.8); /* Dark text shadow for white text */
+    color: #FFFFFF; /* Reinforcing the white color for these elements */
+}
+
+/* Make text more readable against the background - Light Theme */
+body.light-theme h1, body.light-theme h2, body.light-theme h3, body.light-theme h4, body.light-theme p, body.light-theme label {
+    text-shadow: 1px 1px 3px rgba(255, 255, 255, 0.8); /* Light text shadow for black text */
+    color: #000000; /* Black color for these elements */
+}
+
+/* Logo container styling */
+.logo-container {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    z-index: 1000;
+}
+
+.logo-image {
+    max-width: 150px;
+    height: auto;
+}
+
+/* Make container fully transparent to show background */
+.dash-container {
+    background-color: transparent;
+    padding: 20px;
+    margin-top: 20px;
+}
+
+/* Make upload area transparent */
+.dash-upload {
+    background-color: transparent !important;
+    border: 1px dashed #ccc;
+}
+
+/* Style for specific components to ensure they're transparent */
+#upload-ags, #borehole-map, #section-plot-output, #log-plot-output {
+    background-color: transparent !important;
+}
+
+/* For any default card elements that might have backgrounds */
+.card, .box, .panel {
+    background-color: transparent !important;
+    box-shadow: none !important;
+}
+
+/* Apply font color to all major elements - Dark Theme */
+body.dark-theme a, body.dark-theme button, body.dark-theme input, body.dark-theme select, body.dark-theme textarea, body.dark-theme .Select-value-label,
+body:not(.light-theme) a, body:not(.light-theme) button, body:not(.light-theme) input, body:not(.light-theme) select, body:not(.light-theme) textarea, body:not(.light-theme) .Select-value-label {
+    color: #FFFFFF !important;
+}
+
+/* Apply font color to all major elements - Light Theme */
+body.light-theme a, body.light-theme button, body.light-theme input, body.light-theme select, body.light-theme textarea, body.light-theme .Select-value-label {
+    color: #000000 !important;
+}
+
+/* Dark Theme Hover Effects */
+body.dark-theme a:hover, body:not(.light-theme) a:hover {
+    color: #99CCFF !important; /* Light blue on hover */
+    text-decoration: underline;
+}
+
+/* Light Theme Hover Effects */
+body.light-theme a:hover {
+    color: #0066CC !important; /* Dark blue on hover */
+    text-decoration: underline;
+}
+
+/* Style for buttons and inputs to be visible - Dark Theme */
+body.dark-theme button, body.dark-theme .btn, body.dark-theme input, body.dark-theme select, body.dark-theme textarea,
+body:not(.light-theme) button, body:not(.light-theme) .btn, body:not(.light-theme) input, body:not(.light-theme) select, body:not(.light-theme) textarea {
+    background-color: rgba(0, 0, 0, 0.3) !important;
+    border: 1px solid rgba(255, 255, 255, 0.5) !important;
+}
+
+/* Style for buttons and inputs to be visible - Light Theme */
+body.light-theme button, body.light-theme .btn, body.light-theme input, body.light-theme select, body.light-theme textarea {
+    background-color: rgba(255, 255, 255, 0.3) !important;
+    border: 1px solid rgba(0, 0, 0, 0.5) !important;
+}
+
+/* Button hover effects - Dark Theme */
+body.dark-theme button:hover, body.dark-theme .btn:hover, body:not(.light-theme) button:hover, body:not(.light-theme) .btn:hover {
+    background-color: rgba(0, 0, 0, 0.5) !important;
+}
+
+/* Button hover effects - Light Theme */
+body.light-theme button:hover, body.light-theme .btn:hover {
+    background-color: rgba(255, 255, 255, 0.5) !important;
+}
+
+/* Make placeholders visible - Dark Theme */
+body.dark-theme ::placeholder, body:not(.light-theme) ::placeholder {
+    color: rgba(255, 255, 255, 0.7) !important;
+}
+
+/* Make placeholders visible - Light Theme */
+body.light-theme ::placeholder {
+    color: rgba(0, 0, 0, 0.7) !important;
+}
+
+/* Remove or style status headers - target specific sections only */
+/* Hide the Map Status and Selection Status sections specifically */
+div:has(h4[style*="color: #28a745"]),
+div[style*="background-color: #f8f9fa"],
+div[style*="background-color: #d4edda"] {
+    display: none !important;
+}
+
+/* Style subselection checkbox area */
+#subselection-checkbox-grid-container,
+#subselection-checkbox-grid-container > div {
+    background-color: transparent !important;
+    color: #FFFFFF !important;
+    border: none !important;
+    box-shadow: none !important;
+    padding: 10px 0;
+}
+
+/* Ensure the subselection text follows color setting - Dark Theme */
+body.dark-theme #subselection-checkbox-grid-container h4,
+body.dark-theme #subselection-checkbox-grid-container p,
+body.dark-theme #subselection-checkbox-grid-container label,
+body:not(.light-theme) #subselection-checkbox-grid-container h4,
+body:not(.light-theme) #subselection-checkbox-grid-container p,
+body:not(.light-theme) #subselection-checkbox-grid-container label {
+    color: #FFFFFF !important;
+    text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.8);
+}
+
+/* Ensure the subselection text follows color setting - Light Theme */
+body.light-theme #subselection-checkbox-grid-container h4,
+body.light-theme #subselection-checkbox-grid-container p,
+body.light-theme #subselection-checkbox-grid-container label {
+    color: #000000 !important;
+    text-shadow: 1px 1px 3px rgba(255, 255, 255, 0.8);
+}
+
+/* Additional styling for the instruction text about boreholes - Dark Theme */
+body.dark-theme #subselection-checkbox-grid-container p,
+body:not(.light-theme) #subselection-checkbox-grid-container p {
+    color: #FFFFFF !important;
+    font-weight: bold;
+    text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.8);
+    margin-bottom: 10px;
+}
+
+/* Additional styling for the instruction text about boreholes - Light Theme */
+body.light-theme #subselection-checkbox-grid-container p {
+    color: #000000 !important;
+    font-weight: bold;
+    text-shadow: 1px 1px 3px rgba(255, 255, 255, 0.8);
+    margin-bottom: 10px;
+}
+
+/* Style all text content in the app to follow the color setting - Dark Theme */
+body.dark-theme .dash-container div, body.dark-theme .dash-container p, body.dark-theme .dash-container span, 
+body.dark-theme .dash-container li, body.dark-theme .dash-container ul, body.dark-theme .dash-container ol,
+body:not(.light-theme) .dash-container div, body:not(.light-theme) .dash-container p, body:not(.light-theme) .dash-container span, 
+body:not(.light-theme) .dash-container li, body:not(.light-theme) .dash-container ul, body:not(.light-theme) .dash-container ol {
+    color: #FFFFFF !important;
+}
+
+/* Style all text content in the app to follow the color setting - Light Theme */
+body.light-theme .dash-container div, body.light-theme .dash-container p, body.light-theme .dash-container span, 
+body.light-theme .dash-container li, body.light-theme .dash-container ul, body.light-theme .dash-container ol {
+    color: #000000 !important;
+}
+
+/* Make checkbox labels themed */
+body.dark-theme .dash-checkbox-label, body:not(.light-theme) .dash-checkbox-label {
+    color: #FFFFFF !important;
+}
+
+body.light-theme .dash-checkbox-label {
+    color: #000000 !important;
+}
+
+/* More aggressive targeting of green background elements */
+[style*="background-color"] {
+    background-color: transparent !important;
+}
+
+/* Theme Toggle Styling */
+.theme-toggle-container {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 1001;
+    display: flex;
+    gap: 10px;
+}
+
+.theme-toggle-btn {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    background-color: rgba(0, 0, 0, 0.3);
+    color: #FFD700;
+    font-size: 20px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+    user-select: none;
+    outline: none;
+}
+
+.theme-toggle-btn:focus {
+    outline: 2px solid rgba(255, 215, 0, 0.5);
+    outline-offset: 2px;
+}
+
+/* Animation for theme switching */
+body {
+    transition: background-image 0.3s ease, color 0.3s ease;
+}
+
+/* Ensure theme buttons are always visible */
+.theme-toggle-container button {
+    backdrop-filter: blur(5px);
+}
+
+.theme-toggle-btn:hover {
+    background-color: rgba(0, 0, 0, 0.5);
+    border-color: rgba(255, 255, 255, 0.6);
+    transform: scale(1.1);
+}
+
+.theme-toggle-btn.active {
+    background-color: rgba(255, 255, 255, 0.4);
+    border-color: rgba(255, 255, 255, 0.8);
+    box-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+}
+
+/* Sun icon styling */
+.sun-icon {
+    color: #FFD700; /* Gold color for sun */
+}
+
+/* Moon icon styling */
+.moon-icon {
+    color: #C0C0C0; /* Silver color for moon */
+}
+
+/* Light theme adjustments for toggle buttons */
+body.light-theme .theme-toggle-btn {
+    border: 2px solid rgba(0, 0, 0, 0.3);
+    background-color: rgba(255, 255, 255, 0.3);
+}
+
+body.light-theme .theme-toggle-btn:hover {
+    background-color: rgba(255, 255, 255, 0.5);
+    border-color: rgba(0, 0, 0, 0.6);
+}
+
+body.light-theme .theme-toggle-btn.active {
+    background-color: rgba(0, 0, 0, 0.4);
+    border-color: rgba(0, 0, 0, 0.8);
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+}
