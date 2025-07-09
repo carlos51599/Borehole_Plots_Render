@@ -19,6 +19,7 @@ import config
 from data_loader import load_all_loca_data
 from map_utils import filter_selection_by_shape
 from section_plot import plot_section_from_ags_content
+from borehole_log import plot_borehole_log_from_ags_content
 from polyline_utils import (
     create_buffer_visualization,
     create_polyline_section,
@@ -139,6 +140,43 @@ def register_callbacks(app):
                         label = str(row["LOCA_ID"])
                         marker_id = {"type": "borehole-marker", "index": i}
 
+                        # Get additional information for tooltip
+                        ground_level = row.get("LOCA_GL", "N/A")
+                        total_depth = row.get("LOCA_FDEP", "N/A")
+
+                        # Format ground level and total depth
+                        if (
+                            ground_level != "N/A"
+                            and ground_level is not None
+                            and str(ground_level).strip()
+                        ):
+                            try:
+                                ground_level = f"{float(ground_level):.2f}m"
+                            except (ValueError, TypeError):
+                                ground_level = "N/A"
+                        else:
+                            ground_level = "N/A"
+
+                        if (
+                            total_depth != "N/A"
+                            and total_depth is not None
+                            and str(total_depth).strip()
+                        ):
+                            try:
+                                total_depth = f"{float(total_depth):.2f}m"
+                            except (ValueError, TypeError):
+                                total_depth = "N/A"
+                        else:
+                            total_depth = "N/A"
+
+                        # Create detailed tooltip
+                        tooltip_text = f"""
+                        Borehole: {label}
+                        Ground Level: {ground_level}
+                        Total Depth: {total_depth}
+                        Click to view borehole log
+                        """
+
                         # Use more detailed icon configuration for better positioning
                         marker_icon = {
                             "iconUrl": BLUE_MARKER,
@@ -158,7 +196,7 @@ def register_callbacks(app):
                             dl.Marker(
                                 id=marker_id,
                                 position=[lat, lon],  # Ensure this is [lat, lon] order
-                                children=dl.Tooltip(label),
+                                children=dl.Tooltip(tooltip_text.strip()),
                                 icon=marker_icon,
                                 n_clicks=0,
                             )
@@ -266,11 +304,6 @@ def register_callbacks(app):
 
             # Ensure map center is correct before returning
             logging.info(f"📍 Final map_center: {map_center}, zoom: {map_zoom}")
-
-            # Add a small unique value to the map center to force a re-render
-            # This is a workaround for Dash Leaflet not always updating properly
-            random_offset = 0.000001 * (datetime.now().microsecond % 10)
-            map_center = [map_center[0] + random_offset, map_center[1] + random_offset]
 
             # Add additional server-side logging about the map center
             logging.warning(
@@ -913,6 +946,44 @@ def register_callbacks(app):
 
                         # Create marker with appropriate color
                         marker_id = {"type": "borehole-marker", "index": i}
+
+                        # Get additional information for tooltip
+                        ground_level = row.get("LOCA_GL", "N/A")
+                        total_depth = row.get("LOCA_FDEP", "N/A")
+
+                        # Format ground level and total depth
+                        if (
+                            ground_level != "N/A"
+                            and ground_level is not None
+                            and str(ground_level).strip()
+                        ):
+                            try:
+                                ground_level = f"{float(ground_level):.2f}m"
+                            except (ValueError, TypeError):
+                                ground_level = "N/A"
+                        else:
+                            ground_level = "N/A"
+
+                        if (
+                            total_depth != "N/A"
+                            and total_depth is not None
+                            and str(total_depth).strip()
+                        ):
+                            try:
+                                total_depth = f"{float(total_depth):.2f}m"
+                            except (ValueError, TypeError):
+                                total_depth = "N/A"
+                        else:
+                            total_depth = "N/A"
+
+                        # Create detailed tooltip
+                        tooltip_text = f"""
+                        Borehole: {loca_id}
+                        Ground Level: {ground_level}
+                        Total Depth: {total_depth}
+                        Click to view borehole log
+                        """
+
                         marker_icon = {
                             "iconUrl": icon_url,
                             "iconSize": [25, 41],
@@ -925,7 +996,7 @@ def register_callbacks(app):
                             dl.Marker(
                                 id=marker_id,
                                 position=[lat, lon],
-                                children=dl.Tooltip(loca_id),
+                                children=dl.Tooltip(tooltip_text.strip()),
                                 icon=marker_icon,
                                 n_clicks=0,
                             )
@@ -952,7 +1023,7 @@ def register_callbacks(app):
     # ====================================================================
     @app.callback(
         [
-            Output("section-plot-output", "children"),
+            Output("section-plot-output", "children", allow_duplicate=True),
             Output("log-plot-output", "children"),
             Output("download-section-plot", "data"),
         ],
@@ -964,12 +1035,14 @@ def register_callbacks(app):
         [
             State("borehole-data-store", "data"),
         ],
+        prevent_initial_call=True,
     )
     def handle_plot_generation(
         checked_ids, show_labels_value, download_clicks, stored_borehole_data
     ):
         """Handle plot generation and downloads"""
         logging.info("=== PLOT GENERATION CALLBACK ===")
+        logging.info(f"Triggered by: {dash.callback_context.triggered}")
 
         ctx = dash.callback_context
         triggered = ctx.triggered[0]["prop_id"] if ctx.triggered else None
@@ -1044,17 +1117,25 @@ def register_callbacks(app):
             )
 
             if fig:
-                # Convert to image
+                # Convert to image with higher DPI for sharper text
                 buf = io.BytesIO()
-                fig.savefig(buf, format="png", bbox_inches="tight")
+                fig.savefig(buf, format="png", bbox_inches="tight", dpi=150)
                 plt.close(fig)
                 buf.seek(0)
                 img_bytes = buf.read()
                 img_b64 = base64.b64encode(img_bytes).decode("utf-8")
 
+                # Create a custom style that preserves aspect ratio
+                preserved_aspect_style = {
+                    **config.SECTION_PLOT_CENTER_STYLE,  # Copy base styles
+                    "height": "auto",  # Let height be determined by width and aspect ratio
+                    "maxHeight": "80vh",  # Maximum height (80% of viewport height)
+                    "objectFit": "contain",  # Ensure the whole image is visible
+                }
+
                 section_plot = html.Img(
                     src=f"data:image/png;base64,{img_b64}",
-                    style=config.SECTION_PLOT_CENTER_STYLE,
+                    style=preserved_aspect_style,
                 )
 
                 # Handle download
@@ -1086,16 +1167,14 @@ def register_callbacks(app):
             return datetime.now().timestamp()
         return dash.no_update
 
-    # Add a client-side callback to force map to update view using UI elements only
-    # Removed direct map center output to avoid duplicate callbacks
+    # Add a client-side callback to force map to update view on initial load only
+    # This callback has been modified to not disrupt user zoom/pan interactions
     app.clientside_callback(
         """
-        function(center, zoom) {
-            // Only execute if both center and zoom are valid
-            if (center && zoom) {
-                // Log for debugging
-                console.log('Client-side callback triggered for map update');
-                console.log('Center:', center, 'Zoom:', zoom);
+        function(data_store) {
+            // Only execute if we have data and it's a fresh load (from file upload)
+            if (data_store && data_store.hasOwnProperty('loca_df')) {
+                console.log('File upload detected - checking if map needs updating');
                 
                 // Force Leaflet map to update by accessing the internal map instance
                 const mapDiv = document.getElementById('borehole-map');
@@ -1103,22 +1182,15 @@ def register_callbacks(app):
                 if (mapDiv && mapDiv._leaflet_map) {
                     console.log('Found map div:', mapDiv.id);
                     
-                    // Log before changing view
+                    // Log current map state
                     const currentCenter = mapDiv._leaflet_map.getCenter();
                     const currentZoom = mapDiv._leaflet_map.getZoom();
                     console.log('Current map center:', [currentCenter.lat, currentCenter.lng], 'Current zoom:', currentZoom);
                     
-                    // Try different methods to ensure update
-                    try {
-                        // Use setView with animation disabled
-                        mapDiv._leaflet_map.setView(center, zoom, {animate: false, duration: 0});
-                        console.log('Applied setView() method');
-                        
-                        // Invalidate map size to force a redraw
-                        mapDiv._leaflet_map.invalidateSize();
-                    } catch (e) {
-                        console.error('Error updating map view:', e);
-                    }
+                    // Let the map's internal mechanisms handle centering based on the data
+                    // We're no longer forcing any setView() here to avoid disrupting user interactions
+                    mapDiv._leaflet_map.invalidateSize();
+                    console.log('Map updated for file upload');
                 }
             }
             // This is a dummy output that doesn't change anything
@@ -1127,66 +1199,12 @@ def register_callbacks(app):
         """,
         # Use a placeholder output for the clientside callback
         Output("ui-feedback", "children", allow_duplicate=True),
-        [Input("borehole-map", "center"), Input("borehole-map", "zoom")],
-        prevent_initial_call=True,
-    )
-
-    # Add an explicit callback triggered by file upload to center map
-    @app.callback(
-        [
-            Output("borehole-map", "center", allow_duplicate=True),
-            Output("borehole-map", "zoom", allow_duplicate=True),
-        ],
         [Input("borehole-data-store", "data")],
         prevent_initial_call=True,
     )
-    def force_map_center_update(borehole_data):
-        """Force an update to map center after data store is populated"""
-        if not borehole_data:
-            return dash.no_update, dash.no_update
 
-        try:
-            # Get all stored valid coordinates
-            lats = [
-                row.get("lat") for row in borehole_data["loca_df"] if row.get("lat")
-            ]
-            lons = [
-                row.get("lon") for row in borehole_data["loca_df"] if row.get("lon")
-            ]
-
-            if not lats or not lons:
-                logging.warning("No valid coordinates for force_map_center_update")
-                return dash.no_update, dash.no_update
-
-            # Use median coordinates for centering
-            median_lat = statistics.median(lats)
-            median_lon = statistics.median(lons)
-
-            # Calculate appropriate zoom level
-            lat_range = max(lats) - min(lats)
-            lon_range = max(lons) - min(lons)
-            coord_range = max(lat_range, lon_range)
-
-            # Determine zoom based on range
-            if coord_range > 0.1:
-                zoom = 10
-            elif coord_range > 0.01:
-                zoom = 12
-            elif coord_range > 0.001:
-                zoom = 14
-            else:
-                zoom = 16
-
-            # Add a small random offset to force re-render
-            random_offset = 0.000001 * (datetime.now().microsecond % 10)
-            center = [median_lat + random_offset, median_lon + random_offset]
-
-            logging.warning(f"🎯 SECONDARY MAP CENTER TRIGGER: {center}, zoom: {zoom}")
-            return center, zoom
-
-        except Exception as e:
-            logging.error(f"Error in force_map_center_update: {e}")
-            return dash.no_update, dash.no_update
+    # Register marker click callback
+    handle_marker_click(app)
 
     logging.info("✅ All split callbacks registered successfully!")
 
@@ -1269,3 +1287,156 @@ def validate_borehole_near_polyline(
     except Exception as e:
         logging.error(f"Error validating borehole near polyline: {e}")
         return True  # Default to include if validation fails
+
+
+def handle_marker_click(app):
+    """Handle marker clicks to generate borehole logs and update marker colors"""
+
+    @app.callback(
+        [
+            Output(
+                "section-plot-output", "children"
+            ),  # Changed from log-plot-output to section-plot-output
+            Output("borehole-markers", "children", allow_duplicate=True),
+        ],
+        [
+            Input(
+                {"type": "borehole-marker", "index": dash.dependencies.ALL}, "n_clicks"
+            )
+        ],
+        [
+            State("borehole-data-store", "data"),
+            State("borehole-markers", "children"),
+        ],
+        prevent_initial_call=True,
+    )
+    def marker_click_handler(marker_clicks, stored_borehole_data, current_markers):
+        """Handle marker clicks to generate borehole logs"""
+        try:
+            logging.info("=== MARKER CLICK CALLBACK ===")
+            logging.info(f"Triggered by: {dash.callback_context.triggered}")
+
+            # Check if any marker was clicked
+            if not marker_clicks or all(
+                clicks is None or clicks == 0 for clicks in marker_clicks
+            ):
+                logging.info("No marker clicks detected")
+                return dash.no_update, dash.no_update
+
+            # Find which marker was clicked (latest click)
+            clicked_index = None
+            max_clicks = 0
+            for i, clicks in enumerate(marker_clicks):
+                if clicks and clicks > max_clicks:
+                    max_clicks = clicks
+                    clicked_index = i
+
+            if clicked_index is None:
+                logging.info("No valid marker click found")
+                return dash.no_update, dash.no_update
+
+            logging.info(f"Marker {clicked_index} was clicked ({max_clicks} times)")
+
+            # Get borehole data
+            if not stored_borehole_data:
+                logging.warning("No borehole data available")
+                return html.Div("No borehole data available"), dash.no_update
+
+            loca_df = pd.DataFrame(stored_borehole_data["loca_df"])
+            if clicked_index >= len(loca_df):
+                logging.warning(f"Invalid marker index: {clicked_index}")
+                return html.Div("Invalid borehole selected"), dash.no_update
+
+            # Get the clicked borehole
+            clicked_borehole = loca_df.iloc[clicked_index]
+            borehole_id = clicked_borehole["LOCA_ID"]
+            logging.info(f"Generating borehole log for: {borehole_id}")
+
+            # Generate borehole log with larger figure size to match section plot proportions
+            filename_map = stored_borehole_data["filename_map"]
+            combined_content = ""
+            for filename, content in filename_map.items():
+                combined_content += content + "\n"
+
+            # Use larger figure size and proper aspect ratio for borehole logs
+            # Borehole logs are typically taller than they are wide (portrait orientation)
+            fig = plot_borehole_log_from_ags_content(
+                combined_content, borehole_id, fig_height=10, fig_width=4
+            )
+
+            if fig:
+                # Convert to image for display with higher DPI for sharper text
+                buf = io.BytesIO()
+                fig.savefig(buf, format="png", bbox_inches="tight", dpi=150)
+                plt.close(fig)
+                buf.seek(0)
+                img_bytes = buf.read()
+                img_b64 = base64.b64encode(img_bytes).decode("utf-8")
+
+                # Create a custom style that preserves aspect ratio
+                preserved_aspect_style = {
+                    **config.SECTION_PLOT_CENTER_STYLE,  # Copy base styles
+                    "height": "auto",  # Let height be determined by width and aspect ratio
+                    "maxHeight": "80vh",  # Maximum height (80% of viewport height)
+                    "objectFit": "contain",  # Ensure the whole image is visible
+                }
+
+                borehole_log_plot = html.Img(
+                    src=f"data:image/png;base64,{img_b64}",
+                    style=preserved_aspect_style,
+                )
+
+                log_output = html.Div(
+                    [
+                        html.H3(
+                            f"Borehole Log: {borehole_id}",
+                            style={"text-align": "center", "margin-bottom": "20px"},
+                        ),
+                        # The image container preserves aspect ratio with auto height
+                        borehole_log_plot,
+                    ],
+                    style={"width": "100%", "maxWidth": "800px", "margin": "0 auto"},
+                )
+            else:
+                log_output = html.Div(
+                    f"Could not generate borehole log for {borehole_id}"
+                )
+
+            # Update marker colors - make clicked marker green, others blue
+            updated_markers = []
+            if current_markers:
+                for i, marker in enumerate(current_markers):
+                    if marker and marker.get("props"):
+                        # Copy the marker
+                        new_marker = marker.copy()
+                        new_props = marker["props"].copy()
+
+                        # Update icon color based on whether this marker was clicked
+                        if i == clicked_index:
+                            # Make clicked marker green
+                            if "icon" in new_props:
+                                new_icon = new_props["icon"].copy()
+                                new_icon["iconUrl"] = GREEN_MARKER
+                                new_props["icon"] = new_icon
+                        else:
+                            # Make other markers blue
+                            if "icon" in new_props:
+                                new_icon = new_props["icon"].copy()
+                                new_icon["iconUrl"] = BLUE_MARKER
+                                new_props["icon"] = new_icon
+
+                        new_marker["props"] = new_props
+                        updated_markers.append(new_marker)
+                    else:
+                        updated_markers.append(marker)
+
+            # log_output is now returned to section-plot-output
+            return log_output, updated_markers
+
+        except Exception as e:
+            logging.error(f"Error in marker click handler: {e}")
+            import traceback
+
+            traceback.print_exc()
+            # Error message is returned to section-plot-output
+            return html.Div(f"Error generating borehole log: {e}"), dash.no_update

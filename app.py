@@ -11,6 +11,9 @@ from datetime import datetime
 import config  # Import UI configuration
 from callbacks_split import register_callbacks  # Import callback registration
 from app_factory import create_app_with_duplicate_callbacks  # Import app factory
+from borehole_log import (
+    plot_borehole_log_from_ags_content,
+)  # Import borehole log functionality
 
 # Set up enhanced logging format with detailed context
 logfile = "app_debug.log"
@@ -153,10 +156,15 @@ app.layout = html.Div(
         ),
         html.Div(
             [
-                html.H3("Buffer Settings", style={"margin-top": "20px", "margin-bottom": "10px"}),
+                html.H3(
+                    "Buffer Settings",
+                    style={"margin-top": "20px", "margin-bottom": "10px"},
+                ),
                 html.Div(
                     [
-                        html.Label("Polyline Buffer (meters):", style={"margin-right": "10px"}),
+                        html.Label(
+                            "Polyline Buffer (meters):", style={"margin-right": "10px"}
+                        ),
                         dcc.Input(
                             id="buffer-input",
                             type="number",
@@ -164,20 +172,24 @@ app.layout = html.Div(
                             min=1,
                             max=500,
                             step=1,
-                            style={"width": "100px", "margin-right": "10px"}
+                            style={"width": "100px", "margin-right": "10px"},
                         ),
                         html.Button(
                             "Update Buffer",
                             id="update-buffer-btn",
                             n_clicks=0,
-                            style={"margin-left": "10px"}
+                            style={"margin-left": "10px"},
                         ),
                     ],
-                    style={"display": "flex", "align-items": "center", "margin-bottom": "10px"}
+                    style={
+                        "display": "flex",
+                        "align-items": "center",
+                        "margin-bottom": "10px",
+                    },
                 ),
             ],
             id="buffer-controls",
-            style={"display": "none"}  # Initially hidden, shown when polyline is drawn
+            style={"display": "none"},  # Initially hidden, shown when polyline is drawn
         ),
         html.Div(id="selected-borehole-info"),
         html.Div(id="section-plot-output"),
