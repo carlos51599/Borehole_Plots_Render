@@ -63,7 +63,7 @@ def parse_ags_geol_section_from_string(content):
     loca_df = pd.DataFrame(loca_data, columns=loca_headings)
     if "LOCA_ID" in loca_df.columns:
         loca_df["LOCA_ID"] = loca_df["LOCA_ID"].str.strip()
-    for col in ["LOCA_NATE", "LOCA_NATN"]:
+    for col in ["LOCA_NATE", "LOCA_NATN", "LOCA_GL"]:
         if col in loca_df.columns:
             loca_df[col] = pd.to_numeric(loca_df[col], errors="coerce")
     # Parse ABBR
@@ -93,43 +93,157 @@ def plot_borehole_sections(
     The bottom axis is distance in meters (relative to the first borehole), and the same GEOL_LEG code
     uses the same color across all boreholes.
     """
-    # Merge X/Y coordinates into geol_df
-    merged = geol_df.merge(
-        loca_df[["LOCA_ID", "LOCA_NATE", "LOCA_NATN"]],
-        left_on="LOCA_ID",
-        right_on="LOCA_ID",
-        how="left",
-    )
-    # Warn if any boreholes have missing coordinates
-    missing_coords = merged[merged["LOCA_NATE"].isna() | merged["LOCA_NATN"].isna()][
-        "LOCA_ID"
-    ].unique()
-    if len(missing_coords) > 0:
-        print(
-            f"Warning: The following LOCA_IDs have missing coordinates and will be skipped: {missing_coords}"
+    print(f"[DEBUG] Section plot called with section_line: {section_line}")
+    print(f"[DEBUG] LOCA DataFrame shape: {loca_df.shape}")
+    print(f"[DEBUG] LOCA DataFrame columns: {loca_df.columns.tolist()}")
+
+    # Check what coordinate columns are available
+    coord_cols = [
+        col
+        for col in loca_df.columns
+        if any(x in col.upper() for x in ["NATE", "NATN", "LAT", "LON"])
+    ]
+    print(f"[DEBUG] Available coordinate columns: {coord_cols}")
+
+    # Handle coordinate system for polyline mode
+    if section_line is not None:
+        print("[DEBUG] Using polyline mode - need consistent coordinate system")
+
+        # For polyline mode, convert borehole coordinates to the same UTM system as section_line
+        # The section_line is in UTM coordinates, but boreholes are in BNG coordinates
+
+        # First, convert BNG coordinates to WGS84 lat/lon, then to UTM
+        import pyproj
+        from shapely.geometry import Point
+
+        # BNG to WGS84 transformer
+        bng_to_wgs84 = pyproj.Transformer.from_crs(
+            "EPSG:27700", "EPSG:4326", always_xy=True
         )
-    # Remove rows with missing coordinates
-    merged = merged.dropna(subset=["LOCA_NATE", "LOCA_NATN"])
-    if merged.empty:
-        print("No boreholes with valid coordinates to plot.")
-        return None
-    # Merge ground level (LOCA_GL) into merged DataFrame
-    if "LOCA_GL" in loca_df.columns:
-        merged = merged.merge(loca_df[["LOCA_ID", "LOCA_GL"]], on="LOCA_ID", how="left")
-        merged["LOCA_GL"] = pd.to_numeric(merged["LOCA_GL"], errors="coerce")
+
+        # WGS84 to UTM Zone 30N transformer
+        utm_crs = "EPSG:32630"  # UTM Zone 30N for UK
+        wgs84_to_utm = pyproj.Transformer.from_crs("EPSG:4326", utm_crs, always_xy=True)
+
+        print(f"[DEBUG] Converting BNG -> WGS84 -> UTM ({utm_crs})")
+
+        # Convert all borehole coordinates to UTM
+        utm_coordinates = {}
+        for _, row in loca_df.iterrows():
+            try:
+                bng_x = float(row["LOCA_NATE"])
+                bng_y = float(row["LOCA_NATN"])
+
+                # BNG to WGS84
+                wgs84_lon, wgs84_lat = bng_to_wgs84.transform(bng_x, bng_y)
+
+                # WGS84 to UTM
+                utm_x, utm_y = wgs84_to_utm.transform(wgs84_lon, wgs84_lat)
+
+                utm_coordinates[row["LOCA_ID"]] = (utm_x, utm_y)
+
+                if len(utm_coordinates) <= 3:  # Debug first few
+                    print(
+                        f"[DEBUG] {row['LOCA_ID']}: BNG({bng_x}, {bng_y}) -> UTM({utm_x:.1f}, {utm_y:.1f})"
+                    )
+
+            except (ValueError, TypeError) as e:
+                print(
+                    f"[DEBUG] Skipping {row['LOCA_ID']} due to invalid coordinates: {e}"
+                )
+                continue
+
+        # Merge coordinates and LOCA_GL into geol_df
+        loca_cols = ["LOCA_ID", "LOCA_NATE", "LOCA_NATN"]
+        if "LOCA_GL" in loca_df.columns:
+            loca_cols.append("LOCA_GL")
+
+        merged = geol_df.merge(
+            loca_df[loca_cols],
+            left_on="LOCA_ID",
+            right_on="LOCA_ID",
+            how="left",
+        )
+
+        # Add UTM coordinates based on the transformed coordinates
+        merged["UTM_X"] = merged["LOCA_ID"].map(
+            lambda x: utm_coordinates.get(x, (None, None))[0]
+        )
+        merged["UTM_Y"] = merged["LOCA_ID"].map(
+            lambda x: utm_coordinates.get(x, (None, None))[1]
+        )
+
+        # Remove rows with missing UTM coordinates
+        merged = merged.dropna(subset=["UTM_X", "UTM_Y"])
+
+        if merged.empty:
+            print("[DEBUG] No boreholes with valid UTM coordinates")
+            return None
+
+        # Get unique boreholes and their UTM coordinates
+        borehole_utm = merged.groupby("LOCA_ID")[["UTM_X", "UTM_Y"]].first()
+        boreholes = borehole_utm.index.tolist()
+        x_coords = borehole_utm["UTM_X"].values
+        y_coords = borehole_utm["UTM_Y"].values
+
+        print(f"[DEBUG] Using UTM coordinates for {len(boreholes)} boreholes")
+        print(f"[DEBUG] X coords (UTM): {x_coords[:3]}...")
+        print(f"[DEBUG] Y coords (UTM): {y_coords[:3]}...")
+
     else:
-        merged["LOCA_GL"] = 0.0  # fallback if missing
+        print("[DEBUG] Using standard mode with BNG coordinates")
+        # Standard mode: use BNG coordinates directly
+        loca_cols = ["LOCA_ID", "LOCA_NATE", "LOCA_NATN"]
+        if "LOCA_GL" in loca_df.columns:
+            loca_cols.append("LOCA_GL")
+
+        merged = geol_df.merge(
+            loca_df[loca_cols],
+            left_on="LOCA_ID",
+            right_on="LOCA_ID",
+            how="left",
+        )
+
+        # Remove rows with missing coordinates
+        merged = merged.dropna(subset=["LOCA_NATE", "LOCA_NATN"])
+
+        if merged.empty:
+            print("No boreholes with valid coordinates to plot.")
+            return None
+
+        # Get unique boreholes and their coordinates
+        borehole_x = merged.groupby("LOCA_ID")["LOCA_NATE"].first().sort_values()
+        borehole_y = (
+            merged.groupby("LOCA_ID")["LOCA_NATN"].first().reindex(borehole_x.index)
+        )
+        boreholes = borehole_x.index.tolist()
+        x_coords = borehole_x.values
+        y_coords = borehole_y.values
+
+    # Ensure LOCA_GL is available in merged DataFrame
+    if "LOCA_GL" not in merged.columns:
+        if "LOCA_GL" in loca_df.columns:
+            merged = merged.merge(
+                loca_df[["LOCA_ID", "LOCA_GL"]], on="LOCA_ID", how="left"
+            )
+        else:
+            merged["LOCA_GL"] = 0.0  # fallback if missing
+
+    # Ensure LOCA_GL is numeric
+    merged["LOCA_GL"] = pd.to_numeric(merged["LOCA_GL"], errors="coerce").fillna(0.0)
+
     # Calculate elevation for each interval (ELEV = LOCA_GL - depth)
     merged["ELEV_TOP"] = merged["LOCA_GL"] - merged["GEOL_TOP"].abs()
     merged["ELEV_BASE"] = merged["LOCA_GL"] - merged["GEOL_BASE"].abs()
-    # Get unique boreholes and their X/Y (Easting/Northing)
-    borehole_x = merged.groupby("LOCA_ID")["LOCA_NATE"].first().sort_values()
-    borehole_y = (
-        merged.groupby("LOCA_ID")["LOCA_NATN"].first().reindex(borehole_x.index)
+
+    print(f"[DEBUG] Boreholes: {boreholes}")
+    print(f"[DEBUG] X coords (LOCA_NATE): {x_coords}")
+    print(f"[DEBUG] Y coords (LOCA_NATN): {y_coords}")
+    print(
+        f"[DEBUG] X coords type: {type(x_coords[0]) if len(x_coords) > 0 else 'None'}"
     )
-    boreholes = borehole_x.index.tolist()
-    x_coords = borehole_x.values
-    y_coords = borehole_y.values
+    print(f"[DEBUG] Any NaN in X coords: {any(np.isnan(x_coords))}")
+    print(f"[DEBUG] Any NaN in Y coords: {any(np.isnan(y_coords))}")
 
     # If section_line is provided, project boreholes onto this line or polyline for section orientation
     if section_line is not None:
@@ -141,12 +255,19 @@ def plot_borehole_sections(
         # section_line: either ((x0, y0), (x1, y1)) or [(x0, y0), (x1, y1), ...]
         if isinstance(section_line, (list, tuple)) and len(section_line) > 2:
             # Polyline: project each borehole onto the closest point along the polyline
+            print(f"[DEBUG] Processing polyline with {len(section_line)} points")
+            print(f"[DEBUG] Section line coords: {section_line}")
             line = LineString(section_line)
             rel_x = []
-            for x, y in zip(x_coords, y_coords):
+            for i, (x, y) in enumerate(zip(x_coords, y_coords)):
                 point = Point(x, y)
-                rel_x.append(line.project(point))
+                distance = line.project(point)
+                rel_x.append(distance)
+                print(
+                    f"[DEBUG] Borehole {boreholes[i]}: ({x}, {y}) -> distance {distance}"
+                )
             bh_x_map = dict(zip(boreholes, rel_x))
+            print(f"[DEBUG] Final bh_x_map: {bh_x_map}")
         else:
             # Two-point line: keep old logic
             (x0, y0), (x1, y1) = section_line

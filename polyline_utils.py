@@ -49,9 +49,11 @@ def create_buffer_polygon(polyline_coords, buffer_meters=50):
             utm_crs, "epsg:4326", always_xy=True
         ).transform
 
-        # Transform line to UTM and create buffer
+        # Transform line to UTM and create buffer with flat caps
         line_utm = shapely_transform(project_to_utm, line)
-        buffer_utm = line_utm.buffer(buffer_meters)
+        # Use cap_style=2 for flat caps (perpendicular to line ends)
+        # cap_style options: 1=round (default), 2=flat, 3=square
+        buffer_utm = line_utm.buffer(buffer_meters, cap_style=2)
 
         # Transform buffer back to WGS84
         buffer_wgs84 = shapely_transform(project_to_wgs84, buffer_utm)
