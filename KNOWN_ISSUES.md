@@ -4,19 +4,22 @@
 
 **Issue**: When drawing multiple shapes on the map, old shapes remain visually displayed even though only the most recent shape is used for borehole selection and plotting.
 
-**Status**: Unresolved
+**Status**: **FIXED**
 
-**Impact**: Visual only - functionality is correct (only the last drawn shape is used for selection)
+**Solution Applied**:
+- Added dedicated `selection-shapes` FeatureGroup to separate selection shapes from persistent markers
+- Created `create_selection_shape_visual()` function to display drawn polygons and rectangles
+- Updated all callback return statements to clear old selection shapes when new ones are drawn
+- Polylines continue to be displayed in `pca-line-group` with their buffer zones
+- Borehole markers remain persistent in `borehole-markers` group
 
-**Attempted Solutions**:
-- Client-side callbacks to modify geojson and trigger clear_all
-- Server-side callbacks to trigger clear_all property
-- Direct manipulation of Leaflet EditControl instance
-- Multiple approaches with allow_duplicate=True
+**Changes Made**:
+- Added `selection-shapes` FeatureGroup to `app.py`
+- Modified callback outputs in `callbacks_split.py` to include selection shapes control
+- Implemented visual feedback for polygon and rectangle selections
+- Old shapes now automatically disappear when new selections are made
 
-**Root Cause**: The dash-leaflet EditControl component doesn't properly clear previously drawn shapes when new ones are added, despite multiple callback approaches.
-
-**Workaround**: Users can manually use the "Remove All" tool in the drawing toolbar to clear old shapes.
+**Impact**: Users now get clear visual feedback showing only the current selection, while maintaining all functionality
 
 ---
 

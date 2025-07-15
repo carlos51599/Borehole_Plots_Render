@@ -63,6 +63,57 @@ def transform_coordinates(easting, northing):
         return None, None
 
 
+def create_selection_shape_visual(feature):
+    """Create a visual representation of a drawn selection shape for display"""
+    try:
+        if not feature or "geometry" not in feature:
+            return []
+
+        geometry = feature["geometry"]
+        geom_type = geometry.get("type", "")
+        coordinates = geometry.get("coordinates", [])
+
+        if not coordinates:
+            return []
+
+        if geom_type == "Polygon":
+            # Convert coordinates from GeoJSON format [lon, lat] to Leaflet format [lat, lon]
+            if coordinates and len(coordinates[0]) > 0:
+                polygon_coords = [[lat, lon] for lon, lat in coordinates[0]]
+                return [
+                    dl.Polygon(
+                        positions=polygon_coords,
+                        color="#ff7800",
+                        fillColor="#ffb347",
+                        fillOpacity=0.2,
+                        weight=2,
+                        opacity=0.8,
+                        children=dl.Tooltip("Selected Area"),
+                    )
+                ]
+        elif geom_type == "Rectangle":
+            # Rectangle is typically stored as a polygon
+            if coordinates and len(coordinates[0]) > 0:
+                rect_coords = [[lat, lon] for lon, lat in coordinates[0]]
+                return [
+                    dl.Polygon(
+                        positions=rect_coords,
+                        color="#ff7800",
+                        fillColor="#ffb347",
+                        fillOpacity=0.2,
+                        weight=2,
+                        opacity=0.8,
+                        children=dl.Tooltip("Selected Rectangle"),
+                    )
+                ]
+        # Note: LineString shapes are handled in pca-line-group, not here
+
+        return []
+    except Exception as e:
+        logging.error(f"Error creating selection shape visual: {e}")
+        return []
+
+
 def register_callbacks(app):
     """Register all split callbacks with the app"""
 
@@ -342,6 +393,7 @@ def register_callbacks(app):
             Output("borehole-markers", "children", allow_duplicate=True),
             Output("borehole-data-store", "data", allow_duplicate=True),
             Output("buffer-controls", "style", allow_duplicate=True),
+            Output("selection-shapes", "children"),  # Add selection shapes control
         ],
         [
             Input("draw-control", "geojson"),
@@ -372,7 +424,16 @@ def register_callbacks(app):
 
         if not stored_borehole_data:
             logging.warning("No stored borehole data available")
-            return [], None, None, None, [], stored_borehole_data, {"display": "none"}
+            return (
+                [],
+                None,
+                None,
+                None,
+                [],
+                stored_borehole_data,
+                {"display": "none"},
+                [],
+            )
 
         # Drawing triggered
         if (
@@ -380,13 +441,18 @@ def register_callbacks(app):
             and drawn_geojson
             and drawn_geojson.get("features")
         ):
-            logging.info("Processing drawing event")
+            logging.info(
+                "🎨 Processing drawing event - this will clear old polylines and selection shapes"
+            )
             return handle_shape_drawing(
                 drawn_geojson, stored_borehole_data, marker_children, buffer_value
             )
 
         # Checkbox selection triggered
         elif "subselection-checkbox-grid.value" in triggered and checked_ids:
+            logging.info(
+                "☑️ Checkbox selection changed - will clear selection shapes, keep current polyline/PCA"
+            )
             return handle_checkbox_selection(checked_ids, stored_borehole_data)
 
         # Buffer update triggered
@@ -395,7 +461,9 @@ def register_callbacks(app):
             and update_buffer_clicks
             and stored_borehole_data.get("last_polyline")
         ):
-            logging.info(f"Updating buffer to {buffer_value}m")
+            logging.info(
+                f"📏 Updating buffer to {buffer_value}m - will update polyline and clear selection shapes"
+            )
 
             # Get the polyline coordinates and original DataFrame
             polyline_coords = stored_borehole_data.get("last_polyline")
@@ -449,9 +517,10 @@ def register_callbacks(app):
                 updated_markers,
                 new_data,
                 {"display": "block"},
+                [],  # Clear selection shapes when updating buffer
             )
 
-        return [], None, None, None, [], stored_borehole_data, {"display": "none"}
+        return [], None, None, None, [], stored_borehole_data, {"display": "none"}, []
 
     def handle_shape_drawing(
         drawn_geojson, stored_borehole_data, marker_children, buffer_value=50
@@ -690,6 +759,19 @@ def register_callbacks(app):
                 logging.info(
                     f"Line elements: {len(line_elements)}, Markers: {len(updated_markers)}"
                 )
+                logging.info(
+                    "🧹 CLEARING OLD SHAPES: Replacing pca-line-group and selection-shapes with new content"
+                )
+
+                # Create visual representation of the selection shape
+                selection_shapes = []
+                if geom_type != "LineString":  # For polygons, rectangles, etc.
+                    selection_shapes = create_selection_shape_visual(selected_feature)
+                    logging.info(f"📋 Created selection shape visual for {geom_type}")
+                else:
+                    logging.info(
+                        "📏 Polyline detected - selection shapes will be cleared, line goes to pca-line-group"
+                    )
 
                 return (
                     line_elements,
@@ -703,6 +785,7 @@ def register_callbacks(app):
                         if geom_type == "LineString"
                         else {"display": "none"}
                     ),
+                    selection_shapes,  # Add selection shapes visualization
                 )
             else:
                 feedback = html.Div(
@@ -719,6 +802,7 @@ def register_callbacks(app):
                     updated_markers,
                     stored_borehole_data,  # Unchanged data store
                     {"display": "none"},
+                    [],  # No selection shapes when no boreholes found
                 )
 
         except Exception as e:
@@ -736,6 +820,7 @@ def register_callbacks(app):
                 updated_markers,
                 stored_borehole_data,  # Unchanged data store
                 {"display": "none"},
+                [],  # No selection shapes on error
             )
 
     def handle_checkbox_selection(checked_ids, stored_borehole_data):
@@ -802,6 +887,7 @@ def register_callbacks(app):
                 updated_markers,
                 stored_borehole_data,
                 buffer_controls_style,
+                [],  # Keep selection shapes empty for checkbox selections
             )
 
         except Exception as e:
@@ -816,6 +902,7 @@ def register_callbacks(app):
                 updated_markers,
                 stored_borehole_data,
                 {"display": "none"},
+                [],  # No selection shapes on error
             )
 
     def calculate_pca_line(filtered_df):
@@ -1454,3 +1541,53 @@ def handle_marker_click(app):
             traceback.print_exc()
             # Error message is returned to section-plot-output
             return html.Div(f"Error generating borehole log: {e}"), dash.no_update
+
+    def create_selection_shape_visual(feature):
+        """Create a visual representation of a drawn selection shape for display"""
+        try:
+            if not feature or "geometry" not in feature:
+                return []
+
+            geometry = feature["geometry"]
+            geom_type = geometry.get("type", "")
+            coordinates = geometry.get("coordinates", [])
+
+            if not coordinates:
+                return []
+
+            if geom_type == "Polygon":
+                # Convert coordinates from GeoJSON format [lon, lat] to Leaflet format [lat, lon]
+                if coordinates and len(coordinates[0]) > 0:
+                    polygon_coords = [[lat, lon] for lon, lat in coordinates[0]]
+                    return [
+                        dl.Polygon(
+                            positions=polygon_coords,
+                            color="#ff7800",
+                            fillColor="#ffb347",
+                            fillOpacity=0.2,
+                            weight=2,
+                            opacity=0.8,
+                            children=dl.Tooltip("Selected Area"),
+                        )
+                    ]
+            elif geom_type == "Rectangle":
+                # Rectangle is typically stored as a polygon
+                if coordinates and len(coordinates[0]) > 0:
+                    rect_coords = [[lat, lon] for lon, lat in coordinates[0]]
+                    return [
+                        dl.Polygon(
+                            positions=rect_coords,
+                            color="#ff7800",
+                            fillColor="#ffb347",
+                            fillOpacity=0.2,
+                            weight=2,
+                            opacity=0.8,
+                            children=dl.Tooltip("Selected Rectangle"),
+                        )
+                    ]
+            # Note: LineString shapes are handled in pca-line-group, not here
+
+            return []
+        except Exception as e:
+            logging.error(f"Error creating selection shape visual: {e}")
+            return []

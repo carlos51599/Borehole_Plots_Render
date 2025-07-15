@@ -144,6 +144,12 @@ app.layout = html.Div(
                         ),
                         dl.FeatureGroup(
                             [
+                                # Selection shapes (polygons, rectangles, etc.) will be added here
+                            ],
+                            id="selection-shapes",
+                        ),
+                        dl.FeatureGroup(
+                            [
                                 # PCA line will be added dynamically
                             ],
                             id="pca-line-group",
