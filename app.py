@@ -11,9 +11,9 @@ from datetime import datetime
 import config  # Import UI configuration
 from callbacks_split import register_callbacks  # Import callback registration
 from app_factory import create_app_with_duplicate_callbacks  # Import app factory
-from borehole_log import (
+from borehole_log_professional import (
     plot_borehole_log_from_ags_content,
-)  # Import borehole log functionality
+)  # Import professional borehole log functionality
 
 # Set up enhanced logging format with detailed context
 logfile = "app_debug.log"
@@ -43,6 +43,8 @@ logging.info("Creating app layout...")
 
 app.layout = html.Div(
     [
+        # Hidden store to track font cache warming
+        dcc.Store(id="font-cache-warmed", data=False),
         # Logo container positioned absolutely in top-left corner
         html.Div(
             html.Img(

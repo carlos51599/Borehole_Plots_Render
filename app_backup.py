@@ -21,8 +21,8 @@ import config  # Import UI configuration
 
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
-from section_plot import plot_section_from_ags_content
-from borehole_log import plot_borehole_log_from_ags_content
+from section_plot_professional import plot_section_from_ags_content
+from borehole_log_professional import plot_borehole_log_from_ags_content
 
 # Set up enhanced logging format with detailed context
 logfile = "app_debug.log"

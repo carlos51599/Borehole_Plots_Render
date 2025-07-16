@@ -1,3 +1,6 @@
+## Matplotlib Font Scanning Delay
+
+On first plot in a new session, matplotlib scans all system fonts, causing a noticeable delay and many log lines. This is standard behavior and cannot be fully avoided in a Dash app, especially with multiple workers. The delay only occurs once per Python process.
 # Known Issues
 
 ## 1. Old Shapes Not Visually Cleared from Map

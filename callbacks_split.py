@@ -21,7 +21,9 @@ from map_utils import filter_selection_by_shape
 
 # from section_plot import plot_section_from_ags_content
 from section_plot_professional import plot_section_from_ags_content
-from borehole_log import plot_borehole_log_from_ags_content
+
+# from borehole_log import plot_borehole_log_from_ags_content
+from borehole_log_professional import plot_borehole_log_from_ags_content
 from polyline_utils import (
     create_buffer_visualization,
     create_polyline_section,
@@ -117,6 +119,9 @@ def create_selection_shape_visual(feature):
 
 
 def register_callbacks(app):
+    # Font cache warming callback: triggers on first map pan/zoom after upload
+    # Font cache warming callback removed as per user request
+
     """Register all split callbacks with the app"""
 
     # ====================================================================
@@ -174,17 +179,21 @@ def register_callbacks(app):
             loca_df, filename_map = load_all_loca_data(ags_files)
             logging.info(f"Loaded {len(loca_df)} boreholes")
 
-
-
             # --- Hybrid vectorized + fallback approach for coordinate transformation ---
             import pyproj
             import numpy as np
-            bng_to_wgs84 = pyproj.Transformer.from_crs("EPSG:27700", "EPSG:4326", always_xy=True)
+
+            bng_to_wgs84 = pyproj.Transformer.from_crs(
+                "EPSG:27700", "EPSG:4326", always_xy=True
+            )
 
             # Identify valid numeric rows
-            valid_mask = (
-                loca_df["LOCA_NATE"].apply(lambda x: pd.notnull(x) and str(x).replace('.', '', 1).replace('-', '', 1).isdigit()) &
-                loca_df["LOCA_NATN"].apply(lambda x: pd.notnull(x) and str(x).replace('.', '', 1).replace('-', '', 1).isdigit())
+            valid_mask = loca_df["LOCA_NATE"].apply(
+                lambda x: pd.notnull(x)
+                and str(x).replace(".", "", 1).replace("-", "", 1).isdigit()
+            ) & loca_df["LOCA_NATN"].apply(
+                lambda x: pd.notnull(x)
+                and str(x).replace(".", "", 1).replace("-", "", 1).isdigit()
             )
             clean_df = loca_df[valid_mask].copy()
             problem_df = loca_df[~valid_mask].copy()
