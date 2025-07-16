@@ -656,7 +656,7 @@ def plot_professional_borehole_sections(
                 )
             bh_x_map = dict(zip(boreholes, rel_x))
         else:
-            # Two-point line
+            # Two-point line: project each borehole onto the straight line (PCA axis)
             (x0, y0), (x1, y1) = section_line
             dx = x1 - x0
             dy = y1 - y0
@@ -664,6 +664,7 @@ def plot_professional_borehole_sections(
             if line_length == 0:
                 rel_x = x_coords - x_coords[0]
             else:
+                # Project each borehole onto the section line using vector projection
                 rel_x = ((x_coords - x0) * dx + (y_coords - y0) * dy) / line_length
             bh_x_map = dict(zip(boreholes, rel_x))
     else:
@@ -790,57 +791,11 @@ def plot_professional_borehole_sections(
 
             # Grouping logic for labeling
             if prev_leg != leg:
-                # If ending a previous group, label it
-                if prev_leg is not None and group_start_idx is not None:
-                    group_rows = bh_df.iloc[group_start_idx:idx]
-                    if not group_rows.empty:
-                        group_top = group_rows.iloc[0]["ELEV_TOP"]
-                        group_base = group_rows.iloc[-1]["ELEV_BASE"]
-                        label_elev = (group_top + group_base) / 2
-                        if show_labels:
-                            ax.text(
-                                bh_x,
-                                label_elev,
-                                str(prev_leg),
-                                ha="center",
-                                va="center",
-                                fontsize=SECTION_PLOT_LABEL_FONTSIZE - 1,
-                                color="black",
-                                rotation=90,
-                                weight="bold",
-                                bbox=dict(
-                                    boxstyle="round,pad=0.2",
-                                    facecolor="white",
-                                    alpha=0.8,
-                                ),
-                            )
-
-                # Start new group
+                # Start new group (no label)
                 prev_leg = leg
                 group_start_idx = idx
 
-        # Label the last group
-        if prev_leg is not None and group_start_idx is not None:
-            group_rows = bh_df.iloc[group_start_idx:]
-            if not group_rows.empty:
-                group_top = group_rows.iloc[0]["ELEV_TOP"]
-                group_base = group_rows.iloc[-1]["ELEV_BASE"]
-                label_elev = (group_top + group_base) / 2
-                if show_labels:
-                    ax.text(
-                        bh_x,
-                        label_elev,
-                        str(prev_leg),
-                        ha="center",
-                        va="center",
-                        fontsize=SECTION_PLOT_LABEL_FONTSIZE - 1,
-                        color="black",
-                        rotation=90,
-                        weight="bold",
-                        bbox=dict(
-                            boxstyle="round,pad=0.2", facecolor="white", alpha=0.8
-                        ),
-                    )
+        # Label the last group (no label)
 
     # Draw professional ground surface line
     rel_x = np.array(list(bh_x_map.values()))
