@@ -1,395 +1,22 @@
-"""
-Professional-style borehole section plotting module.
-Implements Openground-style formatting with hatch patterns, consistent fonts,
-professional gridlines, and high-quality output.
-"""
-
-import matplotlib.pyplot as plt
-import matplotlib as mpl
-import matplotlib.ticker as ticker
-from matplotlib.patches import Patch
-import pandas as pd
+from geology_code_utils import (
+    get_geology_color,
+    get_geology_pattern,
+)
 import csv
-import re
+import pandas as pd
 import numpy as np
 import pyproj
-from config import (
-    SECTION_BASE_HEIGHT,
-    SECTION_MAX_HEIGHT,
-    SECTION_MIN_WIDTH,
-    SECTION_WIDTH_PER_BH,
-    SECTION_PLOT_LABEL_FONTSIZE,
-    SECTION_PLOT_AXIS_FONTSIZE,
-)
+import re
+import matplotlib.pyplot as plt
+import matplotlib.ticker as ticker
+from matplotlib.patches import Patch
 
-
-# Set global matplotlib parameters for professional appearance
-def setup_professional_style():
-    """Configure matplotlib for professional geological section plots."""
-    # Font configuration
-    mpl.rcParams["font.family"] = "sans-serif"
-    mpl.rcParams["font.sans-serif"] = ["Arial", "DejaVu Sans", "Helvetica"]
-    mpl.rcParams["axes.labelsize"] = 11
-    mpl.rcParams["xtick.labelsize"] = 10
-    mpl.rcParams["ytick.labelsize"] = 10
-    mpl.rcParams["legend.fontsize"] = 10
-    mpl.rcParams["axes.titlesize"] = 12
-
-    # Hatch configuration
-    mpl.rcParams["hatch.linewidth"] = 0.8
-    mpl.rcParams["hatch.color"] = "black"
-
-    # Grid configuration
-    mpl.rcParams["axes.grid"] = True
-    mpl.rcParams["grid.linewidth"] = 0.5
-    mpl.rcParams["grid.alpha"] = 0.7
-
-    # General appearance
-    mpl.rcParams["axes.edgecolor"] = "black"
-    mpl.rcParams["axes.linewidth"] = 0.8
-    mpl.rcParams["figure.facecolor"] = "white"
-    mpl.rcParams["axes.facecolor"] = "white"
-
-
-# Initialize professional style
-setup_professional_style()
-
-
-# Load geology codes from CSV file
-def load_geology_codes():
-    """Load geology codes from Geology Codes.csv file."""
-    import os
-    import pandas as pd
-
-    geology_codes = {}
-    csv_path = os.path.join(os.path.dirname(__file__), "Geology Codes.csv")
-
-    try:
-        df = pd.read_csv(csv_path, header=None, names=["code", "description"])
-        for _, row in df.iterrows():
-            geology_codes[str(row["code"])] = row["description"]
-    except (FileNotFoundError, Exception) as e:
-        print(f"Warning: Could not load geology codes from CSV: {e}")
-        # Fallback to basic codes
-        geology_codes = {
-            "101": "TOPSOIL",
-            "102": "MADE GROUND",
-            "104": "CONCRETE",
-            "999": "Void",
-        }
-
-    return geology_codes
-
-
-# Load geology codes
-GEOLOGY_CODES = load_geology_codes()
-
-
-# Geological hatch pattern mapping based on your specific geology codes
-GEOLOGICAL_HATCH_PATTERNS = {
-    # Surface materials
-    "101": "ooo",  # TOPSOIL - circles
-    "102": "***",  # MADE GROUND - stars
-    "104": "####",  # CONCRETE - hash marks
-    # Clay types
-    "202": "...",  # Silty CLAY - dots
-    "203": ".//.",  # Sandy CLAY - dots with diagonal lines
-    "204": "...\\\\\\",  # Gravelly CLAY - dots with backslash
-    "205": "...ooo",  # Cobbly CLAY - dots with circles
-    "207": ".//.",  # Silty sandy CLAY - dots with diagonal
-    "220": ".//\\\\\\",  # Sandy gravelly CLAY - mixed pattern
-    "227": "...~~~",  # Sandy organic CLAY - dots with waves
-    # Silt types
-    "301": "---",  # SILT - horizontal lines
-    "308": "---//\\\\\\",  # Sandy gravelly SILT - mixed pattern
-    # Sand types
-    "403": "///",  # Silty SAND - diagonal lines
-    "410": "///...\\\\\\",  # Clayey gravelly SAND - complex pattern
-    # Gravel types
-    "501": "\\\\\\",  # GRAVEL - backslash lines
-    "509": "\\\\\\...///",  # Clayey sandy GRAVEL - complex pattern
-    # Cobbles
-    "708": "ooo\\\\\\...",  # Clayey sandy COBBLES - complex pattern
-    # Rock types
-    "801": "===",  # MUDSTONE - thick horizontal lines
-    "802": "---",  # SILTSTONE - horizontal lines
-    "803": "|||",  # SANDSTONE - vertical lines
-    # Special
-    "999": "",  # Void - no pattern
-    # Fallback patterns for common terms (for backward compatibility)
-    "CLAY": "...",
-    "CLAYEY": "...",
-    "SILTY_CLAY": "...",
-    "SANDY_CLAY": ".//.",
-    "SILT": "---",
-    "SILTY": "---",
-    "CLAYEY_SILT": ".---.",
-    "SAND": "///",
-    "SANDY": "///",
-    "FINE_SAND": "//",
-    "MEDIUM_SAND": "///",
-    "COARSE_SAND": "/////",
-    "SILTY_SAND": "///---",
-    "GRAVEL": "\\\\\\",
-    "GRAVELLY": "\\\\\\",
-    "SANDY_GRAVEL": "///\\\\\\",
-    "CLAYEY_GRAVEL": "...\\\\\\",
-    "LIMESTONE": "xxx",
-    "CHALK": "xx",
-    "SANDSTONE": "|||",
-    "MUDSTONE": "===",
-    "SHALE": "====",
-    "GRANITE": "++++",
-    "BEDROCK": "+++",
-    "TOPSOIL": "ooo",
-    "MADE_GROUND": "***",
-    "FILL": "***",
-    "CONCRETE": "####",
-    "ASPHALT": "^^^^",
-    "UNKNOWN": "",
-    "DEFAULT": "",
-}
-
-# Color mapping for geological units based on your specific codes
-GEOLOGICAL_COLOR_MAP = {
-    # Surface materials
-    "101": "#654321",  # TOPSOIL - dark brown
-    "102": "#8B0000",  # MADE GROUND - dark red
-    "104": "#D3D3D3",  # CONCRETE - light gray
-    # Clay types - browns and earth tones
-    "202": "#8B4513",  # Silty CLAY - saddle brown
-    "203": "#CD853F",  # Sandy CLAY - peru
-    "204": "#A0522D",  # Gravelly CLAY - sienna
-    "205": "#8B4513",  # Cobbly CLAY - saddle brown
-    "207": "#DEB887",  # Silty sandy CLAY - burlywood
-    "220": "#D2691E",  # Sandy gravelly CLAY - chocolate
-    "227": "#8B4513",  # Sandy organic CLAY - saddle brown
-    # Silt types - tan colors
-    "301": "#D2B48C",  # SILT - tan
-    "308": "#DEB887",  # Sandy gravelly SILT - burlywood
-    # Sand types - yellow/sandy colors
-    "403": "#F4A460",  # Silty SAND - sandy brown
-    "410": "#DAA520",  # Clayey gravelly SAND - goldenrod
-    # Gravel types - gray colors
-    "501": "#696969",  # GRAVEL - dim gray
-    "509": "#778899",  # Clayey sandy GRAVEL - light slate gray
-    # Cobbles - darker gray
-    "708": "#708090",  # Clayey sandy COBBLES - slate gray
-    # Rock types - stone colors
-    "801": "#2F4F4F",  # MUDSTONE - dark slate gray
-    "802": "#8FBC8F",  # SILTSTONE - dark sea green
-    "803": "#F0E68C",  # SANDSTONE - khaki
-    # Special
-    "999": "#FFFFFF",  # Void - white
-    # Fallback colors for common terms (for backward compatibility)
-    "CLAY": "#8B4513",
-    "CLAYEY": "#8B4513",
-    "SILTY_CLAY": "#A0522D",
-    "SANDY_CLAY": "#CD853F",
-    "SILT": "#D2B48C",
-    "SILTY": "#D2B48C",
-    "CLAYEY_SILT": "#DEB887",
-    "SAND": "#F4A460",
-    "SANDY": "#F4A460",
-    "FINE_SAND": "#F5DEB3",
-    "MEDIUM_SAND": "#F4A460",
-    "COARSE_SAND": "#DAA520",
-    "SILTY_SAND": "#E6D3A3",
-    "GRAVEL": "#696969",
-    "GRAVELLY": "#696969",
-    "SANDY_GRAVEL": "#778899",
-    "CLAYEY_GRAVEL": "#708090",
-    "LIMESTONE": "#F5F5DC",
-    "CHALK": "#FFFAF0",
-    "SANDSTONE": "#F0E68C",
-    "MUDSTONE": "#8FBC8F",
-    "SHALE": "#2F4F4F",
-    "GRANITE": "#C0C0C0",
-    "BEDROCK": "#808080",
-    "TOPSOIL": "#654321",
-    "MADE_GROUND": "#8B0000",
-    "FILL": "#8B0000",
-    "CONCRETE": "#D3D3D3",
-    "ASPHALT": "#2F2F2F",
-}
-
-
-def get_geological_pattern(geol_leg, geol_desc=""):
-    """
-    Determine the appropriate hatch pattern for a geological unit.
-
-    Args:
-        geol_leg (str): Geological legend code
-        geol_desc (str): Geological description
-
-    Returns:
-        str: Hatch pattern string
-    """
-    # First try exact match with GEOL_LEG (your specific codes)
-    if str(geol_leg) in GEOLOGICAL_HATCH_PATTERNS:
-        return GEOLOGICAL_HATCH_PATTERNS[str(geol_leg)]
-
-    # Try matching with the description from your geology codes
-    if str(geol_leg) in GEOLOGY_CODES:
-        desc = GEOLOGY_CODES[str(geol_leg)].upper()
-
-        # Check for keywords in the official description
-        if "CLAY" in desc:
-            if "SANDY" in desc:
-                return GEOLOGICAL_HATCH_PATTERNS.get("203", ".//.")
-            elif "SILTY" in desc:
-                return GEOLOGICAL_HATCH_PATTERNS.get("202", "...")
-            elif "GRAVELLY" in desc:
-                return GEOLOGICAL_HATCH_PATTERNS.get("204", "...\\\\\\")
-            else:
-                return GEOLOGICAL_HATCH_PATTERNS.get("CLAY", "...")
-        elif "SILT" in desc:
-            if "SANDY" in desc and "GRAVELLY" in desc:
-                return GEOLOGICAL_HATCH_PATTERNS.get("308", "---//\\\\\\")
-            else:
-                return GEOLOGICAL_HATCH_PATTERNS.get("301", "---")
-        elif "SAND" in desc:
-            if "SILTY" in desc:
-                return GEOLOGICAL_HATCH_PATTERNS.get("403", "///")
-            elif "CLAYEY" in desc and "GRAVELLY" in desc:
-                return GEOLOGICAL_HATCH_PATTERNS.get("410", "///...\\\\\\")
-            else:
-                return GEOLOGICAL_HATCH_PATTERNS.get("SAND", "///")
-        elif "GRAVEL" in desc:
-            if "CLAYEY" in desc and "SANDY" in desc:
-                return GEOLOGICAL_HATCH_PATTERNS.get("509", "\\\\\\...///")
-            else:
-                return GEOLOGICAL_HATCH_PATTERNS.get("501", "\\\\\\")
-        elif "COBBLES" in desc:
-            return GEOLOGICAL_HATCH_PATTERNS.get("708", "ooo\\\\\\...")
-        elif "TOPSOIL" in desc:
-            return GEOLOGICAL_HATCH_PATTERNS.get("101", "ooo")
-        elif "MADE GROUND" in desc:
-            return GEOLOGICAL_HATCH_PATTERNS.get("102", "***")
-        elif "CONCRETE" in desc:
-            return GEOLOGICAL_HATCH_PATTERNS.get("104", "####")
-        elif "MUDSTONE" in desc:
-            return GEOLOGICAL_HATCH_PATTERNS.get("801", "===")
-        elif "SILTSTONE" in desc:
-            return GEOLOGICAL_HATCH_PATTERNS.get("802", "---")
-        elif "SANDSTONE" in desc:
-            return GEOLOGICAL_HATCH_PATTERNS.get("803", "|||")
-        elif "VOID" in desc:
-            return GEOLOGICAL_HATCH_PATTERNS.get("999", "")
-
-    # Fallback: try pattern matching in the provided description
-    desc_upper = str(geol_desc).upper()
-
-    # Check for keywords in description
-    for pattern_key in GEOLOGICAL_HATCH_PATTERNS:
-        if str(pattern_key).upper() in desc_upper:
-            return GEOLOGICAL_HATCH_PATTERNS[pattern_key]
-
-    # Final fallbacks for common variations
-    if any(word in desc_upper for word in ["CLAY", "CLAYEY"]):
-        return GEOLOGICAL_HATCH_PATTERNS.get("CLAY", "...")
-    elif any(word in desc_upper for word in ["SAND", "SANDY"]):
-        return GEOLOGICAL_HATCH_PATTERNS.get("SAND", "///")
-    elif any(word in desc_upper for word in ["SILT", "SILTY"]):
-        return GEOLOGICAL_HATCH_PATTERNS.get("SILT", "---")
-    elif any(word in desc_upper for word in ["GRAVEL", "GRAVELLY"]):
-        return GEOLOGICAL_HATCH_PATTERNS.get("GRAVEL", "\\\\\\")
-    elif any(word in desc_upper for word in ["TOPSOIL", "SOIL"]):
-        return GEOLOGICAL_HATCH_PATTERNS.get("TOPSOIL", "ooo")
-    elif any(word in desc_upper for word in ["MADE", "FILL"]):
-        return GEOLOGICAL_HATCH_PATTERNS.get("MADE_GROUND", "***")
-
-    return GEOLOGICAL_HATCH_PATTERNS.get("DEFAULT", "")
-
-
-def get_geological_color(geol_leg, geol_desc=""):
-    """
-    Determine the appropriate color for a geological unit.
-
-    Args:
-        geol_leg (str): Geological legend code
-        geol_desc (str): Geological description
-
-    Returns:
-        str: Color hex code
-    """
-    # First try exact match with GEOL_LEG (your specific codes)
-    if str(geol_leg) in GEOLOGICAL_COLOR_MAP:
-        return GEOLOGICAL_COLOR_MAP[str(geol_leg)]
-
-    # Try matching with the description from your geology codes
-    if str(geol_leg) in GEOLOGY_CODES:
-        desc = GEOLOGY_CODES[str(geol_leg)].upper()
-
-        # Check for keywords in the official description
-        if "CLAY" in desc:
-            if "SANDY" in desc:
-                return GEOLOGICAL_COLOR_MAP.get("203", "#CD853F")
-            elif "SILTY" in desc:
-                return GEOLOGICAL_COLOR_MAP.get("202", "#8B4513")
-            elif "GRAVELLY" in desc:
-                return GEOLOGICAL_COLOR_MAP.get("204", "#A0522D")
-            else:
-                return GEOLOGICAL_COLOR_MAP.get("CLAY", "#8B4513")
-        elif "SILT" in desc:
-            if "SANDY" in desc and "GRAVELLY" in desc:
-                return GEOLOGICAL_COLOR_MAP.get("308", "#DEB887")
-            else:
-                return GEOLOGICAL_COLOR_MAP.get("301", "#D2B48C")
-        elif "SAND" in desc:
-            if "SILTY" in desc:
-                return GEOLOGICAL_COLOR_MAP.get("403", "#F4A460")
-            elif "CLAYEY" in desc and "GRAVELLY" in desc:
-                return GEOLOGICAL_COLOR_MAP.get("410", "#DAA520")
-            else:
-                return GEOLOGICAL_COLOR_MAP.get("SAND", "#F4A460")
-        elif "GRAVEL" in desc:
-            if "CLAYEY" in desc and "SANDY" in desc:
-                return GEOLOGICAL_COLOR_MAP.get("509", "#778899")
-            else:
-                return GEOLOGICAL_COLOR_MAP.get("501", "#696969")
-        elif "COBBLES" in desc:
-            return GEOLOGICAL_COLOR_MAP.get("708", "#708090")
-        elif "TOPSOIL" in desc:
-            return GEOLOGICAL_COLOR_MAP.get("101", "#654321")
-        elif "MADE GROUND" in desc:
-            return GEOLOGICAL_COLOR_MAP.get("102", "#8B0000")
-        elif "CONCRETE" in desc:
-            return GEOLOGICAL_COLOR_MAP.get("104", "#D3D3D3")
-        elif "MUDSTONE" in desc:
-            return GEOLOGICAL_COLOR_MAP.get("801", "#2F4F4F")
-        elif "SILTSTONE" in desc:
-            return GEOLOGICAL_COLOR_MAP.get("802", "#8FBC8F")
-        elif "SANDSTONE" in desc:
-            return GEOLOGICAL_COLOR_MAP.get("803", "#F0E68C")
-        elif "VOID" in desc:
-            return GEOLOGICAL_COLOR_MAP.get("999", "#FFFFFF")
-
-    # Fallback: try pattern matching in the provided description
-    desc_upper = str(geol_desc).upper()
-
-    # Check for keywords in description
-    for color_key in GEOLOGICAL_COLOR_MAP:
-        if str(color_key).upper() in desc_upper:
-            return GEOLOGICAL_COLOR_MAP[color_key]
-
-    # Final fallbacks for common variations
-    if any(word in desc_upper for word in ["CLAY", "CLAYEY"]):
-        return GEOLOGICAL_COLOR_MAP.get("CLAY", "#8B4513")
-    elif any(word in desc_upper for word in ["SAND", "SANDY"]):
-        return GEOLOGICAL_COLOR_MAP.get("SAND", "#F4A460")
-    elif any(word in desc_upper for word in ["SILT", "SILTY"]):
-        return GEOLOGICAL_COLOR_MAP.get("SILT", "#D2B48C")
-    elif any(word in desc_upper for word in ["GRAVEL", "GRAVELLY"]):
-        return GEOLOGICAL_COLOR_MAP.get("GRAVEL", "#696969")
-    elif any(word in desc_upper for word in ["TOPSOIL", "SOIL"]):
-        return GEOLOGICAL_COLOR_MAP.get("TOPSOIL", "#654321")
-    elif any(word in desc_upper for word in ["MADE", "FILL"]):
-        return GEOLOGICAL_COLOR_MAP.get("MADE_GROUND", "#8B0000")
-
-    # Default to a neutral color if no match found
-    return "#D3D3D3"  # Light gray
-    return "#D3D3D3"  # Light gray
+# Define missing constants if not already defined
+SECTION_MIN_WIDTH = 10
+SECTION_WIDTH_PER_BH = 2
+SECTION_BASE_HEIGHT = 6
+SECTION_MAX_HEIGHT = 20
+SECTION_PLOT_AXIS_FONTSIZE = 10
 
 
 def parse_ags_geol_section_from_string(content):
@@ -526,12 +153,16 @@ def plot_professional_borehole_sections(
 
         print(f"[DEBUG] Converting BNG -> WGS84 -> UTM ({utm_crs})")
 
-
+        # Hybrid vectorized + fallback loop for UTM conversion
+        # Hybrid vectorized + fallback loop for UTM conversion
         # Hybrid vectorized + fallback loop for UTM conversion
         # 1. Identify rows with valid numeric LOCA_NATE and LOCA_NATN
-        valid_mask = (
-            loca_df["LOCA_NATE"].apply(lambda x: pd.notnull(x) and str(x).replace('.', '', 1).replace('-', '', 1).isdigit()) &
-            loca_df["LOCA_NATN"].apply(lambda x: pd.notnull(x) and str(x).replace('.', '', 1).replace('-', '', 1).isdigit())
+        valid_mask = loca_df["LOCA_NATE"].apply(
+            lambda x: pd.notnull(x)
+            and str(x).replace(".", "", 1).replace("-", "", 1).isdigit()
+        ) & loca_df["LOCA_NATN"].apply(
+            lambda x: pd.notnull(x)
+            and str(x).replace(".", "", 1).replace("-", "", 1).isdigit()
         )
         clean_df = loca_df[valid_mask].copy()
         problem_df = loca_df[~valid_mask].copy()
@@ -548,7 +179,9 @@ def plot_professional_borehole_sections(
             for i, loca_id in enumerate(clean_df["LOCA_ID"].values):
                 utm_coordinates[loca_id] = (utm_x[i], utm_y[i])
                 if i < 3:
-                    print(f"[DEBUG] {loca_id}: BNG({bng_x[i]}, {bng_y[i]}) -> UTM({utm_x[i]:.1f}, {utm_y[i]:.1f})")
+                    print(
+                        f"[DEBUG] {loca_id}: BNG({bng_x[i]}, {bng_y[i]}) -> UTM({utm_x[i]:.1f}, {utm_y[i]:.1f})"
+                    )
 
         # Fallback loop for problematic rows
         for _, row in problem_df.iterrows():
@@ -559,9 +192,13 @@ def plot_professional_borehole_sections(
                 utm_x, utm_y = wgs84_to_utm.transform(wgs84_lon, wgs84_lat)
                 utm_coordinates[row["LOCA_ID"]] = (utm_x, utm_y)
                 if len(utm_coordinates) <= 3:
-                    print(f"[DEBUG] {row['LOCA_ID']}: BNG({bng_x}, {bng_y}) -> UTM({utm_x:.1f}, {utm_y:.1f})")
+                    print(
+                        f"[DEBUG] {row['LOCA_ID']}: BNG({bng_x}, {bng_y}) -> UTM({utm_x:.1f}, {utm_y:.1f})"
+                    )
             except (ValueError, TypeError) as e:
-                print(f"[DEBUG] Skipping {row['LOCA_ID']} due to invalid coordinates: {e}")
+                print(
+                    f"[DEBUG] Skipping {row['LOCA_ID']} due to invalid coordinates: {e}"
+                )
                 continue
 
         # Merge coordinates and LOCA_GL into geol_df
@@ -689,18 +326,17 @@ def plot_professional_borehole_sections(
 
     # Create professional color and hatch mappings
     unique_leg = merged["GEOL_LEG"].unique()
+    print(f"[DEBUG] Found {len(unique_leg)} unique GEOL_LEG codes: {unique_leg}")
     color_map = {}
     hatch_map = {}
-
     for leg in unique_leg:
-        # Get a sample description for this leg
-        sample_desc = (
-            merged.loc[merged["GEOL_LEG"] == leg, "GEOL_DESC"].iloc[0]
-            if "GEOL_DESC" in merged.columns
-            else ""
+        color_map[leg] = get_geology_color(leg)
+        hatch_map[leg] = get_geology_pattern(leg)
+        print(
+            f"[DEBUG] GEOL_LEG '{leg}' -> Color: {color_map[leg]}, Hatch: '{hatch_map[leg]}'"
         )
-        color_map[leg] = get_geological_color(leg, sample_desc)
-        hatch_map[leg] = get_geological_pattern(leg, sample_desc)
+    print(f"[DEBUG] Final color_map: {color_map}")
+    print(f"[DEBUG] Final hatch_map: {hatch_map}")
 
     # Build labels for each GEOL_LEG using ABBR group if available
     leg_label_map = {}
@@ -773,7 +409,7 @@ def plot_professional_borehole_sections(
 
         # Group consecutive intervals with the same GEOL_LEG for labeling
         prev_leg = None
-        group_start_idx = None
+        # group_start_idx = None
 
         for idx, row in bh_df.iterrows():
             leg = row["GEOL_LEG"]
@@ -805,7 +441,6 @@ def plot_professional_borehole_sections(
             if prev_leg != leg:
                 # Start new group (no label)
                 prev_leg = leg
-                group_start_idx = idx
 
         # Label the last group (no label)
 
