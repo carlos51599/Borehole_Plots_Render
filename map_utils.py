@@ -153,20 +153,24 @@ def filter_by_geometry(loca_df, geometry):
                     poly = poly.buffer(0)  # Attempt to fix invalid polygon
                     logging.info(f"Fixed polygon validity: {poly.is_valid}")
 
-                def point_in_polygon(row):
-                    try:
-                        point = Point(row["lon"], row["lat"])  # lon, lat order
-                        result = poly.contains(point)
-                        logging.debug(
-                            f"Point {row['LOCA_ID']} ({row['lon']:.6f}, {row['lat']:.6f}): {result}"
-                        )
-                        return result
-                    except Exception as e:
-                        logging.warning(f"Error checking point {row['LOCA_ID']}: {e}")
-                        return False
-
-                mask = loca_df.apply(point_in_polygon, axis=1)
-                result = loca_df[mask].copy()  # Add .copy() to avoid view issues
+                # Bounding box pre-filter
+                minx, miny, maxx, maxy = poly.bounds
+                bbox_mask = (
+                    (loca_df["lon"] >= minx)
+                    & (loca_df["lon"] <= maxx)
+                    & (loca_df["lat"] >= miny)
+                    & (loca_df["lat"] <= maxy)
+                )
+                candidates = loca_df[bbox_mask]
+                # Vectorized point-in-polygon using shapely
+                points_arr = [
+                    Point(lon, lat)
+                    for lon, lat in zip(
+                        candidates["lon"].values, candidates["lat"].values
+                    )
+                ]
+                mask = [poly.contains(pt) for pt in points_arr]
+                result = candidates[mask].copy()  # Add .copy() to avoid view issues
                 logging.info(f"Polygon filter result: {len(result)} boreholes")
 
                 # Log which points were selected
@@ -178,14 +182,13 @@ def filter_by_geometry(loca_df, geometry):
                     # Log all available points for debugging
                     logging.info("Available borehole coordinates:")
                     for i, row in loca_df.iterrows():
-                        if pd.notna(row["lat"]) and pd.notna(row["lon"]):
-                            logging.info(
-                                f"  {row['LOCA_ID']}: ({row['lon']:.6f}, {row['lat']:.6f})"
-                            )
-                            # Also check if point is close to polygon
-                            point = Point(row["lon"], row["lat"])
-                            distance = poly.distance(point)
-                            logging.info(f"    Distance to polygon: {distance:.6f}")
+                        logging.info(
+                            f"  {row['LOCA_ID']}: ({row['lon']:.6f}, {row['lat']:.6f})"
+                        )
+                        # Also check if point is close to polygon
+                        point = Point(row["lon"], row["lat"])
+                        distance = poly.distance(point)
+                        logging.info(f"    Distance to polygon: {distance:.6f}")
 
                 return result
             except Exception as poly_err:
@@ -230,20 +233,24 @@ def filter_by_geometry(loca_df, geometry):
                 buffer_utm = line_utm.buffer(buffer_m)
                 logging.info(f"Created UTM buffer with {buffer_m}m radius")
 
-                def point_near_line(row):
-                    try:
-                        point = Point(row["lon"], row["lat"])  # lon, lat order
-                        point_utm = shapely_transform(project, point)
-                        result = buffer_utm.contains(point_utm)
-                        return result
-                    except Exception as e:
-                        logging.warning(
-                            f"Error checking point {row['LOCA_ID']} near line: {e}"
-                        )
-                        return False
-
-                mask = loca_df.apply(point_near_line, axis=1)
-                result = loca_df[mask].copy()  # Add .copy() to avoid view issues
+                # Bounding box pre-filter in UTM coordinates
+                minx, miny, maxx, maxy = buffer_utm.bounds
+                # Transform all points to UTM, but only keep those in bbox
+                points_arr = [
+                    Point(lon, lat)
+                    for lon, lat in zip(loca_df["lon"].values, loca_df["lat"].values)
+                ]
+                points_utm = [shapely_transform(project, pt) for pt in points_arr]
+                bbox_mask = [
+                    (pt.x >= minx and pt.x <= maxx and pt.y >= miny and pt.y <= maxy)
+                    for pt in points_utm
+                ]
+                candidates = [pt for pt, keep in zip(points_utm, bbox_mask) if keep]
+                candidate_indices = [i for i, keep in enumerate(bbox_mask) if keep]
+                mask = [buffer_utm.contains(pt) for pt in candidates]
+                # Map mask back to original DataFrame indices
+                result_indices = [candidate_indices[i] for i, m in enumerate(mask) if m]
+                result = loca_df.iloc[result_indices].copy()
                 logging.info(f"LineString filter result: {len(result)} boreholes")
                 return result
             except Exception as line_err:

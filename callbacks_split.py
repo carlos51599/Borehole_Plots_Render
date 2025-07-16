@@ -174,96 +174,107 @@ def register_callbacks(app):
             loca_df, filename_map = load_all_loca_data(ags_files)
             logging.info(f"Loaded {len(loca_df)} boreholes")
 
-            # Create markers
-            markers = []
-            valid_coords = []
 
-            for i, row in loca_df.iterrows():
+
+            # --- Hybrid vectorized + fallback approach for coordinate transformation ---
+            import pyproj
+            import numpy as np
+            bng_to_wgs84 = pyproj.Transformer.from_crs("EPSG:27700", "EPSG:4326", always_xy=True)
+
+            # Identify valid numeric rows
+            valid_mask = (
+                loca_df["LOCA_NATE"].apply(lambda x: pd.notnull(x) and str(x).replace('.', '', 1).replace('-', '', 1).isdigit()) &
+                loca_df["LOCA_NATN"].apply(lambda x: pd.notnull(x) and str(x).replace('.', '', 1).replace('-', '', 1).isdigit())
+            )
+            clean_df = loca_df[valid_mask].copy()
+            problem_df = loca_df[~valid_mask].copy()
+
+            # Vectorized transform for clean batch
+            lat_arr = np.full(len(loca_df), np.nan)
+            lon_arr = np.full(len(loca_df), np.nan)
+            if not clean_df.empty:
+                bng_x = clean_df["LOCA_NATE"].astype(float).values
+                bng_y = clean_df["LOCA_NATN"].astype(float).values
+                wgs84_lon, wgs84_lat = bng_to_wgs84.transform(bng_x, bng_y)
+                lat_arr[clean_df.index] = wgs84_lat
+                lon_arr[clean_df.index] = wgs84_lon
+
+            # Fallback loop for problematic rows
+            for i, row in problem_df.iterrows():
                 try:
                     easting = float(row["LOCA_NATE"])
                     northing = float(row["LOCA_NATN"])
-                    lat, lon = transform_coordinates(easting, northing)
-
-                    if lat and lon:
-                        # Store transformed coordinates
-                        loca_df.at[i, "lat"] = lat
-                        loca_df.at[i, "lon"] = lon
-
-                        # Create marker with proper icon configuration
-                        label = str(row["LOCA_ID"])
-                        marker_id = {"type": "borehole-marker", "index": i}
-
-                        # Get additional information for tooltip
-                        ground_level = row.get("LOCA_GL", "N/A")
-                        total_depth = row.get("LOCA_FDEP", "N/A")
-
-                        # Format ground level and total depth
-                        if (
-                            ground_level != "N/A"
-                            and ground_level is not None
-                            and str(ground_level).strip()
-                        ):
-                            try:
-                                ground_level = f"{float(ground_level):.2f}m"
-                            except (ValueError, TypeError):
-                                ground_level = "N/A"
-                        else:
-                            ground_level = "N/A"
-
-                        if (
-                            total_depth != "N/A"
-                            and total_depth is not None
-                            and str(total_depth).strip()
-                        ):
-                            try:
-                                total_depth = f"{float(total_depth):.2f}m"
-                            except (ValueError, TypeError):
-                                total_depth = "N/A"
-                        else:
-                            total_depth = "N/A"
-
-                        # Create detailed tooltip
-                        tooltip_text = f"""
-                        Borehole: {label}
-                        Ground Level: {ground_level}
-                        Total Depth: {total_depth}
-                        Click to view borehole log
-                        """
-
-                        # Use more detailed icon configuration for better positioning
-                        marker_icon = {
-                            "iconUrl": BLUE_MARKER,
-                            "iconSize": [25, 41],  # Standard Leaflet marker size
-                            "iconAnchor": [
-                                12,
-                                41,
-                            ],  # Point of the icon which will correspond to marker's location
-                            "popupAnchor": [
-                                1,
-                                -34,
-                            ],  # Point from which the popup should open relative to the iconAnchor
-                            "shadowSize": [41, 41],  # Size of the shadow
-                        }
-
-                        markers.append(
-                            dl.Marker(
-                                id=marker_id,
-                                position=[lat, lon],  # Ensure this is [lat, lon] order
-                                children=dl.Tooltip(tooltip_text.strip()),
-                                icon=marker_icon,
-                                n_clicks=0,
-                            )
-                        )
-                        valid_coords.append((lat, lon))
-
-                        # Log first few markers for debugging
-                        if i < 3:
-                            logging.info(
-                                f"Marker {i} ({label}): BNG({easting}, {northing}) -> Position([{lat:.6f}, {lon:.6f}])"
-                            )
-
+                    lon, lat = bng_to_wgs84.transform(easting, northing)
+                    lat_arr[i] = lat
+                    lon_arr[i] = lon
                 except Exception as e:
                     logging.warning(f"Skipping marker for row {i}: {e}")
+
+            # Store transformed coordinates in DataFrame
+            loca_df["lat"] = lat_arr
+            loca_df["lon"] = lon_arr
+
+            # Create markers
+            markers = []
+            valid_coords = []
+            for i, row in loca_df.iterrows():
+                lat = row["lat"]
+                lon = row["lon"]
+                if pd.notnull(lat) and pd.notnull(lon):
+                    label = str(row["LOCA_ID"])
+                    marker_id = {"type": "borehole-marker", "index": i}
+                    ground_level = row.get("LOCA_GL", "N/A")
+                    total_depth = row.get("LOCA_FDEP", "N/A")
+                    if (
+                        ground_level != "N/A"
+                        and ground_level is not None
+                        and str(ground_level).strip()
+                    ):
+                        try:
+                            ground_level = f"{float(ground_level):.2f}m"
+                        except (ValueError, TypeError):
+                            ground_level = "N/A"
+                    else:
+                        ground_level = "N/A"
+                    if (
+                        total_depth != "N/A"
+                        and total_depth is not None
+                        and str(total_depth).strip()
+                    ):
+                        try:
+                            total_depth = f"{float(total_depth):.2f}m"
+                        except (ValueError, TypeError):
+                            total_depth = "N/A"
+                    else:
+                        total_depth = "N/A"
+                    tooltip_text = f"""
+                    Borehole: {label}
+                    Ground Level: {ground_level}
+                    Total Depth: {total_depth}
+                    Click to view borehole log
+                    """
+                    marker_icon = {
+                        "iconUrl": BLUE_MARKER,
+                        "iconSize": [25, 41],
+                        "iconAnchor": [12, 41],
+                        "popupAnchor": [1, -34],
+                        "shadowSize": [41, 41],
+                    }
+                    markers.append(
+                        dl.Marker(
+                            id=marker_id,
+                            position=[lat, lon],
+                            children=dl.Tooltip(tooltip_text.strip()),
+                            icon=marker_icon,
+                            n_clicks=0,
+                        )
+                    )
+                    valid_coords.append((lat, lon))
+                    if i < 3:
+                        logging.info(
+                            f"Marker {i} ({label}): BNG({row['LOCA_NATE']}, {row['LOCA_NATN']}) "
+                            f"-> Position([{lat:.6f}, {lon:.6f}])"
+                        )
 
             # Auto-zoom to median coordinates for better centering
             if valid_coords:

@@ -526,30 +526,42 @@ def plot_professional_borehole_sections(
 
         print(f"[DEBUG] Converting BNG -> WGS84 -> UTM ({utm_crs})")
 
-        # Convert all borehole coordinates to UTM
+
+        # Hybrid vectorized + fallback loop for UTM conversion
+        # 1. Identify rows with valid numeric LOCA_NATE and LOCA_NATN
+        valid_mask = (
+            loca_df["LOCA_NATE"].apply(lambda x: pd.notnull(x) and str(x).replace('.', '', 1).replace('-', '', 1).isdigit()) &
+            loca_df["LOCA_NATN"].apply(lambda x: pd.notnull(x) and str(x).replace('.', '', 1).replace('-', '', 1).isdigit())
+        )
+        clean_df = loca_df[valid_mask].copy()
+        problem_df = loca_df[~valid_mask].copy()
+
         utm_coordinates = {}
-        for _, row in loca_df.iterrows():
+        # Vectorized transform for clean batch
+        if not clean_df.empty:
+            bng_x = clean_df["LOCA_NATE"].astype(float).values
+            bng_y = clean_df["LOCA_NATN"].astype(float).values
+            # BNG to WGS84
+            wgs84_lon, wgs84_lat = bng_to_wgs84.transform(bng_x, bng_y)
+            # WGS84 to UTM
+            utm_x, utm_y = wgs84_to_utm.transform(wgs84_lon, wgs84_lat)
+            for i, loca_id in enumerate(clean_df["LOCA_ID"].values):
+                utm_coordinates[loca_id] = (utm_x[i], utm_y[i])
+                if i < 3:
+                    print(f"[DEBUG] {loca_id}: BNG({bng_x[i]}, {bng_y[i]}) -> UTM({utm_x[i]:.1f}, {utm_y[i]:.1f})")
+
+        # Fallback loop for problematic rows
+        for _, row in problem_df.iterrows():
             try:
                 bng_x = float(row["LOCA_NATE"])
                 bng_y = float(row["LOCA_NATN"])
-
-                # BNG to WGS84
                 wgs84_lon, wgs84_lat = bng_to_wgs84.transform(bng_x, bng_y)
-
-                # WGS84 to UTM
                 utm_x, utm_y = wgs84_to_utm.transform(wgs84_lon, wgs84_lat)
-
                 utm_coordinates[row["LOCA_ID"]] = (utm_x, utm_y)
-
                 if len(utm_coordinates) <= 3:
-                    print(
-                        f"[DEBUG] {row['LOCA_ID']}: BNG({bng_x}, {bng_y}) -> UTM({utm_x:.1f}, {utm_y:.1f})"
-                    )
-
+                    print(f"[DEBUG] {row['LOCA_ID']}: BNG({bng_x}, {bng_y}) -> UTM({utm_x:.1f}, {utm_y:.1f})")
             except (ValueError, TypeError) as e:
-                print(
-                    f"[DEBUG] Skipping {row['LOCA_ID']} due to invalid coordinates: {e}"
-                )
+                print(f"[DEBUG] Skipping {row['LOCA_ID']} due to invalid coordinates: {e}")
                 continue
 
         # Merge coordinates and LOCA_GL into geol_df
