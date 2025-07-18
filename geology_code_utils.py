@@ -19,6 +19,7 @@ def load_geology_code_mappings(csv_filename=None):
         with open(csv_filename, newline="", encoding="utf-8-sig") as csvfile:
             reader = csv.DictReader(csvfile)
             for row in reader:
+                # Normalize code to string and strip whitespace
                 code = str(row["Code"]).strip()
                 color = row["Color"].strip() if row["Color"] else None
                 pattern = row["Hatch"].strip() if row["Hatch"] else None
@@ -26,7 +27,9 @@ def load_geology_code_mappings(csv_filename=None):
                     color_map[code] = color
                 if pattern:
                     pattern_map[code] = pattern
-                print(f"[DEBUG] Loaded: {code} -> Color: {color}, Pattern: '{pattern}'")
+                print(
+                    f"[DEBUG] Loaded: '{code}' -> Color: {color}, Pattern: '{pattern}'"
+                )
         print(
             f"[DEBUG] Total loaded: {len(color_map)} colors, {len(pattern_map)} patterns"
         )

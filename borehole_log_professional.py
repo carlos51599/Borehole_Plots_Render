@@ -9,6 +9,9 @@ Updated to include multi-page support, professional headers, and proper A4 forma
 based on the dummy3 implementation.
 """
 
+# Import shared geology code mapping utility (move to top for lint compliance)
+from geology_code_utils import load_geology_code_mappings
+
 import matplotlib.pyplot as plt
 from matplotlib.patches import Rectangle
 import pandas as pd
@@ -18,8 +21,8 @@ import base64
 import io
 from typing import Optional, Tuple, List
 
-# Import shared geology code mapping utility
-from geology_code_utils import load_geology_code_mappings
+# Define log_col_widths_in at module level for single source of truth
+log_col_widths_in = [0.05, 0.08, 0.04, 0.14, 0.07, 0.07, 0.08, 0.42, 0.05]
 
 # Configure matplotlib for professional rendering
 plt.rcParams["font.family"] = "Arial"
@@ -241,10 +244,6 @@ def draw_header(
     # Draw new additional row at the bottom
     new_row_height = 0.2  # fraction of axes height for new row
 
-    # Define column widths for the new row (adjusted for better text fitting)
-    # Increased proportions to accommodate longer text while maintaining relationships
-    new_col_widths = [0.05, 0.10, 0.06, 0.12, 0.08, 0.08, 0.10, 0.37, 0.04]
-    # Well, Depth, Type, Results, Depth, Level, Legend, Stratum, Empty
     new_col_labels = [
         "Well",
         "Depth (m)",
@@ -256,14 +255,14 @@ def draw_header(
         "Stratum Description",
         "",
     ]
-
+    total_col_width = sum(log_col_widths_in)
     x = 0.0
-    for i, (col_width, label) in enumerate(zip(new_col_widths, new_col_labels)):
+    for i, (col_width, label) in enumerate(zip(log_col_widths_in, new_col_labels)):
         # Draw cell rectangle
         ax.add_patch(
             Rectangle(
                 (x, 0),  # New row at very bottom (y=0)
-                col_width,
+                col_width / total_col_width,  # normalize to axes width
                 new_row_height,
                 edgecolor="black",
                 facecolor="none",
@@ -273,8 +272,7 @@ def draw_header(
 
         # Special handling for "Sample and In Situ Testing" merged header
         if i == 1:  # First sub-column of the merged section
-            # Draw the merged header text spanning columns 1, 2, 3
-            merged_width = new_col_widths[1] + new_col_widths[2] + new_col_widths[3]
+            merged_width = sum(log_col_widths_in[1:4]) / total_col_width
             ax.text(
                 x + merged_width / 2,
                 new_row_height * 0.9,
@@ -296,7 +294,7 @@ def draw_header(
         # Draw sub-column labels
         if i in [1, 2, 3]:  # Sub-columns under "Sample and In Situ Testing"
             ax.text(
-                x + col_width / 2,
+                x + (col_width / total_col_width) / 2,
                 new_row_height * 0.4,
                 label,
                 va="top",
@@ -307,7 +305,7 @@ def draw_header(
             )
         elif label:  # Other column labels
             ax.text(
-                x + col_width / 2,
+                x + (col_width / total_col_width) / 2,
                 new_row_height / 2,
                 label,
                 va="center",
@@ -317,7 +315,7 @@ def draw_header(
                 fontname="Arial",
             )
 
-        x += col_width
+        x += col_width / total_col_width
 
 
 def plot_borehole_log_from_ags_content(
@@ -428,40 +426,45 @@ def plot_borehole_log_from_ags_content(
         Parse ISPT group from AGS content for a given LOCA_ID.
         Returns a DataFrame with columns: Depth, Type, Results
         """
-        import re
+        import csv
 
-        # Find ISPT group
-        ispt_match = re.search(r"\\n\\$ISPT[\r\n]+(.*?)\\n\\$", ags_content, re.DOTALL)
-        if not ispt_match:
-            # Try to match to end of file if $ after ISPT is missing
-            ispt_match = re.search(r"\\n\\$ISPT[\r\n]+(.*)", ags_content, re.DOTALL)
-        if not ispt_match:
+        # Use robust group-agnostic parsing (like section_plot_professional.py)
+        lines = ags_content.splitlines()
+        parsed = list(csv.reader(lines, delimiter=",", quotechar='"'))
+
+        ispt_headings = []
+        ispt_data = []
+        in_ispt = False
+        for row in parsed:
+            if row and row[0] == "GROUP" and len(row) > 1 and row[1] == "ISPT":
+                in_ispt = True
+                continue
+            if in_ispt and row and row[0] == "HEADING":
+                ispt_headings = row[1:]
+                continue
+            if in_ispt and row and row[0] == "DATA":
+                ispt_data.append(row[1 : len(ispt_headings) + 1])
+                continue
+            if (
+                in_ispt
+                and row
+                and row[0] == "GROUP"
+                and (len(row) < 2 or row[1] != "ISPT")
+            ):
+                break
+
+        if not ispt_headings or not ispt_data:
             return None
-        ispt_block = ispt_match.group(1)
-        # Split lines, skip comment lines
-        lines = [
-            line
-            for line in ispt_block.splitlines()
-            if line.strip() and not line.strip().startswith("#")
-        ]
-        if not lines:
-            return None
-        # First line is headers, second line is units, then data
-        header_line = lines[0]
-        headers = [h.strip() for h in header_line.split("\t")]
         # Find required columns
         try:
-            idx_loca = headers.index("LOCA_ID")
-            idx_top = headers.index("ISPT_TOP")
-            idx_type = headers.index("ISPT_TYPE")
-            idx_rep = headers.index("ISPT_REP")
+            idx_loca = ispt_headings.index("LOCA_ID")
+            idx_top = ispt_headings.index("ISPT_TOP")
+            idx_type = ispt_headings.index("ISPT_TYPE")
+            idx_rep = ispt_headings.index("ISPT_REP")
         except ValueError:
             return None
-        # Data lines start after units (second line)
-        data_lines = lines[2:] if len(lines) > 2 else []
         spt_rows = []
-        for line in data_lines:
-            fields = line.split("\t")
+        for fields in ispt_data:
             if len(fields) < max(idx_loca, idx_top, idx_type, idx_rep) + 1:
                 continue
             if fields[idx_loca].strip() == str(loca_id):
@@ -506,6 +509,7 @@ def create_professional_borehole_log_multi_page(
     spt_df: Optional[pd.DataFrame] = None,
     hole_type: str = "",
     coords_str: str = "",
+    geology_mapping: Optional[dict] = None,
 ) -> List[str]:
     """
     Create a professional multi-page borehole log plot.
@@ -529,23 +533,23 @@ def create_professional_borehole_log_multi_page(
         logger.warning(f"No data available for borehole {borehole_id}")
         return []
 
-    # Load geology mapping
-    geology_mapping = {}
-    if geology_csv_path:
-        try:
-            color_map, pattern_map = load_geology_code_mappings(geology_csv_path)
-            # Combine the two maps into a single mapping structure
-            all_codes = set(color_map.keys()) | set(pattern_map.keys())
-            for code in all_codes:
-                geology_mapping[code] = {
-                    "color": color_map.get(code, "#b0c4de"),  # Light blue default
-                    "hatch": pattern_map.get(code, None),
-                }
-            logger.info(
-                f"Loaded {len(geology_mapping)} geology codes from {geology_csv_path}"
-            )
-        except Exception as e:
-            logger.error(f"Failed to load geology mapping: {e}")
+    # Load geology mapping if not provided
+    if geology_mapping is None:
+        geology_mapping = {}
+        if geology_csv_path:
+            try:
+                color_map, pattern_map = load_geology_code_mappings(geology_csv_path)
+                all_codes = set(color_map.keys()) | set(pattern_map.keys())
+                for code in all_codes:
+                    geology_mapping[code] = {
+                        "color": color_map.get(code, "#b0c4de"),
+                        "hatch": pattern_map.get(code, None),
+                    }
+                logger.info(
+                    f"Loaded {len(geology_mapping)} geology codes from {geology_csv_path}"
+                )
+            except Exception as e:
+                logger.error(f"Failed to load geology mapping: {e}")
 
     # --- MULTI-PAGE LOG IMPLEMENTATION ---
     # A4 width is 8.27 inches, minus margins (0.5" each side) = 7.27" usable
@@ -577,7 +581,6 @@ def create_professional_borehole_log_multi_page(
 
     for page_num in range(1, last_borehole_page + 1):
         # Column setup in inches (proportional to a4_usable_width)
-        log_col_widths_in = [0.05, 0.10, 0.06, 0.12, 0.08, 0.08, 0.10, 0.37, 0.04]
         total_col_width = sum(log_col_widths_in)
         a4_usable_width = a4_width_in - left_margin_in - right_margin_in
         scale = a4_usable_width / total_col_width
@@ -759,14 +762,19 @@ def create_professional_borehole_log_multi_page(
             y_base = depth_to_y_abs(seg["Depth_Base"])
             y_base_clipped = max(y_base, toe_y)
             if y_top > y_base_clipped:
-                # Get color and hatch pattern from mapping
-                geology_code = seg["Geology_Code"]
-                layer_props = geology_mapping.get(
-                    geology_code,
-                    {"color": "#b0c4de", "hatch": None},  # Light blue default
-                )
-                color = layer_props.get("color", "#b0c4de")
-                hatch = layer_props.get("hatch", None)
+                # Get color and hatch pattern from mapping (normalize code to string and strip)
+                geology_code = str(seg["Geology_Code"]).strip()
+                color = "#b0c4de"
+                hatch = None
+                if geology_mapping:
+                    entry = geology_mapping.get(geology_code)
+                    if entry:
+                        color = entry.get("color", "#b0c4de")
+                        hatch = entry.get("hatch", None)
+                    else:
+                        print(
+                            f"[DEBUG] Geology code '{geology_code}' not found in mapping."
+                        )
 
                 # Draw lithology rectangle
                 log_ax.add_patch(
@@ -853,7 +861,6 @@ def create_professional_borehole_log_multi_page(
         # --- Draw SPT/ISPT data if available ---
         if spt_df is not None and not spt_df.empty:
             # Columns: Depth, Type, Results
-            # Draw a marker and text at the correct y for each SPT entry within this page
             spt_depths = spt_df["Depth"].astype(float)
             spt_types = spt_df["Type"].astype(str)
             spt_results = spt_df["Results"].astype(str)
@@ -863,32 +870,21 @@ def create_professional_borehole_log_multi_page(
                 if spt_depth < page_top or spt_depth > page_data_bot:
                     continue  # Not on this page
                 y_spt = depth_to_y_abs(spt_depth)
-                # Draw a small horizontal marker in the Depth column (col 1)
                 spt_depth_col_left = log_col_x[1]
                 spt_depth_col_width = log_col_widths[1]
-                log_ax.plot(
-                    [
-                        spt_depth_col_left + spt_depth_col_width * 0.15,
-                        spt_depth_col_left + spt_depth_col_width * 0.85,
-                    ],
-                    [y_spt, y_spt],
-                    color="#d2691e",  # brownish
-                    linewidth=2,
-                    zorder=5,
-                )
-                # Depth value (text)
+                # Depth value (text, black, Arial)
                 log_ax.text(
                     spt_depth_col_left + spt_depth_col_width / 2,
-                    y_spt - 0.05,  # slightly above line
+                    y_spt,
                     f"{spt_depth:.2f}",
-                    va="bottom",
+                    va="center",
                     ha="center",
-                    fontsize=7,
-                    color="#d2691e",
+                    fontsize=8,
+                    color="black",
                     fontname="Arial",
                     zorder=6,
                 )
-                # Type (text) in Type column (col 2)
+                # Type (text, black, Arial) in Type column (col 2)
                 spt_type_col_left = log_col_x[2]
                 spt_type_col_width = log_col_widths[2]
                 log_ax.text(
@@ -897,22 +893,30 @@ def create_professional_borehole_log_multi_page(
                     spt_type,
                     va="center",
                     ha="center",
-                    fontsize=7,
-                    color="#d2691e",
+                    fontsize=8,
+                    color="black",
                     fontname="Arial",
                     zorder=6,
                 )
-                # Results (text) in Results column (col 3)
+                # Results (formatted: N=9\n(1,1/2,1,3,3)) in Results column (col 3)
                 spt_result_col_left = log_col_x[3]
                 spt_result_col_width = log_col_widths[3]
+                # Format: split at first parenthesis
+                if "(" in spt_result and ")" in spt_result:
+                    n_val, paren = spt_result.split("(", 1)
+                    n_val = n_val.strip()
+                    paren = "(" + paren.strip()
+                    result_text = f"{n_val}\n{paren}"
+                else:
+                    result_text = spt_result
                 log_ax.text(
                     spt_result_col_left + spt_result_col_width / 2,
                     y_spt,
-                    spt_result,
+                    result_text,
                     va="center",
                     ha="center",
-                    fontsize=7,
-                    color="#d2691e",
+                    fontsize=8,
+                    color="black",
                     fontname="Arial",
                     zorder=6,
                 )
