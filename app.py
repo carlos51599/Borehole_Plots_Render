@@ -11,9 +11,6 @@ from datetime import datetime
 import config  # Import UI configuration
 from callbacks_split import register_callbacks  # Import callback registration
 from app_factory import create_app_with_duplicate_callbacks  # Import app factory
-from borehole_log_professional import (
-    plot_borehole_log_from_ags_content,
-)  # Import professional borehole log functionality
 
 # Set up enhanced logging format with detailed context
 logfile = "app_debug.log"
@@ -85,6 +82,76 @@ app.layout = html.Div(
         html.Div(
             [
                 html.H2(config.MAP_SECTION_TITLE, style=config.HEADER_H2_LEFT_STYLE),
+                # Borehole Search Section
+                html.Div(
+                    [
+                        html.H3(
+                            "Search for Borehole",
+                            style={
+                                **config.HEADER_H4_LEFT_STYLE,
+                                "marginBottom": "10px",
+                                "marginTop": "10px",
+                            },
+                        ),
+                        html.P(
+                            "Search by borehole name or use the map to click on markers",
+                            style={
+                                "fontSize": "12px",
+                                "marginBottom": "15px",
+                                "fontStyle": "italic",
+                            },
+                        ),
+                        html.Div(
+                            [
+                                dcc.Dropdown(
+                                    id="borehole-search-dropdown",
+                                    placeholder="Type to search for a borehole by name...",
+                                    options=[],
+                                    value=None,
+                                    searchable=True,
+                                    clearable=True,
+                                    style={
+                                        "width": "70%",
+                                        "display": "inline-block",
+                                        "verticalAlign": "top",
+                                    },
+                                ),
+                                html.Button(
+                                    "Go to Borehole",
+                                    id="search-go-btn",
+                                    n_clicks=0,
+                                    disabled=True,
+                                    style={
+                                        "width": "25%",
+                                        "marginLeft": "5%",
+                                        "height": "40px",
+                                        "display": "inline-block",
+                                        "verticalAlign": "top",
+                                        "minWidth": "120px",
+                                        "borderRadius": "5px",
+                                        "fontSize": "14px",
+                                        "cursor": "pointer",
+                                    },
+                                ),
+                            ],
+                            style={
+                                "display": "flex",
+                                "alignItems": "center",
+                                "marginBottom": "20px",
+                                "width": "100%",
+                            },
+                        ),
+                        html.Div(id="search-feedback", style={"marginBottom": "15px"}),
+                    ],
+                    id="borehole-search-section",
+                    style={
+                        "marginBottom": "20px",
+                        "padding": "15px",
+                        "border": "1px solid rgba(204, 204, 204, 0.3)",
+                        "borderRadius": "5px",
+                        "backgroundColor": "rgba(255, 255, 255, 0.05)",
+                    },
+                ),
                 dl.Map(
                     [
                         # Layer control to switch between map types
@@ -259,6 +326,7 @@ app.layout = html.Div(
         # Store components for data sharing between callbacks
         dcc.Store(id="upload-data-store"),
         dcc.Store(id="borehole-data-store"),
+        dcc.Store(id="search-selected-borehole", data=None),
     ],
     className="dash-container",  # Add a class for styling the main container
 )

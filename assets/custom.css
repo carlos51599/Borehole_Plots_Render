@@ -308,3 +308,178 @@ body.light-theme .theme-toggle-btn.active {
     border-color: rgba(0, 0, 0, 0.8);
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
 }
+
+/* ====================================================================
+   BOREHOLE SEARCH SECTION STYLING
+   ====================================================================*/
+
+/* Search section container - Dark Theme */
+body.dark-theme #borehole-search-section,
+body:not(.light-theme) #borehole-search-section {
+    background-color: rgba(255, 255, 255, 0.05) !important;
+    border: 1px solid rgba(255, 255, 255, 0.3) !important;
+    color: #FFFFFF !important;
+}
+
+/* Search section container - Light Theme */
+body.light-theme #borehole-search-section {
+    background-color: rgba(0, 0, 0, 0.05) !important;
+    border: 1px solid rgba(0, 0, 0, 0.3) !important;
+    color: #000000 !important;
+}
+
+/* Search dropdown styling - Dark Theme */
+body.dark-theme .Select-control,
+body.dark-theme .dash-dropdown .Select-control,
+body:not(.light-theme) .Select-control,
+body:not(.light-theme) .dash-dropdown .Select-control {
+    background-color: rgba(255, 255, 255, 0.1) !important;
+    border: 1px solid rgba(255, 255, 255, 0.3) !important;
+    color: #FFFFFF !important;
+}
+
+body.dark-theme .Select-input input,
+body.dark-theme .dash-dropdown .Select-input input,
+body:not(.light-theme) .Select-input input,
+body:not(.light-theme) .dash-dropdown .Select-input input {
+    color: #FFFFFF !important;
+}
+
+body.dark-theme .Select-placeholder,
+body.dark-theme .dash-dropdown .Select-placeholder,
+body:not(.light-theme) .Select-placeholder,
+body:not(.light-theme) .dash-dropdown .Select-placeholder {
+    color: rgba(255, 255, 255, 0.7) !important;
+}
+
+/* Search dropdown styling - Light Theme */
+body.light-theme .Select-control,
+body.light-theme .dash-dropdown .Select-control {
+    background-color: rgba(255, 255, 255, 0.9) !important;
+    border: 1px solid rgba(0, 0, 0, 0.3) !important;
+    color: #000000 !important;
+}
+
+body.light-theme .Select-input input,
+body.light-theme .dash-dropdown .Select-input input {
+    color: #000000 !important;
+}
+
+body.light-theme .Select-placeholder,
+body.light-theme .dash-dropdown .Select-placeholder {
+    color: rgba(0, 0, 0, 0.7) !important;
+}
+
+/* Search dropdown menu - Dark Theme */
+body.dark-theme .Select-menu-outer,
+body.dark-theme .dash-dropdown .Select-menu-outer,
+body:not(.light-theme) .Select-menu-outer,
+body:not(.light-theme) .dash-dropdown .Select-menu-outer {
+    background-color: rgba(40, 40, 40, 0.95) !important;
+    border: 1px solid rgba(255, 255, 255, 0.3) !important;
+}
+
+body.dark-theme .Select-option,
+body.dark-theme .dash-dropdown .Select-option,
+body:not(.light-theme) .Select-option,
+body:not(.light-theme) .dash-dropdown .Select-option {
+    background-color: transparent !important;
+    color: #FFFFFF !important;
+}
+
+body.dark-theme .Select-option.is-focused,
+body.dark-theme .dash-dropdown .Select-option.is-focused,
+body:not(.light-theme) .Select-option.is-focused,
+body:not(.light-theme) .dash-dropdown .Select-option.is-focused {
+    background-color: rgba(255, 255, 255, 0.2) !important;
+}
+
+/* Search dropdown menu - Light Theme */
+body.light-theme .Select-menu-outer,
+body.light-theme .dash-dropdown .Select-menu-outer {
+    background-color: rgba(255, 255, 255, 0.95) !important;
+    border: 1px solid rgba(0, 0, 0, 0.3) !important;
+}
+
+body.light-theme .Select-option,
+body.light-theme .dash-dropdown .Select-option {
+    background-color: transparent !important;
+    color: #000000 !important;
+}
+
+body.light-theme .Select-option.is-focused,
+body.light-theme .dash-dropdown .Select-option.is-focused {
+    background-color: rgba(0, 0, 0, 0.1) !important;
+}
+
+/* Search button styling - Dark Theme */
+body.dark-theme #search-go-btn,
+body:not(.light-theme) #search-go-btn {
+    background-color: rgba(255, 255, 255, 0.1) !important;
+    border: 1px solid rgba(255, 255, 255, 0.3) !important;
+    color: #FFFFFF !important;
+    transition: all 0.3s ease;
+}
+
+body.dark-theme #search-go-btn:not(:disabled):hover,
+body:not(.light-theme) #search-go-btn:not(:disabled):hover {
+    background-color: rgba(255, 255, 255, 0.2) !important;
+    border-color: rgba(255, 255, 255, 0.5) !important;
+    box-shadow: 0 2px 8px rgba(255, 255, 255, 0.2);
+}
+
+body.dark-theme #search-go-btn:disabled,
+body:not(.light-theme) #search-go-btn:disabled {
+    background-color: rgba(255, 255, 255, 0.05) !important;
+    border-color: rgba(255, 255, 255, 0.1) !important;
+    color: rgba(255, 255, 255, 0.4) !important;
+    cursor: not-allowed;
+}
+
+/* Search button styling - Light Theme */
+body.light-theme #search-go-btn {
+    background-color: rgba(0, 0, 0, 0.1) !important;
+    border: 1px solid rgba(0, 0, 0, 0.3) !important;
+    color: #000000 !important;
+    transition: all 0.3s ease;
+}
+
+body.light-theme #search-go-btn:not(:disabled):hover {
+    background-color: rgba(0, 0, 0, 0.2) !important;
+    border-color: rgba(0, 0, 0, 0.5) !important;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+body.light-theme #search-go-btn:disabled {
+    background-color: rgba(0, 0, 0, 0.05) !important;
+    border-color: rgba(0, 0, 0, 0.1) !important;
+    color: rgba(0, 0, 0, 0.4) !important;
+    cursor: not-allowed;
+}
+
+/* Search feedback styling - Success messages */
+#search-feedback div[style*="green"] {
+    background-color: rgba(76, 175, 80, 0.2);
+    border: 1px solid rgba(76, 175, 80, 0.5);
+    border-radius: 4px;
+    padding: 8px 12px;
+    margin: 5px 0;
+}
+
+/* Search feedback styling - Warning messages */
+#search-feedback div[style*="orange"] {
+    background-color: rgba(255, 152, 0, 0.2);
+    border: 1px solid rgba(255, 152, 0, 0.5);
+    border-radius: 4px;
+    padding: 8px 12px;
+    margin: 5px 0;
+}
+
+/* Search feedback styling - Error messages */
+#search-feedback div[style*="red"] {
+    background-color: rgba(244, 67, 54, 0.2);
+    border: 1px solid rgba(244, 67, 54, 0.5);
+    border-radius: 4px;
+    padding: 8px 12px;
+    margin: 5px 0;
+}

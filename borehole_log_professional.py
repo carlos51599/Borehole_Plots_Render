@@ -32,7 +32,13 @@ logger = logging.getLogger(__name__)
 
 
 def draw_header(
-    ax, page_num=None, total_pages=None, borehole_id="BH01", ground_level=0.0
+    ax,
+    page_num=None,
+    total_pages=None,
+    borehole_id="BH01",
+    ground_level=0.0,
+    hole_type="",
+    coords_str="",
 ):
     """
     Draw professional header matching Openground standards.
@@ -60,7 +66,7 @@ def draw_header(
     ]
     top_values = [
         ["SESRO", "Thames Water", ""],
-        ["Abingdon, Oxfordshire", "", "E443012.50 N195881.00"],
+        ["Abingdon, Oxfordshire", "", coords_str if coords_str else ""],
         ["303568-00", "", ""],
     ]
     bottom_labels = [
@@ -78,7 +84,7 @@ def draw_header(
         page_number_str = "Sheet 1 of 1"
     bottom_values = [
         borehole_id,
-        "CP+RC",
+        hole_type if hole_type else "CP+RC",
         f"{ground_level:.2f}m AoD",
         "",
         "1:50",
@@ -348,14 +354,18 @@ def plot_borehole_log_from_ags_content(
         logger.error(f"Failed to import section_plot_professional: {e}")
         return None
 
-    geol_df, loca_df, abbr_df = parse_ags_geol_section_from_string(ags_content)
+    geol_df, loca_df, abbr_df, *extra_groups = parse_ags_geol_section_from_string(
+        ags_content
+    )
     geol_bh = geol_df[geol_df["LOCA_ID"] == loca_id]
     if geol_bh.empty:
         return None
 
-    # Get ground level for this borehole from LOCA data
+    # Get ground level, hole type, and coordinates for this borehole from LOCA data
     ground_level = 0.0  # Default fallback
-    if not loca_df.empty and "LOCA_GL" in loca_df.columns:
+    hole_type = ""
+    coords_str = ""
+    if not loca_df.empty:
         loca_bh = loca_df[loca_df["LOCA_ID"] == loca_id]
         if not loca_bh.empty:
             try:
@@ -365,7 +375,24 @@ def plot_borehole_log_from_ags_content(
                     f"Could not extract ground level for {loca_id}, using 0.0"
                 )
                 ground_level = 0.0
-
+            # Extract hole type
+            if "LOCA_TYPE" in loca_bh.columns:
+                hole_type = str(loca_bh["LOCA_TYPE"].iloc[0])
+            # Extract and format coordinates
+            nate = (
+                str(loca_bh["LOCA_NATE"].iloc[0])
+                if "LOCA_NATE" in loca_bh.columns
+                else ""
+            )
+            natn = (
+                str(loca_bh["LOCA_NATN"].iloc[0])
+                if "LOCA_NATN" in loca_bh.columns
+                else ""
+            )
+            if nate and natn:
+                coords_str = f"E {nate}  N {natn}"
+            elif nate or natn:
+                coords_str = f"E {nate}{'  N ' + natn if natn else ''}"
     # Use GEOL_DESC if available, else fallback to empty string
     desc_col = "GEOL_DESC" if "GEOL_DESC" in geol_bh.columns else None
 
@@ -381,10 +408,78 @@ def plot_borehole_log_from_ags_content(
         }
     )
 
+    # Check for unreasonable depth (e.g., >100m)
+    max_depth = borehole_data["Depth_Base"].max()
+    if max_depth > 100:
+        return {
+            "error": (
+                f"Borehole base depth is {max_depth:.2f} m, which exceeds the 100 m limit. "
+                "Check the AGS GEOL group for errors before plotting."
+            )
+        }
+
     # Sort by top depth
     borehole_data = borehole_data.sort_values("Depth_Top").reset_index(drop=True)
 
-    # Use the professional plotting function
+    # --- SPT/ISPT DATA PARSING LOGIC ---
+    # Try to extract ISPT group from AGS content (if present)
+    def parse_ags_ispt_group(ags_content, loca_id):
+        """
+        Parse ISPT group from AGS content for a given LOCA_ID.
+        Returns a DataFrame with columns: Depth, Type, Results
+        """
+        import re
+
+        # Find ISPT group
+        ispt_match = re.search(r"\\n\\$ISPT[\r\n]+(.*?)\\n\\$", ags_content, re.DOTALL)
+        if not ispt_match:
+            # Try to match to end of file if $ after ISPT is missing
+            ispt_match = re.search(r"\\n\\$ISPT[\r\n]+(.*)", ags_content, re.DOTALL)
+        if not ispt_match:
+            return None
+        ispt_block = ispt_match.group(1)
+        # Split lines, skip comment lines
+        lines = [
+            line
+            for line in ispt_block.splitlines()
+            if line.strip() and not line.strip().startswith("#")
+        ]
+        if not lines:
+            return None
+        # First line is headers, second line is units, then data
+        header_line = lines[0]
+        headers = [h.strip() for h in header_line.split("\t")]
+        # Find required columns
+        try:
+            idx_loca = headers.index("LOCA_ID")
+            idx_top = headers.index("ISPT_TOP")
+            idx_type = headers.index("ISPT_TYPE")
+            idx_rep = headers.index("ISPT_REP")
+        except ValueError:
+            return None
+        # Data lines start after units (second line)
+        data_lines = lines[2:] if len(lines) > 2 else []
+        spt_rows = []
+        for line in data_lines:
+            fields = line.split("\t")
+            if len(fields) < max(idx_loca, idx_top, idx_type, idx_rep) + 1:
+                continue
+            if fields[idx_loca].strip() == str(loca_id):
+                spt_rows.append(
+                    {
+                        "Depth": fields[idx_top].strip(),
+                        "Type": fields[idx_type].strip(),
+                        "Results": fields[idx_rep].strip(),
+                    }
+                )
+        if not spt_rows:
+            return None
+        return pd.DataFrame(spt_rows)
+
+    spt_df = parse_ags_ispt_group(ags_content, loca_id)
+    # spt_df is a DataFrame with columns: Depth, Type, Results (or None)
+
+    # Use the professional plotting function, now passing spt_df
     images = create_professional_borehole_log_multi_page(
         borehole_data=borehole_data,
         borehole_id=loca_id,
@@ -393,6 +488,9 @@ def plot_borehole_log_from_ags_content(
         title=title,
         figsize=(fig_width, fig_height),
         dpi=dpi,
+        spt_df=spt_df,
+        hole_type=hole_type,
+        coords_str=coords_str,
     )
     return images
 
@@ -405,6 +503,9 @@ def create_professional_borehole_log_multi_page(
     title: Optional[str] = None,
     figsize: Tuple[float, float] = (8.27, 11.69),
     dpi: int = 300,
+    spt_df: Optional[pd.DataFrame] = None,
+    hole_type: str = "",
+    coords_str: str = "",
 ) -> List[str]:
     """
     Create a professional multi-page borehole log plot.
@@ -502,7 +603,15 @@ def create_professional_borehole_log_multi_page(
         )
 
         # Draw header with page information
-        draw_header(header_ax, page_num, last_borehole_page, borehole_id, ground_level)
+        draw_header(
+            header_ax,
+            page_num,
+            last_borehole_page,
+            borehole_id,
+            ground_level,
+            hole_type=hole_type,
+            coords_str=coords_str,
+        )
         header_ax.set_xlim(0, 1)
         header_ax.set_ylim(0, 1)
         header_ax.axis("off")
@@ -614,13 +723,14 @@ def create_professional_borehole_log_multi_page(
         # Draw lithology bars (scaled to log area)
         def depth_to_y_abs(depth):
             # Map depth to y in inches within the log area, scaled to page depth (always same for all pages)
-            return log_area_in * (1 - (depth - page_top) / (page_bot - page_top))
+            return log_area_in * (1 - (float(depth) - page_top) / (page_bot - page_top))
 
         legend_left = log_col_x[6]
         legend_width = log_col_widths[6]
         desc_left = log_col_x[7]
         desc_width = log_col_widths[7]
 
+        # --- Draw lithology intervals ---
         intervals = []
         for i, row in borehole_data.iterrows():
             d1 = row["Depth_Top"]
@@ -738,6 +848,73 @@ def create_professional_borehole_log_multi_page(
                     color="black",
                     linewidth=0.8,
                     zorder=4,
+                )
+
+        # --- Draw SPT/ISPT data if available ---
+        if spt_df is not None and not spt_df.empty:
+            # Columns: Depth, Type, Results
+            # Draw a marker and text at the correct y for each SPT entry within this page
+            spt_depths = spt_df["Depth"].astype(float)
+            spt_types = spt_df["Type"].astype(str)
+            spt_results = spt_df["Results"].astype(str)
+            for spt_depth, spt_type, spt_result in zip(
+                spt_depths, spt_types, spt_results
+            ):
+                if spt_depth < page_top or spt_depth > page_data_bot:
+                    continue  # Not on this page
+                y_spt = depth_to_y_abs(spt_depth)
+                # Draw a small horizontal marker in the Depth column (col 1)
+                spt_depth_col_left = log_col_x[1]
+                spt_depth_col_width = log_col_widths[1]
+                log_ax.plot(
+                    [
+                        spt_depth_col_left + spt_depth_col_width * 0.15,
+                        spt_depth_col_left + spt_depth_col_width * 0.85,
+                    ],
+                    [y_spt, y_spt],
+                    color="#d2691e",  # brownish
+                    linewidth=2,
+                    zorder=5,
+                )
+                # Depth value (text)
+                log_ax.text(
+                    spt_depth_col_left + spt_depth_col_width / 2,
+                    y_spt - 0.05,  # slightly above line
+                    f"{spt_depth:.2f}",
+                    va="bottom",
+                    ha="center",
+                    fontsize=7,
+                    color="#d2691e",
+                    fontname="Arial",
+                    zorder=6,
+                )
+                # Type (text) in Type column (col 2)
+                spt_type_col_left = log_col_x[2]
+                spt_type_col_width = log_col_widths[2]
+                log_ax.text(
+                    spt_type_col_left + spt_type_col_width / 2,
+                    y_spt,
+                    spt_type,
+                    va="center",
+                    ha="center",
+                    fontsize=7,
+                    color="#d2691e",
+                    fontname="Arial",
+                    zorder=6,
+                )
+                # Results (text) in Results column (col 3)
+                spt_result_col_left = log_col_x[3]
+                spt_result_col_width = log_col_widths[3]
+                log_ax.text(
+                    spt_result_col_left + spt_result_col_width / 2,
+                    y_spt,
+                    spt_result,
+                    va="center",
+                    ha="center",
+                    fontsize=7,
+                    color="#d2691e",
+                    fontname="Arial",
+                    zorder=6,
                 )
 
         # Convert to base64 image

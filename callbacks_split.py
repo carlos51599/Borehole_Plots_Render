@@ -1312,6 +1312,392 @@ def register_callbacks(app):
         prevent_initial_call=True,
     )
 
+    # ====================================================================
+    # BOREHOLE SEARCH CALLBACKS
+    # ====================================================================
+
+    @app.callback(
+        Output("borehole-search-dropdown", "options"),
+        Output("borehole-search-dropdown", "value"),
+        Input("borehole-data-store", "data"),
+        prevent_initial_call=True,
+    )
+    def update_search_dropdown(stored_borehole_data):
+        """Update search dropdown options when borehole data is loaded"""
+        logging.info("=== UPDATING SEARCH DROPDOWN ===")
+
+        if not stored_borehole_data:
+            logging.info("No borehole data available for search")
+            return [], None
+
+        try:
+            loca_df = pd.DataFrame(stored_borehole_data["loca_df"])
+
+            if loca_df.empty:
+                logging.info("Empty borehole dataframe")
+                return [], None
+
+            # Create options for dropdown
+            options = []
+            for i, row in loca_df.iterrows():
+                borehole_id = str(row["LOCA_ID"]).strip()
+                ground_level = row.get("LOCA_GL", "N/A")
+                total_depth = row.get("LOCA_FDEP", "N/A")
+
+                # Format additional info for display
+                info_parts = []
+                if (
+                    ground_level != "N/A"
+                    and ground_level is not None
+                    and str(ground_level).strip()
+                ):
+                    try:
+                        gl_val = float(ground_level)
+                        info_parts.append(f"GL: {gl_val:.2f}m")
+                    except (ValueError, TypeError):
+                        pass
+
+                if (
+                    total_depth != "N/A"
+                    and total_depth is not None
+                    and str(total_depth).strip()
+                ):
+                    try:
+                        td_val = float(total_depth)
+                        info_parts.append(f"Depth: {td_val:.2f}m")
+                    except (ValueError, TypeError):
+                        pass
+
+                info_str = f" ({', '.join(info_parts)})" if info_parts else ""
+
+                options.append(
+                    {
+                        "label": f"{borehole_id}{info_str}",
+                        "value": i,  # Use the DataFrame index as the value
+                        "search": borehole_id.lower(),  # For case-insensitive search
+                    }
+                )
+
+            # Sort options alphabetically by borehole ID
+            options.sort(key=lambda x: x["label"])
+
+            logging.info(f"Created {len(options)} search options")
+            return options, None
+
+        except Exception as e:
+            logging.error(f"Error updating search dropdown: {e}")
+            return [], None
+
+    @app.callback(
+        Output("search-go-btn", "disabled"),
+        Output("search-go-btn", "children"),
+        Input("borehole-search-dropdown", "value"),
+    )
+    def toggle_search_button(selected_value):
+        """Enable/disable the search button based on dropdown selection"""
+        if selected_value is None:
+            return True, "Go to Borehole"
+        else:
+            return False, "🔍 Go to Borehole"
+
+    @app.callback(
+        [
+            Output("search-feedback", "children"),
+            Output("log-plot-output", "children", allow_duplicate=True),
+            Output("borehole-markers", "children", allow_duplicate=True),
+            Output("borehole-map", "center", allow_duplicate=True),
+            Output("borehole-map", "zoom", allow_duplicate=True),
+            Output("borehole-search-dropdown", "value", allow_duplicate=True),
+        ],
+        Input("search-go-btn", "n_clicks"),
+        [
+            State("borehole-search-dropdown", "value"),
+            State("borehole-data-store", "data"),
+            State("show-labels-checkbox", "value"),
+            State("borehole-markers", "children"),
+        ],
+        prevent_initial_call=True,
+    )
+    def handle_search_go(
+        n_clicks,
+        selected_borehole_index,
+        stored_borehole_data,
+        show_labels_value,
+        current_markers,
+    ):
+        """Handle the 'Go to Borehole' button click"""
+        logging.info("=== SEARCH GO BUTTON CLICKED ===")
+
+        if not n_clicks or n_clicks == 0:
+            return (
+                dash.no_update,
+                dash.no_update,
+                dash.no_update,
+                dash.no_update,
+                dash.no_update,
+                dash.no_update,
+            )
+
+        if selected_borehole_index is None:
+            feedback = html.Div(
+                "Please select a borehole from the dropdown.",
+                style={"color": "orange", "fontWeight": "bold"},
+            )
+            return (
+                feedback,
+                dash.no_update,
+                dash.no_update,
+                dash.no_update,
+                dash.no_update,
+                dash.no_update,
+            )
+
+        if not stored_borehole_data:
+            feedback = html.Div(
+                "No borehole data available. Please upload AGS files first.",
+                style={"color": "red", "fontWeight": "bold"},
+            )
+            return (
+                feedback,
+                dash.no_update,
+                dash.no_update,
+                dash.no_update,
+                dash.no_update,
+                dash.no_update,
+            )
+
+        try:
+            loca_df = pd.DataFrame(stored_borehole_data["loca_df"])
+
+            if selected_borehole_index >= len(loca_df):
+                feedback = html.Div(
+                    "Invalid borehole selection.",
+                    style={"color": "red", "fontWeight": "bold"},
+                )
+                return (
+                    feedback,
+                    dash.no_update,
+                    dash.no_update,
+                    dash.no_update,
+                    dash.no_update,
+                    dash.no_update,
+                )
+
+            # Get the selected borehole
+            selected_borehole = loca_df.iloc[selected_borehole_index]
+            borehole_id = selected_borehole["LOCA_ID"]
+            lat = selected_borehole.get("lat")
+            lon = selected_borehole.get("lon")
+
+            logging.info(f"Processing search for borehole: {borehole_id}")
+
+            # Generate borehole log
+            filename_map = stored_borehole_data["filename_map"]
+            combined_content = ""
+            for filename, content in filename_map.items():
+                combined_content += content + "\n"
+
+            show_labels = "show_labels" in (show_labels_value or [])
+
+            images = plot_borehole_log_from_ags_content(
+                combined_content,
+                borehole_id,
+                show_labels=show_labels,
+                fig_height=11.69,  # A4 height
+                fig_width=8.27,  # A4 width,
+            )
+
+            # Handle error from log plotting (e.g., excessive depth)
+            log_output = None
+            if isinstance(images, dict) and "error" in images:
+                log_output = html.Div(
+                    [
+                        html.H3(
+                            f"Borehole Log: {borehole_id}",
+                            style=config.HEADER_H4_CENTER_STYLE,
+                        ),
+                        html.P(
+                            images["error"],
+                            style={
+                                "color": "red",
+                                "fontWeight": "bold",
+                                "textAlign": "center",
+                            },
+                        ),
+                    ]
+                )
+            elif images and len(images) > 0:
+                preserved_aspect_style = {
+                    "width": "66vw",
+                    "height": "auto",
+                    "display": "block",
+                    "marginLeft": "auto",
+                    "marginRight": "auto",
+                    "margin-bottom": "20px",
+                    "objectFit": "contain",
+                }
+
+                if len(images) == 1:
+                    log_output = html.Div(
+                        [
+                            html.H3(
+                                f"Borehole Log: {borehole_id}",
+                                style=config.HEADER_H4_CENTER_STYLE,
+                            ),
+                            html.Img(
+                                src=f"data:image/png;base64,{images[0]}",
+                                style=preserved_aspect_style,
+                            ),
+                        ]
+                    )
+                else:
+                    image_elements = [
+                        html.H3(
+                            f"Borehole Log: {borehole_id}",
+                            style=config.HEADER_H4_CENTER_STYLE,
+                        )
+                    ]
+                    for i, img in enumerate(images):
+                        if i > 0:
+                            image_elements.append(
+                                html.H4(
+                                    f"Page {i+1} of {len(images)}",
+                                    style=config.HEADER_H4_CENTER_STYLE,
+                                )
+                            )
+                        image_elements.append(
+                            html.Img(
+                                src=f"data:image/png;base64,{img}",
+                                style=preserved_aspect_style,
+                            )
+                        )
+                    log_output = html.Div(image_elements)
+            else:
+                log_output = html.Div(
+                    [
+                        html.H3(
+                            f"Borehole Log: {borehole_id}",
+                            style=config.HEADER_H4_CENTER_STYLE,
+                        ),
+                        html.P(
+                            "No geological data found for this borehole.",
+                            style={"textAlign": "center", "color": "orange"},
+                        ),
+                    ]
+                )
+
+            # Update markers to highlight the selected one
+            updated_markers = []
+            if current_markers:
+                for i, marker in enumerate(current_markers):
+                    # Create new marker with updated icon
+                    if i == selected_borehole_index:
+                        # Highlight selected marker with green color
+                        new_icon = {
+                            "iconUrl": GREEN_MARKER,
+                            "iconSize": [25, 41],
+                            "iconAnchor": [12, 41],
+                            "popupAnchor": [1, -34],
+                            "shadowSize": [41, 41],
+                        }
+                    else:
+                        # Reset other markers to blue
+                        new_icon = {
+                            "iconUrl": BLUE_MARKER,
+                            "iconSize": [25, 41],
+                            "iconAnchor": [12, 41],
+                            "popupAnchor": [1, -34],
+                            "shadowSize": [41, 41],
+                        }
+
+                    # Create new marker with updated icon
+                    if (
+                        hasattr(marker, "id")
+                        and hasattr(marker, "position")
+                        and hasattr(marker, "children")
+                    ):
+                        updated_marker = dl.Marker(
+                            id=marker.id,
+                            position=marker.position,
+                            children=marker.children,
+                            icon=new_icon,
+                            n_clicks=getattr(marker, "n_clicks", 0),
+                        )
+                        updated_markers.append(updated_marker)
+                    else:
+                        # Fallback for any unexpected marker format
+                        updated_markers.append(marker)
+            else:
+                updated_markers = current_markers
+
+            # Update map center and zoom
+            new_center = (
+                [lat, lon] if lat is not None and lon is not None else dash.no_update
+            )
+            new_zoom = 16 if lat is not None and lon is not None else dash.no_update
+
+            # Success feedback with auto-clear instruction
+            feedback = html.Div(
+                [
+                    html.Span("✓ ", style={"fontSize": "16px", "marginRight": "5px"}),
+                    html.Span(
+                        f"Successfully found and centered on borehole: {borehole_id}"
+                    ),
+                ],
+                style={"color": "green", "fontWeight": "bold"},
+            )
+
+            # Reset dropdown selection for next search
+            return feedback, log_output, updated_markers, new_center, new_zoom, None
+
+        except Exception as e:
+            logging.error(f"Error handling search: {e}")
+            feedback = html.Div(
+                f"Error processing borehole search: {str(e)}",
+                style={"color": "red", "fontWeight": "bold"},
+            )
+            return (
+                feedback,
+                dash.no_update,
+                dash.no_update,
+                dash.no_update,
+                dash.no_update,
+                dash.no_update,
+            )
+
+    # Add keyboard shortcut support (Enter key to trigger search)
+    app.clientside_callback(
+        """
+        function(dropdown_value, n_clicks) {
+            // Listen for Enter key on the search dropdown
+            document.addEventListener('keydown', function(event) {
+                if (event.key === 'Enter') {
+                    const searchDropdown = document.querySelector('#borehole-search-dropdown input');
+                    const searchButton = document.querySelector('#search-go-btn');
+                    
+                    if (document.activeElement === searchDropdown &&
+                        searchButton && !searchButton.disabled) {
+                        event.preventDefault();
+                        searchButton.click();
+                    }
+                }
+            });
+            
+            return window.dash_clientside.no_update;
+        }
+        """,
+        Output("search-feedback", "id"),  # Dummy output
+        [
+            Input("borehole-search-dropdown", "value"),
+            Input("search-go-btn", "n_clicks"),
+        ],
+        prevent_initial_call=True,
+    )
+
+    # ====================================================================
+    # MARKER CLICK HANDLING
+    # ====================================================================
+
     # Register marker click callback
     handle_marker_click(app)
 
@@ -1491,11 +1877,14 @@ def handle_marker_click(app):
             if images and len(images) > 0:
                 # Create a custom style that preserves aspect ratio
                 preserved_aspect_style = {
-                    **config.SECTION_PLOT_CENTER_STYLE,  # Copy base styles
-                    "height": "auto",  # Let height be determined by width and aspect ratio
-                    "maxHeight": "80vh",  # Maximum height (80% of viewport height)
-                    "objectFit": "contain",  # Ensure the whole image is visible
+                    "width": "66vw",  # 2/3 of viewport width for the image itself
+                    "height": "auto",  # Maintain aspect ratio
+                    "display": "block",
+                    "marginLeft": "auto",
+                    "marginRight": "auto",
                     "margin-bottom": "20px",  # Space between images
+                    "objectFit": "contain",
+                    # Remove maxWidth/minWidth from image, let container control max width if needed
                 }
 
                 # Create image elements for each page
@@ -1536,7 +1925,12 @@ def handle_marker_click(app):
                         # All image pages displayed one after another
                         html.Div(image_elements),
                     ],
-                    style={"width": "100%", "maxWidth": "800px", "margin": "0 auto"},
+                    style={
+                        "width": "100%",  # Container is full width, image inside is 66vw
+                        "maxWidth": "100vw",  # No artificial max width
+                        "margin": "0 auto",
+                        "display": "block",
+                    },
                 )
             else:
                 log_output = html.Div(
