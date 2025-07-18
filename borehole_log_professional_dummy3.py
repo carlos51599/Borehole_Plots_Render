@@ -1,49 +1,39 @@
 """
-Professional borehole log plotting module matching Openground style standards.
-
-This module creates professional borehole logs with separate columns for
-lithology, depth, and layer description using color and hatch patterns
-from CSV geology code mapping with Openground-style formatting and layout.
-
-Updated to include multi-page support, professional headers, and proper A4 formatting
-based on the dummy3 implementation.
+Dummy version of professional borehole log plotting for testing with dummy lithology data.
 """
 
 import matplotlib.pyplot as plt
+import numpy as np
 from matplotlib.patches import Rectangle
 import pandas as pd
-import logging
-import numpy as np
-import base64
-import io
-from typing import Optional, Tuple, List
 
-# Import shared geology code mapping utility
-from geology_code_utils import load_geology_code_mappings
+# Dummy lithology data based on AGS file codes
+DUMMY_BOREHOLE_DATA = pd.DataFrame(
+    {
+        "Depth_Top": [0.0, 0.5, 2.0, 4.5, 7.0, 10.0],
+        "Depth_Base": [0.5, 2.0, 4.5, 7.0, 10.0, 15.0],
+        "Geology_Code": [
+            "101",  # TOPSOIL
+            "102",  # MADE GROUND
+            "201",  # CLAY
+            "401",  # SAND
+            "504",  # Sandy GRAVEL
+            "801",  # MUDSTONE
+        ],
+        "Description": [
+            "Dark brown silty TOPSOIL with roots",
+            "Brown MADE GROUND with brick fragments",
+            "Firm brown CLAY, slightly silty",
+            "Medium dense fine SAND, some gravel",
+            "Dense sandy GRAVEL, occasional cobbles",
+            "Weathered MUDSTONE, grey, fissured",
+        ],
+    }
+)
 
-# Configure matplotlib for professional rendering
-plt.rcParams["font.family"] = "Arial"
-plt.rcParams["font.size"] = 10
-plt.rcParams["axes.linewidth"] = 0.8
-plt.rcParams["grid.linewidth"] = 0.5
-plt.rcParams["lines.linewidth"] = 1.0
 
-logger = logging.getLogger(__name__)
-
-
-def draw_header(
-    ax, page_num=None, total_pages=None, borehole_id="BH01", ground_level=0.0
-):
-    """
-    Draw professional header matching Openground standards.
-
-    Args:
-        ax: Matplotlib axes to draw on
-        page_num: Current page number
-        total_pages: Total number of pages
-        borehole_id: Borehole identifier
-        ground_level: Ground level for the borehole
-    """
+# Header drawing function from Borehole Log header.py
+def draw_header(ax):
     ax.axis("off")
 
     # For a 4-inch wide log, use a grid that fills the axes from 0 to 1 in x
@@ -51,6 +41,10 @@ def draw_header(
 
     x = x_start
     import matplotlib as mpl
+
+    # Accept page_num and total_pages as attributes of ax if present (set by caller)
+    page_num = getattr(ax, "_page_num", None)
+    total_pages = getattr(ax, "_total_pages", None)
 
     # Header content
     top_labels = [
@@ -75,19 +69,13 @@ def draw_header(
     if page_num is not None and total_pages is not None:
         page_number_str = f"Sheet {page_num} of {total_pages}"
     else:
-        page_number_str = "Sheet 1 of 1"
-    bottom_values = [
-        borehole_id,
-        "CP+RC",
-        f"{ground_level:.2f}m AoD",
-        "",
-        "1:50",
-        page_number_str,
-    ]
+        page_number_str = "Sheet 4 of 5"
+    bottom_values = ["BH01", "CP+RC", "62.50m AoD", "", "1:50", page_number_str]
 
     # Use a temporary figure to measure text widths
     tmp_fig = plt.figure(figsize=(8, 2))
     tmp_ax = tmp_fig.add_subplot(111)
+    renderer = tmp_fig.canvas.get_renderer()
     fontprops = mpl.font_manager.FontProperties(family="Arial", size=8)
     cell_padd = 12  # pixels, padding left and right
 
@@ -133,6 +121,9 @@ def draw_header(
     # Each bottom cell is half the width of a top cell
     bottom_col_widths_px = [avg_top_col_width / 2] * 6
     col_widths_px = bottom_col_widths_px
+    total_width_px = sum(col_widths_px)
+    dpi = tmp_fig.dpi
+    fig_width_in = total_width_px / dpi
     plt.close(tmp_fig)
 
     # Draw the complete header grid on the provided axes
@@ -314,142 +305,11 @@ def draw_header(
         x += col_width
 
 
-def plot_borehole_log_from_ags_content(
-    ags_content,
-    loca_id,
-    show_labels=True,
-    fig_height=11.69,
-    fig_width=4.0,
-    geology_csv_path=None,
-    title=None,
-    dpi=300,
-):
-    """
-    Parse AGS content and plot a professional borehole log for the given borehole ID.
-    Returns a list of base64-encoded images for multi-page display.
-
-    Args:
-        ags_content: AGS file content as string
-        loca_id: Borehole ID to plot
-        show_labels: (compatibility, not used)
-        fig_height: Figure height in inches (default A4 portrait)
-        fig_width: Figure width in inches
-        geology_csv_path: Path to geology code mapping CSV
-        title: Optional plot title
-        dpi: Figure DPI
-
-    Returns:
-        List of base64-encoded PNG images, or None if no data found
-    """
-    try:
-        # Import parser from section_plot_professional (shared logic)
-        from section_plot_professional import parse_ags_geol_section_from_string
-    except ImportError as e:
-        logger.error(f"Failed to import section_plot_professional: {e}")
-        return None
-
-    geol_df, loca_df, abbr_df = parse_ags_geol_section_from_string(ags_content)
-    geol_bh = geol_df[geol_df["LOCA_ID"] == loca_id]
-    if geol_bh.empty:
-        return None
-
-    # Get ground level for this borehole from LOCA data
-    ground_level = 0.0  # Default fallback
-    if not loca_df.empty and "LOCA_GL" in loca_df.columns:
-        loca_bh = loca_df[loca_df["LOCA_ID"] == loca_id]
-        if not loca_bh.empty:
-            try:
-                ground_level = float(loca_bh["LOCA_GL"].iloc[0])
-            except (ValueError, IndexError):
-                logger.warning(
-                    f"Could not extract ground level for {loca_id}, using 0.0"
-                )
-                ground_level = 0.0
-
-    # Use GEOL_DESC if available, else fallback to empty string
-    desc_col = "GEOL_DESC" if "GEOL_DESC" in geol_bh.columns else None
-
-    # Build DataFrame for professional plotting
-    borehole_data = pd.DataFrame(
-        {
-            "Depth_Top": geol_bh["GEOL_TOP"].astype(float),
-            "Depth_Base": geol_bh["GEOL_BASE"].astype(float),
-            "Geology_Code": geol_bh["GEOL_LEG"],
-            "Description": (
-                geol_bh[desc_col] if desc_col else ["" for _ in range(len(geol_bh))]
-            ),
-        }
-    )
-
-    # Sort by top depth
-    borehole_data = borehole_data.sort_values("Depth_Top").reset_index(drop=True)
-
-    # Use the professional plotting function
-    images = create_professional_borehole_log_multi_page(
-        borehole_data=borehole_data,
-        borehole_id=loca_id,
-        ground_level=ground_level,
-        geology_csv_path=geology_csv_path,
-        title=title,
-        figsize=(fig_width, fig_height),
-        dpi=dpi,
-    )
-    return images
-
-
-def create_professional_borehole_log_multi_page(
-    borehole_data: pd.DataFrame,
-    borehole_id: str,
-    ground_level: float = 0.0,
-    geology_csv_path: Optional[str] = None,
-    title: Optional[str] = None,
-    figsize: Tuple[float, float] = (8.27, 11.69),
-    dpi: int = 300,
-) -> List[str]:
-    """
-    Create a professional multi-page borehole log plot.
-    Returns a list of base64-encoded PNG images.
-
-    Args:
-        borehole_data: DataFrame with geological layer data
-        borehole_id: Identifier for the borehole
-        ground_level: Ground level for calculating elevations
-        geology_csv_path: Path to geology code mapping CSV
-        title: Optional title for the plot
-        figsize: Figure size (width, height) in inches
-        dpi: Resolution for the plot
-
-    Returns:
-        List of base64-encoded PNG images
-    """
-    logger.info(f"Creating professional multi-page borehole log for {borehole_id}")
-
-    if borehole_data.empty:
-        logger.warning(f"No data available for borehole {borehole_id}")
-        return []
-
-    # Load geology mapping
-    geology_mapping = {}
-    if geology_csv_path:
-        try:
-            color_map, pattern_map = load_geology_code_mappings(geology_csv_path)
-            # Combine the two maps into a single mapping structure
-            all_codes = set(color_map.keys()) | set(pattern_map.keys())
-            for code in all_codes:
-                geology_mapping[code] = {
-                    "color": color_map.get(code, "#b0c4de"),  # Light blue default
-                    "hatch": pattern_map.get(code, None),
-                }
-            logger.info(
-                f"Loaded {len(geology_mapping)} geology codes from {geology_csv_path}"
-            )
-        except Exception as e:
-            logger.error(f"Failed to load geology mapping: {e}")
-
+def plot_dummy_borehole_log():
     # --- MULTI-PAGE LOG IMPLEMENTATION ---
     # A4 width is 8.27 inches, minus margins (0.5" each side) = 7.27" usable
-    a4_width_in = figsize[0]
-    a4_height_in = figsize[1]
+    a4_width_in = 8.27
+    a4_height_in = 11.69
     left_margin_in = 0.5
     right_margin_in = 0.5
     top_margin_in = 0.3
@@ -457,7 +317,8 @@ def create_professional_borehole_log_multi_page(
     bottom_margin_in = 0.3
     # Log area is the rest of the page
     log_area_in = a4_height_in - (top_margin_in + header_height_in + bottom_margin_in)
-    log_depth = float(borehole_data["Depth_Base"].max())
+    log_area_top_in = a4_height_in - top_margin_in - header_height_in
+    log_depth = float(DUMMY_BOREHOLE_DATA["Depth_Base"].max())
 
     # --- SCALE HANDLING ---
     # Input scale: e.g., 1:50 (1 cm on paper = 50 cm in reality)
@@ -471,9 +332,6 @@ def create_professional_borehole_log_multi_page(
     depth_per_page = log_area_mm * mm_to_m
 
     last_borehole_page = int(np.ceil(log_depth / depth_per_page))
-
-    images = []
-
     for page_num in range(1, last_borehole_page + 1):
         # Column setup in inches (proportional to a4_usable_width)
         log_col_widths_in = [0.05, 0.10, 0.06, 0.12, 0.08, 0.08, 0.10, 0.37, 0.04]
@@ -490,7 +348,6 @@ def create_professional_borehole_log_multi_page(
         )  # Always a full interval for scale, even on last page
         page_data_bot = min(page_bot, log_depth)  # Actual data ends here
         fig = plt.figure(figsize=(a4_width_in, a4_height_in))
-
         # Header axes (absolute units, top of page)
         header_ax = fig.add_axes(
             [
@@ -500,9 +357,10 @@ def create_professional_borehole_log_multi_page(
                 header_height_in / a4_height_in,
             ]
         )
-
-        # Draw header with page information
-        draw_header(header_ax, page_num, last_borehole_page, borehole_id, ground_level)
+        # Attach page_num and total_pages as attributes for header rendering
+        header_ax._page_num = page_num
+        header_ax._total_pages = last_borehole_page
+        draw_header(header_ax)
         header_ax.set_xlim(0, 1)
         header_ax.set_ylim(0, 1)
         header_ax.axis("off")
@@ -622,7 +480,7 @@ def create_professional_borehole_log_multi_page(
         desc_width = log_col_widths[7]
 
         intervals = []
-        for i, row in borehole_data.iterrows():
+        for i, row in DUMMY_BOREHOLE_DATA.iterrows():
             d1 = row["Depth_Top"]
             d2 = row["Depth_Base"]
             if d2 <= page_top or d1 >= page_bot:
@@ -649,26 +507,15 @@ def create_professional_borehole_log_multi_page(
             y_base = depth_to_y_abs(seg["Depth_Base"])
             y_base_clipped = max(y_base, toe_y)
             if y_top > y_base_clipped:
-                # Get color and hatch pattern from mapping
-                geology_code = seg["Geology_Code"]
-                layer_props = geology_mapping.get(
-                    geology_code,
-                    {"color": "#b0c4de", "hatch": None},  # Light blue default
-                )
-                color = layer_props.get("color", "#b0c4de")
-                hatch = layer_props.get("hatch", None)
-
                 # Draw lithology rectangle
                 log_ax.add_patch(
                     Rectangle(
                         (legend_left, y_base_clipped),
                         legend_width,
                         y_top - y_base_clipped,
-                        facecolor=color,
+                        facecolor="#b0c4de",
                         edgecolor="black",
                         linewidth=1,
-                        hatch=hatch,
-                        alpha=0.8,
                         zorder=2,
                     )
                 )
@@ -718,8 +565,8 @@ def create_professional_borehole_log_multi_page(
                 # Draw level (base) value in Level column (col 5)
                 level_col_left = log_col_x[5]
                 level_col_width = log_col_widths[5]
-                # Calculate level using the actual ground level from AGS data
-                base_level = ground_level - seg["Depth_Base"]
+                # For demo, assume ground level is 62.50 and subtract depth
+                base_level = 62.50 - seg["Depth_Base"]
                 log_ax.text(
                     level_col_left + level_col_width / 2,
                     y_base_label,
@@ -740,133 +587,12 @@ def create_professional_borehole_log_multi_page(
                     zorder=4,
                 )
 
-        # Convert to base64 image
-        buf = io.BytesIO()
-        fig.savefig(buf, format="png", dpi=dpi, bbox_inches=None)
-        plt.close(fig)
-        buf.seek(0)
-        img_bytes = buf.read()
-        img_b64 = base64.b64encode(img_bytes).decode("utf-8")
-        images.append(img_b64)
-
-    logger.info(f"Generated {len(images)} pages for borehole {borehole_id}")
-    return images
-
-
-class ProfessionalBoreholeLog:
-    """Professional borehole log plotter with Openground-style formatting."""
-
-    def __init__(self, geology_csv_path: Optional[str] = None):
-        """
-        Initialize the professional borehole log plotter.
-
-        Args:
-            geology_csv_path: Path to CSV file containing geology code mappings
-        """
-        self.geology_mapping = {}
-        if geology_csv_path:
-            try:
-                color_map, pattern_map = load_geology_code_mappings(geology_csv_path)
-                # Combine the two maps into a single mapping structure
-                all_codes = set(color_map.keys()) | set(pattern_map.keys())
-                for code in all_codes:
-                    self.geology_mapping[code] = {
-                        "color": color_map.get(code, "#b0c4de"),  # Light blue default
-                        "hatch": pattern_map.get(code, None),
-                    }
-                logger.info(
-                    f"Loaded {len(self.geology_mapping)} geology codes from {geology_csv_path}"
-                )
-            except Exception as e:
-                logger.error(f"Failed to load geology mapping: {e}")
-
-    def create_borehole_log(
-        self,
-        borehole_data: pd.DataFrame,
-        borehole_id: str,
-        title: Optional[str] = None,
-        figsize: Tuple[float, float] = (8.27, 11.69),
-        dpi: int = 300,
-    ) -> List[str]:
-        """
-        Create a professional borehole log plot.
-        Returns a list of base64-encoded PNG images.
-
-        Args:
-            borehole_data: DataFrame with columns including 'Depth_Top', 'Depth_Base',
-                          'Geology_Code', 'Description'
-            borehole_id: Identifier for the borehole
-            title: Optional title for the plot
-            figsize: Figure size (width, height) in inches
-            dpi: Resolution for the plot
-
-        Returns:
-            List of base64-encoded PNG images
-        """
-        logger.info(f"Creating professional borehole log for {borehole_id}")
-
-        return create_professional_borehole_log_multi_page(
-            borehole_data=borehole_data,
-            borehole_id=borehole_id,
-            geology_csv_path=None,  # Use the already loaded mapping
-            title=title,
-            figsize=figsize,
-            dpi=dpi,
+        # Save as A4-sized PNG image with 300 DPI (always full page)
+        fig.savefig(
+            f"borehole_log_output_page{page_num}.png", dpi=300, bbox_inches=None
         )
+        plt.close(fig)
 
 
-def create_professional_borehole_log(
-    borehole_data: pd.DataFrame,
-    borehole_id: str,
-    geology_csv_path: Optional[str] = None,
-    title: Optional[str] = None,
-    figsize: Tuple[float, float] = (8.27, 11.69),
-    dpi: int = 300,
-) -> List[str]:
-    """
-    Convenience function to create a professional borehole log plot.
-    Returns a list of base64-encoded PNG images.
-
-    Args:
-        borehole_data: DataFrame with geological layer data
-        borehole_id: Identifier for the borehole
-        geology_csv_path: Path to geology code mapping CSV
-        title: Optional title for the plot
-        figsize: Figure size (width, height) in inches
-        dpi: Resolution for the plot
-
-    Returns:
-        List of base64-encoded PNG images
-    """
-    return create_professional_borehole_log_multi_page(
-        borehole_data, borehole_id, geology_csv_path, title, figsize, dpi
-    )
-
-
-# Example usage and testing
 if __name__ == "__main__":
-    # Configure logging
-    logging.basicConfig(level=logging.INFO)
-
-    # Create sample data
-    sample_data = pd.DataFrame(
-        {
-            "Depth_Top": [0.0, 1.5, 3.0, 5.5, 8.0],
-            "Depth_Base": [1.5, 3.0, 5.5, 8.0, 12.0],
-            "Geology_Code": ["CLAY", "SAND", "GRAV", "CLAY", "ROCK"],
-            "Description": [
-                "Soft brown clay with occasional organic matter",
-                "Medium dense fine to coarse sand",
-                "Dense angular gravel with cobbles",
-                "Stiff grey clay with limestone fragments",
-                "Weathered limestone bedrock",
-            ],
-        }
-    )
-
-    # Create professional borehole log
-    images = create_professional_borehole_log(
-        sample_data, "BH001", title="Example Professional Borehole Log"
-    )
-
-    print(f"Generated {len(images)} page(s) for borehole log")
+    plot_dummy_borehole_log()

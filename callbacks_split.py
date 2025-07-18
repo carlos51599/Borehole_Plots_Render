@@ -1479,35 +1479,45 @@ def handle_marker_click(app):
 
             # Use larger figure size and proper aspect ratio for borehole logs
             # Borehole logs are typically taller than they are wide (portrait orientation)
-            fig = plot_borehole_log_from_ags_content(
+            # The new function returns a list of base64-encoded images
+            images = plot_borehole_log_from_ags_content(
                 combined_content,
                 borehole_id,
                 show_labels=show_labels,
-                fig_height=10,
-                fig_width=4,
+                fig_height=11.69,  # A4 height
+                fig_width=8.27,  # A4 width
             )
 
-            if fig:
-                # Convert to image for display with higher DPI for sharper text
-                buf = io.BytesIO()
-                fig.savefig(buf, format="png", bbox_inches="tight", dpi=150)
-                plt.close(fig)
-                buf.seek(0)
-                img_bytes = buf.read()
-                img_b64 = base64.b64encode(img_bytes).decode("utf-8")
-
+            if images and len(images) > 0:
                 # Create a custom style that preserves aspect ratio
                 preserved_aspect_style = {
                     **config.SECTION_PLOT_CENTER_STYLE,  # Copy base styles
                     "height": "auto",  # Let height be determined by width and aspect ratio
                     "maxHeight": "80vh",  # Maximum height (80% of viewport height)
                     "objectFit": "contain",  # Ensure the whole image is visible
+                    "margin-bottom": "20px",  # Space between images
                 }
 
-                borehole_log_plot = html.Img(
-                    src=f"data:image/png;base64,{img_b64}",
-                    style=preserved_aspect_style,
-                )
+                # Create image elements for each page
+                image_elements = []
+                for i, img_b64 in enumerate(images):
+                    page_title = (
+                        f"Page {i + 1} of {len(images)}" if len(images) > 1 else ""
+                    )
+                    if page_title:
+                        image_elements.append(
+                            html.H4(
+                                page_title,
+                                style={"text-align": "center", "margin": "10px 0"},
+                            )
+                        )
+
+                    image_elements.append(
+                        html.Img(
+                            src=f"data:image/png;base64,{img_b64}",
+                            style=preserved_aspect_style,
+                        )
+                    )
 
                 log_output = html.Div(
                     [
@@ -1515,8 +1525,16 @@ def handle_marker_click(app):
                             f"Borehole Log: {borehole_id}",
                             style={"text-align": "center", "margin-bottom": "20px"},
                         ),
-                        # The image container preserves aspect ratio with auto height
-                        borehole_log_plot,
+                        html.P(
+                            f"Generated {len(images)} page(s)",
+                            style={
+                                "text-align": "center",
+                                "margin-bottom": "20px",
+                                "color": "#666",
+                            },
+                        ),
+                        # All image pages displayed one after another
+                        html.Div(image_elements),
                     ],
                     style={"width": "100%", "maxWidth": "800px", "margin": "0 auto"},
                 )
