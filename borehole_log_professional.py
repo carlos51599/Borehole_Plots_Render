@@ -13,6 +13,7 @@ based on the dummy3 implementation.
 from geology_code_utils import get_geology_color, get_geology_pattern
 
 import matplotlib.pyplot as plt
+import matplotlib as mpl
 from matplotlib.patches import Rectangle
 import pandas as pd
 import logging
@@ -20,6 +21,7 @@ import numpy as np
 import base64
 import io
 import textwrap
+import csv
 from typing import Optional, Tuple, List
 
 
@@ -38,6 +40,269 @@ plt.rcParams["grid.linewidth"] = 0.5
 plt.rcParams["lines.linewidth"] = 1.0
 
 logger = logging.getLogger(__name__)
+
+
+def classify_text_box_overflow(
+    text_positions, page_top, page_bot, toe_y, log_area_in, intervals, borehole_data
+):
+    """
+    Classify text boxes based on overflow behavior and page boundaries.
+
+    Args:
+        text_positions: List of text position dictionaries
+        page_top: Top depth of current page
+        page_bot: Bottom depth of current page
+        toe_y: Y position of toe line (page boundary)
+        log_area_in: Log area height in inches
+        intervals: Current page intervals
+        borehole_data: Original borehole data
+
+    Returns:
+        dict: Classification results with overflow strategies
+    """
+
+    def depth_to_y_abs(depth):
+        """Convert depth to absolute Y position on page"""
+        return log_area_in * (1 - (float(depth) - page_top) / (page_bot - page_top))
+
+    results = {
+        "on_page_boxes": [],  # Text boxes that fit on current page
+        "layer_continues_overflow": [],  # Text boxes for layers continuing to next page
+        "layer_complete_overflow": [],  # Text boxes for layers ending on page but text too long
+        "overflow_page_needed": False,  # Whether an overflow page is needed
+    }
+
+    for i, text_pos in enumerate(text_positions):
+        if i >= len(intervals):
+            continue
+
+        interval = intervals[i]
+        layer_bottom_depth = interval["orig_Depth_Base"]
+
+        # Check if text box extends below toe line (page boundary)
+        if text_pos["y_bottom"] < toe_y:
+            # Text box overflows page boundary
+
+            # Strategy 1: Check if layer continues to next page
+            if layer_bottom_depth > page_bot:
+                # Layer continues beyond current page - defer to next page
+                results["layer_continues_overflow"].append(
+                    {
+                        "text_pos": text_pos,
+                        "interval": interval,
+                        "overflow_type": "layer_continues",
+                        "original_interval_idx": interval["orig_idx"],
+                    }
+                )
+            else:
+                # Strategy 2: Layer ends on current page but text doesn't fit
+                # This needs an overflow page
+                results["layer_complete_overflow"].append(
+                    {
+                        "text_pos": text_pos,
+                        "interval": interval,
+                        "overflow_type": "layer_complete",
+                        "original_interval_idx": interval["orig_idx"],
+                    }
+                )
+                results["overflow_page_needed"] = True
+        else:
+            # Text box fits on current page
+            results["on_page_boxes"].append(
+                {
+                    "text_pos": text_pos,
+                    "interval": interval,
+                    "original_interval_idx": interval["orig_idx"],
+                }
+            )
+
+    return results
+
+
+def create_overflow_page(
+    overflow_boxes,
+    page_num,
+    borehole_id,
+    ground_level,
+    hole_type,
+    coords_str,
+    figsize,
+    dpi,
+    color_alpha,
+    hatch_alpha,
+):
+    """
+    Create a dedicated overflow page for text boxes that don't fit on regular pages.
+
+    Args:
+        overflow_boxes: List of overflow text box dictionaries
+        page_num: Base page number for overflow page
+        borehole_id: Borehole identifier
+        ground_level: Ground level for the borehole
+        hole_type: Type of hole
+        coords_str: Coordinates string
+        figsize: Figure size tuple
+        dpi: Resolution
+        color_alpha: Color transparency
+        hatch_alpha: Hatch transparency
+
+    Returns:
+        str: Base64-encoded PNG image
+    """
+
+    a4_width_in = figsize[0]
+    a4_height_in = figsize[1]
+    left_margin_in = 0.5
+    right_margin_in = 0.5
+    top_margin_in = 0.3
+    header_height_in = 2.0
+    bottom_margin_in = 0.3
+    log_area_in = a4_height_in - (top_margin_in + header_height_in + bottom_margin_in)
+
+    # Column setup
+    total_col_width = sum(log_col_widths_in)
+    a4_usable_width = a4_width_in - left_margin_in - right_margin_in
+    scale = a4_usable_width / total_col_width
+    log_col_widths = [w * scale for w in log_col_widths_in]
+    log_col_x = [0]
+    for w in log_col_widths:
+        log_col_x.append(log_col_x[-1] + w)
+
+    fig = plt.figure(figsize=(a4_width_in, a4_height_in))
+
+    # Header axes - special header for overflow page
+    header_ax = fig.add_axes(
+        [
+            left_margin_in / a4_width_in,
+            (a4_height_in - top_margin_in - header_height_in) / a4_height_in,
+            a4_usable_width / a4_width_in,
+            header_height_in / a4_height_in,
+        ]
+    )
+
+    # Draw overflow page header
+    draw_header(
+        header_ax,
+        f"{page_num} Overflow",  # Special overflow page numbering
+        f"{page_num} Overflow",  # Total pages will be updated later
+        borehole_id,
+        ground_level,
+        hole_type=hole_type,
+        coords_str=coords_str,
+    )
+    header_ax.set_xlim(0, 1)
+    header_ax.set_ylim(0, 1)
+    header_ax.axis("off")
+
+    # Log area axes
+    log_ax = fig.add_axes(
+        [
+            left_margin_in / a4_width_in,
+            bottom_margin_in / a4_height_in,
+            a4_usable_width / a4_width_in,
+            log_area_in / a4_height_in,
+        ]
+    )
+    log_ax.set_xlim(0, a4_usable_width)
+    log_ax.set_ylim(0, log_area_in)
+    log_ax.axis("off")
+
+    # Draw log area bounding box
+    log_box = [0, 0, a4_usable_width, log_area_in]
+    rect = Rectangle(
+        (log_box[0], log_box[1]),
+        log_box[2],
+        log_box[3],
+        fill=False,
+        edgecolor="black",
+        linewidth=1.5,
+    )
+    log_ax.add_patch(rect)
+
+    # Draw columns
+    for idx, x_val in enumerate(log_col_x[1:-1], start=1):
+        log_ax.plot([x_val, x_val], [0, log_area_in], color="black", linewidth=1)
+
+    # Top line of log area
+    log_ax.plot(
+        [0, a4_usable_width], [log_area_in, log_area_in], color="black", linewidth=1
+    )
+
+    # Add overflow page title
+    log_ax.text(
+        a4_usable_width / 2,
+        log_area_in * 0.95,
+        f"Page {page_num} - Text Descriptions Overflow",
+        ha="center",
+        va="top",
+        fontsize=12,
+        fontweight="bold",
+        fontname="Arial",
+        zorder=10,
+    )
+
+    # Position overflow text boxes vertically with proper spacing
+    desc_left = log_col_x[7]
+    desc_width = log_col_widths[7]
+
+    current_y = log_area_in * 0.85  # Start below title
+    spacing = 0.1  # Space between boxes
+
+    for box_info in overflow_boxes:
+        text_pos = box_info["text_pos"].copy()
+        interval = box_info["interval"]
+
+        # Calculate required height for this text box
+        required_height = text_pos["original_text_height"]
+
+        # Position text box
+        text_pos["y_top"] = current_y
+        text_pos["y_bottom"] = current_y - required_height
+        text_pos["x_left"] = desc_left
+        text_pos["x_width"] = desc_width
+        text_pos["text_height"] = required_height
+
+        # Check if box fits on page
+        if text_pos["y_bottom"] > 0:
+            # Draw layer reference information
+            ref_text = (
+                f"Depth {interval['orig_Depth_Top']:.2f}-{interval['orig_Depth_Base']:.2f}m "
+                f"(Code: {interval['Geology_Code']})"
+            )
+            log_ax.text(
+                desc_left + desc_width * 0.02,
+                current_y + 0.05,
+                ref_text,
+                va="bottom",
+                ha="left",
+                fontsize=7,
+                color="blue",
+                fontweight="bold",
+                fontname="Arial",
+                zorder=4,
+            )
+
+            # Draw text box
+            draw_text_box(log_ax, text_pos, interval)
+
+            # Move to next position
+            current_y = text_pos["y_bottom"] - spacing
+        else:
+            # Box doesn't fit - would need another overflow page
+            # For now, just note this in the log
+            logger.warning(
+                f"Overflow text box for interval {interval['orig_idx']} doesn't fit on overflow page"
+            )
+
+    # Convert to base64 image
+    buf = io.BytesIO()
+    fig.savefig(buf, format="png", dpi=dpi, bbox_inches=None)
+    plt.close(fig)
+    buf.seek(0)
+    img_bytes = buf.read()
+    img_b64 = base64.b64encode(img_bytes).decode("utf-8")
+
+    return img_b64
 
 
 def wrap_text_and_calculate_height(text, max_width_chars=45, font_size=8):
@@ -107,22 +372,25 @@ def calculate_text_box_positions_aligned(
 
             # Default position: align with layer boundaries
             preferred_y_top = layer_y_top
-            preferred_y_bottom = layer_y_top - text_height
 
             # Check if text fits within the layer
             if text_height <= layer_height:
-                # Text fits within layer - use preferred position
+                # Text fits within layer - extend text box to match layer's bottom boundary
                 final_y_top = preferred_y_top
-                final_y_bottom = preferred_y_bottom
+                final_y_bottom = layer_y_bottom  # Extend to layer's bottom boundary
+                # Update text_height to reflect the extended box height
+                extended_text_height = final_y_top - final_y_bottom
             else:
                 # Text is too tall for layer - extend beyond layer boundary
                 final_y_top = preferred_y_top
                 final_y_bottom = preferred_y_top - text_height  # Extend to fit all text
+                extended_text_height = text_height
 
         else:
             # No valid legend position - shouldn't happen, but handle gracefully
             final_y_top = 0
             final_y_bottom = -text_height
+            extended_text_height = text_height
 
         text_positions.append(
             {
@@ -132,7 +400,8 @@ def calculate_text_box_positions_aligned(
                 "x_left": text_box_left,
                 "x_width": text_box_width,
                 "wrapped_lines": wrapped_lines,
-                "text_height": text_height,
+                "text_height": extended_text_height,  # Use extended height for drawing
+                "original_text_height": text_height,  # Keep original for text positioning
                 "layer_y_top": legend_pos.get("y_top", 0),
                 "layer_y_bottom": legend_pos.get("y_bottom", 0),
             }
@@ -159,7 +428,16 @@ def calculate_text_box_positions_aligned(
                 current["y_top"] = (
                     previous["y_bottom"] - 0.001
                 )  # Small gap to prevent infinite loops
-                current["y_bottom"] = current["y_top"] - current["text_height"]
+                current["y_bottom"] = current["y_top"] - current["original_text_height"]
+
+                # Check if the pushed-down text box is still within its layer's boundaries
+                # If so, extend it to match the layer's bottom boundary
+                if current["y_bottom"] > current["layer_y_bottom"]:
+                    # Text box bottom is still above layer bottom - extend it
+                    current["y_bottom"] = current["layer_y_bottom"]
+
+                # Update the extended height after repositioning
+                current["text_height"] = current["y_top"] - current["y_bottom"]
                 conflicts_resolved = (
                     False  # Need another pass to check cascading effects
                 )
@@ -233,7 +511,6 @@ def draw_header(
     x_start = 0.0
 
     x = x_start
-    import matplotlib as mpl
 
     # Header content
     top_labels = [
@@ -602,7 +879,6 @@ def plot_borehole_log_from_ags_content(
         Parse ISPT group from AGS content for a given LOCA_ID.
         Returns a DataFrame with columns: Depth, Type, Results
         """
-        import csv
 
         # Use robust group-agnostic parsing (like section_plot_professional.py)
         lines = ags_content.splitlines()
@@ -1066,23 +1342,31 @@ def create_professional_borehole_log_multi_page(
             intervals, legend_positions, desc_left, desc_width
         )
 
-        # Second pass: Draw text boxes (positions are already absolute)
-        if legend_positions and text_positions:
-            for i, (text_pos, legend_pos) in enumerate(
-                zip(text_positions, legend_positions)
-            ):
-                if (
-                    i < len(intervals) and legend_pos["y_center"] > 0
-                ):  # Valid legend position
-                    # Ensure text box doesn't go below toe line
-                    if text_pos["y_bottom"] < toe_y:
-                        # Adjust position to stay above toe line
-                        adjustment = toe_y - text_pos["y_bottom"] + 0.02  # Small margin
-                        text_pos["y_top"] += adjustment
-                        text_pos["y_bottom"] += adjustment
+        # === NEW OVERFLOW MANAGEMENT SYSTEM ===
+        # Classify text boxes based on overflow behavior
+        overflow_classification = classify_text_box_overflow(
+            text_positions,
+            page_top,
+            page_bot,
+            toe_y,
+            log_area_in,
+            intervals,
+            borehole_data,
+        )
 
-                    # Draw the text box
-                    draw_text_box(log_ax, text_pos, intervals[i])
+        # Store overflow information for this page
+        if "page_overflow_data" not in locals():
+            page_overflow_data = {}
+        page_overflow_data[page_num] = overflow_classification
+
+        # Draw only text boxes that fit on current page
+        if legend_positions and text_positions:
+            for box_info in overflow_classification["on_page_boxes"]:
+                text_pos = box_info["text_pos"]
+                interval = box_info["interval"]
+
+                # Draw the text box
+                draw_text_box(log_ax, text_pos, interval)
 
         # --- Draw SPT/ISPT data if available ---
         if spt_df is not None and not spt_df.empty:
@@ -1156,7 +1440,44 @@ def create_professional_borehole_log_multi_page(
         img_b64 = base64.b64encode(img_bytes).decode("utf-8")
         images.append(img_b64)
 
-    logger.info(f"Generated {len(images)} pages for borehole {borehole_id}")
+    # === OVERFLOW PAGE GENERATION ===
+    # After all regular pages are generated, create overflow pages for text boxes that didn't fit
+    if "page_overflow_data" in locals():
+        for page_num in range(1, last_borehole_page + 1):
+            if page_num in page_overflow_data:
+                classification = page_overflow_data[page_num]
+
+                # Create overflow pages for layers that end on the page but text doesn't fit
+                if (
+                    classification["overflow_page_needed"]
+                    and classification["layer_complete_overflow"]
+                ):
+                    logger.info(f"Creating overflow page for page {page_num}")
+
+                    overflow_img = create_overflow_page(
+                        classification["layer_complete_overflow"],
+                        page_num,
+                        borehole_id,
+                        ground_level,
+                        hole_type,
+                        coords_str,
+                        figsize,
+                        dpi,
+                        color_alpha,
+                        hatch_alpha,
+                    )
+                    images.append(overflow_img)
+
+                # Log information about deferred text boxes (layer continues strategy)
+                if classification["layer_continues_overflow"]:
+                    logger.info(
+                        f"Page {page_num}: {len(classification['layer_continues_overflow'])} "
+                        f"text boxes deferred to next page (layer continues)"
+                    )
+
+    logger.info(
+        f"Generated {len(images)} pages for borehole {borehole_id} (including overflow pages)"
+    )
     return images
 
 
