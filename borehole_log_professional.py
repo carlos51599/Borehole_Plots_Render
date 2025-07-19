@@ -282,7 +282,7 @@ def create_overflow_page(
                 zorder=4,
             )
 
-            # Draw text box
+            # Draw text box (no connector lines on overflow page)
             draw_text_box(log_ax, text_pos, interval)
 
             # Move to next position
@@ -445,40 +445,139 @@ def calculate_text_box_positions_aligned(
     return text_positions
 
 
-def draw_text_box(log_ax, text_pos, interval):
+def draw_text_box(
+    log_ax,
+    text_pos,
+    interval,
+    legend_right=None,
+    next_col_left=None,
+    depth_to_y_abs=None,
+    page_top=0,
+    page_bot=1,
+):
     """
-    Draw a text box with borders containing wrapped description text.
+    Draw a text box with shortened borders and diagonal connector lines.
 
     Args:
         log_ax: Matplotlib axes
         text_pos: Text position dictionary
         interval: Interval data dictionary
+        legend_right: Right edge of legend/lithology column
+        next_col_left: Left edge of column after description column
+        depth_to_y_abs: Function to convert depth to Y position
+        page_top: Top depth of current page
+        page_bot: Bottom depth of current page
     """
-    # Draw text box border
-    log_ax.add_patch(
-        Rectangle(
-            (text_pos["x_left"], text_pos["y_bottom"]),
-            text_pos["x_width"],
-            text_pos["text_height"],
-            fill=False,
-            edgecolor="black",
-            linewidth=0.8,
-            zorder=3,
-        )
+    # Calculate margin for shortened boundaries (8% of box width)
+    horizontal_margin = text_pos["x_width"] * 0.08
+
+    # Text box coordinates
+    x_left = text_pos["x_left"]
+    x_right = x_left + text_pos["x_width"]
+    y_top = text_pos["y_top"]
+    y_bottom = text_pos["y_bottom"]
+
+    # Shortened boundary coordinates
+    x_left_margin = x_left + horizontal_margin
+    x_right_margin = x_right - horizontal_margin
+
+    # Draw left and right vertical lines (full height)
+    log_ax.plot(
+        [x_left, x_left], [y_bottom, y_top], color="black", linewidth=0.8, zorder=3
     )
+    log_ax.plot(
+        [x_right, x_right], [y_bottom, y_top], color="black", linewidth=0.8, zorder=3
+    )
+
+    # Draw shortened top and bottom lines
+    log_ax.plot(
+        [x_left_margin, x_right_margin],
+        [y_top, y_top],
+        color="black",
+        linewidth=0.8,
+        zorder=3,
+    )
+    log_ax.plot(
+        [x_left_margin, x_right_margin],
+        [y_bottom, y_bottom],
+        color="black",
+        linewidth=0.8,
+        zorder=3,
+    )
+
+    # Draw diagonal connector lines if column positions are provided
+    if (
+        legend_right is not None
+        and next_col_left is not None
+        and depth_to_y_abs is not None
+    ):
+        # Get the true geological layer boundaries
+        geol_top = interval.get("orig_Depth_Top", interval.get("Depth_Top", 0))
+        geol_base = interval.get("orig_Depth_Base", interval.get("Depth_Base", 0))
+
+        # Convert geological depths to Y positions
+        y_geol_top = depth_to_y_abs(geol_top)
+        y_geol_base = depth_to_y_abs(geol_base)
+
+        # Ensure Y positions are within reasonable bounds
+        y_geol_top = max(min(y_geol_top, y_top + 2), y_bottom - 2)
+        y_geol_base = max(min(y_geol_base, y_top + 2), y_bottom - 2)
+
+        # Draw diagonal connector lines
+        # Top-Left: text box corner to legend column at GEOL_TOP
+        log_ax.plot(
+            [x_left_margin, legend_right],
+            [y_top, y_geol_top],
+            color="black",
+            linewidth=0.5,
+            zorder=2,
+        )
+
+        # Top-Right: text box corner to next column at GEOL_TOP
+        log_ax.plot(
+            [x_right_margin, next_col_left],
+            [y_top, y_geol_top],
+            color="black",
+            linewidth=0.5,
+            zorder=2,
+        )
+
+        # Bottom-Left: text box corner to legend column at GEOL_BASE
+        log_ax.plot(
+            [x_left_margin, legend_right],
+            [y_bottom, y_geol_base],
+            color="black",
+            linewidth=0.5,
+            zorder=2,
+        )
+
+        # Bottom-Right: text box corner to next column at GEOL_BASE
+        log_ax.plot(
+            [x_right_margin, next_col_left],
+            [y_bottom, y_geol_base],
+            color="black",
+            linewidth=0.5,
+            zorder=2,
+        )
 
     # Draw wrapped text lines
     line_height_inches = (8 * 1.2) / 72.0  # 8pt font with 1.2x line spacing
 
-    for i, line in enumerate(text_pos["wrapped_lines"]):
-        y_text = text_pos["y_top"] - (i + 0.5) * line_height_inches
+    # Center the text block vertically in the box
+    n_lines = len(text_pos["wrapped_lines"])
+    total_text_height = n_lines * line_height_inches
+    y_text_start = text_pos["y_top"] - (text_pos["text_height"] - total_text_height) / 2
 
+    for i, line in enumerate(text_pos["wrapped_lines"]):
+        y_text = y_text_start - (i + 0.5) * line_height_inches
+
+        # Use simple centered text alignment to avoid matplotlib bugs
         log_ax.text(
-            text_pos["x_left"] + text_pos["x_width"] * 0.02,  # Small left margin
+            text_pos["x_left"] + text_pos["x_width"] / 2,
             y_text,
             line,
             va="center",
-            ha="left",
+            ha="center",
             fontsize=8,
             color="black",
             fontname="Arial",
@@ -1361,12 +1460,27 @@ def create_professional_borehole_log_multi_page(
 
         # Draw only text boxes that fit on current page
         if legend_positions and text_positions:
+            # Calculate column positions for connector lines
+            legend_right = (
+                log_col_x[6] + log_col_widths[6]
+            )  # Right edge of legend column
+            next_col_left = log_col_x[8]  # Left edge of column after description
+
             for box_info in overflow_classification["on_page_boxes"]:
                 text_pos = box_info["text_pos"]
                 interval = box_info["interval"]
 
-                # Draw the text box
-                draw_text_box(log_ax, text_pos, interval)
+                # Draw the text box with connector lines
+                draw_text_box(
+                    log_ax,
+                    text_pos,
+                    interval,
+                    legend_right=legend_right,
+                    next_col_left=next_col_left,
+                    depth_to_y_abs=depth_to_y_abs,
+                    page_top=page_top,
+                    page_bot=page_bot,
+                )
 
         # --- Draw SPT/ISPT data if available ---
         if spt_df is not None and not spt_df.empty:
