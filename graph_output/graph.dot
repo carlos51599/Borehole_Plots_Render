@@ -1,0 +1,35 @@
+digraph Dependencies {
+    rankdir=LR;
+    node [shape=box, style=filled, fillcolor=lightblue];
+    "callbacks_split";
+    "config";
+    "polyline_utils";
+    "section_plot_professional";
+    "borehole_log_professional";
+    "data_loader";
+    "debug_module";
+    "test_legend_mapping";
+    "geology_code_utils";
+    "map_utils";
+    "test_ags_integration";
+    "utils";
+    "app_factory";
+    "generate_dependency_graph";
+    "app";
+    "app" -> "config";
+    "app" -> "callbacks_split";
+    "app" -> "app_factory";
+    "borehole_log_professional" -> "geology_code_utils";
+    "borehole_log_professional" -> "section_plot_professional";
+    "callbacks_split" -> "config";
+    "callbacks_split" -> "data_loader";
+    "callbacks_split" -> "map_utils";
+    "callbacks_split" -> "section_plot_professional";
+    "callbacks_split" -> "borehole_log_professional";
+    "callbacks_split" -> "polyline_utils";
+    "debug_module" -> "geology_code_utils";
+    "section_plot_professional" -> "geology_code_utils";
+    "test_ags_integration" -> "borehole_log_professional";
+    "test_legend_mapping" -> "borehole_log_professional";
+    "test_legend_mapping" -> "geology_code_utils";
+}

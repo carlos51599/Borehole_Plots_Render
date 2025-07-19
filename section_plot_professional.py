@@ -107,6 +107,8 @@ def plot_professional_borehole_sections(
     vertical_exaggeration=3.0,
     save_high_res=False,
     output_filename=None,
+    color_alpha=1.0,
+    hatch_alpha=1.0,
 ):
     """
     Plot professional-style borehole sections with Openground-style formatting.
@@ -409,40 +411,42 @@ def plot_professional_borehole_sections(
 
         # Group consecutive intervals with the same GEOL_LEG for labeling
         prev_leg = None
-        # group_start_idx = None
 
         for idx, row in bh_df.iterrows():
             leg = row["GEOL_LEG"]
             color = color_map.get(leg, "#D3D3D3")
             hatch = hatch_map.get(leg, "")
-
-            # Only suppress repeated legend entries, not text labels
             legend_label = (
                 leg_label_map[leg] if leg not in legend_labels_added else None
             )
-
-            # Professional geological interval plotting with hatch patterns
+            # Draw color (no hatch) with color_alpha
             ax.fill_betweenx(
                 [row["ELEV_TOP"], row["ELEV_BASE"]],
                 bh_x - width / 2,
                 bh_x + width / 2,
                 facecolor=color,
-                hatch=hatch,
                 edgecolor="black",
                 linewidth=0.5,
-                alpha=0.8,
+                alpha=color_alpha,
                 label=legend_label,
             )
-
+            # Draw hatch overlay (transparent face, only hatch) with hatch_alpha
+            if hatch:
+                ax.fill_betweenx(
+                    [row["ELEV_TOP"], row["ELEV_BASE"]],
+                    bh_x - width / 2,
+                    bh_x + width / 2,
+                    facecolor="none",
+                    hatch=hatch,
+                    edgecolor="black",
+                    linewidth=0.5,
+                    alpha=hatch_alpha,
+                    label=None,
+                )
             if legend_label is not None:
                 legend_labels_added.add(leg)
-
-            # Grouping logic for labeling
             if prev_leg != leg:
-                # Start new group (no label)
                 prev_leg = leg
-
-        # Label the last group (no label)
 
     # Draw professional ground surface line
     rel_x = np.array(list(bh_x_map.values()))

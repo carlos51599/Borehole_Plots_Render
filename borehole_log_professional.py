@@ -10,7 +10,7 @@ based on the dummy3 implementation.
 """
 
 # Import shared geology code mapping utility (move to top for lint compliance)
-from geology_code_utils import load_geology_code_mappings
+from geology_code_utils import get_geology_color, get_geology_pattern
 
 import matplotlib.pyplot as plt
 from matplotlib.patches import Rectangle
@@ -19,10 +19,16 @@ import logging
 import numpy as np
 import base64
 import io
+import textwrap
 from typing import Optional, Tuple, List
+
 
 # Define log_col_widths_in at module level for single source of truth
 log_col_widths_in = [0.05, 0.08, 0.04, 0.14, 0.07, 0.07, 0.08, 0.42, 0.05]
+
+# --- Transparency defaults (define once here) ---
+DEFAULT_COLOR_ALPHA = 0.4
+DEFAULT_HATCH_ALPHA = 0.2
 
 # Configure matplotlib for professional rendering
 plt.rcParams["font.family"] = "Arial"
@@ -32,6 +38,174 @@ plt.rcParams["grid.linewidth"] = 0.5
 plt.rcParams["lines.linewidth"] = 1.0
 
 logger = logging.getLogger(__name__)
+
+
+def wrap_text_and_calculate_height(text, max_width_chars=45, font_size=8):
+    """
+    Wrap text and calculate required height in inches for rendering.
+
+    Args:
+        text: Text to wrap
+        max_width_chars: Maximum characters per line
+        font_size: Font size in points
+
+    Returns:
+        tuple: (wrapped_lines, height_in_inches)
+    """
+    if not text or pd.isna(text):
+        return [""], 0.15  # Minimum height for empty text
+
+    # Wrap text
+    wrapped_lines = textwrap.wrap(str(text), width=max_width_chars)
+    if not wrapped_lines:  # Empty after wrapping
+        wrapped_lines = [""]
+
+    # Calculate height: font_size in points, converted to inches
+    # Add some line spacing (1.2x font size per line)
+    line_height_inches = (font_size * 1.2) / 72.0  # 72 points per inch
+    total_height = len(wrapped_lines) * line_height_inches
+
+    # Minimum height for readability
+    min_height = 0.15
+
+    return wrapped_lines, max(total_height, min_height)
+
+
+def calculate_text_box_positions_aligned(
+    intervals, legend_positions, desc_left, desc_width
+):
+    """
+    Calculate text box positions aligned with their geological layers,
+    with adjustments for conflicts.
+
+    Args:
+        intervals: List of interval dictionaries with lithology data
+        legend_positions: List of legend position dictionaries with y_top, y_bottom
+        desc_left: Left edge of description column
+        desc_width: Width of description column
+
+    Returns:
+        list: Text box positions with y_top, y_bottom, x_left, x_width for each interval
+    """
+    text_positions = []
+
+    # Use full width of description column
+    text_box_width = desc_width
+    text_box_left = desc_left
+
+    for i, (interval, legend_pos) in enumerate(zip(intervals, legend_positions)):
+        # Calculate wrapped text height
+        wrapped_lines, text_height = wrap_text_and_calculate_height(
+            interval.get("Description", ""), max_width_chars=45
+        )
+
+        if legend_pos["y_center"] > 0:  # Valid legend position
+            # Start with layer boundaries as default position
+            layer_y_top = legend_pos["y_top"]
+            layer_y_bottom = legend_pos["y_bottom"]
+            layer_height = layer_y_top - layer_y_bottom
+
+            # Default position: align with layer boundaries
+            preferred_y_top = layer_y_top
+            preferred_y_bottom = layer_y_top - text_height
+
+            # Check if text fits within the layer
+            if text_height <= layer_height:
+                # Text fits within layer - use preferred position
+                final_y_top = preferred_y_top
+                final_y_bottom = preferred_y_bottom
+            else:
+                # Text is too tall for layer - extend beyond layer boundary
+                final_y_top = preferred_y_top
+                final_y_bottom = preferred_y_top - text_height  # Extend to fit all text
+
+        else:
+            # No valid legend position - shouldn't happen, but handle gracefully
+            final_y_top = 0
+            final_y_bottom = -text_height
+
+        text_positions.append(
+            {
+                "interval_idx": i,
+                "y_top": final_y_top,
+                "y_bottom": final_y_bottom,
+                "x_left": text_box_left,
+                "x_width": text_box_width,
+                "wrapped_lines": wrapped_lines,
+                "text_height": text_height,
+                "layer_y_top": legend_pos.get("y_top", 0),
+                "layer_y_bottom": legend_pos.get("y_bottom", 0),
+            }
+        )
+
+    # Second pass: resolve conflicts with cascading push-down effect
+    # Keep adjusting until no more conflicts exist
+    conflicts_resolved = False
+    max_iterations = len(text_positions) * 2  # Prevent infinite loops
+    iteration = 0
+
+    while not conflicts_resolved and iteration < max_iterations:
+        conflicts_resolved = True
+        iteration += 1
+
+        for i in range(1, len(text_positions)):
+            current = text_positions[i]
+            previous = text_positions[i - 1]
+
+            # Check if current text box overlaps with previous
+            # Overlap occurs when current y_top is above previous y_bottom
+            if current["y_top"] > previous["y_bottom"]:
+                # Overlap detected - push current text box down
+                current["y_top"] = (
+                    previous["y_bottom"] - 0.001
+                )  # Small gap to prevent infinite loops
+                current["y_bottom"] = current["y_top"] - current["text_height"]
+                conflicts_resolved = (
+                    False  # Need another pass to check cascading effects
+                )
+
+    return text_positions
+
+
+def draw_text_box(log_ax, text_pos, interval):
+    """
+    Draw a text box with borders containing wrapped description text.
+
+    Args:
+        log_ax: Matplotlib axes
+        text_pos: Text position dictionary
+        interval: Interval data dictionary
+    """
+    # Draw text box border
+    log_ax.add_patch(
+        Rectangle(
+            (text_pos["x_left"], text_pos["y_bottom"]),
+            text_pos["x_width"],
+            text_pos["text_height"],
+            fill=False,
+            edgecolor="black",
+            linewidth=0.8,
+            zorder=3,
+        )
+    )
+
+    # Draw wrapped text lines
+    line_height_inches = (8 * 1.2) / 72.0  # 8pt font with 1.2x line spacing
+
+    for i, line in enumerate(text_pos["wrapped_lines"]):
+        y_text = text_pos["y_top"] - (i + 0.5) * line_height_inches
+
+        log_ax.text(
+            text_pos["x_left"] + text_pos["x_width"] * 0.02,  # Small left margin
+            y_text,
+            line,
+            va="center",
+            ha="left",
+            fontsize=8,
+            color="black",
+            fontname="Arial",
+            zorder=4,
+        )
 
 
 def draw_header(
@@ -327,6 +501,8 @@ def plot_borehole_log_from_ags_content(
     geology_csv_path=None,
     title=None,
     dpi=300,
+    color_alpha=DEFAULT_COLOR_ALPHA,
+    hatch_alpha=DEFAULT_HATCH_ALPHA,
 ):
     """
     Parse AGS content and plot a professional borehole log for the given borehole ID.
@@ -494,6 +670,8 @@ def plot_borehole_log_from_ags_content(
         spt_df=spt_df,
         hole_type=hole_type,
         coords_str=coords_str,
+        color_alpha=color_alpha,
+        hatch_alpha=hatch_alpha,
     )
     return images
 
@@ -510,6 +688,8 @@ def create_professional_borehole_log_multi_page(
     hole_type: str = "",
     coords_str: str = "",
     geology_mapping: Optional[dict] = None,
+    color_alpha: float = DEFAULT_COLOR_ALPHA,
+    hatch_alpha: float = DEFAULT_HATCH_ALPHA,
 ) -> List[str]:
     """
     Create a professional multi-page borehole log plot.
@@ -533,23 +713,8 @@ def create_professional_borehole_log_multi_page(
         logger.warning(f"No data available for borehole {borehole_id}")
         return []
 
-    # Load geology mapping if not provided
-    if geology_mapping is None:
-        geology_mapping = {}
-        if geology_csv_path:
-            try:
-                color_map, pattern_map = load_geology_code_mappings(geology_csv_path)
-                all_codes = set(color_map.keys()) | set(pattern_map.keys())
-                for code in all_codes:
-                    geology_mapping[code] = {
-                        "color": color_map.get(code, "#b0c4de"),
-                        "hatch": pattern_map.get(code, None),
-                    }
-                logger.info(
-                    f"Loaded {len(geology_mapping)} geology codes from {geology_csv_path}"
-                )
-            except Exception as e:
-                logger.error(f"Failed to load geology mapping: {e}")
+    # Note: We use get_geology_color and get_geology_pattern functions directly
+    # which automatically load from the default CSV file, so no need for complex mapping
 
     # --- MULTI-PAGE LOG IMPLEMENTATION ---
     # A4 width is 8.27 inches, minus margins (0.5" each side) = 7.27" usable
@@ -756,27 +921,50 @@ def create_professional_borehole_log_multi_page(
                 }
             )
 
+        # First pass: Draw lithology rectangles and collect legend positions
+        legend_positions = []
         for j, seg in enumerate(intervals):
             # Clip lithology at toe_y for all pages
             y_top = depth_to_y_abs(seg["Depth_Top"])
             y_base = depth_to_y_abs(seg["Depth_Base"])
             y_base_clipped = max(y_base, toe_y)
-            if y_top > y_base_clipped:
-                # Get color and hatch pattern from mapping (normalize code to string and strip)
-                geology_code = str(seg["Geology_Code"]).strip()
-                color = "#b0c4de"
-                hatch = None
-                if geology_mapping:
-                    entry = geology_mapping.get(geology_code)
-                    if entry:
-                        color = entry.get("color", "#b0c4de")
-                        hatch = entry.get("hatch", None)
-                    else:
-                        print(
-                            f"[DEBUG] Geology code '{geology_code}' not found in mapping."
-                        )
 
-                # Draw lithology rectangle
+            if y_top > y_base_clipped:
+                # Get color and hatch pattern using the same approach as section script
+                geology_code = str(seg["Geology_Code"]).strip()
+                color = get_geology_color(geology_code, "#b0c4de")
+                hatch = get_geology_pattern(geology_code, None)
+
+                # Convert hatch pattern to matplotlib format if needed
+                if hatch == "\\":
+                    hatch = "\\\\"  # Matplotlib needs double backslash
+                elif hatch and len(hatch) > 1:
+                    # Handle complex patterns like '-/.', '-/o', etc.
+                    matplotlib_hatch = ""
+                    for char in hatch:
+                        if char == "\\":
+                            matplotlib_hatch += "\\\\"
+                        elif char == "/":
+                            matplotlib_hatch += "///"
+                        elif char == ".":
+                            matplotlib_hatch += "..."
+                        elif char == "o":
+                            matplotlib_hatch += "ooo"
+                        elif char == "O":
+                            matplotlib_hatch += "OOO"
+                        elif char == "x":
+                            matplotlib_hatch += "xxx"
+                        elif char == "-":
+                            matplotlib_hatch += "---"
+                        elif char == "+":
+                            matplotlib_hatch += "+++"
+                        elif char == "*":
+                            matplotlib_hatch += "***"
+                        else:
+                            matplotlib_hatch += char
+                    hatch = matplotlib_hatch
+
+                # Draw lithology rectangle color (no hatch)
                 log_ax.add_patch(
                     Rectangle(
                         (legend_left, y_base_clipped),
@@ -785,14 +973,36 @@ def create_professional_borehole_log_multi_page(
                         facecolor=color,
                         edgecolor="black",
                         linewidth=1,
-                        hatch=hatch,
-                        alpha=0.8,
+                        hatch=None,
+                        alpha=color_alpha,
                         zorder=2,
                     )
                 )
+                # Draw hatch overlay (transparent face, only hatch)
+                if hatch:
+                    log_ax.add_patch(
+                        Rectangle(
+                            (legend_left, y_base_clipped),
+                            legend_width,
+                            y_top - y_base_clipped,
+                            facecolor="none",
+                            edgecolor="black",
+                            linewidth=1,
+                            hatch=hatch,
+                            alpha=hatch_alpha,
+                            zorder=3,
+                        )
+                    )
+
                 y_center = (y_top + y_base_clipped) / 2
                 # For depth/level values, align with base (bottom) of interval
                 y_base_label = max(y_base, y_base_clipped)
+
+                # Store legend position for this interval
+                legend_positions.append(
+                    {"y_center": y_center, "y_top": y_top, "y_bottom": y_base_clipped}
+                )
+
                 # Draw geology code in legend column
                 log_ax.text(
                     legend_left + legend_width / 2,
@@ -806,19 +1016,7 @@ def create_professional_borehole_log_multi_page(
                     fontname="Arial",
                     zorder=3,
                 )
-                # Draw description in description column
-                log_ax.text(
-                    desc_left + desc_width * 0.02,
-                    y_center,
-                    seg["Description"],
-                    va="center",
-                    ha="left",
-                    fontsize=8,
-                    color="black",
-                    fontname="Arial",
-                    zorder=3,
-                    wrap=True,
-                )
+
                 # Draw depth (base) value in Depth column (col 4)
                 depth_col_left = log_col_x[4]
                 depth_col_width = log_col_widths[4]
@@ -849,14 +1047,42 @@ def create_professional_borehole_log_multi_page(
                     fontname="Arial",
                     zorder=3,
                 )
-                # Draw horizontal line at top of each stratum in description column
+
+                # Draw horizontal line at top of each stratum in legend column only
+                # (not in description column - this is removed as per requirement)
                 log_ax.plot(
-                    [desc_left, desc_left + desc_width],
+                    [legend_left, legend_left + legend_width],
                     [y_top, y_top],
                     color="black",
                     linewidth=0.8,
                     zorder=4,
                 )
+            else:
+                # Interval not visible, but we still need a placeholder for position tracking
+                legend_positions.append({"y_center": 0, "y_top": 0, "y_bottom": 0})
+
+        # Calculate text box positions aligned with legend positions
+        text_positions = calculate_text_box_positions_aligned(
+            intervals, legend_positions, desc_left, desc_width
+        )
+
+        # Second pass: Draw text boxes (positions are already absolute)
+        if legend_positions and text_positions:
+            for i, (text_pos, legend_pos) in enumerate(
+                zip(text_positions, legend_positions)
+            ):
+                if (
+                    i < len(intervals) and legend_pos["y_center"] > 0
+                ):  # Valid legend position
+                    # Ensure text box doesn't go below toe line
+                    if text_pos["y_bottom"] < toe_y:
+                        # Adjust position to stay above toe line
+                        adjustment = toe_y - text_pos["y_bottom"] + 0.02  # Small margin
+                        text_pos["y_top"] += adjustment
+                        text_pos["y_bottom"] += adjustment
+
+                    # Draw the text box
+                    draw_text_box(log_ax, text_pos, intervals[i])
 
         # --- Draw SPT/ISPT data if available ---
         if spt_df is not None and not spt_df.empty:
@@ -942,24 +1168,11 @@ class ProfessionalBoreholeLog:
         Initialize the professional borehole log plotter.
 
         Args:
-            geology_csv_path: Path to CSV file containing geology code mappings
+            geology_csv_path: Path to CSV file containing geology code mappings (optional, uses default if None)
         """
-        self.geology_mapping = {}
-        if geology_csv_path:
-            try:
-                color_map, pattern_map = load_geology_code_mappings(geology_csv_path)
-                # Combine the two maps into a single mapping structure
-                all_codes = set(color_map.keys()) | set(pattern_map.keys())
-                for code in all_codes:
-                    self.geology_mapping[code] = {
-                        "color": color_map.get(code, "#b0c4de"),  # Light blue default
-                        "hatch": pattern_map.get(code, None),
-                    }
-                logger.info(
-                    f"Loaded {len(self.geology_mapping)} geology codes from {geology_csv_path}"
-                )
-            except Exception as e:
-                logger.error(f"Failed to load geology mapping: {e}")
+        # Note: We use get_geology_color and get_geology_pattern functions directly
+        # which automatically load from the CSV file, so no need for complex mapping
+        pass
 
     def create_borehole_log(
         self,
@@ -968,6 +1181,8 @@ class ProfessionalBoreholeLog:
         title: Optional[str] = None,
         figsize: Tuple[float, float] = (8.27, 11.69),
         dpi: int = 300,
+        color_alpha: float = DEFAULT_COLOR_ALPHA,
+        hatch_alpha: float = DEFAULT_HATCH_ALPHA,
     ) -> List[str]:
         """
         Create a professional borehole log plot.
@@ -989,10 +1204,12 @@ class ProfessionalBoreholeLog:
         return create_professional_borehole_log_multi_page(
             borehole_data=borehole_data,
             borehole_id=borehole_id,
-            geology_csv_path=None,  # Use the already loaded mapping
+            geology_csv_path=None,  # Use the default CSV file
             title=title,
             figsize=figsize,
             dpi=dpi,
+            color_alpha=color_alpha,
+            hatch_alpha=hatch_alpha,
         )
 
 
@@ -1003,6 +1220,8 @@ def create_professional_borehole_log(
     title: Optional[str] = None,
     figsize: Tuple[float, float] = (8.27, 11.69),
     dpi: int = 300,
+    color_alpha: float = DEFAULT_COLOR_ALPHA,
+    hatch_alpha: float = DEFAULT_HATCH_ALPHA,
 ) -> List[str]:
     """
     Convenience function to create a professional borehole log plot.
@@ -1019,8 +1238,18 @@ def create_professional_borehole_log(
     Returns:
         List of base64-encoded PNG images
     """
+    # Ensure figsize is always a tuple (width, height)
+    if not isinstance(figsize, tuple):
+        figsize = (8.27, 11.69)
     return create_professional_borehole_log_multi_page(
-        borehole_data, borehole_id, geology_csv_path, title, figsize, dpi
+        borehole_data,
+        borehole_id,
+        geology_csv_path=geology_csv_path,
+        title=title,
+        figsize=figsize,
+        dpi=dpi,
+        color_alpha=color_alpha,
+        hatch_alpha=hatch_alpha,
     )
 
 
@@ -1029,12 +1258,12 @@ if __name__ == "__main__":
     # Configure logging
     logging.basicConfig(level=logging.INFO)
 
-    # Create sample data
+    # Create sample data using real codes from the CSV for testing
     sample_data = pd.DataFrame(
         {
             "Depth_Top": [0.0, 1.5, 3.0, 5.5, 8.0],
             "Depth_Base": [1.5, 3.0, 5.5, 8.0, 12.0],
-            "Geology_Code": ["CLAY", "SAND", "GRAV", "CLAY", "ROCK"],
+            "Geology_Code": ["101", "203", "501", "202", "801"],
             "Description": [
                 "Soft brown clay with occasional organic matter",
                 "Medium dense fine to coarse sand",
@@ -1047,7 +1276,10 @@ if __name__ == "__main__":
 
     # Create professional borehole log
     images = create_professional_borehole_log(
-        sample_data, "BH001", title="Example Professional Borehole Log"
+        sample_data,
+        "BH001",
+        geology_csv_path="Geology Codes BGS.csv",
+        title="Example Professional Borehole Log",
     )
 
     print(f"Generated {len(images)} page(s) for borehole log")
