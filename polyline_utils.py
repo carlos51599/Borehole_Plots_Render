@@ -8,6 +8,7 @@ from shapely.geometry import Point, LineString
 from shapely.ops import transform as shapely_transform
 import dash_leaflet as dl
 import numpy as np
+from coordinate_service import get_coordinate_service
 
 
 def create_buffer_polygon(polyline_coords, buffer_meters=50):

@@ -18,6 +18,15 @@ from datetime import datetime
 import config
 from data_loader import load_all_loca_data
 from map_utils import filter_selection_by_shape
+from coordinate_service import get_coordinate_service
+from app_constants import FILE_LIMITS, MAP_CONFIG, PLOT_CONFIG
+from loading_indicators import (
+    LoadingIndicator,
+    get_loading_manager,
+    create_upload_loading,
+    create_plot_loading,
+    create_data_loading,
+)
 
 # from section_plot import plot_section_from_ags_content
 from section_plot_professional import plot_section_from_ags_content
@@ -36,27 +45,254 @@ from polyline_utils import (
 
 matplotlib.use("Agg")
 
+# File upload security configuration
+# File size limits - imported from constants
+MAX_FILE_SIZE_MB = FILE_LIMITS.MAX_FILE_SIZE_MB
+MAX_TOTAL_FILES_SIZE_MB = FILE_LIMITS.MAX_TOTAL_FILES_MB
+MAX_FILES_COUNT = 10  # Maximum number of files that can be uploaded at once
 
-# Define marker icon URLs
-BLUE_MARKER = "https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-blue.png"
-GREEN_MARKER = "https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-green.png"
+
+class CallbackError(Exception):
+    """Custom exception for callback errors with user-friendly messages."""
+
+    def __init__(self, user_message, technical_message=None, error_type="error"):
+        self.user_message = user_message
+        self.technical_message = technical_message or user_message
+        self.error_type = error_type  # 'error', 'warning', 'info'
+        super().__init__(self.technical_message)
+
+
+def create_error_message(error, context="Operation"):
+    """
+    Create a standardized error message for display to users.
+
+    Args:
+        error: Exception or error message
+        context: Context where the error occurred
+
+    Returns:
+        html.Div: Styled error message component
+    """
+    if isinstance(error, CallbackError):
+        user_msg = error.user_message
+        tech_msg = error.technical_message
+        error_type = error.error_type
+    else:
+        user_msg = f"{context} failed. Please try again."
+        tech_msg = str(error)
+        error_type = "error"
+
+    # Choose colors based on error type
+    colors = {
+        "error": {"border": "red", "bg": "#ffebee", "text": "darkred"},
+        "warning": {"border": "orange", "bg": "#fff3e0", "text": "darkorange"},
+        "info": {"border": "blue", "bg": "#e3f2fd", "text": "darkblue"},
+    }
+
+    color_scheme = colors.get(error_type, colors["error"])
+
+    return html.Div(
+        [
+            html.Div(
+                [
+                    html.P(
+                        f"❌ {user_msg}" if error_type == "error" else f"⚠️ {user_msg}",
+                        style={
+                            "margin": "0",
+                            "fontWeight": "bold",
+                            "color": color_scheme["text"],
+                        },
+                    ),
+                    (
+                        html.Details(
+                            [
+                                html.Summary(
+                                    "Technical Details",
+                                    style={"cursor": "pointer", "marginTop": "10px"},
+                                ),
+                                html.P(
+                                    tech_msg,
+                                    style={
+                                        "margin": "5px 0",
+                                        "fontFamily": "monospace",
+                                        "fontSize": "12px",
+                                    },
+                                ),
+                            ],
+                            style={"marginTop": "10px"},
+                        )
+                        if tech_msg != user_msg
+                        else None
+                    ),
+                ]
+            )
+        ],
+        style={
+            "border": f"2px solid {color_scheme['border']}",
+            "backgroundColor": color_scheme["bg"],
+            "padding": "15px",
+            "borderRadius": "8px",
+            "margin": "10px 0",
+        },
+    )
+
+
+def create_success_message(message, details=None):
+    """
+    Create a standardized success message for display to users.
+
+    Args:
+        message: Success message text
+        details: Optional additional details
+
+    Returns:
+        html.Div: Styled success message component
+    """
+    return html.Div(
+        [
+            html.P(
+                f"✅ {message}",
+                style={"margin": "0", "fontWeight": "bold", "color": "darkgreen"},
+            ),
+            (
+                html.P(details, style={"margin": "5px 0 0 0", "color": "green"})
+                if details
+                else None
+            ),
+        ],
+        style={
+            "border": "2px solid green",
+            "backgroundColor": "#e8f5e8",
+            "padding": "15px",
+            "borderRadius": "8px",
+            "margin": "10px 0",
+        },
+    )
+
+
+def handle_callback_error(func):
+    """
+    Decorator for consistent error handling in callbacks.
+
+    Usage:
+        @handle_callback_error
+        def my_callback(...):
+            # callback logic
+            return results
+    """
+
+    def wrapper(*args, **kwargs):
+        try:
+            return func(*args, **kwargs)
+        except CallbackError as e:
+            logging.error(f"Callback error in {func.__name__}: {e.technical_message}")
+            # Return appropriate no_update or error UI based on callback signature
+            return create_callback_error_response(e, func.__name__)
+        except Exception as e:
+            logging.error(f"Unexpected error in {func.__name__}: {e}", exc_info=True)
+            error = CallbackError(
+                f"An unexpected error occurred in {func.__name__.replace('_', ' ')}",
+                str(e),
+            )
+            return create_callback_error_response(error, func.__name__)
+
+    return wrapper
+
+
+def create_callback_error_response(error, callback_name):
+    """
+    Create appropriate error response based on callback type.
+    This is a simplified version - in practice, you'd need to know the expected return structure.
+    """
+    # For now, return a generic error message
+    # In a full implementation, you'd inspect the callback signature or use a registry
+    return create_error_message(error, callback_name.replace("_", " ").title())
+
+
+def validate_file_size(content_string, filename):
+    """
+    Validate file size to prevent DoS attacks.
+
+    Args:
+        content_string: Base64 encoded file content
+        filename: Name of the file being uploaded
+
+    Returns:
+        tuple: (is_valid, error_message, size_mb)
+    """
+    try:
+        # Calculate file size from base64 content
+        # Base64 encoding increases size by ~33%, so we decode to get actual size
+        decoded_size = len(base64.b64decode(content_string))
+        size_mb = decoded_size / (1024 * 1024)  # Convert to MB
+
+        if size_mb > MAX_FILE_SIZE_MB:
+            return (
+                False,
+                f"File '{filename}' ({size_mb:.1f}MB) exceeds maximum size of {MAX_FILE_SIZE_MB}MB",
+                size_mb,
+            )
+
+        return True, None, size_mb
+    except Exception as e:
+        return False, f"Error validating file '{filename}': {str(e)}", 0
+
+
+def validate_total_upload_size(files_data):
+    """
+    Validate total upload size and file count.
+
+    Args:
+        files_data: List of tuples containing (content_type, content_string, filename)
+
+    Returns:
+        tuple: (is_valid, error_message, total_size_mb)
+    """
+    if len(files_data) > MAX_FILES_COUNT:
+        return (
+            False,
+            f"Too many files ({len(files_data)}). Maximum allowed: {MAX_FILES_COUNT}",
+            0,
+        )
+
+    total_size = 0
+    for _, content_string, filename in files_data:
+        try:
+            decoded_size = len(base64.b64decode(content_string))
+            total_size += decoded_size
+        except Exception as e:
+            return False, f"Error processing file '{filename}': {str(e)}", 0
+
+    total_size_mb = total_size / (1024 * 1024)
+
+    if total_size_mb > MAX_TOTAL_FILES_SIZE_MB:
+        return (
+            False,
+            f"Total upload size ({total_size_mb:.1f}MB) exceeds maximum of {MAX_TOTAL_FILES_SIZE_MB}MB",
+            total_size_mb,
+        )
+
+    return True, None, total_size_mb
+
+
+# Define marker icon URLs - imported from constants
+BLUE_MARKER = MAP_CONFIG.BLUE_MARKER_URL
+GREEN_MARKER = MAP_CONFIG.GREEN_MARKER_URL
 
 
 def transform_coordinates(easting, northing):
-    """Transform BNG to WGS84 coordinates with detailed logging"""
-    from pyproj import Transformer
-
-    transformer = Transformer.from_crs("EPSG:27700", "EPSG:4326", always_xy=True)
+    """Transform BNG to WGS84 coordinates using centralized coordinate service"""
     try:
-        # Transform coordinates
-        lon, lat = transformer.transform(easting, northing)
+        # Use the centralized coordinate service
+        coordinate_service = get_coordinate_service()
+        lat, lon = coordinate_service.transform_bng_to_wgs84(easting, northing)
 
         # Add detailed logging for debugging
         logging.debug(
             f"Coordinate transform: BNG({easting}, {northing}) -> WGS84({lat:.6f}, {lon:.6f})"
         )
 
-        # Validate the transformed coordinates
+        # Validate the transformed coordinates (service already validates, but double-check)
         if not (-90 <= lat <= 90) or not (-180 <= lon <= 180):
             logging.error(f"Invalid transformed coordinates: lat={lat}, lon={lon}")
             return None, None
@@ -160,32 +396,130 @@ def register_callbacks(app):
             list_of_names = stored_data["filenames"]
             logging.info(f"Processing {len(list_of_contents)} uploaded files")
 
+            # SECURITY: Validate file sizes before processing
+            files_for_validation = []
+            for content, name in zip(list_of_contents, list_of_names or []):
+                content_type, content_string = content.split(",")
+                files_for_validation.append((content_type, content_string, name))
+
+            # Validate total upload size and count
+            is_valid_total, total_error, total_size_mb = validate_total_upload_size(
+                files_for_validation
+            )
+            if not is_valid_total:
+                logging.warning(f"Upload rejected: {total_error}")
+                error_msg = create_error_message(
+                    CallbackError(
+                        "Upload rejected due to size limits", total_error, "warning"
+                    ),
+                    "File Upload",
+                )
+                return [error_msg], [], map_center, map_zoom, None, None
+
             ags_files = []
             file_status = []
+            total_processed_size = 0
 
             for content, name in zip(list_of_contents, list_of_names or []):
                 try:
                     content_type, content_string = content.split(",")
+
+                    # Validate individual file size
+                    is_valid_file, file_error, file_size_mb = validate_file_size(
+                        content_string, name
+                    )
+                    if not is_valid_file:
+                        logging.warning(f"File rejected: {file_error}")
+                        file_status.append(
+                            html.Div(
+                                [
+                                    html.Span("❌ ", style={"color": "red"}),
+                                    html.Span(file_error, style={"color": "red"}),
+                                ]
+                            )
+                        )
+                        continue
+
                     decoded = base64.b64decode(content_string)
                     s = decoded.decode("utf-8")
                     ags_files.append((name, s))
-                    file_status.append(html.Div([f"Uploaded: {name}"]))
-                    logging.info(f"Successfully processed file: {name}")
+                    total_processed_size += file_size_mb
+
+                    file_status.append(
+                        html.Div(
+                            [
+                                html.Span("✅ ", style={"color": "green"}),
+                                html.Span(
+                                    f"Uploaded: {name} ({file_size_mb:.1f}MB)",
+                                    style={"color": "green"},
+                                ),
+                            ]
+                        )
+                    )
+                    logging.info(
+                        f"Successfully processed file: {name} ({file_size_mb:.1f}MB)"
+                    )
                 except Exception as e:
                     logging.error(f"Error reading {name}: {e}")
-                    file_status.append(html.Div([f"Error reading {name}: {e}"]))
+                    file_status.append(
+                        html.Div(
+                            [
+                                html.Span("❌ ", style={"color": "red"}),
+                                html.Span(
+                                    f"Error reading {name}: {e}", style={"color": "red"}
+                                ),
+                            ]
+                        )
+                    )
+
+            # Check if any files were successfully processed
+            if not ags_files:
+                error_msg = create_error_message(
+                    CallbackError(
+                        "No valid files could be processed",
+                        "All uploaded files were rejected due to size limits or processing errors",
+                        "error",
+                    ),
+                    "File Processing",
+                )
+                return [error_msg], [], map_center, map_zoom, None, None
+
+            # Add upload summary
+            file_status.insert(
+                0,
+                html.Div(
+                    [
+                        html.P(
+                            f"📊 Upload Summary:",
+                            style={"fontWeight": "bold", "marginBottom": "5px"},
+                        ),
+                        html.P(
+                            f"Files processed: {len(ags_files)}/{len(list_of_contents)}",
+                            style={"margin": "2px 0"},
+                        ),
+                        html.P(
+                            f"Total size: {total_processed_size:.1f}MB",
+                            style={"margin": "2px 0"},
+                        ),
+                    ],
+                    style={
+                        "backgroundColor": "#f0f0f0",
+                        "padding": "10px",
+                        "borderRadius": "5px",
+                        "marginBottom": "10px",
+                    },
+                ),
+            )
 
             # Load and process data
             loca_df, filename_map = load_all_loca_data(ags_files)
             logging.info(f"Loaded {len(loca_df)} boreholes")
 
             # --- Hybrid vectorized + fallback approach for coordinate transformation ---
-            import pyproj
             import numpy as np
 
-            bng_to_wgs84 = pyproj.Transformer.from_crs(
-                "EPSG:27700", "EPSG:4326", always_xy=True
-            )
+            # Use centralized coordinate service for transformation
+            coordinate_service = get_coordinate_service()
 
             # Identify valid numeric rows
             valid_mask = loca_df["LOCA_NATE"].apply(
@@ -204,7 +538,9 @@ def register_callbacks(app):
             if not clean_df.empty:
                 bng_x = clean_df["LOCA_NATE"].astype(float).values
                 bng_y = clean_df["LOCA_NATN"].astype(float).values
-                wgs84_lon, wgs84_lat = bng_to_wgs84.transform(bng_x, bng_y)
+                wgs84_lat, wgs84_lon = coordinate_service.transform_bng_to_wgs84(
+                    bng_x, bng_y
+                )
                 lat_arr[clean_df.index] = wgs84_lat
                 lon_arr[clean_df.index] = wgs84_lon
 
@@ -213,7 +549,9 @@ def register_callbacks(app):
                 try:
                     easting = float(row["LOCA_NATE"])
                     northing = float(row["LOCA_NATN"])
-                    lon, lat = bng_to_wgs84.transform(easting, northing)
+                    lat, lon = coordinate_service.transform_bng_to_wgs84(
+                        easting, northing
+                    )
                     lat_arr[i] = lat
                     lon_arr[i] = lon
                 except Exception as e:
@@ -397,8 +735,15 @@ def register_callbacks(app):
             )
 
         except Exception as e:
-            logging.error(f"Error in file upload: {e}")
-            error_msg = html.Div([f"Error processing files: {e}"])
+            logging.error(f"Error in file upload: {e}", exc_info=True)
+            error_msg = create_error_message(
+                CallbackError(
+                    "Failed to process uploaded files",
+                    f"Unexpected error during file processing: {str(e)}",
+                    "error",
+                ),
+                "File Upload",
+            )
             # Also clear shapes on error
             clear_shapes = datetime.now().timestamp()
             return [error_msg], [], map_center, map_zoom, None, clear_shapes
@@ -545,7 +890,10 @@ def register_callbacks(app):
         return [], None, None, None, [], stored_borehole_data, {"display": "none"}, []
 
     def handle_shape_drawing(
-        drawn_geojson, stored_borehole_data, marker_children, buffer_value=50
+        drawn_geojson,
+        stored_borehole_data,
+        marker_children,
+        buffer_value=MAP_CONFIG.DEFAULT_BUFFER_METERS,
     ):
         """Handle shape drawing and borehole selection"""
         try:
@@ -609,7 +957,7 @@ def register_callbacks(app):
 
                 # Use the buffer value
                 buffer_meters = buffer_value or stored_borehole_data.get(
-                    "buffer_meters", 50
+                    "buffer_meters", MAP_CONFIG.DEFAULT_BUFFER_METERS
                 )
                 logging.info(f"Using buffer distance: {buffer_meters}m")
 
@@ -866,7 +1214,9 @@ def register_callbacks(app):
             if "last_polyline" in stored_borehole_data:
                 # If we have a polyline, use it
                 polyline_coords = stored_borehole_data["last_polyline"]
-                buffer_meters = stored_borehole_data.get("buffer_meters", 50)
+                buffer_meters = stored_borehole_data.get(
+                    "buffer_meters", MAP_CONFIG.DEFAULT_BUFFER_METERS
+                )
 
                 # Create section line and buffer visualization
                 section_line = create_polyline_section(polyline_coords)
@@ -1177,38 +1527,33 @@ def register_callbacks(app):
                 # Convert polyline from geographic coordinates (lat/lon) to projected coordinates (easting/northing)
                 # to match the coordinate system used by LOCA_NATE/LOCA_NATN in the borehole data
                 try:
-                    import pyproj
                     from shapely.geometry import LineString
-                    from shapely.ops import transform as shapely_transform
 
                     # Create a line from the polyline coordinates
                     line_points = [(lon, lat) for lat, lon in polyline_coords]
                     line = LineString(line_points)
 
-                    # Get the centroid for UTM zone calculation
-                    centroid = line.centroid
-                    median_lon, median_lat = centroid.x, centroid.y
+                    # Use coordinate service for UTM transformation
+                    coordinate_service = get_coordinate_service()
 
-                    # Calculate UTM zone (same as in polyline_utils.py)
-                    utm_zone = int((median_lon + 180) / 6) + 1
-                    utm_crs = f"EPSG:{32600 + utm_zone if median_lat >= 0 else 32700 + utm_zone}"
+                    # Extract lat/lon coordinates for transformation
+                    lats, lons = zip(*[(lat, lon) for lat, lon in polyline_coords])
 
-                    # Create transformer to UTM
-                    project_to_utm = pyproj.Transformer.from_crs(
-                        "epsg:4326", utm_crs, always_xy=True
-                    ).transform
+                    # Transform to UTM using coordinate service
+                    utm_x, utm_y, utm_crs = coordinate_service.transform_wgs84_to_utm(
+                        lons, lats
+                    )
 
-                    # Transform polyline to UTM
-                    line_utm = shapely_transform(project_to_utm, line)
-
-                    # Extract coordinates as (easting, northing) pairs
-                    section_line = list(line_utm.coords)
+                    # Create section line as (easting, northing) pairs
+                    section_line = list(zip(utm_x, utm_y))
 
                     logging.info(
                         f"Using polyline section with {len(section_line)} points"
                     )
                     logging.info(f"Polyline coords (lat/lon): {polyline_coords[:2]}...")
-                    logging.info(f"Section line coords (UTM): {section_line[:2]}...")
+                    logging.info(
+                        f"Section line coords (UTM {utm_crs}): {section_line[:2]}..."
+                    )
 
                 except Exception as e:
                     logging.error(f"Error converting polyline coordinates: {e}")
@@ -1226,33 +1571,41 @@ def register_callbacks(app):
             )
 
             if fig:
-                # Convert to image with higher DPI for sharper text
-                buf = io.BytesIO()
-                fig.savefig(buf, format="png", bbox_inches="tight", dpi=150)
-                plt.close(fig)
-                buf.seek(0)
-                img_bytes = buf.read()
-                img_b64 = base64.b64encode(img_bytes).decode("utf-8")
+                try:
+                    # Convert to image with higher DPI for sharper text
+                    buf = io.BytesIO()
+                    fig.savefig(
+                        buf,
+                        format="png",
+                        bbox_inches="tight",
+                        dpi=PLOT_CONFIG.PREVIEW_DPI,
+                    )
+                    buf.seek(0)
+                    img_bytes = buf.read()
+                    img_b64 = base64.b64encode(img_bytes).decode("utf-8")
 
-                # Create a custom style that preserves aspect ratio
-                preserved_aspect_style = {
-                    **config.SECTION_PLOT_CENTER_STYLE,  # Copy base styles
-                    "height": "auto",  # Let height be determined by width and aspect ratio
-                    "maxHeight": "80vh",  # Maximum height (80% of viewport height)
-                    "objectFit": "contain",  # Ensure the whole image is visible
-                }
+                    # Create a custom style that preserves aspect ratio
+                    preserved_aspect_style = {
+                        **config.SECTION_PLOT_CENTER_STYLE,  # Copy base styles
+                        "height": "auto",  # Let height be determined by width and aspect ratio
+                        "maxHeight": "80vh",  # Maximum height (80% of viewport height)
+                        "objectFit": "contain",  # Ensure the whole image is visible
+                    }
 
-                section_plot = html.Img(
-                    src=f"data:image/png;base64,{img_b64}",
-                    style=preserved_aspect_style,
-                )
+                    section_plot = html.Img(
+                        src=f"data:image/png;base64,{img_b64}",
+                        style=preserved_aspect_style,
+                    )
 
-                # Handle download
-                download_data = None
-                if "download-section-btn.n_clicks" in triggered and download_clicks:
-                    download_data = dcc.send_bytes(img_bytes, "section_plot.png")
+                    # Handle download
+                    download_data = None
+                    if "download-section-btn.n_clicks" in triggered and download_clicks:
+                        download_data = dcc.send_bytes(img_bytes, "section_plot.png")
 
-                return section_plot, None, download_data
+                    return section_plot, None, download_data
+                finally:
+                    # MEMORY LEAK FIX: Always close the figure, even if an exception occurs
+                    plt.close(fig)
             else:
                 return None, None, None
 

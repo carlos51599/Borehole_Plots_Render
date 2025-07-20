@@ -23,6 +23,7 @@ import io
 import textwrap
 import csv
 from typing import Optional, Tuple, List
+from contextlib import contextmanager
 
 
 # Define log_col_widths_in at module level for single source of truth
@@ -40,6 +41,38 @@ plt.rcParams["grid.linewidth"] = 0.5
 plt.rcParams["lines.linewidth"] = 1.0
 
 logger = logging.getLogger(__name__)
+
+
+@contextmanager
+def matplotlib_figure(*args, **kwargs):
+    """
+    Context manager for matplotlib figures to ensure proper cleanup.
+
+    Usage:
+        with matplotlib_figure(figsize=(8, 6)) as fig:
+            # work with figure
+            pass
+    # Figure is automatically closed here
+    """
+    fig = plt.figure(*args, **kwargs)
+    try:
+        yield fig
+    finally:
+        plt.close(fig)
+
+
+def safe_close_figure(fig):
+    """
+    Safely close a matplotlib figure with error handling.
+
+    Args:
+        fig: matplotlib Figure object or None
+    """
+    if fig is not None:
+        try:
+            plt.close(fig)
+        except Exception as e:
+            logger.warning(f"Error closing matplotlib figure: {e}")
 
 
 def classify_text_box_overflow(
@@ -644,55 +677,59 @@ def draw_header(
         page_number_str,
     ]
 
-    # Use a temporary figure to measure text widths
-    tmp_fig = plt.figure(figsize=(8, 2))
-    tmp_ax = tmp_fig.add_subplot(111)
-    fontprops = mpl.font_manager.FontProperties(family="Arial", size=8)
-    cell_padd = 12  # pixels, padding left and right
+    # Use a temporary figure to measure text widths with safe cleanup
+    with matplotlib_figure(figsize=(8, 2)) as tmp_fig:
+        tmp_ax = tmp_fig.add_subplot(111)
+        fontprops = mpl.font_manager.FontProperties(family="Arial", size=8)
+        cell_padd = 12  # pixels, padding left and right
 
-    # Top 3 rows
-    max_top_widths = []
-    for row in range(3):
-        for col in range(3):
-            title = top_labels[row][col]
-            value = top_values[row][col]
+        # Top 3 rows
+        max_top_widths = []
+        for row in range(3):
+            for col in range(3):
+                title = top_labels[row][col]
+                value = top_values[row][col]
+                t_width = (
+                    tmp_ax.figure.canvas.get_renderer().get_text_width_height_descent(
+                        title, fontprops, ismath=False
+                    )[0]
+                )
+                v_width = (
+                    tmp_ax.figure.canvas.get_renderer().get_text_width_height_descent(
+                        value, fontprops, ismath=False
+                    )[0]
+                )
+                max_top_widths.append(t_width + v_width + cell_padd)
+
+        # Bottom row
+        max_bottom_widths = []
+        for i in range(6):
+            title = bottom_labels[i]
+            value = bottom_values[i]
             t_width = tmp_ax.figure.canvas.get_renderer().get_text_width_height_descent(
                 title, fontprops, ismath=False
             )[0]
             v_width = tmp_ax.figure.canvas.get_renderer().get_text_width_height_descent(
                 value, fontprops, ismath=False
             )[0]
-            max_top_widths.append(t_width + v_width + cell_padd)
+            max_bottom_widths.append(max(t_width, v_width) + cell_padd)
 
-    # Bottom row
-    max_bottom_widths = []
-    for i in range(6):
-        title = bottom_labels[i]
-        value = bottom_values[i]
-        t_width = tmp_ax.figure.canvas.get_renderer().get_text_width_height_descent(
-            title, fontprops, ismath=False
-        )[0]
-        v_width = tmp_ax.figure.canvas.get_renderer().get_text_width_height_descent(
-            value, fontprops, ismath=False
-        )[0]
-        max_bottom_widths.append(max(t_width, v_width) + cell_padd)
-
-    # For the top 3 rows (3 columns), find max width for each column
-    top_col_widths_px = [
-        max(
-            max_top_widths[i],
-            max_top_widths[i + 3],
-            max_top_widths[i + 6],
-        )
-        for i in range(3)
-    ]
-    # For the bottom row (6 columns), use its own widths, but make each cell half the width of the cells above
-    # Calculate the average width of the top row columns
-    avg_top_col_width = sum(top_col_widths_px) / 3
-    # Each bottom cell is half the width of a top cell
-    bottom_col_widths_px = [avg_top_col_width / 2] * 6
-    col_widths_px = bottom_col_widths_px
-    plt.close(tmp_fig)
+        # For the top 3 rows (3 columns), find max width for each column
+        top_col_widths_px = [
+            max(
+                max_top_widths[i],
+                max_top_widths[i + 3],
+                max_top_widths[i + 6],
+            )
+            for i in range(3)
+        ]
+        # For the bottom row (6 columns), use its own widths, but make each cell half the width of the cells above
+        # Calculate the average width of the top row columns
+        avg_top_col_width = sum(top_col_widths_px) / 3
+        # Each bottom cell is half the width of a top cell
+        bottom_col_widths_px = [avg_top_col_width / 2] * 6
+        col_widths_px = bottom_col_widths_px
+    # Temporary figure is automatically closed here by the context manager
 
     # Draw the complete header grid on the provided axes
     # Top 3 rows (3 columns each)
