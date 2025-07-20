@@ -1,0 +1,44 @@
+{
+  "matplotlib_verbosity": {
+    "figure_creation_time": 0.03399825096130371,
+    "total_log_lines": 3,
+    "font_manager_lines": 538,
+    "log_sample": [
+      "2025-07-20 21:42:02,215 - matplotlib.font_manager - DEBUG - findfont: Matching Arial:style=normal:variant=normal:weight=normal:stretch=normal:size=10.0.",
+      "2025-07-20 21:42:02,215 - matplotlib.font_manager - DEBUG - findfont: score(FontEntry(fname='C:\\\\Users\\\\dea29431.RSKGAD\\\\AppData\\\\Local\\\\anaconda3\\\\Lib\\\\site-packages\\\\matplotlib\\\\mpl-data\\\\fonts\\\\ttf\\\\cmb10.ttf', name='cmb10', style='normal', variant='normal', weight=400, stretch='normal', size='scalable')) = 10.05",
+      "2025-07-20 21:42:02,215 - matplotlib.font_manager - DEBUG - findfont: score(FontEntry(fname='C:\\\\Users\\\\dea29431.RSKGAD\\\\AppData\\\\Local\\\\anaconda3\\\\Lib\\\\site-packages\\\\matplotlib\\\\mpl-data\\\\fonts\\\\ttf\\\\DejaVuSans.ttf', name='DejaVu Sans', style='normal', variant='normal', weight=400, stretch='normal', size='scalable')) = 10.05",
+      "2025-07-20 21:42:02,215 - matplotlib.font_manager - DEBUG - findfont: score(FontEntry(fname='C:\\\\Users\\\\dea29431.RSKGAD\\\\AppData\\\\Local\\\\anaconda3\\\\Lib\\\\site-packages\\\\matplotlib\\\\mpl-data\\\\fonts\\\\ttf\\\\cmss10.ttf', name='cmss10', style='normal', variant='normal', weight=400, stretch='normal', size='scalable')) = 10.05",
+      "2025-07-20 21:42:02,215 - matplotlib.font_manager - DEBUG - findfont: score(FontEntry(fname='C:\\\\Users\\\\dea29431.RSKGAD\\\\AppData\\\\Local\\\\anaconda3\\\\Lib\\\\site-packages\\\\matplotlib\\\\mpl-data\\\\fonts\\\\ttf\\\\STIXSizThreeSymBol.ttf', name='STIXSizeThreeSym', style='normal', variant='normal', weight=700, stretch='normal', size='scalable')) = 10.335",
+      "2025-07-20 21:42:02,215 - matplotlib.font_manager - DEBUG - findfont: score(FontEntry(fname='C:\\\\Users\\\\dea29431.RSKGAD\\\\AppData\\\\Local\\\\anaconda3\\\\Lib\\\\site-packages\\\\matplotlib\\\\mpl-data\\\\fonts\\\\ttf\\\\DejaVuSans-BoldOblique.ttf', name='DejaVu Sans', style='oblique', variant='normal', weight=700, stretch='normal', size='scalable')) = 11.335",
+      "2025-07-20 21:42:02,215 - matplotlib.font_manager - DEBUG - findfont: score(FontEntry(fname='C:\\\\Users\\\\dea29431.RSKGAD\\\\AppData\\\\Local\\\\anaconda3\\\\Lib\\\\site-packages\\\\matplotlib\\\\mpl-data\\\\fonts\\\\ttf\\\\STIXSizOneSymReg.ttf', name='STIXSizeOneSym', style='normal', variant='normal', weight=400, stretch='normal', size='scalable')) = 10.05",
+      "2025-07-20 21:42:02,215 - matplotlib.font_manager - DEBUG - findfont: score(FontEntry(fname='C:\\\\Users\\\\dea29431.RSKGAD\\\\AppData\\\\Local\\\\anaconda3\\\\Lib\\\\site-packages\\\\matplotlib\\\\mpl-data\\\\fonts\\\\ttf\\\\STIXGeneral.ttf', name='STIXGeneral', style='normal', variant='normal', weight=400, stretch='normal', size='scalable')) = 10.05",
+      "2025-07-20 21:42:02,215 - matplotlib.font_manager - DEBUG - findfont: score(FontEntry(fname='C:\\\\Users\\\\dea29431.RSKGAD\\\\AppData\\\\Local\\\\anaconda3\\\\Lib\\\\site-packages\\\\matplotlib\\\\mpl-data\\\\fonts\\\\ttf\\\\STIXSizTwoSymBol.ttf', name='STIXSizeTwoSym', style='normal', variant='normal', weight=700, stretch='normal', size='scalable')) = 10.335",
+      "2025-07-20 21:42:02,215 - matplotlib.font_manager - DEBUG - findfont: score(FontEntry(fname='C:\\\\Users\\\\dea29431.RSKGAD\\\\AppData\\\\Local\\\\anaconda3\\\\Lib\\\\site-packages\\\\matplotlib\\\\mpl-data\\\\fonts\\\\ttf\\\\DejaVuSans-Bold.ttf', name='DejaVu Sans', style='normal', variant='normal', weight=700, stretch='normal', size='scalable')) = 10.335"
+    ]
+  },
+  "marker_click_logging": {
+    "processing_time": 0.0,
+    "total_log_lines": 1,
+    "debug_lines": 1,
+    "marker_state_size": 616
+  },
+  "coordinate_transformation": {
+    "error": "float division by zero"
+  },
+  "dataframe_optimization": {
+    "dataframe_shape": [
+      94,
+      12
+    ],
+    "total_memory_bytes": 28990,
+    "categorical_savings_bytes": 16984,
+    "categorical_savings_percent": 0.585857192135219,
+    "peak_memory_bytes": 90620
+  },
+  "error_handling": {
+    "coordinate_transform_invalid": false,
+    "coordinate_transform_recovery": true,
+    "matplotlib_memory_pressure": true,
+    "file_processing_invalid": false
+  }
+}

@@ -27,10 +27,20 @@ logging.basicConfig(
 root_logger = logging.getLogger()
 root_logger.setLevel(logging.DEBUG)
 
+# OPTIMIZATION: Reduce matplotlib logging verbosity to improve performance
+# This addresses the 538 font manager debug lines found in baseline testing
+logging.getLogger("matplotlib.font_manager").setLevel(logging.WARNING)
+logging.getLogger("matplotlib.pyplot").setLevel(logging.WARNING)
+logging.getLogger("matplotlib.backends").setLevel(logging.WARNING)
+logging.getLogger("matplotlib").setLevel(
+    logging.INFO
+)  # Keep INFO level for other matplotlib logs
+
 # Log app startup
 logging.info(f"App starting at {datetime.now()}")
 logging.info(f"Dash version: {dash.__version__}")
 logging.info(f"Dash-leaflet version: {dl.__version__}")
+logging.info("✓ Matplotlib logging optimized for performance")
 
 # Create the Dash app using the factory function for proper duplicate callback handling
 app = create_app_with_duplicate_callbacks()

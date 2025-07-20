@@ -40,6 +40,12 @@ plt.rcParams["axes.linewidth"] = 0.8
 plt.rcParams["grid.linewidth"] = 0.5
 plt.rcParams["lines.linewidth"] = 1.0
 
+# OPTIMIZATION: Reduce matplotlib logging verbosity for better performance
+# Prevents excessive font manager debug output during plot generation
+logging.getLogger("matplotlib.font_manager").setLevel(logging.WARNING)
+logging.getLogger("matplotlib.pyplot").setLevel(logging.WARNING)
+logging.getLogger("matplotlib.backends").setLevel(logging.WARNING)
+
 logger = logging.getLogger(__name__)
 
 
