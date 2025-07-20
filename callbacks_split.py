@@ -28,6 +28,9 @@ from loading_indicators import (
     create_data_loading,
 )
 
+# Import memory management
+from memory_manager import optimize_dataframe_memory, monitor_memory_usage
+
 # from section_plot import plot_section_from_ags_content
 from section_plot_professional import plot_section_from_ags_content
 
@@ -515,13 +518,22 @@ def register_callbacks(app):
             loca_df, filename_map = load_all_loca_data(ags_files)
             logging.info(f"Loaded {len(loca_df)} boreholes")
 
+            # === MEMORY OPTIMIZATION: Monitor and optimize DataFrames ===
+            monitor_memory_usage("DEBUG")
+
+            # Optimize the loaded DataFrame for memory efficiency
+            loca_df = optimize_dataframe_memory(loca_df, inplace=True)
+            logging.info(
+                f"DataFrame optimized for memory efficiency: {len(loca_df)} rows"
+            )
+
             # --- Hybrid vectorized + fallback approach for coordinate transformation ---
             import numpy as np
 
             # Use centralized coordinate service for transformation
             coordinate_service = get_coordinate_service()
 
-            # Identify valid numeric rows
+            # Identify valid numeric rows (avoid defensive copying)
             valid_mask = loca_df["LOCA_NATE"].apply(
                 lambda x: pd.notnull(x)
                 and str(x).replace(".", "", 1).replace("-", "", 1).isdigit()
@@ -529,8 +541,10 @@ def register_callbacks(app):
                 lambda x: pd.notnull(x)
                 and str(x).replace(".", "", 1).replace("-", "", 1).isdigit()
             )
-            clean_df = loca_df[valid_mask].copy()
-            problem_df = loca_df[~valid_mask].copy()
+
+            # Only copy when necessary for modification
+            clean_df = loca_df[valid_mask]
+            problem_df = loca_df[~valid_mask]
 
             # Vectorized transform for clean batch
             lat_arr = np.full(len(loca_df), np.nan)
@@ -1527,12 +1541,6 @@ def register_callbacks(app):
                 # Convert polyline from geographic coordinates (lat/lon) to projected coordinates (easting/northing)
                 # to match the coordinate system used by LOCA_NATE/LOCA_NATN in the borehole data
                 try:
-                    from shapely.geometry import LineString
-
-                    # Create a line from the polyline coordinates
-                    line_points = [(lon, lat) for lat, lon in polyline_coords]
-                    line = LineString(line_points)
-
                     # Use coordinate service for UTM transformation
                     coordinate_service = get_coordinate_service()
 

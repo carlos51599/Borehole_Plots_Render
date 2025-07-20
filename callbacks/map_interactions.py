@@ -506,10 +506,45 @@ class MapInteractionCallback(MapInteractionCallbackBase):
         )
 
     def _update_marker_colors(self, stored_data: dict, selected_ids: List[str]) -> List:
-        """Update marker colors based on selection."""
+        """Update marker colors based on selection using lazy loading."""
 
         if not stored_data:
             return []
+
+        try:
+            # Import lazy marker manager
+            from lazy_marker_manager import get_lazy_marker_manager, ViewportBounds
+
+            loca_df = pd.DataFrame(stored_data["loca_df"])
+
+            # Get viewport info if available (for future viewport-based optimization)
+            # For now, we'll use the smart loading based on dataset size
+            lazy_manager = get_lazy_marker_manager()
+
+            # Determine if we should render all markers or use lazy loading
+            force_all = len(loca_df) <= 100  # Render all for small datasets
+
+            markers = lazy_manager.get_visible_markers(
+                loca_df=loca_df,
+                viewport=None,  # TODO: Get from map state in future optimization
+                selected_ids=selected_ids,
+                force_all=force_all,
+            )
+
+            self.logger.info(
+                f"Lazy marker update: {len(markers)} markers rendered for {len(loca_df)} total boreholes"
+            )
+            return markers
+
+        except Exception as e:
+            self.logger.error(f"Error in lazy marker update: {e}")
+            # Fallback to original implementation
+            return self._update_marker_colors_fallback(stored_data, selected_ids)
+
+    def _update_marker_colors_fallback(
+        self, stored_data: dict, selected_ids: List[str]
+    ) -> List:
+        """Fallback marker update method (original implementation)."""
 
         try:
             loca_df = pd.DataFrame(stored_data["loca_df"])
@@ -562,7 +597,7 @@ class MapInteractionCallback(MapInteractionCallbackBase):
             return markers
 
         except Exception as e:
-            self.logger.error(f"Error updating marker colors: {e}")
+            self.logger.error(f"Error in fallback marker update: {e}")
             return []
 
     def _format_depth_value(self, value) -> str:

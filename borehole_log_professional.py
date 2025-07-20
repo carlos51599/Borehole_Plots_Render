@@ -1310,28 +1310,44 @@ def create_professional_borehole_log_multi_page(
         desc_left = log_col_x[7]
         desc_width = log_col_widths[7]
 
-        # --- Draw lithology intervals ---
+        # --- Draw lithology intervals (optimized) ---
         intervals = []
-        for i, row in borehole_data.iterrows():
-            d1 = row["Depth_Top"]
-            d2 = row["Depth_Base"]
-            if d2 <= page_top or d1 >= page_bot:
-                continue
-            seg_top = max(d1, page_top)
-            seg_base = min(d2, page_data_bot)  # Only plot up to actual data
-            if seg_top >= seg_base:
-                continue
-            intervals.append(
-                {
-                    "orig_idx": i,
-                    "Depth_Top": seg_top,
-                    "Depth_Base": seg_base,
-                    "Geology_Code": row["Geology_Code"],
-                    "Description": row["Description"],
-                    "orig_Depth_Top": d1,
-                    "orig_Depth_Base": d2,
-                }
-            )
+
+        # Vectorized filtering for performance - only process relevant rows
+        depth_mask = (borehole_data["Depth_Base"] > page_top) & (
+            borehole_data["Depth_Top"] < page_bot
+        )
+        relevant_data = borehole_data[depth_mask]
+
+        if len(relevant_data) > 0:
+            # Vectorized operations for depth calculations
+            seg_tops = np.maximum(relevant_data["Depth_Top"].values, page_top)
+            seg_bases = np.minimum(relevant_data["Depth_Base"].values, page_data_bot)
+
+            # Only keep valid intervals
+            valid_mask = seg_tops < seg_bases
+
+            if valid_mask.any():
+                valid_indices = relevant_data.index[valid_mask]
+                valid_tops = seg_tops[valid_mask]
+                valid_bases = seg_bases[valid_mask]
+
+                # Build intervals list efficiently
+                for idx, (orig_idx, seg_top, seg_base) in enumerate(
+                    zip(valid_indices, valid_tops, valid_bases)
+                ):
+                    row = relevant_data.loc[orig_idx]
+                    intervals.append(
+                        {
+                            "orig_idx": orig_idx,
+                            "Depth_Top": seg_top,
+                            "Depth_Base": seg_base,
+                            "Geology_Code": row["Geology_Code"],
+                            "Description": row["Description"],
+                            "orig_Depth_Top": row["Depth_Top"],
+                            "orig_Depth_Base": row["Depth_Base"],
+                        }
+                    )
 
         # First pass: Draw lithology rectangles and collect legend positions
         legend_positions = []

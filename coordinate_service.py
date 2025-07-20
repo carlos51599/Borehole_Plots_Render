@@ -283,12 +283,20 @@ class CoordinateTransformService:
             x_coords = df[source_x_col].values
             y_coords = df[source_y_col].values
 
-            # Transform coordinates
+            # Transform coordinates using vectorized operations
             transformer = get_transformer(source_crs, target_crs)
             target_x, target_y = transformer.transform(x_coords, y_coords)
 
-            # Add to DataFrame
-            df_result = df.copy()
+            # Optimize: Add columns directly to existing DataFrame to avoid copy
+            # Only copy if the operation would modify the input DataFrame structure
+            if target_x_col in df.columns or target_y_col in df.columns:
+                logger.warning(
+                    f"Target columns {target_x_col}/{target_y_col} already exist, creating copy"
+                )
+                df_result = df.copy()
+            else:
+                df_result = df
+
             df_result[target_x_col] = target_x
             df_result[target_y_col] = target_y
 
