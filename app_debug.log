@@ -1,215 +1,74 @@
-2025-07-21 12:30:47,090 INFO [app.py:40 <module>] App starting at 2025-07-21 12:30:47.090719
-2025-07-21 12:30:47,091 INFO [app.py:41 <module>] Dash version: 3.1.1
-2025-07-21 12:30:47,091 INFO [app.py:42 <module>] Dash-leaflet version: 1.1.3
-2025-07-21 12:30:47,091 INFO [app.py:43 <module>] ✓ Matplotlib logging optimized for performance
-2025-07-21 12:30:47,201 INFO [app.py:49 <module>] Creating app layout...
-2025-07-21 12:30:47,276 INFO [app.py:345 <module>] App layout created successfully
-2025-07-21 12:30:47,277 INFO [app.py:365 <module>] === LAYOUT COMPONENT IDs ===
-2025-07-21 12:30:47,277 INFO [app.py:353 log_layout_ids] Found component ID: font-cache-warmed
-2025-07-21 12:30:47,278 INFO [app.py:353 log_layout_ids] Found component ID: logo-container
-2025-07-21 12:30:47,278 INFO [app.py:353 log_layout_ids] Found component ID: logo-img
-2025-07-21 12:30:47,279 INFO [app.py:353 log_layout_ids] Found component ID: light-theme-btn
-2025-07-21 12:30:47,279 INFO [app.py:353 log_layout_ids] Found component ID: dark-theme-btn
-2025-07-21 12:30:47,280 INFO [app.py:353 log_layout_ids] Found component ID: upload-ags
-2025-07-21 12:30:47,280 INFO [app.py:353 log_layout_ids] Found component ID: output-upload
-2025-07-21 12:30:47,280 INFO [app.py:353 log_layout_ids] Found component ID: borehole-search-section
-2025-07-21 12:30:47,281 INFO [app.py:353 log_layout_ids] Found component ID: borehole-search-dropdown
-2025-07-21 12:30:47,281 INFO [app.py:353 log_layout_ids] Found component ID: search-go-btn
-2025-07-21 12:30:47,281 INFO [app.py:353 log_layout_ids] Found component ID: search-feedback
-2025-07-21 12:30:47,282 INFO [app.py:353 log_layout_ids] Found component ID: borehole-map
-2025-07-21 12:30:47,282 INFO [app.py:353 log_layout_ids] Found component ID: borehole-markers
-2025-07-21 12:30:47,283 INFO [app.py:353 log_layout_ids] Found component ID: selection-shapes
-2025-07-21 12:30:47,283 INFO [app.py:353 log_layout_ids] Found component ID: pca-line-group
-2025-07-21 12:30:47,283 INFO [app.py:353 log_layout_ids] Found component ID: draw-feature-group
-2025-07-21 12:30:47,284 INFO [app.py:353 log_layout_ids] Found component ID: draw-control
-2025-07-21 12:30:47,284 INFO [app.py:353 log_layout_ids] Found component ID: buffer-controls
-2025-07-21 12:30:47,284 INFO [app.py:353 log_layout_ids] Found component ID: buffer-input
-2025-07-21 12:30:47,285 INFO [app.py:353 log_layout_ids] Found component ID: update-buffer-btn
-2025-07-21 12:30:47,285 INFO [app.py:353 log_layout_ids] Found component ID: selected-borehole-info
-2025-07-21 12:30:47,285 INFO [app.py:353 log_layout_ids] Found component ID: section-plot-output
-2025-07-21 12:30:47,286 INFO [app.py:353 log_layout_ids] Found component ID: log-plot-output
-2025-07-21 12:30:47,286 INFO [app.py:353 log_layout_ids] Found component ID: show-labels-checkbox
-2025-07-21 12:30:47,286 INFO [app.py:353 log_layout_ids] Found component ID: download-section-btn
-2025-07-21 12:30:47,286 INFO [app.py:353 log_layout_ids] Found component ID: download-section-plot
-2025-07-21 12:30:47,287 INFO [app.py:353 log_layout_ids] Found component ID: ui-feedback
-2025-07-21 12:30:47,287 INFO [app.py:353 log_layout_ids] Found component ID: subselection-checkbox-grid-container
-2025-07-21 12:30:47,287 INFO [app.py:353 log_layout_ids] Found component ID: subselection-checkbox-grid
-2025-07-21 12:30:47,288 INFO [app.py:353 log_layout_ids] Found component ID: upload-data-store
-2025-07-21 12:30:47,288 INFO [app.py:353 log_layout_ids] Found component ID: borehole-data-store
-2025-07-21 12:30:47,288 INFO [app.py:353 log_layout_ids] Found component ID: search-selected-borehole
-2025-07-21 12:30:47,289 INFO [app.py:367 <module>] === END LAYOUT IDs ===
-2025-07-21 12:30:47,289 INFO [app.py:448 <module>] Registering split callbacks...
-2025-07-21 12:30:47,291 INFO [callbacks_split.py:2095 register_callbacks] ✅ All split callbacks registered successfully!
-2025-07-21 12:30:47,291 INFO [app.py:450 <module>] ✅ All callbacks registered successfully!
-2025-07-21 12:30:47,292 INFO [app.py:554 <module>] Opening browser and starting Dash server
-2025-07-21 12:30:48,604 INFO [app.py:462 store_upload_data] No upload data to store
-2025-07-21 12:30:48,743 INFO [callbacks_split.py:387 handle_file_upload] === FILE UPLOAD CALLBACK ===
-2025-07-21 12:30:48,745 INFO [callbacks_split.py:394 handle_file_upload] No file uploaded yet
-2025-07-21 12:30:48,825 INFO [callbacks_split.py:1718 update_search_dropdown] === UPDATING SEARCH DROPDOWN ===
-2025-07-21 12:30:48,826 INFO [callbacks_split.py:1721 update_search_dropdown] No borehole data available for search
-2025-07-21 12:30:48,840 INFO [callbacks_split.py:802 handle_map_interactions] === MAP INTERACTION CALLBACK ===
-2025-07-21 12:30:48,842 INFO [callbacks_split.py:806 handle_map_interactions] Triggered by: draw-control.geojson
-2025-07-21 12:30:48,843 WARNING [callbacks_split.py:809 handle_map_interactions] No stored borehole data available
-2025-07-21 12:30:48,898 INFO [callbacks_split.py:1718 update_search_dropdown] === UPDATING SEARCH DROPDOWN ===
-2025-07-21 12:30:48,899 INFO [callbacks_split.py:1721 update_search_dropdown] No borehole data available for search
-2025-07-21 12:30:49,109 INFO [app.py:462 store_upload_data] No upload data to store
-2025-07-21 12:30:49,204 INFO [callbacks_split.py:387 handle_file_upload] === FILE UPLOAD CALLBACK ===
-2025-07-21 12:30:49,204 INFO [callbacks_split.py:394 handle_file_upload] No file uploaded yet
-2025-07-21 12:30:49,312 INFO [callbacks_split.py:1718 update_search_dropdown] === UPDATING SEARCH DROPDOWN ===
-2025-07-21 12:30:49,313 INFO [callbacks_split.py:1721 update_search_dropdown] No borehole data available for search
-2025-07-21 12:30:50,118 INFO [callbacks_split.py:802 handle_map_interactions] === MAP INTERACTION CALLBACK ===
-2025-07-21 12:30:50,120 INFO [callbacks_split.py:806 handle_map_interactions] Triggered by: draw-control.geojson
-2025-07-21 12:30:50,123 WARNING [callbacks_split.py:809 handle_map_interactions] No stored borehole data available
-2025-07-21 12:30:50,177 INFO [callbacks_split.py:1718 update_search_dropdown] === UPDATING SEARCH DROPDOWN ===
-2025-07-21 12:30:50,178 INFO [callbacks_split.py:1721 update_search_dropdown] No borehole data available for search
-2025-07-21 12:30:52,247 INFO [app.py:466 store_upload_data] === STORING UPLOAD DATA ===
-2025-07-21 12:30:52,247 INFO [app.py:468 store_upload_data] Storing 1 files
-2025-07-21 12:30:52,851 INFO [callbacks_split.py:387 handle_file_upload] === FILE UPLOAD CALLBACK ===
-2025-07-21 12:30:52,851 INFO [callbacks_split.py:401 handle_file_upload] Processing 1 uploaded files
-2025-07-21 12:30:53,210 INFO [callbacks_split.py:463 handle_file_upload] Successfully processed file: SESR - 2025-05-08 - Preliminary SM.ags (12.0MB)
-2025-07-21 12:30:53,496 INFO [callbacks_split.py:520 handle_file_upload] Loaded 94 boreholes
-2025-07-21 12:30:53,496 INFO [memory_manager.py:68 __init__] MemoryManager initialized: threshold=500.0MB, cleanup_interval=30min, auto_cleanup=True
-2025-07-21 12:30:53,497 DEBUG [memory_manager.py:414 monitor_memory_usage] Memory usage: 326.69MB RSS, 2.0% of system, 2595.81MB available
-2025-07-21 12:30:53,497 INFO [dataframe_optimizer.py:259 optimize_borehole_dataframe] Applying borehole-specific DataFrame optimizations
-2025-07-21 12:30:53,499 INFO [dataframe_optimizer.py:281 optimize_borehole_dataframe] Optimized borehole column ags_file: saved 7,889 bytes
-2025-07-21 12:30:53,501 INFO [dataframe_optimizer.py:281 optimize_borehole_dataframe] Optimized borehole column LOCA_TYPE: saved 4,098 bytes
-2025-07-21 12:30:53,503 INFO [dataframe_optimizer.py:281 optimize_borehole_dataframe] Optimized borehole column LOCA_STAT: saved 4,715 bytes
-2025-07-21 12:30:53,503 INFO [dataframe_optimizer.py:32 optimize_dataframe_memory] Starting DataFrame optimization for 94 rows, 47 columns
-2025-07-21 12:30:53,511 DEBUG [dataframe_optimizer.py:70 optimize_dataframe_memory] Converted LOCA_GREF to categorical: 1 unique values (1.1%), saved 4,355 bytes
-2025-07-21 12:30:53,514 DEBUG [dataframe_optimizer.py:70 optimize_dataframe_memory] Converted LOCA_REM to categorical: 71 unique values (75.5%), saved 168 bytes
-2025-07-21 12:30:53,516 DEBUG [dataframe_optimizer.py:70 optimize_dataframe_memory] Converted LOCA_FDEP to categorical: 58 unique values (61.7%), saved -306 bytes
-2025-07-21 12:30:53,518 DEBUG [dataframe_optimizer.py:70 optimize_dataframe_memory] Converted LOCA_STAR to categorical: 52 unique values (55.3%), saved 270 bytes
-2025-07-21 12:30:53,519 DEBUG [dataframe_optimizer.py:70 optimize_dataframe_memory] Converted LOCA_PURP to categorical: 3 unique values (3.2%), saved 4,494 bytes
-2025-07-21 12:30:53,521 DEBUG [dataframe_optimizer.py:70 optimize_dataframe_memory] Converted LOCA_TERM to categorical: 17 unique values (18.1%), saved 4,091 bytes
-2025-07-21 12:30:53,522 DEBUG [dataframe_optimizer.py:70 optimize_dataframe_memory] Converted LOCA_ENDD to categorical: 57 unique values (60.6%), saved -135 bytes
-2025-07-21 12:30:53,524 DEBUG [dataframe_optimizer.py:70 optimize_dataframe_memory] Converted LOCA_LETT to categorical: 1 unique values (1.1%), saved 4,355 bytes
-2025-07-21 12:30:53,525 DEBUG [dataframe_optimizer.py:70 optimize_dataframe_memory] Converted LOCA_LOCX to categorical: 1 unique values (1.1%), saved 4,355 bytes
-2025-07-21 12:30:53,527 DEBUG [dataframe_optimizer.py:70 optimize_dataframe_memory] Converted LOCA_LOCY to categorical: 1 unique values (1.1%), saved 4,355 bytes
-2025-07-21 12:30:53,529 DEBUG [dataframe_optimizer.py:70 optimize_dataframe_memory] Converted LOCA_LOCZ to categorical: 1 unique values (1.1%), saved 4,355 bytes
-2025-07-21 12:30:53,531 DEBUG [dataframe_optimizer.py:70 optimize_dataframe_memory] Converted LOCA_LREF to categorical: 1 unique values (1.1%), saved 4,355 bytes
-2025-07-21 12:30:53,533 DEBUG [dataframe_optimizer.py:70 optimize_dataframe_memory] Converted LOCA_DATM to categorical: 1 unique values (1.1%), saved 4,355 bytes
-2025-07-21 12:30:53,534 DEBUG [dataframe_optimizer.py:70 optimize_dataframe_memory] Converted LOCA_ETRV to categorical: 1 unique values (1.1%), saved 4,355 bytes
-2025-07-21 12:30:53,536 DEBUG [dataframe_optimizer.py:70 optimize_dataframe_memory] Converted LOCA_NTRV to categorical: 1 unique values (1.1%), saved 4,355 bytes
-2025-07-21 12:30:53,537 DEBUG [dataframe_optimizer.py:70 optimize_dataframe_memory] Converted LOCA_LTRV to categorical: 1 unique values (1.1%), saved 4,355 bytes
-2025-07-21 12:30:53,539 DEBUG [dataframe_optimizer.py:70 optimize_dataframe_memory] Converted LOCA_XTRL to categorical: 1 unique values (1.1%), saved 4,355 bytes
-2025-07-21 12:30:53,540 DEBUG [dataframe_optimizer.py:70 optimize_dataframe_memory] Converted LOCA_YTRL to categorical: 1 unique values (1.1%), saved 4,355 bytes
-2025-07-21 12:30:53,542 DEBUG [dataframe_optimizer.py:70 optimize_dataframe_memory] Converted LOCA_ZTRL to categorical: 1 unique values (1.1%), saved 4,355 bytes
-2025-07-21 12:30:53,543 DEBUG [dataframe_optimizer.py:70 optimize_dataframe_memory] Converted LOCA_LAT to categorical: 1 unique values (1.1%), saved 4,355 bytes
-2025-07-21 12:30:53,545 DEBUG [dataframe_optimizer.py:70 optimize_dataframe_memory] Converted LOCA_LON to categorical: 1 unique values (1.1%), saved 4,355 bytes
-2025-07-21 12:30:53,547 DEBUG [dataframe_optimizer.py:70 optimize_dataframe_memory] Converted LOCA_ELAT to categorical: 1 unique values (1.1%), saved 4,355 bytes
-2025-07-21 12:30:53,548 DEBUG [dataframe_optimizer.py:70 optimize_dataframe_memory] Converted LOCA_ELON to categorical: 1 unique values (1.1%), saved 4,355 bytes
-2025-07-21 12:30:53,550 DEBUG [dataframe_optimizer.py:70 optimize_dataframe_memory] Converted LOCA_LLZ to categorical: 1 unique values (1.1%), saved 4,355 bytes
-2025-07-21 12:30:53,551 DEBUG [dataframe_optimizer.py:70 optimize_dataframe_memory] Converted LOCA_LOCM to categorical: 4 unique values (4.3%), saved 8,342 bytes
-2025-07-21 12:30:53,553 DEBUG [dataframe_optimizer.py:70 optimize_dataframe_memory] Converted LOCA_LOCA to categorical: 2 unique values (2.1%), saved 4,316 bytes
-2025-07-21 12:30:53,554 DEBUG [dataframe_optimizer.py:70 optimize_dataframe_memory] Converted LOCA_CLST to categorical: 5 unique values (5.3%), saved 4,273 bytes
-2025-07-21 12:30:53,556 DEBUG [dataframe_optimizer.py:70 optimize_dataframe_memory] Converted LOCA_ALID to categorical: 1 unique values (1.1%), saved 4,355 bytes
-2025-07-21 12:30:53,557 DEBUG [dataframe_optimizer.py:70 optimize_dataframe_memory] Converted LOCA_OFFS to categorical: 1 unique values (1.1%), saved 4,355 bytes
-2025-07-21 12:30:53,559 DEBUG [dataframe_optimizer.py:70 optimize_dataframe_memory] Converted LOCA_CNGE to categorical: 1 unique values (1.1%), saved 4,355 bytes
-2025-07-21 12:30:53,560 DEBUG [dataframe_optimizer.py:70 optimize_dataframe_memory] Converted LOCA_TRAN to categorical: 1 unique values (1.1%), saved 4,355 bytes
-2025-07-21 12:30:53,562 DEBUG [dataframe_optimizer.py:70 optimize_dataframe_memory] Converted FILE_FSET to categorical: 1 unique values (1.1%), saved 4,355 bytes
-2025-07-21 12:30:53,564 DEBUG [dataframe_optimizer.py:70 optimize_dataframe_memory] Converted LOCA_NATD to categorical: 1 unique values (1.1%), saved 4,355 bytes
-2025-07-21 12:30:53,565 DEBUG [dataframe_optimizer.py:70 optimize_dataframe_memory] Converted LOCA_ORID to categorical: 1 unique values (1.1%), saved 4,355 bytes
-2025-07-21 12:30:53,567 DEBUG [dataframe_optimizer.py:70 optimize_dataframe_memory] Converted LOCA_ORJO to categorical: 1 unique values (1.1%), saved 4,355 bytes
-2025-07-21 12:30:53,568 DEBUG [dataframe_optimizer.py:70 optimize_dataframe_memory] Converted LOCA_ORCO to categorical: 1 unique values (1.1%), saved 4,355 bytes
-2025-07-21 12:30:53,570 DEBUG [dataframe_optimizer.py:70 optimize_dataframe_memory] Converted LOCA_CHKG to categorical: 3 unique values (3.2%), saved 4,373 bytes
-2025-07-21 12:30:53,571 DEBUG [dataframe_optimizer.py:70 optimize_dataframe_memory] Converted LOCA_APPG to categorical: 1 unique values (1.1%), saved 4,355 bytes
-2025-07-21 12:30:53,572 DEBUG [dataframe_optimizer.py:70 optimize_dataframe_memory] Converted LOCA_WELL to categorical: 1 unique values (1.1%), saved 4,355 bytes
-2025-07-21 12:30:53,573 DEBUG [dataframe_optimizer.py:114 optimize_dataframe_memory] Optimized LOCA_NATE: float64 -> float32, saved 376 bytes
-2025-07-21 12:30:53,574 DEBUG [dataframe_optimizer.py:114 optimize_dataframe_memory] Optimized LOCA_NATN: float64 -> float32, saved 376 bytes
-2025-07-21 12:30:53,577 INFO [dataframe_optimizer.py:124 optimize_dataframe_memory] DataFrame optimization complete:
-2025-07-21 12:30:53,577 INFO [dataframe_optimizer.py:125 optimize_dataframe_memory]   Initial memory: 236,404 bytes (0.23 MB)
-2025-07-21 12:30:53,577 INFO [dataframe_optimizer.py:128 optimize_dataframe_memory]   Final memory: 79,471 bytes (0.08 MB)
-2025-07-21 12:30:53,578 INFO [dataframe_optimizer.py:131 optimize_dataframe_memory]   Total savings: 156,933 bytes (66.4%)
-2025-07-21 12:30:53,578 INFO [dataframe_optimizer.py:134 optimize_dataframe_memory]   Categorical conversions: 39
-2025-07-21 12:30:53,579 INFO [dataframe_optimizer.py:135 optimize_dataframe_memory]   Numeric conversions: 2
-2025-07-21 12:30:53,579 INFO [callbacks_split.py:528 handle_file_upload] ✓ DataFrame optimized for memory efficiency: 94 rows
-2025-07-21 12:30:53,654 DEBUG [coordinate_service.py:55 get_transformer] Created transformer: EPSG:27700 -> EPSG:4326
-2025-07-21 12:30:53,757 DEBUG [coordinate_service.py:168 transform_bng_to_wgs84] Transformed BNG to WGS84: 94 points
-2025-07-21 12:30:53,772 INFO [callbacks_split.py:637 handle_file_upload] Marker 0 (BH401): BNG(444475.09375, 192526.484375) -> Position([51.629803, -1.358834])
-2025-07-21 12:30:53,772 INFO [callbacks_split.py:637 handle_file_upload] Marker 1 (BH401A): BNG(444474.75, 192525.296875) -> Position([51.629793, -1.358839])
-2025-07-21 12:30:53,773 INFO [callbacks_split.py:637 handle_file_upload] Marker 2 (BH403): BNG(445416.53125, 192996.0) -> Position([51.633950, -1.345173])
-2025-07-21 12:30:53,791 INFO [callbacks_split.py:667 handle_file_upload] 🎯 SETTING MAP CENTER: [51.642722, -1.333881] with zoom 10
-2025-07-21 12:30:53,792 INFO [callbacks_split.py:670 handle_file_upload] 📊 Coordinate analysis: Range=6.274092, Bounds: Lat[49.766807, 51.654438], Lon[-7.557207, -1.283116]
-2025-07-21 12:30:53,804 INFO [callbacks_split.py:733 handle_file_upload] 📍 Final map_center: [51.64272192027613, -1.3338806048641514], zoom: 10
-2025-07-21 12:30:53,805 WARNING [callbacks_split.py:736 handle_file_upload] ⚠️ MAP CENTER VERIFICATION: Returning center=[51.64272192027613, -1.3338806048641514], zoom=10. If this doesn't match what you see in the UI, check browser console logs.
-2025-07-21 12:30:54,602 INFO [callbacks_split.py:2207 marker_click_handler] === MARKER CLICK CALLBACK ===
-2025-07-21 12:30:54,603 INFO [callbacks_split.py:2208 marker_click_handler] Triggered by: [{'prop_id': '{"index":0,"type":"borehole-marker"}.n_clicks', 'value': 0}, {'prop_id': '{"index":1,"type":"borehole-marker"}.n_clicks', 'value': 0}, {'prop_id': '{"index":2,"type":"borehole-marker"}.n_clicks', 'value': 0}, {'prop_id': '{"index":3,"type":"borehole-marker"}.n_clicks', 'value': 0}, {'prop_id': '{"index":4,"type":"borehole-marker"}.n_clicks', 'value': 0}, {'prop_id': '{"index":5,"type":"borehole-marker"}.n_clicks', 'value': 0}, {'prop_id': '{"index":6,"type":"borehole-marker"}.n_clicks', 'value': 0}, {'prop_id': '{"index":7,"type":"borehole-marker"}.n_clicks', 'value': 0}, {'prop_id': '{"index":8,"type":"borehole-marker"}.n_clicks', 'value': 0}, {'prop_id': '{"index":9,"type":"borehole-marker"}.n_clicks', 'value': 0}, {'prop_id': '{"index":10,"type":"borehole-marker"}.n_clicks', 'value': 0}, {'prop_id': '{"index":11,"type":"borehole-marker"}.n_clicks', 'value': 0}, {'prop_id': '{"index":12,"type":"borehole-marker"}.n_clicks', 'value': 0}, {'prop_id': '{"index":13,"type":"borehole-marker"}.n_clicks', 'value': 0}, {'prop_id': '{"index":14,"type":"borehole-marker"}.n_clicks', 'value': 0}, {'prop_id': '{"index":15,"type":"borehole-marker"}.n_clicks', 'value': 0}, {'prop_id': '{"index":16,"type":"borehole-marker"}.n_clicks', 'value': 0}, {'prop_id': '{"index":17,"type":"borehole-marker"}.n_clicks', 'value': 0}, {'prop_id': '{"index":18,"type":"borehole-marker"}.n_clicks', 'value': 0}, {'prop_id': '{"index":19,"type":"borehole-marker"}.n_clicks', 'value': 0}, {'prop_id': '{"index":20,"type":"borehole-marker"}.n_clicks', 'value': 0}, {'prop_id': '{"index":21,"type":"borehole-marker"}.n_clicks', 'value': 0}, {'prop_id': '{"index":22,"type":"borehole-marker"}.n_clicks', 'value': 0}, {'prop_id': '{"index":23,"type":"borehole-marker"}.n_clicks', 'value': 0}, {'prop_id': '{"index":24,"type":"borehole-marker"}.n_clicks', 'value': 0}, {'prop_id': '{"index":25,"type":"borehole-marker"}.n_clicks', 'value': 0}, {'prop_id': '{"index":26,"type":"borehole-marker"}.n_clicks', 'value': 0}, {'prop_id': '{"index":27,"type":"borehole-marker"}.n_clicks', 'value': 0}, {'prop_id': '{"index":28,"type":"borehole-marker"}.n_clicks', 'value': 0}, {'prop_id': '{"index":29,"type":"borehole-marker"}.n_clicks', 'value': 0}, {'prop_id': '{"index":30,"type":"borehole-marker"}.n_clicks', 'value': 0}, {'prop_id': '{"index":31,"type":"borehole-marker"}.n_clicks', 'value': 0}, {'prop_id': '{"index":32,"type":"borehole-marker"}.n_clicks', 'value': 0}, {'prop_id': '{"index":33,"type":"borehole-marker"}.n_clicks', 'value': 0}, {'prop_id': '{"index":34,"type":"borehole-marker"}.n_clicks', 'value': 0}, {'prop_id': '{"index":35,"type":"borehole-marker"}.n_clicks', 'value': 0}, {'prop_id': '{"index":36,"type":"borehole-marker"}.n_clicks', 'value': 0}, {'prop_id': '{"index":37,"type":"borehole-marker"}.n_clicks', 'value': 0}, {'prop_id': '{"index":38,"type":"borehole-marker"}.n_clicks', 'value': 0}, {'prop_id': '{"index":39,"type":"borehole-marker"}.n_clicks', 'value': 0}, {'prop_id': '{"index":40,"type":"borehole-marker"}.n_clicks', 'value': 0}, {'prop_id': '{"index":41,"type":"borehole-marker"}.n_clicks', 'value': 0}, {'prop_id': '{"index":42,"type":"borehole-marker"}.n_clicks', 'value': 0}, {'prop_id': '{"index":43,"type":"borehole-marker"}.n_clicks', 'value': 0}, {'prop_id': '{"index":44,"type":"borehole-marker"}.n_clicks', 'value': 0}, {'prop_id': '{"index":45,"type":"borehole-marker"}.n_clicks', 'value': 0}, {'prop_id': '{"index":46,"type":"borehole-marker"}.n_clicks', 'value': 0}, {'prop_id': '{"index":47,"type":"borehole-marker"}.n_clicks', 'value': 0}, {'prop_id': '{"index":48,"type":"borehole-marker"}.n_clicks', 'value': 0}, {'prop_id': '{"index":49,"type":"borehole-marker"}.n_clicks', 'value': 0}, {'prop_id': '{"index":50,"type":"borehole-marker"}.n_clicks', 'value': 0}, {'prop_id': '{"index":51,"type":"borehole-marker"}.n_clicks', 'value': 0}, {'prop_id': '{"index":52,"type":"borehole-marker"}.n_clicks', 'value': 0}, {'prop_id': '{"index":53,"type":"borehole-marker"}.n_clicks', 'value': 0}, {'prop_id': '{"index":54,"type":"borehole-marker"}.n_clicks', 'value': 0}, {'prop_id': '{"index":55,"type":"borehole-marker"}.n_clicks', 'value': 0}, {'prop_id': '{"index":56,"type":"borehole-marker"}.n_clicks', 'value': 0}, {'prop_id': '{"index":57,"type":"borehole-marker"}.n_clicks', 'value': 0}, {'prop_id': '{"index":58,"type":"borehole-marker"}.n_clicks', 'value': 0}, {'prop_id': '{"index":59,"type":"borehole-marker"}.n_clicks', 'value': 0}, {'prop_id': '{"index":60,"type":"borehole-marker"}.n_clicks', 'value': 0}, {'prop_id': '{"index":61,"type":"borehole-marker"}.n_clicks', 'value': 0}, {'prop_id': '{"index":62,"type":"borehole-marker"}.n_clicks', 'value': 0}, {'prop_id': '{"index":63,"type":"borehole-marker"}.n_clicks', 'value': 0}, {'prop_id': '{"index":64,"type":"borehole-marker"}.n_clicks', 'value': 0}, {'prop_id': '{"index":65,"type":"borehole-marker"}.n_clicks', 'value': 0}, {'prop_id': '{"index":66,"type":"borehole-marker"}.n_clicks', 'value': 0}, {'prop_id': '{"index":67,"type":"borehole-marker"}.n_clicks', 'value': 0}, {'prop_id': '{"index":68,"type":"borehole-marker"}.n_clicks', 'value': 0}, {'prop_id': '{"index":69,"type":"borehole-marker"}.n_clicks', 'value': 0}, {'prop_id': '{"index":70,"type":"borehole-marker"}.n_clicks', 'value': 0}, {'prop_id': '{"index":71,"type":"borehole-marker"}.n_clicks', 'value': 0}, {'prop_id': '{"index":72,"type":"borehole-marker"}.n_clicks', 'value': 0}, {'prop_id': '{"index":73,"type":"borehole-marker"}.n_clicks', 'value': 0}, {'prop_id': '{"index":74,"type":"borehole-marker"}.n_clicks', 'value': 0}, {'prop_id': '{"index":75,"type":"borehole-marker"}.n_clicks', 'value': 0}, {'prop_id': '{"index":76,"type":"borehole-marker"}.n_clicks', 'value': 0}, {'prop_id': '{"index":77,"type":"borehole-marker"}.n_clicks', 'value': 0}, {'prop_id': '{"index":78,"type":"borehole-marker"}.n_clicks', 'value': 0}, {'prop_id': '{"index":79,"type":"borehole-marker"}.n_clicks', 'value': 0}, {'prop_id': '{"index":80,"type":"borehole-marker"}.n_clicks', 'value': 0}, {'prop_id': '{"index":81,"type":"borehole-marker"}.n_clicks', 'value': 0}, {'prop_id': '{"index":82,"type":"borehole-marker"}.n_clicks', 'value': 0}, {'prop_id': '{"index":83,"type":"borehole-marker"}.n_clicks', 'value': 0}, {'prop_id': '{"index":84,"type":"borehole-marker"}.n_clicks', 'value': 0}, {'prop_id': '{"index":85,"type":"borehole-marker"}.n_clicks', 'value': 0}, {'prop_id': '{"index":86,"type":"borehole-marker"}.n_clicks', 'value': 0}, {'prop_id': '{"index":87,"type":"borehole-marker"}.n_clicks', 'value': 0}, {'prop_id': '{"index":88,"type":"borehole-marker"}.n_clicks', 'value': 0}, {'prop_id': '{"index":89,"type":"borehole-marker"}.n_clicks', 'value': 0}, {'prop_id': '{"index":90,"type":"borehole-marker"}.n_clicks', 'value': 0}, {'prop_id': '{"index":91,"type":"borehole-marker"}.n_clicks', 'value': 0}, {'prop_id': '{"index":92,"type":"borehole-marker"}.n_clicks', 'value': 0}, {'prop_id': '{"index":93,"type":"borehole-marker"}.n_clicks', 'value': 0}]
-2025-07-21 12:30:54,610 INFO [callbacks_split.py:2209 marker_click_handler] Show labels checkbox value: ['show_labels']
-2025-07-21 12:30:54,612 INFO [callbacks_split.py:2215 marker_click_handler] No marker clicks detected
-2025-07-21 12:30:54,870 INFO [callbacks_split.py:1718 update_search_dropdown] === UPDATING SEARCH DROPDOWN ===
-2025-07-21 12:30:54,884 INFO [callbacks_split.py:1775 update_search_dropdown] Created 94 search options
-2025-07-21 12:31:03,297 INFO [callbacks_split.py:1663 clear_all_shapes] Server-side clearing all shapes. Features: 1
-2025-07-21 12:31:03,462 INFO [callbacks_split.py:802 handle_map_interactions] === MAP INTERACTION CALLBACK ===
-2025-07-21 12:31:03,463 INFO [callbacks_split.py:806 handle_map_interactions] Triggered by: draw-control.geojson
-2025-07-21 12:31:03,463 INFO [callbacks_split.py:827 handle_map_interactions] 🎨 Processing drawing event - this will clear old polylines and selection shapes
-2025-07-21 12:31:03,463 INFO [callbacks_split.py:917 handle_shape_drawing] === DETAILED SHAPE DRAWING DIAGNOSTICS ===
-2025-07-21 12:31:03,464 INFO [callbacks_split.py:918 handle_shape_drawing] GeoJSON type: <class 'dict'>
-2025-07-21 12:31:03,464 INFO [callbacks_split.py:920 handle_shape_drawing] GeoJSON keys: ['type', 'features']
-2025-07-21 12:31:03,464 INFO [callbacks_split.py:921 handle_shape_drawing] Features count: 1
-2025-07-21 12:31:03,465 INFO [callbacks_split.py:925 handle_shape_drawing] Feature 0 type: Polygon
-2025-07-21 12:31:03,465 INFO [callbacks_split.py:929 handle_shape_drawing] Feature 0 properties: {'type': 'rectangle', '_bounds': [{'lat': 51.631773631217264, 'lng': -1.3662046194076538}, {'lat': 51.633008957010155, 'lng': -1.3635921478271487}], '_leaflet_id': 1058}
-2025-07-21 12:31:03,467 INFO [callbacks_split.py:935 handle_shape_drawing] Processing shape with 94 boreholes
-2025-07-21 12:31:03,468 INFO [callbacks_split.py:946 handle_shape_drawing] Processing most recent shape: Polygon
-2025-07-21 12:31:03,468 INFO [callbacks_split.py:947 handle_shape_drawing] Selected feature details: {'type': 'Feature', 'properties': {'type': 'rectangle', '_bounds': [{'lat': 51.631773631217264, 'lng': -1.3662046194076538}, {'lat': 51.633008957010155, 'lng': -1.3635921478271487}], '_leaflet_id': 1058}, 'geometry': {'type': 'Polygon', 'coordinates': [[[-1.3662046194076538, 51.631773631217264], [-1.3662046194076538, 51.633008957010155], [-1.3635921478271487, 51.633008957010155], [-1.3635921478271487, 51.631773631217264], [-1.3662046194076538, 51.631773631217264]]]}}
-2025-07-21 12:31:03,468 INFO [callbacks_split.py:954 handle_shape_drawing] Created clean GeoJSON with single feature
-2025-07-21 12:31:03,469 INFO [map_utils.py:10 filter_selection_by_shape] ====== FILTER_SELECTION_BY_SHAPE CALLED ======
-2025-07-21 12:31:03,469 INFO [map_utils.py:11 filter_selection_by_shape] loca_df type: <class 'pandas.core.frame.DataFrame'>
-2025-07-21 12:31:03,469 INFO [map_utils.py:12 filter_selection_by_shape] drawn_geojson type: <class 'dict'>
-2025-07-21 12:31:03,469 INFO [map_utils.py:25 filter_selection_by_shape] loca_df shape: (94, 49)
-2025-07-21 12:31:03,469 INFO [map_utils.py:26 filter_selection_by_shape] loca_df columns: ['LOCA_ID', 'LOCA_TYPE', 'LOCA_STAT', 'LOCA_NATE', 'LOCA_NATN', 'LOCA_GREF', 'LOCA_GL', 'LOCA_REM', 'LOCA_FDEP', 'LOCA_STAR', 'LOCA_PURP', 'LOCA_TERM', 'LOCA_ENDD', 'LOCA_LETT', 'LOCA_LOCX', 'LOCA_LOCY', 'LOCA_LOCZ', 'LOCA_LREF', 'LOCA_DATM', 'LOCA_ETRV', 'LOCA_NTRV', 'LOCA_LTRV', 'LOCA_XTRL', 'LOCA_YTRL', 'LOCA_ZTRL', 'LOCA_LAT', 'LOCA_LON', 'LOCA_ELAT', 'LOCA_ELON', 'LOCA_LLZ', 'LOCA_LOCM', 'LOCA_LOCA', 'LOCA_CLST', 'LOCA_ALID', 'LOCA_OFFS', 'LOCA_CNGE', 'LOCA_TRAN', 'FILE_FSET', 'LOCA_NATD', 'LOCA_ORID', 'LOCA_ORJO', 'LOCA_ORCO', 'LOCA_CHKG', 'LOCA_APPG', 'LOCA_WELL', 'original_LOCA_ID', 'ags_file', 'lat', 'lon']
-2025-07-21 12:31:03,470 INFO [map_utils.py:37 filter_selection_by_shape] Sample coordinates: lat=51.62980318364945, lon=-1.3588340694973142
-2025-07-21 12:31:03,470 INFO [map_utils.py:40 filter_selection_by_shape] Coordinate ranges: lat [49.766807, 51.654438]
-2025-07-21 12:31:03,471 INFO [map_utils.py:43 filter_selection_by_shape] Coordinate ranges: lon [-7.557207, -1.283116]
-2025-07-21 12:31:03,471 INFO [map_utils.py:48 filter_selection_by_shape] drawn_geojson keys: dict_keys(['type', 'features'])
-2025-07-21 12:31:03,471 INFO [map_utils.py:54 filter_selection_by_shape] Number of features: 1
-2025-07-21 12:31:03,471 INFO [map_utils.py:62 filter_selection_by_shape] Processing feature...
-2025-07-21 12:31:03,472 INFO [map_utils.py:63 filter_selection_by_shape] Feature type: <class 'dict'>
-2025-07-21 12:31:03,472 INFO [map_utils.py:70 filter_selection_by_shape] Geometry: {'type': 'Polygon', 'coordinates': [[[-1.3662046194076538, 51.631773631217264], [-1.3662046194076538, 51.633008957010155], [-1.3635921478271487, 51.633008957010155], [-1.3635921478271487, 51.631773631217264], [-1.3662046194076538, 51.631773631217264]]]}
-2025-07-21 12:31:03,472 INFO [map_utils.py:75 filter_selection_by_shape] Geometry type: Polygon
-2025-07-21 12:31:03,472 INFO [map_utils.py:76 filter_selection_by_shape] Coordinates length: 1
-2025-07-21 12:31:03,472 INFO [map_utils.py:79 filter_selection_by_shape] First coordinate: [[-1.3662046194076538, 51.631773631217264], [-1.3662046194076538, 51.633008957010155], [-1.3635921478271487, 51.633008957010155], [-1.3635921478271487, 51.631773631217264], [-1.3662046194076538, 51.631773631217264]]
-2025-07-21 12:31:03,473 INFO [map_utils.py:102 filter_by_geometry] filter_by_geometry called with geometry type: Polygon
-2025-07-21 12:31:03,473 INFO [map_utils.py:141 filter_by_geometry] Processing Polygon geometry
-2025-07-21 12:31:03,473 INFO [map_utils.py:144 filter_by_geometry] Polygon has 5 vertices
-2025-07-21 12:31:03,473 INFO [map_utils.py:145 filter_by_geometry] First vertex: [-1.3662046194076538, 51.631773631217264], Last vertex: [-1.3662046194076538, 51.631773631217264]
-2025-07-21 12:31:03,474 INFO [map_utils.py:151 filter_by_geometry] Created Shapely polygon: bounds=(-1.3662046194076538, 51.631773631217264, -1.3635921478271487, 51.633008957010155)
-2025-07-21 12:31:03,476 INFO [map_utils.py:184 filter_by_geometry] Polygon filter result: 13 boreholes
-2025-07-21 12:31:03,476 INFO [map_utils.py:189 filter_by_geometry] Selected borehole IDs: ['BH551', 'CPT551A', 'CPT551AA', 'CPT551A-A', 'CPT551B', 'CPT551BA', 'CPT551B-A', 'CPT551C', 'CPT551CA', 'CPT551C-A', 'TP409', 'TP410', 'TP410a']
-2025-07-21 12:31:03,476 INFO [map_utils.py:85 filter_selection_by_shape] Filtered result: 13 boreholes
-2025-07-21 12:31:03,477 INFO [map_utils.py:90 filter_selection_by_shape] Final borehole IDs: ['BH551', 'CPT551A', 'CPT551AA', 'CPT551A-A', 'CPT551B', 'CPT551BA', 'CPT551B-A', 'CPT551C', 'CPT551CA', 'CPT551C-A', 'TP409', 'TP410', 'TP410a']
-2025-07-21 12:31:03,477 INFO [callbacks_split.py:1017 handle_shape_drawing] filter_selection_by_shape returned: <class 'list'>
-2025-07-21 12:31:03,477 INFO [callbacks_split.py:1031 handle_shape_drawing] Got 13 LOCA_IDs directly from filter
-2025-07-21 12:31:03,478 INFO [callbacks_split.py:1038 handle_shape_drawing] Selected 13 boreholes: ['BH551', 'CPT551A', 'CPT551AA', 'CPT551A-A', 'CPT551B', 'CPT551BA', 'CPT551B-A', 'CPT551C', 'CPT551CA', 'CPT551C-A', 'TP409', 'TP410', 'TP410a']
-2025-07-21 12:31:03,479 INFO [callbacks_split.py:1305 calculate_pca_line] Calculating PCA line for 13 points
-2025-07-21 12:31:03,487 INFO [callbacks_split.py:1317 calculate_pca_line] PCA line length: 119.21, buffer: 119.21
-2025-07-21 12:31:03,488 INFO [callbacks_split.py:1323 calculate_pca_line] PCA line BNG: start(443917.59, 192706.81) to end(444219.20, 192898.98)
-2025-07-21 12:31:03,526 DEBUG [coordinate_service.py:168 transform_bng_to_wgs84] Transformed BNG to WGS84: 2 points
-2025-07-21 12:31:03,527 INFO [callbacks_split.py:1338 calculate_pca_line] PCA line WGS84: start(51.631468, -1.366865) to end(51.633172, -1.362484)
-2025-07-21 12:31:03,527 INFO [callbacks_split.py:1079 handle_shape_drawing] Created 1 line elements
-2025-07-21 12:31:03,527 INFO [callbacks_split.py:1087 handle_shape_drawing] About to update marker colors with 13 selected IDs
-2025-07-21 12:31:03,528 INFO [callbacks_split.py:1397 update_marker_colors] === UPDATE MARKER COLORS DEBUG ===
-2025-07-21 12:31:03,528 INFO [callbacks_split.py:1398 update_marker_colors] Selected IDs input: ['BH551', 'CPT551A', 'CPT551AA', 'CPT551A-A', 'CPT551B', 'CPT551BA', 'CPT551B-A', 'CPT551C', 'CPT551CA', 'CPT551C-A', 'TP409', 'TP410', 'TP410a']
-2025-07-21 12:31:03,528 INFO [callbacks_split.py:1399 update_marker_colors] Number of selected IDs: 13
-2025-07-21 12:31:03,531 INFO [callbacks_split.py:1407 update_marker_colors] Total boreholes in DataFrame: 94
-2025-07-21 12:31:03,531 INFO [callbacks_split.py:1423 update_marker_colors] Marker 0 (BH401): selected=False, color=blue
-2025-07-21 12:31:03,532 INFO [callbacks_split.py:1423 update_marker_colors] Marker 1 (BH401A): selected=False, color=blue
-2025-07-21 12:31:03,532 INFO [callbacks_split.py:1423 update_marker_colors] Marker 2 (BH403): selected=False, color=blue
-2025-07-21 12:31:03,533 INFO [callbacks_split.py:1423 update_marker_colors] Marker 3 (BH404): selected=False, color=blue
-2025-07-21 12:31:03,533 INFO [callbacks_split.py:1423 update_marker_colors] Marker 4 (BH405): selected=False, color=blue
-2025-07-21 12:31:03,545 INFO [callbacks_split.py:1491 update_marker_colors] Updated 94 markers: 13 green, 81 blue
-2025-07-21 12:31:03,545 INFO [callbacks_split.py:1494 update_marker_colors] === END UPDATE MARKER COLORS DEBUG ===
-2025-07-21 12:31:03,546 INFO [callbacks_split.py:1096 handle_shape_drawing] Marker update complete, returning 94 markers
-2025-07-21 12:31:03,546 INFO [callbacks_split.py:1144 handle_shape_drawing] Shape drawing complete - returning results
-2025-07-21 12:31:03,547 INFO [callbacks_split.py:1145 handle_shape_drawing] Line elements: 1, Markers: 94
-2025-07-21 12:31:03,547 INFO [callbacks_split.py:1148 handle_shape_drawing] 🧹 CLEARING OLD SHAPES: Replacing pca-line-group and selection-shapes with new content
-2025-07-21 12:31:03,547 INFO [callbacks_split.py:1156 handle_shape_drawing] 📋 Created selection shape visual for Polygon
-2025-07-21 12:31:04,110 INFO [callbacks_split.py:1524 handle_plot_generation] === PLOT GENERATION CALLBACK ===
-2025-07-21 12:31:04,111 INFO [callbacks_split.py:1525 handle_plot_generation] Triggered by: [{'prop_id': 'subselection-checkbox-grid.value', 'value': ['BH551', 'CPT551A', 'CPT551AA', 'CPT551A-A', 'CPT551B', 'CPT551BA', 'CPT551B-A', 'CPT551C', 'CPT551CA', 'CPT551C-A', 'TP409', 'TP410', 'TP410a']}]
-2025-07-21 12:31:04,349 INFO [section_plot_professional.py:248 plot_professional_borehole_sections] Creating professional section plot with 154 geological records
-2025-07-21 12:31:04,873 INFO [callbacks_split.py:1718 update_search_dropdown] === UPDATING SEARCH DROPDOWN ===
-2025-07-21 12:31:04,878 INFO [callbacks_split.py:2207 marker_click_handler] === MARKER CLICK CALLBACK ===
-2025-07-21 12:31:04,884 INFO [callbacks_split.py:2208 marker_click_handler] Triggered by: [{'prop_id': '{"index":0,"type":"borehole-marker"}.n_clicks', 'value': 0}, {'prop_id': '{"index":1,"type":"borehole-marker"}.n_clicks', 'value': 0}, {'prop_id': '{"index":2,"type":"borehole-marker"}.n_clicks', 'value': 0}, {'prop_id': '{"index":3,"type":"borehole-marker"}.n_clicks', 'value': 0}, {'prop_id': '{"index":4,"type":"borehole-marker"}.n_clicks', 'value': 0}, {'prop_id': '{"index":5,"type":"borehole-marker"}.n_clicks', 'value': 0}, {'prop_id': '{"index":6,"type":"borehole-marker"}.n_clicks', 'value': 0}, {'prop_id': '{"index":7,"type":"borehole-marker"}.n_clicks', 'value': 0}, {'prop_id': '{"index":8,"type":"borehole-marker"}.n_clicks', 'value': 0}, {'prop_id': '{"index":9,"type":"borehole-marker"}.n_clicks', 'value': 0}, {'prop_id': '{"index":10,"type":"borehole-marker"}.n_clicks', 'value': 0}, {'prop_id': '{"index":11,"type":"borehole-marker"}.n_clicks', 'value': 0}, {'prop_id': '{"index":12,"type":"borehole-marker"}.n_clicks', 'value': 0}, {'prop_id': '{"index":13,"type":"borehole-marker"}.n_clicks', 'value': 0}, {'prop_id': '{"index":14,"type":"borehole-marker"}.n_clicks', 'value': 0}, {'prop_id': '{"index":15,"type":"borehole-marker"}.n_clicks', 'value': 0}, {'prop_id': '{"index":16,"type":"borehole-marker"}.n_clicks', 'value': 0}, {'prop_id': '{"index":17,"type":"borehole-marker"}.n_clicks', 'value': 0}, {'prop_id': '{"index":18,"type":"borehole-marker"}.n_clicks', 'value': 0}, {'prop_id': '{"index":19,"type":"borehole-marker"}.n_clicks', 'value': 0}, {'prop_id': '{"index":20,"type":"borehole-marker"}.n_clicks', 'value': 0}, {'prop_id': '{"index":21,"type":"borehole-marker"}.n_clicks', 'value': 0}, {'prop_id': '{"index":22,"type":"borehole-marker"}.n_clicks', 'value': 0}, {'prop_id': '{"index":23,"type":"borehole-marker"}.n_clicks', 'value': 0}, {'prop_id': '{"index":24,"type":"borehole-marker"}.n_clicks', 'value': 0}, {'prop_id': '{"index":25,"type":"borehole-marker"}.n_clicks', 'value': 0}, {'prop_id': '{"index":26,"type":"borehole-marker"}.n_clicks', 'value': 0}, {'prop_id': '{"index":27,"type":"borehole-marker"}.n_clicks', 'value': 0}, {'prop_id': '{"index":28,"type":"borehole-marker"}.n_clicks', 'value': 0}, {'prop_id': '{"index":29,"type":"borehole-marker"}.n_clicks', 'value': 0}, {'prop_id': '{"index":30,"type":"borehole-marker"}.n_clicks', 'value': 0}, {'prop_id': '{"index":31,"type":"borehole-marker"}.n_clicks', 'value': 0}, {'prop_id': '{"index":32,"type":"borehole-marker"}.n_clicks', 'value': 0}, {'prop_id': '{"index":33,"type":"borehole-marker"}.n_clicks', 'value': 0}, {'prop_id': '{"index":34,"type":"borehole-marker"}.n_clicks', 'value': 0}, {'prop_id': '{"index":35,"type":"borehole-marker"}.n_clicks', 'value': 0}, {'prop_id': '{"index":36,"type":"borehole-marker"}.n_clicks', 'value': 0}, {'prop_id': '{"index":37,"type":"borehole-marker"}.n_clicks', 'value': 0}, {'prop_id': '{"index":38,"type":"borehole-marker"}.n_clicks', 'value': 0}, {'prop_id': '{"index":39,"type":"borehole-marker"}.n_clicks', 'value': 0}, {'prop_id': '{"index":40,"type":"borehole-marker"}.n_clicks', 'value': 0}, {'prop_id': '{"index":41,"type":"borehole-marker"}.n_clicks', 'value': 0}, {'prop_id': '{"index":42,"type":"borehole-marker"}.n_clicks', 'value': 0}, {'prop_id': '{"index":43,"type":"borehole-marker"}.n_clicks', 'value': 0}, {'prop_id': '{"index":44,"type":"borehole-marker"}.n_clicks', 'value': 0}, {'prop_id': '{"index":45,"type":"borehole-marker"}.n_clicks', 'value': 0}, {'prop_id': '{"index":46,"type":"borehole-marker"}.n_clicks', 'value': 0}, {'prop_id': '{"index":47,"type":"borehole-marker"}.n_clicks', 'value': 0}, {'prop_id': '{"index":48,"type":"borehole-marker"}.n_clicks', 'value': 0}, {'prop_id': '{"index":49,"type":"borehole-marker"}.n_clicks', 'value': 0}, {'prop_id': '{"index":50,"type":"borehole-marker"}.n_clicks', 'value': 0}, {'prop_id': '{"index":51,"type":"borehole-marker"}.n_clicks', 'value': 0}, {'prop_id': '{"index":52,"type":"borehole-marker"}.n_clicks', 'value': 0}, {'prop_id': '{"index":53,"type":"borehole-marker"}.n_clicks', 'value': 0}, {'prop_id': '{"index":54,"type":"borehole-marker"}.n_clicks', 'value': 0}, {'prop_id': '{"index":55,"type":"borehole-marker"}.n_clicks', 'value': 0}, {'prop_id': '{"index":56,"type":"borehole-marker"}.n_clicks', 'value': 0}, {'prop_id': '{"index":57,"type":"borehole-marker"}.n_clicks', 'value': 0}, {'prop_id': '{"index":58,"type":"borehole-marker"}.n_clicks', 'value': 0}, {'prop_id': '{"index":59,"type":"borehole-marker"}.n_clicks', 'value': 0}, {'prop_id': '{"index":60,"type":"borehole-marker"}.n_clicks', 'value': 0}, {'prop_id': '{"index":61,"type":"borehole-marker"}.n_clicks', 'value': 0}, {'prop_id': '{"index":62,"type":"borehole-marker"}.n_clicks', 'value': 0}, {'prop_id': '{"index":63,"type":"borehole-marker"}.n_clicks', 'value': 0}, {'prop_id': '{"index":64,"type":"borehole-marker"}.n_clicks', 'value': 0}, {'prop_id': '{"index":65,"type":"borehole-marker"}.n_clicks', 'value': 0}, {'prop_id': '{"index":66,"type":"borehole-marker"}.n_clicks', 'value': 0}, {'prop_id': '{"index":67,"type":"borehole-marker"}.n_clicks', 'value': 0}, {'prop_id': '{"index":68,"type":"borehole-marker"}.n_clicks', 'value': 0}, {'prop_id': '{"index":69,"type":"borehole-marker"}.n_clicks', 'value': 0}, {'prop_id': '{"index":70,"type":"borehole-marker"}.n_clicks', 'value': 0}, {'prop_id': '{"index":71,"type":"borehole-marker"}.n_clicks', 'value': 0}, {'prop_id': '{"index":72,"type":"borehole-marker"}.n_clicks', 'value': 0}, {'prop_id': '{"index":73,"type":"borehole-marker"}.n_clicks', 'value': 0}, {'prop_id': '{"index":74,"type":"borehole-marker"}.n_clicks', 'value': 0}, {'prop_id': '{"index":75,"type":"borehole-marker"}.n_clicks', 'value': 0}, {'prop_id': '{"index":76,"type":"borehole-marker"}.n_clicks', 'value': 0}, {'prop_id': '{"index":77,"type":"borehole-marker"}.n_clicks', 'value': 0}, {'prop_id': '{"index":78,"type":"borehole-marker"}.n_clicks', 'value': 0}, {'prop_id': '{"index":79,"type":"borehole-marker"}.n_clicks', 'value': 0}, {'prop_id': '{"index":80,"type":"borehole-marker"}.n_clicks', 'value': 0}, {'prop_id': '{"index":81,"type":"borehole-marker"}.n_clicks', 'value': 0}, {'prop_id': '{"index":82,"type":"borehole-marker"}.n_clicks', 'value': 0}, {'prop_id': '{"index":83,"type":"borehole-marker"}.n_clicks', 'value': 0}, {'prop_id': '{"index":84,"type":"borehole-marker"}.n_clicks', 'value': 0}, {'prop_id': '{"index":85,"type":"borehole-marker"}.n_clicks', 'value': 0}, {'prop_id': '{"index":86,"type":"borehole-marker"}.n_clicks', 'value': 0}, {'prop_id': '{"index":87,"type":"borehole-marker"}.n_clicks', 'value': 0}, {'prop_id': '{"index":88,"type":"borehole-marker"}.n_clicks', 'value': 0}, {'prop_id': '{"index":89,"type":"borehole-marker"}.n_clicks', 'value': 0}, {'prop_id': '{"index":90,"type":"borehole-marker"}.n_clicks', 'value': 0}, {'prop_id': '{"index":91,"type":"borehole-marker"}.n_clicks', 'value': 0}, {'prop_id': '{"index":92,"type":"borehole-marker"}.n_clicks', 'value': 0}, {'prop_id': '{"index":93,"type":"borehole-marker"}.n_clicks', 'value': 0}]
-2025-07-21 12:31:04,891 INFO [callbacks_split.py:1775 update_search_dropdown] Created 94 search options
-2025-07-21 12:31:04,892 INFO [callbacks_split.py:2209 marker_click_handler] Show labels checkbox value: ['show_labels']
-2025-07-21 12:31:04,897 INFO [callbacks_split.py:2215 marker_click_handler] No marker clicks detected
-2025-07-21 12:31:06,352 INFO [section_plot_professional.py:782 plot_professional_borehole_sections] Successfully created base64-encoded section plot
+2025-07-21 15:59:54,250 INFO [app.py:40 <module>] App starting at 2025-07-21 15:59:54.250315
+2025-07-21 15:59:54,251 INFO [app.py:41 <module>] Dash version: 3.1.1
+2025-07-21 15:59:54,251 INFO [app.py:42 <module>] Dash-leaflet version: 1.1.3
+2025-07-21 15:59:54,251 INFO [app.py:43 <module>] ✓ Matplotlib logging optimized for performance
+2025-07-21 15:59:54,296 INFO [app.py:49 <module>] Creating app layout...
+2025-07-21 15:59:54,345 INFO [app.py:345 <module>] App layout created successfully
+2025-07-21 15:59:54,345 INFO [app.py:365 <module>] === LAYOUT COMPONENT IDs ===
+2025-07-21 15:59:54,345 INFO [app.py:353 log_layout_ids] Found component ID: font-cache-warmed
+2025-07-21 15:59:54,345 INFO [app.py:353 log_layout_ids] Found component ID: logo-container
+2025-07-21 15:59:54,345 INFO [app.py:353 log_layout_ids] Found component ID: logo-img
+2025-07-21 15:59:54,345 INFO [app.py:353 log_layout_ids] Found component ID: light-theme-btn
+2025-07-21 15:59:54,345 INFO [app.py:353 log_layout_ids] Found component ID: dark-theme-btn
+2025-07-21 15:59:54,345 INFO [app.py:353 log_layout_ids] Found component ID: upload-ags
+2025-07-21 15:59:54,345 INFO [app.py:353 log_layout_ids] Found component ID: output-upload
+2025-07-21 15:59:54,354 INFO [app.py:353 log_layout_ids] Found component ID: borehole-search-section
+2025-07-21 15:59:54,354 INFO [app.py:353 log_layout_ids] Found component ID: borehole-search-dropdown
+2025-07-21 15:59:54,354 INFO [app.py:353 log_layout_ids] Found component ID: search-go-btn
+2025-07-21 15:59:54,354 INFO [app.py:353 log_layout_ids] Found component ID: search-feedback
+2025-07-21 15:59:54,354 INFO [app.py:353 log_layout_ids] Found component ID: borehole-map
+2025-07-21 15:59:54,354 INFO [app.py:353 log_layout_ids] Found component ID: borehole-markers
+2025-07-21 15:59:54,354 INFO [app.py:353 log_layout_ids] Found component ID: selection-shapes
+2025-07-21 15:59:54,354 INFO [app.py:353 log_layout_ids] Found component ID: pca-line-group
+2025-07-21 15:59:54,354 INFO [app.py:353 log_layout_ids] Found component ID: draw-feature-group
+2025-07-21 15:59:54,354 INFO [app.py:353 log_layout_ids] Found component ID: draw-control
+2025-07-21 15:59:54,354 INFO [app.py:353 log_layout_ids] Found component ID: buffer-controls
+2025-07-21 15:59:54,354 INFO [app.py:353 log_layout_ids] Found component ID: buffer-input
+2025-07-21 15:59:54,354 INFO [app.py:353 log_layout_ids] Found component ID: update-buffer-btn
+2025-07-21 15:59:54,354 INFO [app.py:353 log_layout_ids] Found component ID: selected-borehole-info
+2025-07-21 15:59:54,354 INFO [app.py:353 log_layout_ids] Found component ID: section-plot-output
+2025-07-21 15:59:54,354 INFO [app.py:353 log_layout_ids] Found component ID: log-plot-output
+2025-07-21 15:59:54,354 INFO [app.py:353 log_layout_ids] Found component ID: show-labels-checkbox
+2025-07-21 15:59:54,354 INFO [app.py:353 log_layout_ids] Found component ID: download-section-btn
+2025-07-21 15:59:54,354 INFO [app.py:353 log_layout_ids] Found component ID: download-section-plot
+2025-07-21 15:59:54,354 INFO [app.py:353 log_layout_ids] Found component ID: ui-feedback
+2025-07-21 15:59:54,354 INFO [app.py:353 log_layout_ids] Found component ID: subselection-checkbox-grid-container
+2025-07-21 15:59:54,354 INFO [app.py:353 log_layout_ids] Found component ID: subselection-checkbox-grid
+2025-07-21 15:59:54,354 INFO [app.py:353 log_layout_ids] Found component ID: upload-data-store
+2025-07-21 15:59:54,354 INFO [app.py:353 log_layout_ids] Found component ID: borehole-data-store
+2025-07-21 15:59:54,354 INFO [app.py:353 log_layout_ids] Found component ID: search-selected-borehole
+2025-07-21 15:59:54,354 INFO [app.py:367 <module>] === END LAYOUT IDs ===
+2025-07-21 15:59:54,354 INFO [app.py:448 <module>] Registering split callbacks...
+2025-07-21 15:59:54,359 INFO [callbacks_split.py:2095 register_callbacks] ✅ All split callbacks registered successfully!
+2025-07-21 15:59:54,359 INFO [app.py:450 <module>] ✅ All callbacks registered successfully!
+2025-07-21 15:59:54,360 INFO [app.py:554 <module>] Opening browser and starting Dash server
+2025-07-21 15:59:54,987 INFO [app.py:462 store_upload_data] No upload data to store
+2025-07-21 15:59:55,065 INFO [callbacks_split.py:387 handle_file_upload] === FILE UPLOAD CALLBACK ===
+2025-07-21 15:59:55,066 INFO [callbacks_split.py:394 handle_file_upload] No file uploaded yet
+2025-07-21 15:59:55,085 INFO [callbacks_split.py:802 handle_map_interactions] === MAP INTERACTION CALLBACK ===
+2025-07-21 15:59:55,086 INFO [callbacks_split.py:806 handle_map_interactions] Triggered by: draw-control.geojson
+2025-07-21 15:59:55,087 WARNING [callbacks_split.py:809 handle_map_interactions] No stored borehole data available
+2025-07-21 15:59:55,101 INFO [callbacks_split.py:1718 update_search_dropdown] === UPDATING SEARCH DROPDOWN ===
+2025-07-21 15:59:55,101 INFO [callbacks_split.py:1721 update_search_dropdown] No borehole data available for search
+2025-07-21 15:59:55,127 INFO [callbacks_split.py:1718 update_search_dropdown] === UPDATING SEARCH DROPDOWN ===
+2025-07-21 15:59:55,128 INFO [callbacks_split.py:1721 update_search_dropdown] No borehole data available for search
+2025-07-21 16:00:01,653 INFO [app.py:462 store_upload_data] No upload data to store
+2025-07-21 16:00:01,664 INFO [callbacks_split.py:387 handle_file_upload] === FILE UPLOAD CALLBACK ===
+2025-07-21 16:00:01,664 INFO [callbacks_split.py:394 handle_file_upload] No file uploaded yet
+2025-07-21 16:00:01,670 INFO [app.py:462 store_upload_data] No upload data to store
+2025-07-21 16:00:01,680 INFO [callbacks_split.py:1718 update_search_dropdown] === UPDATING SEARCH DROPDOWN ===
+2025-07-21 16:00:01,681 INFO [callbacks_split.py:1721 update_search_dropdown] No borehole data available for search
+2025-07-21 16:00:01,701 INFO [callbacks_split.py:387 handle_file_upload] === FILE UPLOAD CALLBACK ===
+2025-07-21 16:00:01,701 INFO [callbacks_split.py:394 handle_file_upload] No file uploaded yet
+2025-07-21 16:00:01,740 INFO [callbacks_split.py:1718 update_search_dropdown] === UPDATING SEARCH DROPDOWN ===
+2025-07-21 16:00:01,740 INFO [callbacks_split.py:1721 update_search_dropdown] No borehole data available for search
+2025-07-21 16:00:02,462 INFO [callbacks_split.py:802 handle_map_interactions] === MAP INTERACTION CALLBACK ===
+2025-07-21 16:00:02,475 INFO [callbacks_split.py:806 handle_map_interactions] Triggered by: draw-control.geojson
+2025-07-21 16:00:02,479 WARNING [callbacks_split.py:809 handle_map_interactions] No stored borehole data available
+2025-07-21 16:00:02,481 INFO [callbacks_split.py:802 handle_map_interactions] === MAP INTERACTION CALLBACK ===
+2025-07-21 16:00:02,484 INFO [callbacks_split.py:806 handle_map_interactions] Triggered by: draw-control.geojson
+2025-07-21 16:00:02,485 WARNING [callbacks_split.py:809 handle_map_interactions] No stored borehole data available
+2025-07-21 16:00:02,492 INFO [callbacks_split.py:1718 update_search_dropdown] === UPDATING SEARCH DROPDOWN ===
+2025-07-21 16:00:02,493 INFO [callbacks_split.py:1721 update_search_dropdown] No borehole data available for search
+2025-07-21 16:00:02,502 INFO [callbacks_split.py:1718 update_search_dropdown] === UPDATING SEARCH DROPDOWN ===
+2025-07-21 16:00:02,503 INFO [callbacks_split.py:1721 update_search_dropdown] No borehole data available for search

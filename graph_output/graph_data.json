@@ -1,0 +1,2945 @@
+{
+  "nodes": [
+    {
+      "id": "root__analysis_current_state",
+      "name": "analysis_current_state",
+      "stem": "analysis_current_state",
+      "folder": "root",
+      "color": "#E3F2FD",
+      "file_path": "analysis_current_state.py",
+      "imports_count": 0,
+      "index": 0
+    },
+    {
+      "id": "root__analyze_debug_log",
+      "name": "analyze_debug_log",
+      "stem": "analyze_debug_log",
+      "folder": "root",
+      "color": "#E3F2FD",
+      "file_path": "analyze_debug_log.py",
+      "imports_count": 0,
+      "index": 1
+    },
+    {
+      "id": "root__app",
+      "name": "app",
+      "stem": "app",
+      "folder": "root",
+      "color": "#E3F2FD",
+      "file_path": "app.py",
+      "imports_count": 3,
+      "index": 2
+    },
+    {
+      "id": "root__app_constants",
+      "name": "app_constants",
+      "stem": "app_constants",
+      "folder": "root",
+      "color": "#E3F2FD",
+      "file_path": "app_constants.py",
+      "imports_count": 0,
+      "index": 3
+    },
+    {
+      "id": "root__app_factory",
+      "name": "app_factory",
+      "stem": "app_factory",
+      "folder": "root",
+      "color": "#E3F2FD",
+      "file_path": "app_factory.py",
+      "imports_count": 0,
+      "index": 4
+    },
+    {
+      "id": "root__borehole_log_professional",
+      "name": "borehole_log_professional",
+      "stem": "borehole_log_professional",
+      "folder": "root",
+      "color": "#E3F2FD",
+      "file_path": "borehole_log_professional.py",
+      "imports_count": 2,
+      "index": 5
+    },
+    {
+      "id": "root__callbacks_split",
+      "name": "callbacks_split",
+      "stem": "callbacks_split",
+      "folder": "root",
+      "color": "#E3F2FD",
+      "file_path": "callbacks_split.py",
+      "imports_count": 11,
+      "index": 6
+    },
+    {
+      "id": "root__comprehensive_optimization_validation",
+      "name": "comprehensive_optimization_validation",
+      "stem": "comprehensive_optimization_validation",
+      "folder": "root",
+      "color": "#E3F2FD",
+      "file_path": "comprehensive_optimization_validation.py",
+      "imports_count": 4,
+      "index": 7
+    },
+    {
+      "id": "root__config",
+      "name": "config",
+      "stem": "config",
+      "folder": "root",
+      "color": "#E3F2FD",
+      "file_path": "config.py",
+      "imports_count": 0,
+      "index": 8
+    },
+    {
+      "id": "root__coordinate_service",
+      "name": "coordinate_service",
+      "stem": "coordinate_service",
+      "folder": "root",
+      "color": "#E3F2FD",
+      "file_path": "coordinate_service.py",
+      "imports_count": 0,
+      "index": 9
+    },
+    {
+      "id": "root__dataframe_optimizer",
+      "name": "dataframe_optimizer",
+      "stem": "dataframe_optimizer",
+      "folder": "root",
+      "color": "#E3F2FD",
+      "file_path": "dataframe_optimizer.py",
+      "imports_count": 0,
+      "index": 10
+    },
+    {
+      "id": "root__data_loader",
+      "name": "data_loader",
+      "stem": "data_loader",
+      "folder": "root",
+      "color": "#E3F2FD",
+      "file_path": "data_loader.py",
+      "imports_count": 0,
+      "index": 11
+    },
+    {
+      "id": "root__debug_module",
+      "name": "debug_module",
+      "stem": "debug_module",
+      "folder": "root",
+      "color": "#E3F2FD",
+      "file_path": "debug_module.py",
+      "imports_count": 1,
+      "index": 12
+    },
+    {
+      "id": "root__debug_offset_layout",
+      "name": "debug_offset_layout",
+      "stem": "debug_offset_layout",
+      "folder": "root",
+      "color": "#E3F2FD",
+      "file_path": "debug_offset_layout.py",
+      "imports_count": 1,
+      "index": 13
+    },
+    {
+      "id": "root__demo_html_graph",
+      "name": "demo_html_graph",
+      "stem": "demo_html_graph",
+      "folder": "root",
+      "color": "#E3F2FD",
+      "file_path": "demo_html_graph.py",
+      "imports_count": 0,
+      "index": 14
+    },
+    {
+      "id": "root__enhanced_dependency_graph",
+      "name": "enhanced_dependency_graph",
+      "stem": "enhanced_dependency_graph",
+      "folder": "root",
+      "color": "#E3F2FD",
+      "file_path": "enhanced_dependency_graph.py",
+      "imports_count": 0,
+      "index": 15
+    },
+    {
+      "id": "root__enhanced_error_handling",
+      "name": "enhanced_error_handling",
+      "stem": "enhanced_error_handling",
+      "folder": "root",
+      "color": "#E3F2FD",
+      "file_path": "enhanced_error_handling.py",
+      "imports_count": 2,
+      "index": 16
+    },
+    {
+      "id": "root__error_handling",
+      "name": "error_handling",
+      "stem": "error_handling",
+      "folder": "root",
+      "color": "#E3F2FD",
+      "file_path": "error_handling.py",
+      "imports_count": 0,
+      "index": 17
+    },
+    {
+      "id": "root__error_recovery",
+      "name": "error_recovery",
+      "stem": "error_recovery",
+      "folder": "root",
+      "color": "#E3F2FD",
+      "file_path": "error_recovery.py",
+      "imports_count": 1,
+      "index": 18
+    },
+    {
+      "id": "root__geology_code_utils",
+      "name": "geology_code_utils",
+      "stem": "geology_code_utils",
+      "folder": "root",
+      "color": "#E3F2FD",
+      "file_path": "geology_code_utils.py",
+      "imports_count": 0,
+      "index": 19
+    },
+    {
+      "id": "root__health_check",
+      "name": "health_check",
+      "stem": "health_check",
+      "folder": "root",
+      "color": "#E3F2FD",
+      "file_path": "health_check.py",
+      "imports_count": 3,
+      "index": 20
+    },
+    {
+      "id": "root__implementation_planning",
+      "name": "implementation_planning",
+      "stem": "implementation_planning",
+      "folder": "root",
+      "color": "#E3F2FD",
+      "file_path": "implementation_planning.py",
+      "imports_count": 0,
+      "index": 21
+    },
+    {
+      "id": "root__interactive_validation",
+      "name": "interactive_validation",
+      "stem": "interactive_validation",
+      "folder": "root",
+      "color": "#E3F2FD",
+      "file_path": "interactive_validation.py",
+      "imports_count": 0,
+      "index": 22
+    },
+    {
+      "id": "root__lazy_marker_manager",
+      "name": "lazy_marker_manager",
+      "stem": "lazy_marker_manager",
+      "folder": "root",
+      "color": "#E3F2FD",
+      "file_path": "lazy_marker_manager.py",
+      "imports_count": 0,
+      "index": 23
+    },
+    {
+      "id": "root__loading_indicators",
+      "name": "loading_indicators",
+      "stem": "loading_indicators",
+      "folder": "root",
+      "color": "#E3F2FD",
+      "file_path": "loading_indicators.py",
+      "imports_count": 1,
+      "index": 24
+    },
+    {
+      "id": "root__map_utils",
+      "name": "map_utils",
+      "stem": "map_utils",
+      "folder": "root",
+      "color": "#E3F2FD",
+      "file_path": "map_utils.py",
+      "imports_count": 0,
+      "index": 25
+    },
+    {
+      "id": "root__memory_manager",
+      "name": "memory_manager",
+      "stem": "memory_manager",
+      "folder": "root",
+      "color": "#E3F2FD",
+      "file_path": "memory_manager.py",
+      "imports_count": 2,
+      "index": 26
+    },
+    {
+      "id": "root__migration_validation",
+      "name": "migration_validation",
+      "stem": "migration_validation",
+      "folder": "root",
+      "color": "#E3F2FD",
+      "file_path": "migration_validation.py",
+      "imports_count": 1,
+      "index": 27
+    },
+    {
+      "id": "root__options_exploration",
+      "name": "options_exploration",
+      "stem": "options_exploration",
+      "folder": "root",
+      "color": "#E3F2FD",
+      "file_path": "options_exploration.py",
+      "imports_count": 0,
+      "index": 28
+    },
+    {
+      "id": "root__polyline_utils",
+      "name": "polyline_utils",
+      "stem": "polyline_utils",
+      "folder": "root",
+      "color": "#E3F2FD",
+      "file_path": "polyline_utils.py",
+      "imports_count": 1,
+      "index": 29
+    },
+    {
+      "id": "root__section_plot_professional",
+      "name": "section_plot_professional",
+      "stem": "section_plot_professional",
+      "folder": "root",
+      "color": "#E3F2FD",
+      "file_path": "section_plot_professional.py",
+      "imports_count": 1,
+      "index": 30
+    },
+    {
+      "id": "root__utils",
+      "name": "utils",
+      "stem": "utils",
+      "folder": "root",
+      "color": "#E3F2FD",
+      "file_path": "utils.py",
+      "imports_count": 0,
+      "index": 31
+    },
+    {
+      "id": "root__validate_features",
+      "name": "validate_features",
+      "stem": "validate_features",
+      "folder": "root",
+      "color": "#E3F2FD",
+      "file_path": "validate_features.py",
+      "imports_count": 0,
+      "index": 32
+    },
+    {
+      "id": "archive__app_backup",
+      "name": "app_backup (archive)",
+      "stem": "app_backup",
+      "folder": "archive",
+      "color": "#FFEBEE",
+      "file_path": "archive\\app_backup.py",
+      "imports_count": 0,
+      "index": 33
+    },
+    {
+      "id": "archive__app_clean",
+      "name": "app_clean (archive)",
+      "stem": "app_clean",
+      "folder": "archive",
+      "color": "#FFEBEE",
+      "file_path": "archive\\app_clean.py",
+      "imports_count": 2,
+      "index": 34
+    },
+    {
+      "id": "archive__app_debug_network",
+      "name": "app_debug_network (archive)",
+      "stem": "app_debug_network",
+      "folder": "archive",
+      "color": "#FFEBEE",
+      "file_path": "archive\\app_debug_network.py",
+      "imports_count": 4,
+      "index": 35
+    },
+    {
+      "id": "archive__app_fixed",
+      "name": "app_fixed (archive)",
+      "stem": "app_fixed",
+      "folder": "archive",
+      "color": "#FFEBEE",
+      "file_path": "archive\\app_fixed.py",
+      "imports_count": 4,
+      "index": 36
+    },
+    {
+      "id": "archive__app_megacallback",
+      "name": "app_megacallback (archive)",
+      "stem": "app_megacallback",
+      "folder": "archive",
+      "color": "#FFEBEE",
+      "file_path": "archive\\app_megacallback.py",
+      "imports_count": 5,
+      "index": 37
+    },
+    {
+      "id": "archive__app_render",
+      "name": "app_render (archive)",
+      "stem": "app_render",
+      "folder": "archive",
+      "color": "#FFEBEE",
+      "file_path": "archive\\app_render.py",
+      "imports_count": 4,
+      "index": 38
+    },
+    {
+      "id": "archive__app_with_checkboxes",
+      "name": "app_with_checkboxes (archive)",
+      "stem": "app_with_checkboxes",
+      "folder": "archive",
+      "color": "#FFEBEE",
+      "file_path": "archive\\app_with_checkboxes.py",
+      "imports_count": 4,
+      "index": 39
+    },
+    {
+      "id": "archive__borehole_log",
+      "name": "borehole_log (archive)",
+      "stem": "borehole_log",
+      "folder": "archive",
+      "color": "#FFEBEE",
+      "file_path": "archive\\borehole_log.py",
+      "imports_count": 2,
+      "index": 40
+    },
+    {
+      "id": "archive__borehole_log_professional_clean",
+      "name": "borehole_log_professional_clean (archive)",
+      "stem": "borehole_log_professional_clean",
+      "folder": "archive",
+      "color": "#FFEBEE",
+      "file_path": "archive\\borehole_log_professional_clean.py",
+      "imports_count": 2,
+      "index": 41
+    },
+    {
+      "id": "archive__borehole_log_professional_dummy3",
+      "name": "borehole_log_professional_dummy3 (archive)",
+      "stem": "borehole_log_professional_dummy3",
+      "folder": "archive",
+      "color": "#FFEBEE",
+      "file_path": "archive\\borehole_log_professional_dummy3.py",
+      "imports_count": 0,
+      "index": 42
+    },
+    {
+      "id": "archive__borehole_log_professional_old",
+      "name": "borehole_log_professional_old (archive)",
+      "stem": "borehole_log_professional_old",
+      "folder": "archive",
+      "color": "#FFEBEE",
+      "file_path": "archive\\borehole_log_professional_old.py",
+      "imports_count": 2,
+      "index": 43
+    },
+    {
+      "id": "archive__check_center_callbacks",
+      "name": "check_center_callbacks (archive)",
+      "stem": "check_center_callbacks",
+      "folder": "archive",
+      "color": "#FFEBEE",
+      "file_path": "archive\\check_center_callbacks.py",
+      "imports_count": 3,
+      "index": 44
+    },
+    {
+      "id": "archive__example_professional_borehole_log",
+      "name": "example_professional_borehole_log (archive)",
+      "stem": "example_professional_borehole_log",
+      "folder": "archive",
+      "color": "#FFEBEE",
+      "file_path": "archive\\example_professional_borehole_log.py",
+      "imports_count": 1,
+      "index": 45
+    },
+    {
+      "id": "archive__find_center_callbacks",
+      "name": "find_center_callbacks (archive)",
+      "stem": "find_center_callbacks",
+      "folder": "archive",
+      "color": "#FFEBEE",
+      "file_path": "archive\\find_center_callbacks.py",
+      "imports_count": 3,
+      "index": 46
+    },
+    {
+      "id": "archive__run_debug",
+      "name": "run_debug (archive)",
+      "stem": "run_debug",
+      "folder": "archive",
+      "color": "#FFEBEE",
+      "file_path": "archive\\run_debug.py",
+      "imports_count": 0,
+      "index": 47
+    },
+    {
+      "id": "archive__section_plot",
+      "name": "section_plot (archive)",
+      "stem": "section_plot",
+      "folder": "archive",
+      "color": "#FFEBEE",
+      "file_path": "archive\\section_plot.py",
+      "imports_count": 1,
+      "index": 48
+    },
+    {
+      "id": "callbacks__base",
+      "name": "base (callbacks)",
+      "stem": "base",
+      "folder": "callbacks",
+      "color": "#E8F5E8",
+      "file_path": "callbacks\\base.py",
+      "imports_count": 0,
+      "index": 49
+    },
+    {
+      "id": "callbacks__file_upload",
+      "name": "file_upload (callbacks)",
+      "stem": "file_upload",
+      "folder": "callbacks",
+      "color": "#E8F5E8",
+      "file_path": "callbacks\\file_upload.py",
+      "imports_count": 6,
+      "index": 50
+    },
+    {
+      "id": "callbacks__map_interactions",
+      "name": "map_interactions (callbacks)",
+      "stem": "map_interactions",
+      "folder": "callbacks",
+      "color": "#E8F5E8",
+      "file_path": "callbacks\\map_interactions.py",
+      "imports_count": 8,
+      "index": 51
+    },
+    {
+      "id": "callbacks__marker_handling",
+      "name": "marker_handling (callbacks)",
+      "stem": "marker_handling",
+      "folder": "callbacks",
+      "color": "#E8F5E8",
+      "file_path": "callbacks\\marker_handling.py",
+      "imports_count": 4,
+      "index": 52
+    },
+    {
+      "id": "callbacks__plot_generation",
+      "name": "plot_generation (callbacks)",
+      "stem": "plot_generation",
+      "folder": "callbacks",
+      "color": "#E8F5E8",
+      "file_path": "callbacks\\plot_generation.py",
+      "imports_count": 6,
+      "index": 53
+    },
+    {
+      "id": "callbacks__search_functionality",
+      "name": "search_functionality (callbacks)",
+      "stem": "search_functionality",
+      "folder": "callbacks",
+      "color": "#E8F5E8",
+      "file_path": "callbacks\\search_functionality.py",
+      "imports_count": 5,
+      "index": 54
+    },
+    {
+      "id": "callbacks____init__",
+      "name": "__init__ (callbacks)",
+      "stem": "__init__",
+      "folder": "callbacks",
+      "color": "#E8F5E8",
+      "file_path": "callbacks\\__init__.py",
+      "imports_count": 6,
+      "index": 55
+    },
+    {
+      "id": "flowchart_visualization__analyze_codebase",
+      "name": "analyze_codebase (flowchart_visualization)",
+      "stem": "analyze_codebase",
+      "folder": "flowchart_visualization",
+      "color": "#E0F2F1",
+      "file_path": "flowchart_visualization\\analyze_codebase.py",
+      "imports_count": 0,
+      "index": 56
+    },
+    {
+      "id": "flowchart_visualization__enhanced_server",
+      "name": "enhanced_server (flowchart_visualization)",
+      "stem": "enhanced_server",
+      "folder": "flowchart_visualization",
+      "color": "#E0F2F1",
+      "file_path": "flowchart_visualization\\enhanced_server.py",
+      "imports_count": 0,
+      "index": 57
+    },
+    {
+      "id": "flowchart_visualization__flowchart_server",
+      "name": "flowchart_server (flowchart_visualization)",
+      "stem": "flowchart_server",
+      "folder": "flowchart_visualization",
+      "color": "#E0F2F1",
+      "file_path": "flowchart_visualization\\flowchart_server.py",
+      "imports_count": 0,
+      "index": 58
+    },
+    {
+      "id": "flowchart_visualization__generate_flowchart_data",
+      "name": "generate_flowchart_data (flowchart_visualization)",
+      "stem": "generate_flowchart_data",
+      "folder": "flowchart_visualization",
+      "color": "#E0F2F1",
+      "file_path": "flowchart_visualization\\generate_flowchart_data.py",
+      "imports_count": 0,
+      "index": 59
+    },
+    {
+      "id": "flowchart_visualization__setup_flowchart",
+      "name": "setup_flowchart (flowchart_visualization)",
+      "stem": "setup_flowchart",
+      "folder": "flowchart_visualization",
+      "color": "#E0F2F1",
+      "file_path": "flowchart_visualization\\setup_flowchart.py",
+      "imports_count": 1,
+      "index": 60
+    },
+    {
+      "id": "flowchart_visualization__start_server",
+      "name": "start_server (flowchart_visualization)",
+      "stem": "start_server",
+      "folder": "flowchart_visualization",
+      "color": "#E0F2F1",
+      "file_path": "flowchart_visualization\\start_server.py",
+      "imports_count": 1,
+      "index": 61
+    },
+    {
+      "id": "flowchart_visualization__validate_implementation",
+      "name": "validate_implementation (flowchart_visualization)",
+      "stem": "validate_implementation",
+      "folder": "flowchart_visualization",
+      "color": "#E0F2F1",
+      "file_path": "flowchart_visualization\\validate_implementation.py",
+      "imports_count": 1,
+      "index": 62
+    },
+    {
+      "id": "graph_output__Copy html_dependency_graph -",
+      "name": "Copy html_dependency_graph - (graph_output)",
+      "stem": "Copy html_dependency_graph -",
+      "folder": "graph_output",
+      "color": "#FAFAFA",
+      "file_path": "graph_output\\Copy html_dependency_graph -.py",
+      "imports_count": 0,
+      "index": 63
+    },
+    {
+      "id": "graph_output__Copy2 html_dependency_graph -",
+      "name": "Copy2 html_dependency_graph - (graph_output)",
+      "stem": "Copy2 html_dependency_graph -",
+      "folder": "graph_output",
+      "color": "#FAFAFA",
+      "file_path": "graph_output\\Copy2 html_dependency_graph -.py",
+      "imports_count": 0,
+      "index": 64
+    },
+    {
+      "id": "graph_output__generate_dependency_graph - Copy (2)",
+      "name": "generate_dependency_graph - Copy (2) (graph_output)",
+      "stem": "generate_dependency_graph - Copy (2)",
+      "folder": "graph_output",
+      "color": "#FAFAFA",
+      "file_path": "graph_output\\generate_dependency_graph - Copy (2).py",
+      "imports_count": 0,
+      "index": 65
+    },
+    {
+      "id": "graph_output__generate_dependency_graph - Copy (3)",
+      "name": "generate_dependency_graph - Copy (3) (graph_output)",
+      "stem": "generate_dependency_graph - Copy (3)",
+      "folder": "graph_output",
+      "color": "#FAFAFA",
+      "file_path": "graph_output\\generate_dependency_graph - Copy (3).py",
+      "imports_count": 0,
+      "index": 66
+    },
+    {
+      "id": "graph_output__generate_dependency_graph",
+      "name": "generate_dependency_graph (graph_output)",
+      "stem": "generate_dependency_graph",
+      "folder": "graph_output",
+      "color": "#FAFAFA",
+      "file_path": "graph_output\\generate_dependency_graph.py",
+      "imports_count": 0,
+      "index": 67
+    },
+    {
+      "id": "graph_output__html_dependency_graph",
+      "name": "html_dependency_graph (graph_output)",
+      "stem": "html_dependency_graph",
+      "folder": "graph_output",
+      "color": "#FAFAFA",
+      "file_path": "graph_output\\html_dependency_graph.py",
+      "imports_count": 0,
+      "index": 68
+    },
+    {
+      "id": "old_streamlit_files__app",
+      "name": "app (old_streamlit_files)",
+      "stem": "app",
+      "folder": "old_streamlit_files",
+      "color": "#FFF8E1",
+      "file_path": "old_streamlit_files\\app.py",
+      "imports_count": 8,
+      "index": 69
+    },
+    {
+      "id": "old_streamlit_files__borehole_log",
+      "name": "borehole_log (old_streamlit_files)",
+      "stem": "borehole_log",
+      "folder": "old_streamlit_files",
+      "color": "#FFF8E1",
+      "file_path": "old_streamlit_files\\borehole_log.py",
+      "imports_count": 2,
+      "index": 70
+    },
+    {
+      "id": "old_streamlit_files__borehole_selection",
+      "name": "borehole_selection (old_streamlit_files)",
+      "stem": "borehole_selection",
+      "folder": "old_streamlit_files",
+      "color": "#FFF8E1",
+      "file_path": "old_streamlit_files\\borehole_selection.py",
+      "imports_count": 0,
+      "index": 71
+    },
+    {
+      "id": "old_streamlit_files__config",
+      "name": "config (old_streamlit_files)",
+      "stem": "config",
+      "folder": "old_streamlit_files",
+      "color": "#FFF8E1",
+      "file_path": "old_streamlit_files\\config.py",
+      "imports_count": 0,
+      "index": 72
+    },
+    {
+      "id": "old_streamlit_files__data_loader",
+      "name": "data_loader (old_streamlit_files)",
+      "stem": "data_loader",
+      "folder": "old_streamlit_files",
+      "color": "#FFF8E1",
+      "file_path": "old_streamlit_files\\data_loader.py",
+      "imports_count": 1,
+      "index": 73
+    },
+    {
+      "id": "old_streamlit_files__map_render",
+      "name": "map_render (old_streamlit_files)",
+      "stem": "map_render",
+      "folder": "old_streamlit_files",
+      "color": "#FFF8E1",
+      "file_path": "old_streamlit_files\\map_render.py",
+      "imports_count": 0,
+      "index": 74
+    },
+    {
+      "id": "old_streamlit_files__map_utils",
+      "name": "map_utils (old_streamlit_files)",
+      "stem": "map_utils",
+      "folder": "old_streamlit_files",
+      "color": "#FFF8E1",
+      "file_path": "old_streamlit_files\\map_utils.py",
+      "imports_count": 0,
+      "index": 75
+    },
+    {
+      "id": "old_streamlit_files__section_logic",
+      "name": "section_logic (old_streamlit_files)",
+      "stem": "section_logic",
+      "folder": "old_streamlit_files",
+      "color": "#FFF8E1",
+      "file_path": "old_streamlit_files\\section_logic.py",
+      "imports_count": 1,
+      "index": 76
+    },
+    {
+      "id": "old_streamlit_files__section_plot",
+      "name": "section_plot (old_streamlit_files)",
+      "stem": "section_plot",
+      "folder": "old_streamlit_files",
+      "color": "#FFF8E1",
+      "file_path": "old_streamlit_files\\section_plot.py",
+      "imports_count": 1,
+      "index": 77
+    },
+    {
+      "id": "old_streamlit_files__utils",
+      "name": "utils (old_streamlit_files)",
+      "stem": "utils",
+      "folder": "old_streamlit_files",
+      "color": "#FFF8E1",
+      "file_path": "old_streamlit_files\\utils.py",
+      "imports_count": 0,
+      "index": 78
+    },
+    {
+      "id": "state_management__app_state",
+      "name": "app_state (state_management)",
+      "stem": "app_state",
+      "folder": "state_management",
+      "color": "#F3E5F5",
+      "file_path": "state_management\\app_state.py",
+      "imports_count": 1,
+      "index": 79
+    },
+    {
+      "id": "state_management__state_models",
+      "name": "state_models (state_management)",
+      "stem": "state_models",
+      "folder": "state_management",
+      "color": "#F3E5F5",
+      "file_path": "state_management\\state_models.py",
+      "imports_count": 0,
+      "index": 80
+    },
+    {
+      "id": "state_management____init__",
+      "name": "__init__ (state_management)",
+      "stem": "__init__",
+      "folder": "state_management",
+      "color": "#F3E5F5",
+      "file_path": "state_management\\__init__.py",
+      "imports_count": 2,
+      "index": 81
+    },
+    {
+      "id": "archive_app_variants__app_debug_network",
+      "name": "app_debug_network (archive)",
+      "stem": "app_debug_network",
+      "folder": "archive",
+      "color": "#FFEBEE",
+      "file_path": "archive\\app_variants\\app_debug_network.py",
+      "imports_count": 4,
+      "index": 82
+    },
+    {
+      "id": "archive_app_variants__app_render",
+      "name": "app_render (archive)",
+      "stem": "app_render",
+      "folder": "archive",
+      "color": "#FFEBEE",
+      "file_path": "archive\\app_variants\\app_render.py",
+      "imports_count": 4,
+      "index": 83
+    },
+    {
+      "id": "archive_debug_utilities__debug_monitor",
+      "name": "debug_monitor (archive)",
+      "stem": "debug_monitor",
+      "folder": "archive",
+      "color": "#FFEBEE",
+      "file_path": "archive\\debug_utilities\\debug_monitor.py",
+      "imports_count": 0,
+      "index": 84
+    },
+    {
+      "id": "archive_debug_utilities__diagnose_app",
+      "name": "diagnose_app (archive)",
+      "stem": "diagnose_app",
+      "folder": "archive",
+      "color": "#FFEBEE",
+      "file_path": "archive\\debug_utilities\\diagnose_app.py",
+      "imports_count": 4,
+      "index": 85
+    },
+    {
+      "id": "archive_debug_utilities__network_diagnostics",
+      "name": "network_diagnostics (archive)",
+      "stem": "network_diagnostics",
+      "folder": "archive",
+      "color": "#FFEBEE",
+      "file_path": "archive\\debug_utilities\\network_diagnostics.py",
+      "imports_count": 0,
+      "index": 86
+    },
+    {
+      "id": "archive_debug_utilities__startup_debug",
+      "name": "startup_debug (archive)",
+      "stem": "startup_debug",
+      "folder": "archive",
+      "color": "#FFEBEE",
+      "file_path": "archive\\debug_utilities\\startup_debug.py",
+      "imports_count": 4,
+      "index": 87
+    }
+  ],
+  "edges": [
+    {
+      "source": 2,
+      "target": 8,
+      "source_name": "root__app",
+      "target_name": "root__config",
+      "source_folder": "root",
+      "target_folder": "root"
+    },
+    {
+      "source": 2,
+      "target": 6,
+      "source_name": "root__app",
+      "target_name": "root__callbacks_split",
+      "source_folder": "root",
+      "target_folder": "root"
+    },
+    {
+      "source": 2,
+      "target": 4,
+      "source_name": "root__app",
+      "target_name": "root__app_factory",
+      "source_folder": "root",
+      "target_folder": "root"
+    },
+    {
+      "source": 5,
+      "target": 19,
+      "source_name": "root__borehole_log_professional",
+      "target_name": "root__geology_code_utils",
+      "source_folder": "root",
+      "target_folder": "root"
+    },
+    {
+      "source": 5,
+      "target": 30,
+      "source_name": "root__borehole_log_professional",
+      "target_name": "root__section_plot_professional",
+      "source_folder": "root",
+      "target_folder": "root"
+    },
+    {
+      "source": 6,
+      "target": 8,
+      "source_name": "root__callbacks_split",
+      "target_name": "root__config",
+      "source_folder": "root",
+      "target_folder": "root"
+    },
+    {
+      "source": 6,
+      "target": 11,
+      "source_name": "root__callbacks_split",
+      "target_name": "root__data_loader",
+      "source_folder": "root",
+      "target_folder": "root"
+    },
+    {
+      "source": 6,
+      "target": 25,
+      "source_name": "root__callbacks_split",
+      "target_name": "root__map_utils",
+      "source_folder": "root",
+      "target_folder": "root"
+    },
+    {
+      "source": 6,
+      "target": 9,
+      "source_name": "root__callbacks_split",
+      "target_name": "root__coordinate_service",
+      "source_folder": "root",
+      "target_folder": "root"
+    },
+    {
+      "source": 6,
+      "target": 10,
+      "source_name": "root__callbacks_split",
+      "target_name": "root__dataframe_optimizer",
+      "source_folder": "root",
+      "target_folder": "root"
+    },
+    {
+      "source": 6,
+      "target": 3,
+      "source_name": "root__callbacks_split",
+      "target_name": "root__app_constants",
+      "source_folder": "root",
+      "target_folder": "root"
+    },
+    {
+      "source": 6,
+      "target": 24,
+      "source_name": "root__callbacks_split",
+      "target_name": "root__loading_indicators",
+      "source_folder": "root",
+      "target_folder": "root"
+    },
+    {
+      "source": 6,
+      "target": 26,
+      "source_name": "root__callbacks_split",
+      "target_name": "root__memory_manager",
+      "source_folder": "root",
+      "target_folder": "root"
+    },
+    {
+      "source": 6,
+      "target": 30,
+      "source_name": "root__callbacks_split",
+      "target_name": "root__section_plot_professional",
+      "source_folder": "root",
+      "target_folder": "root"
+    },
+    {
+      "source": 6,
+      "target": 5,
+      "source_name": "root__callbacks_split",
+      "target_name": "root__borehole_log_professional",
+      "source_folder": "root",
+      "target_folder": "root"
+    },
+    {
+      "source": 6,
+      "target": 29,
+      "source_name": "root__callbacks_split",
+      "target_name": "root__polyline_utils",
+      "source_folder": "root",
+      "target_folder": "root"
+    },
+    {
+      "source": 7,
+      "target": 9,
+      "source_name": "root__comprehensive_optimization_validation",
+      "target_name": "root__coordinate_service",
+      "source_folder": "root",
+      "target_folder": "root"
+    },
+    {
+      "source": 7,
+      "target": 10,
+      "source_name": "root__comprehensive_optimization_validation",
+      "target_name": "root__dataframe_optimizer",
+      "source_folder": "root",
+      "target_folder": "root"
+    },
+    {
+      "source": 7,
+      "target": 16,
+      "source_name": "root__comprehensive_optimization_validation",
+      "target_name": "root__enhanced_error_handling",
+      "source_folder": "root",
+      "target_folder": "root"
+    },
+    {
+      "source": 7,
+      "target": 26,
+      "source_name": "root__comprehensive_optimization_validation",
+      "target_name": "root__memory_manager",
+      "source_folder": "root",
+      "target_folder": "root"
+    },
+    {
+      "source": 12,
+      "target": 19,
+      "source_name": "root__debug_module",
+      "target_name": "root__geology_code_utils",
+      "source_folder": "root",
+      "target_folder": "root"
+    },
+    {
+      "source": 13,
+      "target": 5,
+      "source_name": "root__debug_offset_layout",
+      "target_name": "root__borehole_log_professional",
+      "source_folder": "root",
+      "target_folder": "root"
+    },
+    {
+      "source": 16,
+      "target": 9,
+      "source_name": "root__enhanced_error_handling",
+      "target_name": "root__coordinate_service",
+      "source_folder": "root",
+      "target_folder": "root"
+    },
+    {
+      "source": 16,
+      "target": 11,
+      "source_name": "root__enhanced_error_handling",
+      "target_name": "root__data_loader",
+      "source_folder": "root",
+      "target_folder": "root"
+    },
+    {
+      "source": 18,
+      "target": 3,
+      "source_name": "root__error_recovery",
+      "target_name": "root__app_constants",
+      "source_folder": "root",
+      "target_folder": "root"
+    },
+    {
+      "source": 20,
+      "target": 3,
+      "source_name": "root__health_check",
+      "target_name": "root__app_constants",
+      "source_folder": "root",
+      "target_folder": "root"
+    },
+    {
+      "source": 20,
+      "target": 9,
+      "source_name": "root__health_check",
+      "target_name": "root__coordinate_service",
+      "source_folder": "root",
+      "target_folder": "root"
+    },
+    {
+      "source": 20,
+      "target": 18,
+      "source_name": "root__health_check",
+      "target_name": "root__error_recovery",
+      "source_folder": "root",
+      "target_folder": "root"
+    },
+    {
+      "source": 24,
+      "target": 3,
+      "source_name": "root__loading_indicators",
+      "target_name": "root__app_constants",
+      "source_folder": "root",
+      "target_folder": "root"
+    },
+    {
+      "source": 26,
+      "target": 23,
+      "source_name": "root__memory_manager",
+      "target_name": "root__lazy_marker_manager",
+      "source_folder": "root",
+      "target_folder": "root"
+    },
+    {
+      "source": 26,
+      "target": 9,
+      "source_name": "root__memory_manager",
+      "target_name": "root__coordinate_service",
+      "source_folder": "root",
+      "target_folder": "root"
+    },
+    {
+      "source": 27,
+      "target": 68,
+      "source_name": "root__migration_validation",
+      "target_name": "graph_output__html_dependency_graph",
+      "source_folder": "root",
+      "target_folder": "graph_output"
+    },
+    {
+      "source": 29,
+      "target": 9,
+      "source_name": "root__polyline_utils",
+      "target_name": "root__coordinate_service",
+      "source_folder": "root",
+      "target_folder": "root"
+    },
+    {
+      "source": 30,
+      "target": 19,
+      "source_name": "root__section_plot_professional",
+      "target_name": "root__geology_code_utils",
+      "source_folder": "root",
+      "target_folder": "root"
+    },
+    {
+      "source": 34,
+      "target": 8,
+      "source_name": "archive__app_clean",
+      "target_name": "root__config",
+      "source_folder": "archive",
+      "target_folder": "root"
+    },
+    {
+      "source": 34,
+      "target": 6,
+      "source_name": "archive__app_clean",
+      "target_name": "root__callbacks_split",
+      "source_folder": "archive",
+      "target_folder": "root"
+    },
+    {
+      "source": 35,
+      "target": 11,
+      "source_name": "archive__app_debug_network",
+      "target_name": "root__data_loader",
+      "source_folder": "archive",
+      "target_folder": "root"
+    },
+    {
+      "source": 35,
+      "target": 30,
+      "source_name": "archive__app_debug_network",
+      "target_name": "root__section_plot_professional",
+      "source_folder": "archive",
+      "target_folder": "root"
+    },
+    {
+      "source": 35,
+      "target": 5,
+      "source_name": "archive__app_debug_network",
+      "target_name": "root__borehole_log_professional",
+      "source_folder": "archive",
+      "target_folder": "root"
+    },
+    {
+      "source": 35,
+      "target": 25,
+      "source_name": "archive__app_debug_network",
+      "target_name": "root__map_utils",
+      "source_folder": "archive",
+      "target_folder": "root"
+    },
+    {
+      "source": 36,
+      "target": 11,
+      "source_name": "archive__app_fixed",
+      "target_name": "root__data_loader",
+      "source_folder": "archive",
+      "target_folder": "root"
+    },
+    {
+      "source": 36,
+      "target": 30,
+      "source_name": "archive__app_fixed",
+      "target_name": "root__section_plot_professional",
+      "source_folder": "archive",
+      "target_folder": "root"
+    },
+    {
+      "source": 36,
+      "target": 5,
+      "source_name": "archive__app_fixed",
+      "target_name": "root__borehole_log_professional",
+      "source_folder": "archive",
+      "target_folder": "root"
+    },
+    {
+      "source": 36,
+      "target": 25,
+      "source_name": "archive__app_fixed",
+      "target_name": "root__map_utils",
+      "source_folder": "archive",
+      "target_folder": "root"
+    },
+    {
+      "source": 37,
+      "target": 11,
+      "source_name": "archive__app_megacallback",
+      "target_name": "root__data_loader",
+      "source_folder": "archive",
+      "target_folder": "root"
+    },
+    {
+      "source": 37,
+      "target": 25,
+      "source_name": "archive__app_megacallback",
+      "target_name": "root__map_utils",
+      "source_folder": "archive",
+      "target_folder": "root"
+    },
+    {
+      "source": 37,
+      "target": 8,
+      "source_name": "archive__app_megacallback",
+      "target_name": "root__config",
+      "source_folder": "archive",
+      "target_folder": "root"
+    },
+    {
+      "source": 37,
+      "target": 30,
+      "source_name": "archive__app_megacallback",
+      "target_name": "root__section_plot_professional",
+      "source_folder": "archive",
+      "target_folder": "root"
+    },
+    {
+      "source": 37,
+      "target": 5,
+      "source_name": "archive__app_megacallback",
+      "target_name": "root__borehole_log_professional",
+      "source_folder": "archive",
+      "target_folder": "root"
+    },
+    {
+      "source": 38,
+      "target": 11,
+      "source_name": "archive__app_render",
+      "target_name": "root__data_loader",
+      "source_folder": "archive",
+      "target_folder": "root"
+    },
+    {
+      "source": 38,
+      "target": 30,
+      "source_name": "archive__app_render",
+      "target_name": "root__section_plot_professional",
+      "source_folder": "archive",
+      "target_folder": "root"
+    },
+    {
+      "source": 38,
+      "target": 5,
+      "source_name": "archive__app_render",
+      "target_name": "root__borehole_log_professional",
+      "source_folder": "archive",
+      "target_folder": "root"
+    },
+    {
+      "source": 38,
+      "target": 25,
+      "source_name": "archive__app_render",
+      "target_name": "root__map_utils",
+      "source_folder": "archive",
+      "target_folder": "root"
+    },
+    {
+      "source": 39,
+      "target": 11,
+      "source_name": "archive__app_with_checkboxes",
+      "target_name": "root__data_loader",
+      "source_folder": "archive",
+      "target_folder": "root"
+    },
+    {
+      "source": 39,
+      "target": 25,
+      "source_name": "archive__app_with_checkboxes",
+      "target_name": "root__map_utils",
+      "source_folder": "archive",
+      "target_folder": "root"
+    },
+    {
+      "source": 39,
+      "target": 30,
+      "source_name": "archive__app_with_checkboxes",
+      "target_name": "root__section_plot_professional",
+      "source_folder": "archive",
+      "target_folder": "root"
+    },
+    {
+      "source": 39,
+      "target": 5,
+      "source_name": "archive__app_with_checkboxes",
+      "target_name": "root__borehole_log_professional",
+      "source_folder": "archive",
+      "target_folder": "root"
+    },
+    {
+      "source": 40,
+      "target": 8,
+      "source_name": "archive__borehole_log",
+      "target_name": "root__config",
+      "source_folder": "archive",
+      "target_folder": "root"
+    },
+    {
+      "source": 40,
+      "target": 48,
+      "source_name": "archive__borehole_log",
+      "target_name": "archive__section_plot",
+      "source_folder": "archive",
+      "target_folder": "archive"
+    },
+    {
+      "source": 41,
+      "target": 19,
+      "source_name": "archive__borehole_log_professional_clean",
+      "target_name": "root__geology_code_utils",
+      "source_folder": "archive",
+      "target_folder": "root"
+    },
+    {
+      "source": 41,
+      "target": 48,
+      "source_name": "archive__borehole_log_professional_clean",
+      "target_name": "archive__section_plot",
+      "source_folder": "archive",
+      "target_folder": "archive"
+    },
+    {
+      "source": 43,
+      "target": 19,
+      "source_name": "archive__borehole_log_professional_old",
+      "target_name": "root__geology_code_utils",
+      "source_folder": "archive",
+      "target_folder": "root"
+    },
+    {
+      "source": 43,
+      "target": 30,
+      "source_name": "archive__borehole_log_professional_old",
+      "target_name": "root__section_plot_professional",
+      "source_folder": "archive",
+      "target_folder": "root"
+    },
+    {
+      "source": 44,
+      "target": 4,
+      "source_name": "archive__check_center_callbacks",
+      "target_name": "root__app_factory",
+      "source_folder": "archive",
+      "target_folder": "root"
+    },
+    {
+      "source": 44,
+      "target": 6,
+      "source_name": "archive__check_center_callbacks",
+      "target_name": "root__callbacks_split",
+      "source_folder": "archive",
+      "target_folder": "root"
+    },
+    {
+      "source": 44,
+      "target": 2,
+      "source_name": "archive__check_center_callbacks",
+      "target_name": "root__app",
+      "source_folder": "archive",
+      "target_folder": "root"
+    },
+    {
+      "source": 45,
+      "target": 5,
+      "source_name": "archive__example_professional_borehole_log",
+      "target_name": "root__borehole_log_professional",
+      "source_folder": "archive",
+      "target_folder": "root"
+    },
+    {
+      "source": 46,
+      "target": 4,
+      "source_name": "archive__find_center_callbacks",
+      "target_name": "root__app_factory",
+      "source_folder": "archive",
+      "target_folder": "root"
+    },
+    {
+      "source": 46,
+      "target": 6,
+      "source_name": "archive__find_center_callbacks",
+      "target_name": "root__callbacks_split",
+      "source_folder": "archive",
+      "target_folder": "root"
+    },
+    {
+      "source": 46,
+      "target": 2,
+      "source_name": "archive__find_center_callbacks",
+      "target_name": "root__app",
+      "source_folder": "archive",
+      "target_folder": "root"
+    },
+    {
+      "source": 48,
+      "target": 8,
+      "source_name": "archive__section_plot",
+      "target_name": "root__config",
+      "source_folder": "archive",
+      "target_folder": "root"
+    },
+    {
+      "source": 50,
+      "target": 49,
+      "source_name": "callbacks__file_upload",
+      "target_name": "callbacks__base",
+      "source_folder": "callbacks",
+      "target_folder": "callbacks"
+    },
+    {
+      "source": 50,
+      "target": 11,
+      "source_name": "callbacks__file_upload",
+      "target_name": "root__data_loader",
+      "source_folder": "callbacks",
+      "target_folder": "root"
+    },
+    {
+      "source": 50,
+      "target": 9,
+      "source_name": "callbacks__file_upload",
+      "target_name": "root__coordinate_service",
+      "source_folder": "callbacks",
+      "target_folder": "root"
+    },
+    {
+      "source": 50,
+      "target": 3,
+      "source_name": "callbacks__file_upload",
+      "target_name": "root__app_constants",
+      "source_folder": "callbacks",
+      "target_folder": "root"
+    },
+    {
+      "source": 50,
+      "target": 17,
+      "source_name": "callbacks__file_upload",
+      "target_name": "root__error_handling",
+      "source_folder": "callbacks",
+      "target_folder": "root"
+    },
+    {
+      "source": 50,
+      "target": 8,
+      "source_name": "callbacks__file_upload",
+      "target_name": "root__config",
+      "source_folder": "callbacks",
+      "target_folder": "root"
+    },
+    {
+      "source": 51,
+      "target": 49,
+      "source_name": "callbacks__map_interactions",
+      "target_name": "callbacks__base",
+      "source_folder": "callbacks",
+      "target_folder": "callbacks"
+    },
+    {
+      "source": 51,
+      "target": 25,
+      "source_name": "callbacks__map_interactions",
+      "target_name": "root__map_utils",
+      "source_folder": "callbacks",
+      "target_folder": "root"
+    },
+    {
+      "source": 51,
+      "target": 29,
+      "source_name": "callbacks__map_interactions",
+      "target_name": "root__polyline_utils",
+      "source_folder": "callbacks",
+      "target_folder": "root"
+    },
+    {
+      "source": 51,
+      "target": 9,
+      "source_name": "callbacks__map_interactions",
+      "target_name": "root__coordinate_service",
+      "source_folder": "callbacks",
+      "target_folder": "root"
+    },
+    {
+      "source": 51,
+      "target": 3,
+      "source_name": "callbacks__map_interactions",
+      "target_name": "root__app_constants",
+      "source_folder": "callbacks",
+      "target_folder": "root"
+    },
+    {
+      "source": 51,
+      "target": 17,
+      "source_name": "callbacks__map_interactions",
+      "target_name": "root__error_handling",
+      "source_folder": "callbacks",
+      "target_folder": "root"
+    },
+    {
+      "source": 51,
+      "target": 8,
+      "source_name": "callbacks__map_interactions",
+      "target_name": "root__config",
+      "source_folder": "callbacks",
+      "target_folder": "root"
+    },
+    {
+      "source": 51,
+      "target": 23,
+      "source_name": "callbacks__map_interactions",
+      "target_name": "root__lazy_marker_manager",
+      "source_folder": "callbacks",
+      "target_folder": "root"
+    },
+    {
+      "source": 52,
+      "target": 49,
+      "source_name": "callbacks__marker_handling",
+      "target_name": "callbacks__base",
+      "source_folder": "callbacks",
+      "target_folder": "callbacks"
+    },
+    {
+      "source": 52,
+      "target": 17,
+      "source_name": "callbacks__marker_handling",
+      "target_name": "root__error_handling",
+      "source_folder": "callbacks",
+      "target_folder": "root"
+    },
+    {
+      "source": 52,
+      "target": 3,
+      "source_name": "callbacks__marker_handling",
+      "target_name": "root__app_constants",
+      "source_folder": "callbacks",
+      "target_folder": "root"
+    },
+    {
+      "source": 52,
+      "target": 5,
+      "source_name": "callbacks__marker_handling",
+      "target_name": "root__borehole_log_professional",
+      "source_folder": "callbacks",
+      "target_folder": "root"
+    },
+    {
+      "source": 53,
+      "target": 49,
+      "source_name": "callbacks__plot_generation",
+      "target_name": "callbacks__base",
+      "source_folder": "callbacks",
+      "target_folder": "callbacks"
+    },
+    {
+      "source": 53,
+      "target": 17,
+      "source_name": "callbacks__plot_generation",
+      "target_name": "root__error_handling",
+      "source_folder": "callbacks",
+      "target_folder": "root"
+    },
+    {
+      "source": 53,
+      "target": 9,
+      "source_name": "callbacks__plot_generation",
+      "target_name": "root__coordinate_service",
+      "source_folder": "callbacks",
+      "target_folder": "root"
+    },
+    {
+      "source": 53,
+      "target": 8,
+      "source_name": "callbacks__plot_generation",
+      "target_name": "root__config",
+      "source_folder": "callbacks",
+      "target_folder": "root"
+    },
+    {
+      "source": 53,
+      "target": 3,
+      "source_name": "callbacks__plot_generation",
+      "target_name": "root__app_constants",
+      "source_folder": "callbacks",
+      "target_folder": "root"
+    },
+    {
+      "source": 53,
+      "target": 30,
+      "source_name": "callbacks__plot_generation",
+      "target_name": "root__section_plot_professional",
+      "source_folder": "callbacks",
+      "target_folder": "root"
+    },
+    {
+      "source": 54,
+      "target": 49,
+      "source_name": "callbacks__search_functionality",
+      "target_name": "callbacks__base",
+      "source_folder": "callbacks",
+      "target_folder": "callbacks"
+    },
+    {
+      "source": 54,
+      "target": 17,
+      "source_name": "callbacks__search_functionality",
+      "target_name": "root__error_handling",
+      "source_folder": "callbacks",
+      "target_folder": "root"
+    },
+    {
+      "source": 54,
+      "target": 9,
+      "source_name": "callbacks__search_functionality",
+      "target_name": "root__coordinate_service",
+      "source_folder": "callbacks",
+      "target_folder": "root"
+    },
+    {
+      "source": 54,
+      "target": 5,
+      "source_name": "callbacks__search_functionality",
+      "target_name": "root__borehole_log_professional",
+      "source_folder": "callbacks",
+      "target_folder": "root"
+    },
+    {
+      "source": 54,
+      "target": 8,
+      "source_name": "callbacks__search_functionality",
+      "target_name": "root__config",
+      "source_folder": "callbacks",
+      "target_folder": "root"
+    },
+    {
+      "source": 55,
+      "target": 49,
+      "source_name": "callbacks____init__",
+      "target_name": "callbacks__base",
+      "source_folder": "callbacks",
+      "target_folder": "callbacks"
+    },
+    {
+      "source": 55,
+      "target": 50,
+      "source_name": "callbacks____init__",
+      "target_name": "callbacks__file_upload",
+      "source_folder": "callbacks",
+      "target_folder": "callbacks"
+    },
+    {
+      "source": 55,
+      "target": 51,
+      "source_name": "callbacks____init__",
+      "target_name": "callbacks__map_interactions",
+      "source_folder": "callbacks",
+      "target_folder": "callbacks"
+    },
+    {
+      "source": 55,
+      "target": 53,
+      "source_name": "callbacks____init__",
+      "target_name": "callbacks__plot_generation",
+      "source_folder": "callbacks",
+      "target_folder": "callbacks"
+    },
+    {
+      "source": 55,
+      "target": 54,
+      "source_name": "callbacks____init__",
+      "target_name": "callbacks__search_functionality",
+      "source_folder": "callbacks",
+      "target_folder": "callbacks"
+    },
+    {
+      "source": 55,
+      "target": 52,
+      "source_name": "callbacks____init__",
+      "target_name": "callbacks__marker_handling",
+      "source_folder": "callbacks",
+      "target_folder": "callbacks"
+    },
+    {
+      "source": 60,
+      "target": 58,
+      "source_name": "flowchart_visualization__setup_flowchart",
+      "target_name": "flowchart_visualization__flowchart_server",
+      "source_folder": "flowchart_visualization",
+      "target_folder": "flowchart_visualization"
+    },
+    {
+      "source": 61,
+      "target": 57,
+      "source_name": "flowchart_visualization__start_server",
+      "target_name": "flowchart_visualization__enhanced_server",
+      "source_folder": "flowchart_visualization",
+      "target_folder": "flowchart_visualization"
+    },
+    {
+      "source": 62,
+      "target": 57,
+      "source_name": "flowchart_visualization__validate_implementation",
+      "target_name": "flowchart_visualization__enhanced_server",
+      "source_folder": "flowchart_visualization",
+      "target_folder": "flowchart_visualization"
+    },
+    {
+      "source": 69,
+      "target": 11,
+      "source_name": "old_streamlit_files__app",
+      "target_name": "root__data_loader",
+      "source_folder": "old_streamlit_files",
+      "target_folder": "root"
+    },
+    {
+      "source": 69,
+      "target": 25,
+      "source_name": "old_streamlit_files__app",
+      "target_name": "root__map_utils",
+      "source_folder": "old_streamlit_files",
+      "target_folder": "root"
+    },
+    {
+      "source": 69,
+      "target": 71,
+      "source_name": "old_streamlit_files__app",
+      "target_name": "old_streamlit_files__borehole_selection",
+      "source_folder": "old_streamlit_files",
+      "target_folder": "old_streamlit_files"
+    },
+    {
+      "source": 69,
+      "target": 76,
+      "source_name": "old_streamlit_files__app",
+      "target_name": "old_streamlit_files__section_logic",
+      "source_folder": "old_streamlit_files",
+      "target_folder": "old_streamlit_files"
+    },
+    {
+      "source": 69,
+      "target": 74,
+      "source_name": "old_streamlit_files__app",
+      "target_name": "old_streamlit_files__map_render",
+      "source_folder": "old_streamlit_files",
+      "target_folder": "old_streamlit_files"
+    },
+    {
+      "source": 69,
+      "target": 40,
+      "source_name": "old_streamlit_files__app",
+      "target_name": "archive__borehole_log",
+      "source_folder": "old_streamlit_files",
+      "target_folder": "archive"
+    },
+    {
+      "source": 69,
+      "target": 8,
+      "source_name": "old_streamlit_files__app",
+      "target_name": "root__config",
+      "source_folder": "old_streamlit_files",
+      "target_folder": "root"
+    },
+    {
+      "source": 69,
+      "target": 25,
+      "source_name": "old_streamlit_files__app",
+      "target_name": "root__map_utils",
+      "source_folder": "old_streamlit_files",
+      "target_folder": "root"
+    },
+    {
+      "source": 70,
+      "target": 8,
+      "source_name": "old_streamlit_files__borehole_log",
+      "target_name": "root__config",
+      "source_folder": "old_streamlit_files",
+      "target_folder": "root"
+    },
+    {
+      "source": 70,
+      "target": 48,
+      "source_name": "old_streamlit_files__borehole_log",
+      "target_name": "archive__section_plot",
+      "source_folder": "old_streamlit_files",
+      "target_folder": "archive"
+    },
+    {
+      "source": 73,
+      "target": 31,
+      "source_name": "old_streamlit_files__data_loader",
+      "target_name": "root__utils",
+      "source_folder": "old_streamlit_files",
+      "target_folder": "root"
+    },
+    {
+      "source": 76,
+      "target": 48,
+      "source_name": "old_streamlit_files__section_logic",
+      "target_name": "archive__section_plot",
+      "source_folder": "old_streamlit_files",
+      "target_folder": "archive"
+    },
+    {
+      "source": 77,
+      "target": 8,
+      "source_name": "old_streamlit_files__section_plot",
+      "target_name": "root__config",
+      "source_folder": "old_streamlit_files",
+      "target_folder": "root"
+    },
+    {
+      "source": 79,
+      "target": 80,
+      "source_name": "state_management__app_state",
+      "target_name": "state_management__state_models",
+      "source_folder": "state_management",
+      "target_folder": "state_management"
+    },
+    {
+      "source": 81,
+      "target": 79,
+      "source_name": "state_management____init__",
+      "target_name": "state_management__app_state",
+      "source_folder": "state_management",
+      "target_folder": "state_management"
+    },
+    {
+      "source": 81,
+      "target": 80,
+      "source_name": "state_management____init__",
+      "target_name": "state_management__state_models",
+      "source_folder": "state_management",
+      "target_folder": "state_management"
+    },
+    {
+      "source": 82,
+      "target": 11,
+      "source_name": "archive_app_variants__app_debug_network",
+      "target_name": "root__data_loader",
+      "source_folder": "archive",
+      "target_folder": "root"
+    },
+    {
+      "source": 82,
+      "target": 48,
+      "source_name": "archive_app_variants__app_debug_network",
+      "target_name": "archive__section_plot",
+      "source_folder": "archive",
+      "target_folder": "archive"
+    },
+    {
+      "source": 82,
+      "target": 40,
+      "source_name": "archive_app_variants__app_debug_network",
+      "target_name": "archive__borehole_log",
+      "source_folder": "archive",
+      "target_folder": "archive"
+    },
+    {
+      "source": 82,
+      "target": 25,
+      "source_name": "archive_app_variants__app_debug_network",
+      "target_name": "root__map_utils",
+      "source_folder": "archive",
+      "target_folder": "root"
+    },
+    {
+      "source": 83,
+      "target": 11,
+      "source_name": "archive_app_variants__app_render",
+      "target_name": "root__data_loader",
+      "source_folder": "archive",
+      "target_folder": "root"
+    },
+    {
+      "source": 83,
+      "target": 48,
+      "source_name": "archive_app_variants__app_render",
+      "target_name": "archive__section_plot",
+      "source_folder": "archive",
+      "target_folder": "archive"
+    },
+    {
+      "source": 83,
+      "target": 40,
+      "source_name": "archive_app_variants__app_render",
+      "target_name": "archive__borehole_log",
+      "source_folder": "archive",
+      "target_folder": "archive"
+    },
+    {
+      "source": 83,
+      "target": 25,
+      "source_name": "archive_app_variants__app_render",
+      "target_name": "root__map_utils",
+      "source_folder": "archive",
+      "target_folder": "root"
+    },
+    {
+      "source": 85,
+      "target": 11,
+      "source_name": "archive_debug_utilities__diagnose_app",
+      "target_name": "root__data_loader",
+      "source_folder": "archive",
+      "target_folder": "root"
+    },
+    {
+      "source": 85,
+      "target": 25,
+      "source_name": "archive_debug_utilities__diagnose_app",
+      "target_name": "root__map_utils",
+      "source_folder": "archive",
+      "target_folder": "root"
+    },
+    {
+      "source": 85,
+      "target": 48,
+      "source_name": "archive_debug_utilities__diagnose_app",
+      "target_name": "archive__section_plot",
+      "source_folder": "archive",
+      "target_folder": "archive"
+    },
+    {
+      "source": 85,
+      "target": 40,
+      "source_name": "archive_debug_utilities__diagnose_app",
+      "target_name": "archive__borehole_log",
+      "source_folder": "archive",
+      "target_folder": "archive"
+    },
+    {
+      "source": 87,
+      "target": 11,
+      "source_name": "archive_debug_utilities__startup_debug",
+      "target_name": "root__data_loader",
+      "source_folder": "archive",
+      "target_folder": "root"
+    },
+    {
+      "source": 87,
+      "target": 48,
+      "source_name": "archive_debug_utilities__startup_debug",
+      "target_name": "archive__section_plot",
+      "source_folder": "archive",
+      "target_folder": "archive"
+    },
+    {
+      "source": 87,
+      "target": 40,
+      "source_name": "archive_debug_utilities__startup_debug",
+      "target_name": "archive__borehole_log",
+      "source_folder": "archive",
+      "target_folder": "archive"
+    },
+    {
+      "source": 87,
+      "target": 25,
+      "source_name": "archive_debug_utilities__startup_debug",
+      "target_name": "root__map_utils",
+      "source_folder": "archive",
+      "target_folder": "root"
+    }
+  ],
+  "subfolder_info": {
+    "root": {
+      "color": "#E3F2FD",
+      "modules": [
+        "root__analysis_current_state",
+        "root__analyze_debug_log",
+        "root__app",
+        "root__app_constants",
+        "root__app_factory",
+        "root__borehole_log_professional",
+        "root__callbacks_split",
+        "root__comprehensive_optimization_validation",
+        "root__config",
+        "root__coordinate_service",
+        "root__dataframe_optimizer",
+        "root__data_loader",
+        "root__debug_module",
+        "root__debug_offset_layout",
+        "root__demo_html_graph",
+        "root__enhanced_dependency_graph",
+        "root__enhanced_error_handling",
+        "root__error_handling",
+        "root__error_recovery",
+        "root__geology_code_utils",
+        "root__health_check",
+        "root__implementation_planning",
+        "root__interactive_validation",
+        "root__lazy_marker_manager",
+        "root__loading_indicators",
+        "root__map_utils",
+        "root__memory_manager",
+        "root__migration_validation",
+        "root__options_exploration",
+        "root__polyline_utils",
+        "root__section_plot_professional",
+        "root__utils",
+        "root__validate_features"
+      ]
+    },
+    "archive": {
+      "color": "#FFEBEE",
+      "modules": [
+        "archive__app_backup",
+        "archive__app_clean",
+        "archive__app_debug_network",
+        "archive__app_fixed",
+        "archive__app_megacallback",
+        "archive__app_render",
+        "archive__app_with_checkboxes",
+        "archive__borehole_log",
+        "archive__borehole_log_professional_clean",
+        "archive__borehole_log_professional_dummy3",
+        "archive__borehole_log_professional_old",
+        "archive__check_center_callbacks",
+        "archive__example_professional_borehole_log",
+        "archive__find_center_callbacks",
+        "archive__run_debug",
+        "archive__section_plot",
+        "archive_app_variants__app_debug_network",
+        "archive_app_variants__app_render",
+        "archive_debug_utilities__debug_monitor",
+        "archive_debug_utilities__diagnose_app",
+        "archive_debug_utilities__network_diagnostics",
+        "archive_debug_utilities__startup_debug"
+      ]
+    },
+    "callbacks": {
+      "color": "#E8F5E8",
+      "modules": [
+        "callbacks__base",
+        "callbacks__file_upload",
+        "callbacks__map_interactions",
+        "callbacks__marker_handling",
+        "callbacks__plot_generation",
+        "callbacks__search_functionality",
+        "callbacks____init__"
+      ]
+    },
+    "flowchart_visualization": {
+      "color": "#E0F2F1",
+      "modules": [
+        "flowchart_visualization__analyze_codebase",
+        "flowchart_visualization__enhanced_server",
+        "flowchart_visualization__flowchart_server",
+        "flowchart_visualization__generate_flowchart_data",
+        "flowchart_visualization__setup_flowchart",
+        "flowchart_visualization__start_server",
+        "flowchart_visualization__validate_implementation"
+      ]
+    },
+    "graph_output": {
+      "color": "#FAFAFA",
+      "modules": [
+        "graph_output__Copy html_dependency_graph -",
+        "graph_output__Copy2 html_dependency_graph -",
+        "graph_output__generate_dependency_graph - Copy (2)",
+        "graph_output__generate_dependency_graph - Copy (3)",
+        "graph_output__generate_dependency_graph",
+        "graph_output__html_dependency_graph"
+      ]
+    },
+    "old_streamlit_files": {
+      "color": "#FFF8E1",
+      "modules": [
+        "old_streamlit_files__app",
+        "old_streamlit_files__borehole_log",
+        "old_streamlit_files__borehole_selection",
+        "old_streamlit_files__config",
+        "old_streamlit_files__data_loader",
+        "old_streamlit_files__map_render",
+        "old_streamlit_files__map_utils",
+        "old_streamlit_files__section_logic",
+        "old_streamlit_files__section_plot",
+        "old_streamlit_files__utils"
+      ]
+    },
+    "state_management": {
+      "color": "#F3E5F5",
+      "modules": [
+        "state_management__app_state",
+        "state_management__state_models",
+        "state_management____init__"
+      ]
+    }
+  },
+  "dependencies": {
+    "root__analysis_current_state": {
+      "imports": [],
+      "file_path": "analysis_current_state.py",
+      "folder": "root",
+      "stem": "analysis_current_state",
+      "display_name": "analysis_current_state"
+    },
+    "root__analyze_debug_log": {
+      "imports": [],
+      "file_path": "analyze_debug_log.py",
+      "folder": "root",
+      "stem": "analyze_debug_log",
+      "display_name": "analyze_debug_log"
+    },
+    "root__app": {
+      "imports": [
+        "root__config",
+        "root__callbacks_split",
+        "root__app_factory"
+      ],
+      "file_path": "app.py",
+      "folder": "root",
+      "stem": "app",
+      "display_name": "app"
+    },
+    "root__app_constants": {
+      "imports": [],
+      "file_path": "app_constants.py",
+      "folder": "root",
+      "stem": "app_constants",
+      "display_name": "app_constants"
+    },
+    "root__app_factory": {
+      "imports": [],
+      "file_path": "app_factory.py",
+      "folder": "root",
+      "stem": "app_factory",
+      "display_name": "app_factory"
+    },
+    "root__borehole_log_professional": {
+      "imports": [
+        "root__geology_code_utils",
+        "root__section_plot_professional"
+      ],
+      "file_path": "borehole_log_professional.py",
+      "folder": "root",
+      "stem": "borehole_log_professional",
+      "display_name": "borehole_log_professional"
+    },
+    "root__callbacks_split": {
+      "imports": [
+        "root__config",
+        "root__data_loader",
+        "root__map_utils",
+        "root__coordinate_service",
+        "root__dataframe_optimizer",
+        "root__app_constants",
+        "root__loading_indicators",
+        "root__memory_manager",
+        "root__section_plot_professional",
+        "root__borehole_log_professional",
+        "root__polyline_utils"
+      ],
+      "file_path": "callbacks_split.py",
+      "folder": "root",
+      "stem": "callbacks_split",
+      "display_name": "callbacks_split"
+    },
+    "root__comprehensive_optimization_validation": {
+      "imports": [
+        "root__coordinate_service",
+        "root__dataframe_optimizer",
+        "root__enhanced_error_handling",
+        "root__memory_manager"
+      ],
+      "file_path": "comprehensive_optimization_validation.py",
+      "folder": "root",
+      "stem": "comprehensive_optimization_validation",
+      "display_name": "comprehensive_optimization_validation"
+    },
+    "root__config": {
+      "imports": [],
+      "file_path": "config.py",
+      "folder": "root",
+      "stem": "config",
+      "display_name": "config"
+    },
+    "root__coordinate_service": {
+      "imports": [],
+      "file_path": "coordinate_service.py",
+      "folder": "root",
+      "stem": "coordinate_service",
+      "display_name": "coordinate_service"
+    },
+    "root__dataframe_optimizer": {
+      "imports": [],
+      "file_path": "dataframe_optimizer.py",
+      "folder": "root",
+      "stem": "dataframe_optimizer",
+      "display_name": "dataframe_optimizer"
+    },
+    "root__data_loader": {
+      "imports": [],
+      "file_path": "data_loader.py",
+      "folder": "root",
+      "stem": "data_loader",
+      "display_name": "data_loader"
+    },
+    "root__debug_module": {
+      "imports": [
+        "root__geology_code_utils"
+      ],
+      "file_path": "debug_module.py",
+      "folder": "root",
+      "stem": "debug_module",
+      "display_name": "debug_module"
+    },
+    "root__debug_offset_layout": {
+      "imports": [
+        "root__borehole_log_professional"
+      ],
+      "file_path": "debug_offset_layout.py",
+      "folder": "root",
+      "stem": "debug_offset_layout",
+      "display_name": "debug_offset_layout"
+    },
+    "root__demo_html_graph": {
+      "imports": [],
+      "file_path": "demo_html_graph.py",
+      "folder": "root",
+      "stem": "demo_html_graph",
+      "display_name": "demo_html_graph"
+    },
+    "root__enhanced_dependency_graph": {
+      "imports": [],
+      "file_path": "enhanced_dependency_graph.py",
+      "folder": "root",
+      "stem": "enhanced_dependency_graph",
+      "display_name": "enhanced_dependency_graph"
+    },
+    "root__enhanced_error_handling": {
+      "imports": [
+        "root__coordinate_service",
+        "root__data_loader"
+      ],
+      "file_path": "enhanced_error_handling.py",
+      "folder": "root",
+      "stem": "enhanced_error_handling",
+      "display_name": "enhanced_error_handling"
+    },
+    "root__error_handling": {
+      "imports": [],
+      "file_path": "error_handling.py",
+      "folder": "root",
+      "stem": "error_handling",
+      "display_name": "error_handling"
+    },
+    "root__error_recovery": {
+      "imports": [
+        "root__app_constants"
+      ],
+      "file_path": "error_recovery.py",
+      "folder": "root",
+      "stem": "error_recovery",
+      "display_name": "error_recovery"
+    },
+    "root__geology_code_utils": {
+      "imports": [],
+      "file_path": "geology_code_utils.py",
+      "folder": "root",
+      "stem": "geology_code_utils",
+      "display_name": "geology_code_utils"
+    },
+    "root__health_check": {
+      "imports": [
+        "root__app_constants",
+        "root__coordinate_service",
+        "root__error_recovery"
+      ],
+      "file_path": "health_check.py",
+      "folder": "root",
+      "stem": "health_check",
+      "display_name": "health_check"
+    },
+    "root__implementation_planning": {
+      "imports": [],
+      "file_path": "implementation_planning.py",
+      "folder": "root",
+      "stem": "implementation_planning",
+      "display_name": "implementation_planning"
+    },
+    "root__interactive_validation": {
+      "imports": [],
+      "file_path": "interactive_validation.py",
+      "folder": "root",
+      "stem": "interactive_validation",
+      "display_name": "interactive_validation"
+    },
+    "root__lazy_marker_manager": {
+      "imports": [],
+      "file_path": "lazy_marker_manager.py",
+      "folder": "root",
+      "stem": "lazy_marker_manager",
+      "display_name": "lazy_marker_manager"
+    },
+    "root__loading_indicators": {
+      "imports": [
+        "root__app_constants"
+      ],
+      "file_path": "loading_indicators.py",
+      "folder": "root",
+      "stem": "loading_indicators",
+      "display_name": "loading_indicators"
+    },
+    "root__map_utils": {
+      "imports": [],
+      "file_path": "map_utils.py",
+      "folder": "root",
+      "stem": "map_utils",
+      "display_name": "map_utils"
+    },
+    "root__memory_manager": {
+      "imports": [
+        "root__lazy_marker_manager",
+        "root__coordinate_service"
+      ],
+      "file_path": "memory_manager.py",
+      "folder": "root",
+      "stem": "memory_manager",
+      "display_name": "memory_manager"
+    },
+    "root__migration_validation": {
+      "imports": [
+        "graph_output__html_dependency_graph"
+      ],
+      "file_path": "migration_validation.py",
+      "folder": "root",
+      "stem": "migration_validation",
+      "display_name": "migration_validation"
+    },
+    "root__options_exploration": {
+      "imports": [],
+      "file_path": "options_exploration.py",
+      "folder": "root",
+      "stem": "options_exploration",
+      "display_name": "options_exploration"
+    },
+    "root__polyline_utils": {
+      "imports": [
+        "root__coordinate_service"
+      ],
+      "file_path": "polyline_utils.py",
+      "folder": "root",
+      "stem": "polyline_utils",
+      "display_name": "polyline_utils"
+    },
+    "root__section_plot_professional": {
+      "imports": [
+        "root__geology_code_utils"
+      ],
+      "file_path": "section_plot_professional.py",
+      "folder": "root",
+      "stem": "section_plot_professional",
+      "display_name": "section_plot_professional"
+    },
+    "root__utils": {
+      "imports": [],
+      "file_path": "utils.py",
+      "folder": "root",
+      "stem": "utils",
+      "display_name": "utils"
+    },
+    "root__validate_features": {
+      "imports": [],
+      "file_path": "validate_features.py",
+      "folder": "root",
+      "stem": "validate_features",
+      "display_name": "validate_features"
+    },
+    "archive__app_backup": {
+      "imports": [],
+      "file_path": "archive\\app_backup.py",
+      "folder": "archive",
+      "stem": "app_backup",
+      "display_name": "app_backup (archive)"
+    },
+    "archive__app_clean": {
+      "imports": [
+        "root__config",
+        "root__callbacks_split"
+      ],
+      "file_path": "archive\\app_clean.py",
+      "folder": "archive",
+      "stem": "app_clean",
+      "display_name": "app_clean (archive)"
+    },
+    "archive__app_debug_network": {
+      "imports": [
+        "root__data_loader",
+        "root__section_plot_professional",
+        "root__borehole_log_professional",
+        "root__map_utils"
+      ],
+      "file_path": "archive\\app_debug_network.py",
+      "folder": "archive",
+      "stem": "app_debug_network",
+      "display_name": "app_debug_network (archive)"
+    },
+    "archive__app_fixed": {
+      "imports": [
+        "root__data_loader",
+        "root__section_plot_professional",
+        "root__borehole_log_professional",
+        "root__map_utils"
+      ],
+      "file_path": "archive\\app_fixed.py",
+      "folder": "archive",
+      "stem": "app_fixed",
+      "display_name": "app_fixed (archive)"
+    },
+    "archive__app_megacallback": {
+      "imports": [
+        "root__data_loader",
+        "root__map_utils",
+        "root__config",
+        "root__section_plot_professional",
+        "root__borehole_log_professional"
+      ],
+      "file_path": "archive\\app_megacallback.py",
+      "folder": "archive",
+      "stem": "app_megacallback",
+      "display_name": "app_megacallback (archive)"
+    },
+    "archive__app_render": {
+      "imports": [
+        "root__data_loader",
+        "root__section_plot_professional",
+        "root__borehole_log_professional",
+        "root__map_utils"
+      ],
+      "file_path": "archive\\app_render.py",
+      "folder": "archive",
+      "stem": "app_render",
+      "display_name": "app_render (archive)"
+    },
+    "archive__app_with_checkboxes": {
+      "imports": [
+        "root__data_loader",
+        "root__map_utils",
+        "root__section_plot_professional",
+        "root__borehole_log_professional"
+      ],
+      "file_path": "archive\\app_with_checkboxes.py",
+      "folder": "archive",
+      "stem": "app_with_checkboxes",
+      "display_name": "app_with_checkboxes (archive)"
+    },
+    "archive__borehole_log": {
+      "imports": [
+        "root__config",
+        "archive__section_plot"
+      ],
+      "file_path": "archive\\borehole_log.py",
+      "folder": "archive",
+      "stem": "borehole_log",
+      "display_name": "borehole_log (archive)"
+    },
+    "archive__borehole_log_professional_clean": {
+      "imports": [
+        "root__geology_code_utils",
+        "archive__section_plot"
+      ],
+      "file_path": "archive\\borehole_log_professional_clean.py",
+      "folder": "archive",
+      "stem": "borehole_log_professional_clean",
+      "display_name": "borehole_log_professional_clean (archive)"
+    },
+    "archive__borehole_log_professional_dummy3": {
+      "imports": [],
+      "file_path": "archive\\borehole_log_professional_dummy3.py",
+      "folder": "archive",
+      "stem": "borehole_log_professional_dummy3",
+      "display_name": "borehole_log_professional_dummy3 (archive)"
+    },
+    "archive__borehole_log_professional_old": {
+      "imports": [
+        "root__geology_code_utils",
+        "root__section_plot_professional"
+      ],
+      "file_path": "archive\\borehole_log_professional_old.py",
+      "folder": "archive",
+      "stem": "borehole_log_professional_old",
+      "display_name": "borehole_log_professional_old (archive)"
+    },
+    "archive__check_center_callbacks": {
+      "imports": [
+        "root__app_factory",
+        "root__callbacks_split",
+        "root__app"
+      ],
+      "file_path": "archive\\check_center_callbacks.py",
+      "folder": "archive",
+      "stem": "check_center_callbacks",
+      "display_name": "check_center_callbacks (archive)"
+    },
+    "archive__example_professional_borehole_log": {
+      "imports": [
+        "root__borehole_log_professional"
+      ],
+      "file_path": "archive\\example_professional_borehole_log.py",
+      "folder": "archive",
+      "stem": "example_professional_borehole_log",
+      "display_name": "example_professional_borehole_log (archive)"
+    },
+    "archive__find_center_callbacks": {
+      "imports": [
+        "root__app_factory",
+        "root__callbacks_split",
+        "root__app"
+      ],
+      "file_path": "archive\\find_center_callbacks.py",
+      "folder": "archive",
+      "stem": "find_center_callbacks",
+      "display_name": "find_center_callbacks (archive)"
+    },
+    "archive__run_debug": {
+      "imports": [],
+      "file_path": "archive\\run_debug.py",
+      "folder": "archive",
+      "stem": "run_debug",
+      "display_name": "run_debug (archive)"
+    },
+    "archive__section_plot": {
+      "imports": [
+        "root__config"
+      ],
+      "file_path": "archive\\section_plot.py",
+      "folder": "archive",
+      "stem": "section_plot",
+      "display_name": "section_plot (archive)"
+    },
+    "callbacks__base": {
+      "imports": [],
+      "file_path": "callbacks\\base.py",
+      "folder": "callbacks",
+      "stem": "base",
+      "display_name": "base (callbacks)"
+    },
+    "callbacks__file_upload": {
+      "imports": [
+        "callbacks__base",
+        "root__data_loader",
+        "root__coordinate_service",
+        "root__app_constants",
+        "root__error_handling",
+        "root__config"
+      ],
+      "file_path": "callbacks\\file_upload.py",
+      "folder": "callbacks",
+      "stem": "file_upload",
+      "display_name": "file_upload (callbacks)"
+    },
+    "callbacks__map_interactions": {
+      "imports": [
+        "callbacks__base",
+        "root__map_utils",
+        "root__polyline_utils",
+        "root__coordinate_service",
+        "root__app_constants",
+        "root__error_handling",
+        "root__config",
+        "root__lazy_marker_manager"
+      ],
+      "file_path": "callbacks\\map_interactions.py",
+      "folder": "callbacks",
+      "stem": "map_interactions",
+      "display_name": "map_interactions (callbacks)"
+    },
+    "callbacks__marker_handling": {
+      "imports": [
+        "callbacks__base",
+        "root__error_handling",
+        "root__app_constants",
+        "root__borehole_log_professional"
+      ],
+      "file_path": "callbacks\\marker_handling.py",
+      "folder": "callbacks",
+      "stem": "marker_handling",
+      "display_name": "marker_handling (callbacks)"
+    },
+    "callbacks__plot_generation": {
+      "imports": [
+        "callbacks__base",
+        "root__error_handling",
+        "root__coordinate_service",
+        "root__config",
+        "root__app_constants",
+        "root__section_plot_professional"
+      ],
+      "file_path": "callbacks\\plot_generation.py",
+      "folder": "callbacks",
+      "stem": "plot_generation",
+      "display_name": "plot_generation (callbacks)"
+    },
+    "callbacks__search_functionality": {
+      "imports": [
+        "callbacks__base",
+        "root__error_handling",
+        "root__coordinate_service",
+        "root__borehole_log_professional",
+        "root__config"
+      ],
+      "file_path": "callbacks\\search_functionality.py",
+      "folder": "callbacks",
+      "stem": "search_functionality",
+      "display_name": "search_functionality (callbacks)"
+    },
+    "callbacks____init__": {
+      "imports": [
+        "callbacks__base",
+        "callbacks__file_upload",
+        "callbacks__map_interactions",
+        "callbacks__plot_generation",
+        "callbacks__search_functionality",
+        "callbacks__marker_handling"
+      ],
+      "file_path": "callbacks\\__init__.py",
+      "folder": "callbacks",
+      "stem": "__init__",
+      "display_name": "__init__ (callbacks)"
+    },
+    "flowchart_visualization__analyze_codebase": {
+      "imports": [],
+      "file_path": "flowchart_visualization\\analyze_codebase.py",
+      "folder": "flowchart_visualization",
+      "stem": "analyze_codebase",
+      "display_name": "analyze_codebase (flowchart_visualization)"
+    },
+    "flowchart_visualization__enhanced_server": {
+      "imports": [],
+      "file_path": "flowchart_visualization\\enhanced_server.py",
+      "folder": "flowchart_visualization",
+      "stem": "enhanced_server",
+      "display_name": "enhanced_server (flowchart_visualization)"
+    },
+    "flowchart_visualization__flowchart_server": {
+      "imports": [],
+      "file_path": "flowchart_visualization\\flowchart_server.py",
+      "folder": "flowchart_visualization",
+      "stem": "flowchart_server",
+      "display_name": "flowchart_server (flowchart_visualization)"
+    },
+    "flowchart_visualization__generate_flowchart_data": {
+      "imports": [],
+      "file_path": "flowchart_visualization\\generate_flowchart_data.py",
+      "folder": "flowchart_visualization",
+      "stem": "generate_flowchart_data",
+      "display_name": "generate_flowchart_data (flowchart_visualization)"
+    },
+    "flowchart_visualization__setup_flowchart": {
+      "imports": [
+        "flowchart_visualization__flowchart_server"
+      ],
+      "file_path": "flowchart_visualization\\setup_flowchart.py",
+      "folder": "flowchart_visualization",
+      "stem": "setup_flowchart",
+      "display_name": "setup_flowchart (flowchart_visualization)"
+    },
+    "flowchart_visualization__start_server": {
+      "imports": [
+        "flowchart_visualization__enhanced_server"
+      ],
+      "file_path": "flowchart_visualization\\start_server.py",
+      "folder": "flowchart_visualization",
+      "stem": "start_server",
+      "display_name": "start_server (flowchart_visualization)"
+    },
+    "flowchart_visualization__validate_implementation": {
+      "imports": [
+        "flowchart_visualization__enhanced_server"
+      ],
+      "file_path": "flowchart_visualization\\validate_implementation.py",
+      "folder": "flowchart_visualization",
+      "stem": "validate_implementation",
+      "display_name": "validate_implementation (flowchart_visualization)"
+    },
+    "graph_output__Copy html_dependency_graph -": {
+      "imports": [],
+      "file_path": "graph_output\\Copy html_dependency_graph -.py",
+      "folder": "graph_output",
+      "stem": "Copy html_dependency_graph -",
+      "display_name": "Copy html_dependency_graph - (graph_output)"
+    },
+    "graph_output__Copy2 html_dependency_graph -": {
+      "imports": [],
+      "file_path": "graph_output\\Copy2 html_dependency_graph -.py",
+      "folder": "graph_output",
+      "stem": "Copy2 html_dependency_graph -",
+      "display_name": "Copy2 html_dependency_graph - (graph_output)"
+    },
+    "graph_output__generate_dependency_graph - Copy (2)": {
+      "imports": [],
+      "file_path": "graph_output\\generate_dependency_graph - Copy (2).py",
+      "folder": "graph_output",
+      "stem": "generate_dependency_graph - Copy (2)",
+      "display_name": "generate_dependency_graph - Copy (2) (graph_output)"
+    },
+    "graph_output__generate_dependency_graph - Copy (3)": {
+      "imports": [],
+      "file_path": "graph_output\\generate_dependency_graph - Copy (3).py",
+      "folder": "graph_output",
+      "stem": "generate_dependency_graph - Copy (3)",
+      "display_name": "generate_dependency_graph - Copy (3) (graph_output)"
+    },
+    "graph_output__generate_dependency_graph": {
+      "imports": [],
+      "file_path": "graph_output\\generate_dependency_graph.py",
+      "folder": "graph_output",
+      "stem": "generate_dependency_graph",
+      "display_name": "generate_dependency_graph (graph_output)"
+    },
+    "graph_output__html_dependency_graph": {
+      "imports": [],
+      "file_path": "graph_output\\html_dependency_graph.py",
+      "folder": "graph_output",
+      "stem": "html_dependency_graph",
+      "display_name": "html_dependency_graph (graph_output)"
+    },
+    "old_streamlit_files__app": {
+      "imports": [
+        "root__data_loader",
+        "root__map_utils",
+        "old_streamlit_files__borehole_selection",
+        "old_streamlit_files__section_logic",
+        "old_streamlit_files__map_render",
+        "archive__borehole_log",
+        "root__config",
+        "root__map_utils"
+      ],
+      "file_path": "old_streamlit_files\\app.py",
+      "folder": "old_streamlit_files",
+      "stem": "app",
+      "display_name": "app (old_streamlit_files)"
+    },
+    "old_streamlit_files__borehole_log": {
+      "imports": [
+        "root__config",
+        "archive__section_plot"
+      ],
+      "file_path": "old_streamlit_files\\borehole_log.py",
+      "folder": "old_streamlit_files",
+      "stem": "borehole_log",
+      "display_name": "borehole_log (old_streamlit_files)"
+    },
+    "old_streamlit_files__borehole_selection": {
+      "imports": [],
+      "file_path": "old_streamlit_files\\borehole_selection.py",
+      "folder": "old_streamlit_files",
+      "stem": "borehole_selection",
+      "display_name": "borehole_selection (old_streamlit_files)"
+    },
+    "old_streamlit_files__config": {
+      "imports": [],
+      "file_path": "old_streamlit_files\\config.py",
+      "folder": "old_streamlit_files",
+      "stem": "config",
+      "display_name": "config (old_streamlit_files)"
+    },
+    "old_streamlit_files__data_loader": {
+      "imports": [
+        "root__utils"
+      ],
+      "file_path": "old_streamlit_files\\data_loader.py",
+      "folder": "old_streamlit_files",
+      "stem": "data_loader",
+      "display_name": "data_loader (old_streamlit_files)"
+    },
+    "old_streamlit_files__map_render": {
+      "imports": [],
+      "file_path": "old_streamlit_files\\map_render.py",
+      "folder": "old_streamlit_files",
+      "stem": "map_render",
+      "display_name": "map_render (old_streamlit_files)"
+    },
+    "old_streamlit_files__map_utils": {
+      "imports": [],
+      "file_path": "old_streamlit_files\\map_utils.py",
+      "folder": "old_streamlit_files",
+      "stem": "map_utils",
+      "display_name": "map_utils (old_streamlit_files)"
+    },
+    "old_streamlit_files__section_logic": {
+      "imports": [
+        "archive__section_plot"
+      ],
+      "file_path": "old_streamlit_files\\section_logic.py",
+      "folder": "old_streamlit_files",
+      "stem": "section_logic",
+      "display_name": "section_logic (old_streamlit_files)"
+    },
+    "old_streamlit_files__section_plot": {
+      "imports": [
+        "root__config"
+      ],
+      "file_path": "old_streamlit_files\\section_plot.py",
+      "folder": "old_streamlit_files",
+      "stem": "section_plot",
+      "display_name": "section_plot (old_streamlit_files)"
+    },
+    "old_streamlit_files__utils": {
+      "imports": [],
+      "file_path": "old_streamlit_files\\utils.py",
+      "folder": "old_streamlit_files",
+      "stem": "utils",
+      "display_name": "utils (old_streamlit_files)"
+    },
+    "state_management__app_state": {
+      "imports": [
+        "state_management__state_models"
+      ],
+      "file_path": "state_management\\app_state.py",
+      "folder": "state_management",
+      "stem": "app_state",
+      "display_name": "app_state (state_management)"
+    },
+    "state_management__state_models": {
+      "imports": [],
+      "file_path": "state_management\\state_models.py",
+      "folder": "state_management",
+      "stem": "state_models",
+      "display_name": "state_models (state_management)"
+    },
+    "state_management____init__": {
+      "imports": [
+        "state_management__app_state",
+        "state_management__state_models"
+      ],
+      "file_path": "state_management\\__init__.py",
+      "folder": "state_management",
+      "stem": "__init__",
+      "display_name": "__init__ (state_management)"
+    },
+    "archive_app_variants__app_debug_network": {
+      "imports": [
+        "root__data_loader",
+        "archive__section_plot",
+        "archive__borehole_log",
+        "root__map_utils"
+      ],
+      "file_path": "archive\\app_variants\\app_debug_network.py",
+      "folder": "archive",
+      "stem": "app_debug_network",
+      "display_name": "app_debug_network (archive)"
+    },
+    "archive_app_variants__app_render": {
+      "imports": [
+        "root__data_loader",
+        "archive__section_plot",
+        "archive__borehole_log",
+        "root__map_utils"
+      ],
+      "file_path": "archive\\app_variants\\app_render.py",
+      "folder": "archive",
+      "stem": "app_render",
+      "display_name": "app_render (archive)"
+    },
+    "archive_debug_utilities__debug_monitor": {
+      "imports": [],
+      "file_path": "archive\\debug_utilities\\debug_monitor.py",
+      "folder": "archive",
+      "stem": "debug_monitor",
+      "display_name": "debug_monitor (archive)"
+    },
+    "archive_debug_utilities__diagnose_app": {
+      "imports": [
+        "root__data_loader",
+        "root__map_utils",
+        "archive__section_plot",
+        "archive__borehole_log"
+      ],
+      "file_path": "archive\\debug_utilities\\diagnose_app.py",
+      "folder": "archive",
+      "stem": "diagnose_app",
+      "display_name": "diagnose_app (archive)"
+    },
+    "archive_debug_utilities__network_diagnostics": {
+      "imports": [],
+      "file_path": "archive\\debug_utilities\\network_diagnostics.py",
+      "folder": "archive",
+      "stem": "network_diagnostics",
+      "display_name": "network_diagnostics (archive)"
+    },
+    "archive_debug_utilities__startup_debug": {
+      "imports": [
+        "root__data_loader",
+        "archive__section_plot",
+        "archive__borehole_log",
+        "root__map_utils"
+      ],
+      "file_path": "archive\\debug_utilities\\startup_debug.py",
+      "folder": "archive",
+      "stem": "startup_debug",
+      "display_name": "startup_debug (archive)"
+    }
+  }
+}
