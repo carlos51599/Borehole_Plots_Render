@@ -1,0 +1,615 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Enhanced Interactive Codebase Flowchart</title>
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            color: #fff;
+            overflow: hidden;
+            margin: 0;
+            padding: 0;
+        }
+
+        .app-container {
+            position: relative;
+            width: 100vw;
+            height: 100vh;
+            display: grid;
+            grid-template-rows: auto auto 1fr auto;
+            grid-template-columns: 1fr;
+            grid-template-areas: 
+                "header"
+                "controls"
+                "diagram"
+                "summary";
+        }
+
+        .header {
+            grid-area: header;
+            background: rgba(0, 0, 0, 0.3);
+            padding: 12px 20px;
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            z-index: 1000;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .header-content h1 {
+            font-size: 22px;
+            margin-bottom: 4px;
+            color: #fff;
+        }
+
+        .header-content p {
+            font-size: 13px;
+            color: rgba(255, 255, 255, 0.8);
+            margin: 0;
+        }
+
+        .header-actions {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+        }
+
+        .controls {
+            grid-area: controls;
+            background: rgba(0, 0, 0, 0.2);
+            padding: 8px 20px;
+            display: flex;
+            gap: 12px;
+            align-items: center;
+            backdrop-filter: blur(5px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            flex-wrap: wrap;
+            overflow-x: auto;
+        }
+
+        .control-group {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .control-group label {
+            font-size: 11px;
+            color: rgba(255, 255, 255, 0.9);
+            white-space: nowrap;
+        }
+
+        input, select {
+            padding: 4px 8px;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 4px;
+            background: rgba(255, 255, 255, 0.1);
+            color: #fff;
+            font-size: 11px;
+        }
+
+        input::placeholder {
+            color: rgba(255, 255, 255, 0.5);
+        }
+
+        button {
+            padding: 5px 10px;
+            background: linear-gradient(45deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 11px;
+            transition: all 0.3s ease;
+        }
+
+        button:hover {
+            background: linear-gradient(45deg, #764ba2 0%, #667eea 100%);
+            transform: translateY(-1px);
+        }
+
+        .diagram-container {
+            grid-area: diagram;
+            position: relative;
+            overflow: hidden;
+            background: linear-gradient(135deg, rgba(0, 20, 40, 0.8), rgba(0, 10, 30, 0.9));
+            border-radius: 8px;
+            margin: 8px 8px 8px 8px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+            min-height: calc(100vh - 200px);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: calc(100vw - 16px); /* Make as wide as possible */
+        }
+
+        #diagram {
+            width: 100%;
+            height: 100%;
+            min-height: calc(100vh - 200px);
+            display: block;
+            border: none;
+        }
+
+        .tooltip {
+            position: absolute;
+            background: rgba(0, 0, 0, 0.95);
+            color: white;
+            padding: 15px;
+            border-radius: 12px;
+            pointer-events: none;
+            font-size: 12px;
+            max-width: 400px;
+            min-width: 280px;
+            z-index: 1000;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            backdrop-filter: blur(15px);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+        }
+
+        .tooltip h3 {
+            margin-bottom: 8px;
+            color: #4fc3f7;
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        .tooltip .path {
+            color: #aaa;
+            font-size: 11px;
+            margin-bottom: 6px;
+            font-family: 'Courier New', monospace;
+        }
+
+        .tooltip .file-type {
+            color: #81c784;
+            font-size: 11px;
+            margin-bottom: 10px;
+            font-weight: 500;
+        }
+
+        .tooltip .stats {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 6px;
+            margin-bottom: 10px;
+        }
+
+        .tooltip .stat {
+            font-size: 11px;
+            padding: 2px 0;
+        }
+
+        .legend {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(0, 0, 0, 0.8);
+            padding: 15px;
+            border-radius: 8px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(10px);
+            z-index: 1000;
+            max-width: 200px;
+        }
+
+        .legend h3 {
+            margin-bottom: 10px;
+            font-size: 14px;
+            color: #4fc3f7;
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 6px;
+            font-size: 12px;
+        }
+
+        .legend-color {
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+        }
+
+        .summary-area {
+            grid-area: summary;
+            background: rgba(0, 0, 0, 0.4);
+            padding: 15px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(5px);
+            min-height: 80px;
+            max-height: 150px;
+            overflow-y: auto;
+            display: none;
+        }
+
+        .summary-area.visible {
+            display: block;
+        }
+
+        .summary-content h3 {
+            margin-bottom: 10px;
+            color: #4fc3f7;
+            font-size: 16px;
+        }
+
+        .summary-metrics {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+
+        .summary-metric {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 8px;
+            border-radius: 4px;
+            text-align: center;
+        }
+
+        .summary-metric .label {
+            font-size: 11px;
+            color: rgba(255, 255, 255, 0.7);
+            display: block;
+        }
+
+        .summary-metric .value {
+            font-size: 14px;
+            font-weight: bold;
+            color: #fff;
+        }
+
+        .breadcrumb {
+            position: absolute;
+            bottom: 20px;
+            left: 20px;
+            background: rgba(0, 0, 0, 0.8);
+            padding: 10px 15px;
+            border-radius: 6px;
+            font-size: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(10px);
+        }
+
+        /* SVG Styles */
+        .node {
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .node:hover {
+            stroke-width: 3px;
+        }
+
+        .node.selected {
+            stroke: #ffd54f;
+            stroke-width: 3px;
+        }
+
+        .node.highlighted {
+            stroke: #ff7043;
+            stroke-width: 2px;
+            filter: drop-shadow(0 0 5px rgba(255, 112, 67, 0.6));
+        }
+
+        .link {
+            stroke: rgba(255, 255, 255, 0.3);
+            stroke-width: 1.5px;
+            fill: none;
+            transition: all 0.3s ease;
+        }
+
+        .link.dependency {
+            stroke: #2196F3;
+            stroke-width: 2px;
+        }
+
+        .link.dependent {
+            stroke: #FF9800;
+            stroke-width: 2px;
+        }
+
+        .link.highlighted-dependency {
+            stroke: #2196F3;
+            stroke-width: 3px;
+            stroke-opacity: 0.9;
+            filter: drop-shadow(0 0 3px rgba(33, 150, 243, 0.6));
+        }
+
+        .link.highlighted-dependent {
+            stroke: #FF9800;
+            stroke-width: 3px;
+            stroke-opacity: 0.9;
+            filter: drop-shadow(0 0 3px rgba(255, 152, 0, 0.6));
+        }
+
+        .node-label {
+            fill: #fff;
+            font-size: 10px;
+            text-anchor: middle;
+            pointer-events: none;
+            font-family: 'Segoe UI', sans-serif;
+        }
+
+        .loading {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+            z-index: 1000;
+        }
+
+        .spinner {
+            border: 3px solid rgba(255, 255, 255, 0.3);
+            border-top: 3px solid #4fc3f7;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 20px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Responsive design */
+        @media (max-width: 768px) {
+            .controls {
+                flex-direction: column;
+                align-items: stretch;
+                gap: 8px;
+            }
+
+            .control-group {
+                justify-content: space-between;
+            }
+
+            .legend {
+                position: relative;
+                top: auto;
+                right: auto;
+                margin: 10px;
+            }
+        }
+
+        /* Help modal styles */
+        .help-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            z-index: 2000;
+            display: none;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .help-content {
+            background: rgba(30, 60, 114, 0.95);
+            padding: 30px;
+            border-radius: 12px;
+            max-width: 600px;
+            max-height: 80vh;
+            overflow-y: auto;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .help-content h2 {
+            margin-bottom: 20px;
+            color: #4fc3f7;
+        }
+
+        .help-section {
+            margin-bottom: 20px;
+        }
+
+        .help-section h3 {
+            margin-bottom: 10px;
+            color: #81c784;
+        }
+
+        .help-section ul {
+            list-style-position: inside;
+            margin-left: 10px;
+        }
+
+        .help-section li {
+            margin-bottom: 5px;
+            font-size: 14px;
+        }
+
+        .close-help {
+            position: absolute;
+            top: 15px;
+            right: 20px;
+            background: none;
+            border: none;
+            color: #fff;
+            font-size: 24px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <div class="app-container">
+        <div class="header">
+            <div class="header-content">
+                <h1>🗂️ Enhanced Interactive Codebase Explorer</h1>
+                <p>Advanced visualization with function details and relationship highlighting</p>
+            </div>
+            <div class="header-actions">
+                <button onclick="toggleView()">🔍 Toggle View</button>
+                <button onclick="toggleHelp()">❓ Help</button>
+                <button onclick="resetZoom()">🔄 Reset View</button>
+            </div>
+        </div>
+
+        <div class="controls">
+            <div class="control-group">
+                <label for="search">🔍 Search:</label>
+                <input type="text" id="search" placeholder="Search files or functions...">
+            </div>
+            
+            <div class="control-group">
+                <label for="filter">📁 Filter:</label>
+                <select id="filter">
+                    <option value="all">All Files</option>
+                    <option value="main">Main Files</option>
+                    <option value="tests">Test Files</option>
+                    <option value="utils">Utilities</option>
+                    <option value="config">Configuration</option>
+                </select>
+            </div>
+            
+            <div class="control-group">
+                <label for="layout">🎨 Layout:</label>
+                <select id="layout">
+                    <option value="force">Force Directed</option>
+                    <option value="hierarchical">Hierarchical</option>
+                    <option value="radial">Radial</option>
+                </select>
+            </div>
+            
+            <div class="control-group">
+                <label for="view-mode">👁️ View:</label>
+                <select id="view-mode">
+                    <option value="files">File Overview</option>
+                    <option value="functions">Function Details</option>
+                    <option value="dependencies">Dependencies</option>
+                </select>
+            </div>
+            
+            <button onclick="resetView()">🔄 Reset View</button>
+            <button onclick="exportDiagram()">📥 Export</button>
+        </div>
+
+        <div class="diagram-container">
+            <div class="loading" id="loading">
+                <div class="spinner"></div>
+                <p>Loading enhanced codebase analysis...</p>
+            </div>
+            <svg id="diagram"></svg>
+        </div>
+
+        <div class="tooltip" id="tooltip"></div>
+        
+        <div class="legend">
+            <h3>🎯 Legend</h3>
+            <div class="legend-item">
+                <div class="legend-color" style="background: #4fc3f7;"></div>
+                <span>Main Application</span>
+            </div>
+            <div class="legend-item">
+                <div class="legend-color" style="background: #81c784;"></div>
+                <span>Core Modules</span>
+            </div>
+            <div class="legend-item">
+                <div class="legend-color" style="background: #ffb74d;"></div>
+                <span>Utilities</span>
+            </div>
+            <div class="legend-item">
+                <div class="legend-color" style="background: #f06292;"></div>
+                <span>Tests</span>
+            </div>
+            <div class="legend-item">
+                <div class="legend-color" style="background: #ba68c8;"></div>
+                <span>Configuration</span>
+            </div>
+            <div style="margin-top: 10px; padding-top: 10px; border-top: 1px solid rgba(255,255,255,0.2);">
+                <div class="legend-item">
+                    <div style="width: 16px; height: 2px; background: #2196F3;"></div>
+                    <span style="font-size: 10px;">Dependencies</span>
+                </div>
+                <div class="legend-item">
+                    <div style="width: 16px; height: 2px; background: #FF9800;"></div>
+                    <span style="font-size: 10px;">Dependents</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="breadcrumb" id="breadcrumb">
+            <span>📍 Root</span>
+        </div>
+
+        <!-- Summary Area for Selected Node -->
+        <div class="summary-area" id="summary-area">
+            <div class="summary-content" id="summary-content">
+                <!-- Content will be populated by JavaScript -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Help Overlay -->
+    <div class="help-overlay" id="help-overlay">
+        <div class="help-content">
+            <button class="close-help" onclick="hideHelp()">&times;</button>
+            <h2>🚀 Enhanced Interactive Codebase Explorer</h2>
+            
+            <div class="help-section">
+                <h3>🎯 Navigation</h3>
+                <ul>
+                    <li><strong>Click & Drag:</strong> Pan around the diagram</li>
+                    <li><strong>Mouse Wheel:</strong> Zoom in/out</li>
+                    <li><strong>Click Node:</strong> Select and highlight relationships</li>
+                    <li><strong>Double-click Node:</strong> Focus on specific file</li>
+                    <li><strong>Hover Node:</strong> View detailed information</li>
+                </ul>
+            </div>
+
+            <div class="help-section">
+                <h3>🔍 Features</h3>
+                <ul>
+                    <li><strong>Search:</strong> Find files or functions by name</li>
+                    <li><strong>Filter:</strong> Show specific file types</li>
+                    <li><strong>Layout:</strong> Change visualization style</li>
+                    <li><strong>Function Details:</strong> View all functions as nodes</li>
+                    <li><strong>Relationship Highlighting:</strong> Blue for dependencies, Orange for dependents</li>
+                </ul>
+            </div>
+
+            <div class="help-section">
+                <h3>🎨 Visual Elements</h3>
+                <ul>
+                    <li><strong>Node Colors:</strong> Represent different file types</li>
+                    <li><strong>Node Size:</strong> Proportional to code complexity</li>
+                    <li><strong>Blue Lines:</strong> Dependencies (what this file imports)</li>
+                    <li><strong>Orange Lines:</strong> Dependents (what imports this file)</li>
+                    <li><strong>Highlighting:</strong> Shows related files when selected</li>
+                </ul>
+            </div>
+
+            <div class="help-section">
+                <h3>⚡ Keyboard Shortcuts</h3>
+                <ul>
+                    <li><strong>Space:</strong> Reset view</li>
+                    <li><strong>F:</strong> Focus mode</li>
+                    <li><strong>H:</strong> Toggle help</li>
+                    <li><strong>Escape:</strong> Clear selection</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <script src="enhanced_flowchart.js"></script>
+</body>
+</html>
