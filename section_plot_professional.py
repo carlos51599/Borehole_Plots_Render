@@ -8,8 +8,14 @@ import numpy as np
 import pyproj
 import re
 import matplotlib.pyplot as plt
+import matplotlib as mpl
 import matplotlib.ticker as ticker
 from matplotlib.patches import Patch
+import base64
+import io
+import logging
+from typing import Optional, Tuple, List, Union
+from contextlib import contextmanager
 
 # Define missing constants if not already defined
 SECTION_MIN_WIDTH = 10
@@ -17,6 +23,110 @@ SECTION_WIDTH_PER_BH = 2
 SECTION_BASE_HEIGHT = 6
 SECTION_MAX_HEIGHT = 20
 SECTION_PLOT_AXIS_FONTSIZE = 10
+
+# Professional A4 dimensions and transparency defaults
+A4_LANDSCAPE_WIDTH = 11.69  # inches
+A4_LANDSCAPE_HEIGHT = 8.27  # inches
+DEFAULT_DPI = 300
+DEFAULT_COLOR_ALPHA = 0.7
+DEFAULT_HATCH_ALPHA = 0.3
+
+# Configure matplotlib for professional rendering
+plt.rcParams["font.family"] = "Arial"
+plt.rcParams["font.size"] = 10
+plt.rcParams["axes.linewidth"] = 0.8
+plt.rcParams["grid.linewidth"] = 0.5
+plt.rcParams["lines.linewidth"] = 1.0
+
+# Reduce matplotlib logging verbosity for better performance
+logging.getLogger("matplotlib.font_manager").setLevel(logging.WARNING)
+logging.getLogger("matplotlib.pyplot").setLevel(logging.WARNING)
+logging.getLogger("matplotlib.backends").setLevel(logging.WARNING)
+
+logger = logging.getLogger(__name__)
+
+
+@contextmanager
+def matplotlib_figure(*args, **kwargs):
+    """
+    Context manager for matplotlib figures to ensure proper cleanup.
+
+    Usage:
+        with matplotlib_figure(figsize=(8, 6)) as fig:
+            # work with figure
+            pass
+    # Figure is automatically closed here
+    """
+    fig = plt.figure(*args, **kwargs)
+    try:
+        yield fig
+    finally:
+        plt.close(fig)
+
+
+def safe_close_figure(fig):
+    """
+    Safely close a matplotlib figure with error handling.
+
+    Args:
+        fig: matplotlib Figure object or None
+    """
+    if fig is not None:
+        try:
+            plt.close(fig)
+        except Exception as e:
+            logger.warning(f"Error closing matplotlib figure: {e}")
+
+
+def convert_figure_to_base64(fig, dpi: int = DEFAULT_DPI, format: str = "png") -> str:
+    """
+    Convert a matplotlib figure to a base64-encoded image string.
+
+    Args:
+        fig: matplotlib Figure object
+        dpi: Resolution for the image
+        format: Image format ('png', 'jpg', etc.)
+
+    Returns:
+        str: Base64-encoded image string
+    """
+    try:
+        buf = io.BytesIO()
+        fig.savefig(buf, format=format, dpi=dpi, bbox_inches=None)
+        buf.seek(0)
+        img_bytes = buf.read()
+        img_b64 = base64.b64encode(img_bytes).decode("utf-8")
+        return img_b64
+    except Exception as e:
+        logger.error(f"Error converting figure to base64: {e}")
+        raise
+    finally:
+        buf.close()
+
+
+def save_high_resolution_outputs(fig, output_filename: str, dpi: int = DEFAULT_DPI):
+    """
+    Save high-resolution PDF and PNG outputs.
+
+    Args:
+        fig: matplotlib Figure object
+        output_filename: Base filename (without extension)
+        dpi: Resolution for output files
+    """
+    try:
+        # Save as PDF (vector format)
+        pdf_filename = f"{output_filename}.pdf"
+        fig.savefig(pdf_filename, format="pdf", dpi=dpi, bbox_inches="tight")
+        logger.info(f"Saved high-resolution PDF: {pdf_filename}")
+
+        # Save as high-DPI PNG
+        png_filename = f"{output_filename}.png"
+        fig.savefig(png_filename, format="png", dpi=dpi, bbox_inches="tight")
+        logger.info(f"Saved high-resolution PNG: {png_filename}")
+
+    except Exception as e:
+        logger.error(f"Error saving high-resolution outputs: {e}")
+        raise
 
 
 def parse_ags_geol_section_from_string(content):
@@ -107,8 +217,11 @@ def plot_professional_borehole_sections(
     vertical_exaggeration=3.0,
     save_high_res=False,
     output_filename=None,
-    color_alpha=1.0,
-    hatch_alpha=1.0,
+    color_alpha=DEFAULT_COLOR_ALPHA,
+    hatch_alpha=DEFAULT_HATCH_ALPHA,
+    return_base64=True,
+    figsize: Tuple[float, float] = (A4_LANDSCAPE_WIDTH, A4_LANDSCAPE_HEIGHT),
+    dpi: int = DEFAULT_DPI,
 ):
     """
     Plot professional-style borehole sections with Openground-style formatting.
@@ -123,10 +236,18 @@ def plot_professional_borehole_sections(
         vertical_exaggeration: Vertical exaggeration factor (default 3.0)
         save_high_res: Whether to save high-resolution output
         output_filename: Output filename for saving (without extension)
+        color_alpha: Transparency for geological colors (0.0-1.0)
+        hatch_alpha: Transparency for hatch patterns (0.0-1.0)
+        return_base64: If True, return base64-encoded PNG; if False, return Figure
+        figsize: Figure size (width, height) in inches - default A4 landscape
+        dpi: Resolution for the plot (default 300)
 
     Returns:
-        matplotlib.figure.Figure: The generated figure
+        Union[str, matplotlib.figure.Figure]: Base64-encoded PNG string or Figure object
     """
+    logger.info(
+        f"Creating professional section plot with {len(geol_df)} geological records"
+    )
     print(f"[DEBUG] Professional section plot called with section_line: {section_line}")
     print(f"[DEBUG] LOCA DataFrame shape: {loca_df.shape}")
     print(f"[DEBUG] LOCA DataFrame columns: {loca_df.columns.tolist()}")
@@ -155,8 +276,6 @@ def plot_professional_borehole_sections(
 
         print(f"[DEBUG] Converting BNG -> WGS84 -> UTM ({utm_crs})")
 
-        # Hybrid vectorized + fallback loop for UTM conversion
-        # Hybrid vectorized + fallback loop for UTM conversion
         # Hybrid vectorized + fallback loop for UTM conversion
         # 1. Identify rows with valid numeric LOCA_NATE and LOCA_NATN
         valid_mask = loca_df["LOCA_NATE"].apply(
@@ -363,17 +482,53 @@ def plot_professional_borehole_sections(
                         break
         leg_label_map[leg] = f"{label} ({leg})"
 
-    # Professional figure sizing with vertical exaggeration
-    width = 1.2  # width of each borehole (slightly wider for professional look)
-    n_bhs = len(boreholes)
-    width_inches = max(SECTION_MIN_WIDTH, n_bhs * SECTION_WIDTH_PER_BH * 1.2)
-    height_inches = min(
-        SECTION_BASE_HEIGHT * vertical_exaggeration, SECTION_MAX_HEIGHT * 1.5
-    )
+    # Professional A4 landscape figure sizing and layout
+    a4_width_in = figsize[0]  # 11.69" for A4 landscape
+    a4_height_in = figsize[1]  # 8.27" for A4 landscape
 
-    # Create figure with professional styling
-    fig, ax = plt.subplots(figsize=(width_inches, height_inches))
+    # Professional margins
+    left_margin_in = 0.5
+    right_margin_in = 0.5
+    top_margin_in = 0.3
+    bottom_margin_in = 0.3
+    header_height_in = 1.5  # Reduced for landscape format
+
+    # Calculate usable plot area
+    plot_width_in = a4_width_in - left_margin_in - right_margin_in
+    plot_height_in = a4_height_in - top_margin_in - bottom_margin_in - header_height_in
+
+    # Create figure with A4 landscape dimensions
+    fig = plt.figure(figsize=(a4_width_in, a4_height_in), dpi=dpi)
     fig.patch.set_facecolor("white")
+
+    # Create subplot with professional margins
+    ax = fig.add_subplot(111)
+
+    # Position the plot area within the figure with proper margins
+    plot_left = left_margin_in / a4_width_in
+    plot_bottom = bottom_margin_in / a4_height_in
+    plot_width_frac = plot_width_in / a4_width_in
+    plot_height_frac = plot_height_in / a4_height_in
+
+    ax.set_position([plot_left, plot_bottom, plot_width_frac, plot_height_frac])
+
+    # Calculate optimal borehole width based on available space and number of boreholes
+    n_bhs = len(boreholes)
+    if n_bhs > 0:
+        total_section_width = (
+            max(bh_x_map.values()) - min(bh_x_map.values())
+            if len(bh_x_map) > 1
+            else 50.0
+        )
+        # Optimal width: use available plot width efficiently
+        width = min(
+            total_section_width / n_bhs * 0.8, 25.0
+        )  # Max 25m width per borehole
+        width = max(width, 2.0)  # Minimum 2m width for readability
+    else:
+        width = 5.0  # Default width
+
+    print(f"[DEBUG] Calculated borehole width: {width:.1f}m for {n_bhs} boreholes")
 
     # Set up professional gridlines
     ax.xaxis.set_major_locator(ticker.MultipleLocator(10))
@@ -522,6 +677,15 @@ def plot_professional_borehole_sections(
     ax.set_xlim(rel_x.min() - total_length * 0.05, rel_x.max() + total_length * 0.05)
 
     # Professional legend with color and hatch patterns
+    # Professional title with proper positioning for A4 landscape
+    if ags_title is None:
+        ags_title = "Geological Cross-Section"
+
+    # Position title in the header area
+    title_y = (a4_height_in - top_margin_in - header_height_in / 2) / a4_height_in
+    fig.suptitle(ags_title, fontsize=14, weight="bold", y=title_y, ha="center")
+
+    # Professional legend with color and hatch patterns
     legend_patches = []
     for leg in unique_leg:
         label = leg_label_map[leg]
@@ -548,22 +712,82 @@ def plot_professional_borehole_sections(
     legend.get_frame().set_facecolor("white")
     legend.get_frame().set_alpha(0.9)
 
-    # Apply tight layout
-    plt.tight_layout()
+    # Add professional footer at the bottom of the figure
+    footer_height_in = 1.5  # Match header height from borehole log
+    a4_usable_width = a4_width_in - left_margin_in - right_margin_in
+    footer_ax = fig.add_axes(
+        [
+            left_margin_in / a4_width_in,
+            bottom_margin_in / a4_height_in,
+            a4_usable_width / a4_width_in,
+            footer_height_in / a4_height_in,
+        ]
+    )
+    footer_ax.axis("off")
+    # Draw footer row: two cells, left 70%, right 30%
+    left_frac = 0.7
+    right_frac = 0.3
+    y_pos = 0.5  # Vertically center text in footer
+    # Draw left cell rectangle
+    from matplotlib.patches import Rectangle
+
+    footer_ax.add_patch(
+        Rectangle(
+            (0, 0), left_frac, 1, edgecolor="black", facecolor="none", linewidth=1
+        )
+    )
+    # Draw right cell rectangle
+    footer_ax.add_patch(
+        Rectangle(
+            (left_frac, 0),
+            right_frac,
+            1,
+            edgecolor="black",
+            facecolor="none",
+            linewidth=1,
+        )
+    )
+    # Add placeholder text
+    footer_ax.text(
+        0.02,
+        y_pos,
+        "Left Footer Placeholder",
+        va="center",
+        ha="left",
+        fontsize=10,
+        fontname="Arial",
+    )
+    footer_ax.text(
+        left_frac + 0.02,
+        y_pos,
+        "Right Footer Placeholder",
+        va="center",
+        ha="left",
+        fontsize=10,
+        fontname="Arial",
+    )
 
     # Save high-resolution output if requested
     if save_high_res and output_filename:
-        # Save as PDF (vector format)
-        pdf_filename = f"{output_filename}.pdf"
-        plt.savefig(pdf_filename, format="pdf", dpi=300, bbox_inches="tight")
-        print(f"[INFO] Saved high-resolution PDF: {pdf_filename}")
+        try:
+            save_high_resolution_outputs(fig, output_filename, dpi)
+        except Exception as e:
+            logger.error(f"Failed to save high-resolution outputs: {e}")
 
-        # Save as high-DPI PNG
-        png_filename = f"{output_filename}.png"
-        plt.savefig(png_filename, format="png", dpi=300, bbox_inches="tight")
-        print(f"[INFO] Saved high-resolution PNG: {png_filename}")
-
-    return fig
+    # Return based on requested format
+    if return_base64:
+        try:
+            img_b64 = convert_figure_to_base64(fig, dpi)
+            safe_close_figure(fig)
+            logger.info("Successfully created base64-encoded section plot")
+            return img_b64
+        except Exception as e:
+            logger.error(f"Failed to convert figure to base64: {e}")
+            safe_close_figure(fig)
+            raise
+    else:
+        logger.info("Returning matplotlib Figure object")
+        return fig
 
 
 def plot_section_from_ags_content(
@@ -574,6 +798,11 @@ def plot_section_from_ags_content(
     vertical_exaggeration=3.0,
     save_high_res=False,
     output_filename=None,
+    return_base64=True,
+    figsize: Tuple[float, float] = (A4_LANDSCAPE_WIDTH, A4_LANDSCAPE_HEIGHT),
+    dpi: int = DEFAULT_DPI,
+    color_alpha: float = DEFAULT_COLOR_ALPHA,
+    hatch_alpha: float = DEFAULT_HATCH_ALPHA,
 ):
     """
     Create a professional geological section plot from AGS content.
@@ -586,9 +815,14 @@ def plot_section_from_ags_content(
         vertical_exaggeration: Vertical exaggeration factor (default 3.0)
         save_high_res: Whether to save high-resolution output (default False)
         output_filename: Output filename for saving (optional)
+        return_base64: If True, return base64-encoded PNG; if False, return Figure
+        figsize: Figure size (width, height) in inches - default A4 landscape
+        dpi: Resolution for the plot (default 300)
+        color_alpha: Transparency for geological colors (0.0-1.0)
+        hatch_alpha: Transparency for hatch patterns (0.0-1.0)
 
     Returns:
-        matplotlib.figure.Figure: The generated figure
+        Union[str, matplotlib.figure.Figure]: Base64-encoded PNG string or Figure object
     """
     geol_df, loca_df, abbr_df = parse_ags_geol_section_from_string(ags_content)
 
@@ -597,6 +831,7 @@ def plot_section_from_ags_content(
         loca_df = loca_df[loca_df["LOCA_ID"].isin(filter_loca_ids)]
 
     if geol_df.empty or loca_df.empty:
+        logger.warning("No data available after filtering")
         return None
 
     return plot_professional_borehole_sections(
@@ -609,4 +844,9 @@ def plot_section_from_ags_content(
         vertical_exaggeration=vertical_exaggeration,
         save_high_res=save_high_res,
         output_filename=output_filename,
+        return_base64=return_base64,
+        figsize=figsize,
+        dpi=dpi,
+        color_alpha=color_alpha,
+        hatch_alpha=hatch_alpha,
     )

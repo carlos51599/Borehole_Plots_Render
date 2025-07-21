@@ -1578,18 +1578,45 @@ def register_callbacks(app):
                         f"Using fallback polyline section with {len(section_line)} points"
                     )
 
-            fig = plot_section_from_ags_content(
+            fig_or_b64 = plot_section_from_ags_content(
                 combined_content,
                 checked_ids,
                 section_line=section_line,
                 show_labels=show_labels,
             )
 
-            if fig:
+            # Minimal, careful handling: support both base64 string and Figure
+            if isinstance(fig_or_b64, str):
+                # Accept both raw base64 and full data URI
+                if fig_or_b64.startswith("iVBORw0KGgo"):
+                    img_src = f"data:image/png;base64,{fig_or_b64}"
+                elif fig_or_b64.startswith("data:image/png;base64,"):
+                    img_src = fig_or_b64
+                else:
+                    return None, None, None
+                centered_img_style = {
+                    "display": "block",
+                    "marginLeft": "auto",
+                    "marginRight": "auto",
+                    "maxWidth": "100%",
+                    "height": "auto",
+                    "maxHeight": "80vh",
+                    "objectFit": "contain",
+                }
+                section_plot = html.Img(src=img_src, style=centered_img_style)
+                # For download, decode if needed
+                if img_src.startswith("data:image/png;base64,"):
+                    img_bytes = base64.b64decode(img_src.split(",", 1)[1])
+                else:
+                    img_bytes = base64.b64decode(img_src)
+                download_data = None
+                if "download-section-btn.n_clicks" in triggered and download_clicks:
+                    download_data = dcc.send_bytes(img_bytes, "section_plot.png")
+                return section_plot, None, download_data
+            elif hasattr(fig_or_b64, "savefig"):
                 try:
-                    # Convert to image with higher DPI for sharper text
                     buf = io.BytesIO()
-                    fig.savefig(
+                    fig_or_b64.savefig(
                         buf,
                         format="png",
                         bbox_inches="tight",
@@ -1598,29 +1625,25 @@ def register_callbacks(app):
                     buf.seek(0)
                     img_bytes = buf.read()
                     img_b64 = base64.b64encode(img_bytes).decode("utf-8")
-
-                    # Create a custom style that preserves aspect ratio
-                    preserved_aspect_style = {
-                        **config.SECTION_PLOT_CENTER_STYLE,  # Copy base styles
-                        "height": "auto",  # Let height be determined by width and aspect ratio
-                        "maxHeight": "80vh",  # Maximum height (80% of viewport height)
-                        "objectFit": "contain",  # Ensure the whole image is visible
+                    centered_img_style = {
+                        "display": "block",
+                        "marginLeft": "auto",
+                        "marginRight": "auto",
+                        "maxWidth": "100%",
+                        "height": "auto",
+                        "maxHeight": "80vh",
+                        "objectFit": "contain",
                     }
-
                     section_plot = html.Img(
                         src=f"data:image/png;base64,{img_b64}",
-                        style=preserved_aspect_style,
+                        style=centered_img_style,
                     )
-
-                    # Handle download
                     download_data = None
                     if "download-section-btn.n_clicks" in triggered and download_clicks:
                         download_data = dcc.send_bytes(img_bytes, "section_plot.png")
-
                     return section_plot, None, download_data
                 finally:
-                    # MEMORY LEAK FIX: Always close the figure, even if an exception occurs
-                    plt.close(fig)
+                    plt.close(fig_or_b64)
             else:
                 return None, None, None
 
