@@ -66,7 +66,7 @@
         }
         
         .node-rect.dimmed {
-            opacity: 0.3;
+            opacity: 0.1;
         }
         
         /* Enhanced link styles */
@@ -90,7 +90,7 @@
         }
         
         .link.dimmed {
-            opacity: 0.2;
+            opacity: 0.05;
         }
         
         .link.hidden {
@@ -323,9 +323,114 @@
             margin-top: 5px;
             text-align: center;
         }
+        
+        /* Filter range inputs */
+        input[type="range"] {
+            width: 100%;
+            height: 6px;
+            border-radius: 3px;
+            background: #dee2e6;
+            outline: none;
+            -webkit-appearance: none;
+        }
+        
+        input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            background: #007bff;
+            cursor: pointer;
+        }
+        
+        input[type="range"]::-moz-range-thumb {
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            background: #007bff;
+            cursor: pointer;
+            border: none;
+        }
+        
+        /* Filter labels */
+        .filter-label {
+            display: block;
+            font-size: 0.9em;
+            margin-bottom: 5px;
+            color: #6c757d;
+        }
+        
+        .filter-value {
+            font-size: 0.8em;
+            color: #6c757d;
+            text-align: center;
+        }
+        
+        /* Animation classes */
+        .node-transition {
+            transition: all 0.5s ease-in-out;
+        }
+        
+        .link-transition {
+            transition: all 0.5s ease-in-out;
+        }
+        
+        /* Accessibility improvements */
+        .folder-item:focus {
+            outline: 2px solid #007bff;
+            outline-offset: 2px;
+        }
+        
+        .toggle-switch:focus {
+            outline: 2px solid #007bff;
+            outline-offset: 2px;
+        }
+        
+        /* Loading states */
+        .loading {
+            opacity: 0.5;
+            pointer-events: none;
+        }
+        
+        .loading::after {
+            content: "";
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 20px;
+            height: 20px;
+            margin: -10px 0 0 -10px;
+            border: 2px solid #f3f3f3;
+            border-top: 2px solid #007bff;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        /* Responsive design */
+        @media (max-width: 768px) {
+            .container {
+                flex-direction: column;
+            }
+            
+            .controls {
+                width: 100%;
+                height: 300px;
+                order: 2;
+            }
+            
+            .graph-container {
+                height: calc(100vh - 300px);
+                order: 1;
+            }
+        }
     </style>
-</head>
-<body>
+</head><body>
     <div class="container">
         <div class="controls">
             <div class="section">
@@ -359,31 +464,31 @@
             <div class="section">
                 <h3>🔍 Advanced Filters</h3>
                 <div style="margin-bottom: 15px;">
-                    <label for="imports-filter" style="display: block; font-size: 0.9em; margin-bottom: 5px; color: #6c757d;">
+                    <label for="imports-filter" class="filter-label">
                         📥 Max Internal Imports:
                     </label>
                     <input type="range" id="imports-filter" min="0" max="20" value="20" style="width: 100%; margin-bottom: 5px;">
-                    <div style="font-size: 0.8em; color: #6c757d; text-align: center;">
+                    <div class="filter-value">
                         <span id="imports-filter-value">20</span> imports
                     </div>
                 </div>
                 
                 <div style="margin-bottom: 15px;">
-                    <label for="dependencies-filter" style="display: block; font-size: 0.9em; margin-bottom: 5px; color: #6c757d;">
+                    <label for="dependencies-filter" class="filter-label">
                         📤 Max Dependencies (outgoing):
                     </label>
                     <input type="range" id="dependencies-filter" min="0" max="20" value="20" style="width: 100%; margin-bottom: 5px;">
-                    <div style="font-size: 0.8em; color: #6c757d; text-align: center;">
+                    <div class="filter-value">
                         <span id="dependencies-filter-value">20</span> dependencies
                     </div>
                 </div>
                 
                 <div style="margin-bottom: 15px;">
-                    <label for="size-filter" style="display: block; font-size: 0.9em; margin-bottom: 5px; color: #6c757d;">
+                    <label for="size-filter" class="filter-label">
                         📄 Max File Size (KB):
                     </label>
                     <input type="range" id="size-filter" min="0" max="100" value="100" style="width: 100%; margin-bottom: 5px;">
-                    <div style="font-size: 0.8em; color: #6c757d; text-align: center;">
+                    <div class="filter-value">
                         <span id="size-filter-value">100</span> KB
                     </div>
                 </div>
@@ -414,235 +519,235 @@
         const graphData = {
   "nodes": [
     {
-      "id": "root__app",
+      "id": "app.py",
       "name": "app",
       "stem": "app",
       "folder": "root",
-      "color": "#E3F2FD",
+      "color": "#45B7D1",
       "file_path": "app.py",
       "imports_count": 3,
-      "importance": 0.20843558837414103,
+      "importance": 0.21211502130416832,
       "is_test": false,
       "is_init": false,
       "size": 23005,
       "index": 0
     },
     {
-      "id": "root__app_constants",
+      "id": "app_constants.py",
       "name": "app_constants",
       "stem": "app_constants",
       "folder": "root",
-      "color": "#E3F2FD",
+      "color": "#45B7D1",
       "file_path": "app_constants.py",
       "imports_count": 0,
-      "importance": 0.7442894705540104,
+      "importance": 0.734475336794196,
       "is_test": false,
       "is_init": false,
       "size": 8612,
       "index": 1
     },
     {
-      "id": "root__app_factory",
+      "id": "app_factory.py",
       "name": "app_factory",
       "stem": "app_factory",
       "folder": "root",
-      "color": "#E3F2FD",
+      "color": "#45B7D1",
       "file_path": "app_factory.py",
       "imports_count": 0,
-      "importance": 0.26749233841348097,
+      "importance": 0.27221427734034936,
       "is_test": false,
       "is_init": false,
       "size": 576,
       "index": 2
     },
     {
-      "id": "root__borehole_log_professional",
+      "id": "borehole_log_professional.py",
       "name": "borehole_log_professional",
       "stem": "borehole_log_professional",
       "folder": "root",
-      "color": "#E3F2FD",
+      "color": "#45B7D1",
       "file_path": "borehole_log_professional.py",
       "imports_count": 2,
-      "importance": 0.4972969170040626,
+      "importance": 0.48892217806414534,
       "is_test": false,
       "is_init": false,
       "size": 63204,
       "index": 3
     },
     {
-      "id": "root__callbacks_split",
+      "id": "callbacks_split.py",
       "name": "callbacks_split",
       "stem": "callbacks_split",
       "folder": "root",
-      "color": "#E3F2FD",
+      "color": "#45B7D1",
       "file_path": "callbacks_split.py",
       "imports_count": 11,
-      "importance": 0.26749233841348097,
+      "importance": 0.27221427734034936,
       "is_test": false,
       "is_init": false,
       "size": 98589,
       "index": 4
     },
     {
-      "id": "root__comprehensive_optimization_validation",
+      "id": "comprehensive_optimization_validation.py",
       "name": "comprehensive_optimization_validation",
       "stem": "comprehensive_optimization_validation",
       "folder": "root",
-      "color": "#E3F2FD",
+      "color": "#45B7D1",
       "file_path": "comprehensive_optimization_validation.py",
       "imports_count": 4,
-      "importance": 0.20843558837414103,
+      "importance": 0.21211502130416832,
       "is_test": false,
       "is_init": false,
       "size": 24553,
       "index": 5
     },
     {
-      "id": "root__config",
+      "id": "config.py",
       "name": "config",
       "stem": "config",
       "folder": "root",
-      "color": "#E3F2FD",
+      "color": "#45B7D1",
       "file_path": "config.py",
       "imports_count": 0,
-      "importance": 0.4213228687763701,
+      "importance": 0.40923819621172947,
       "is_test": false,
       "is_init": false,
       "size": 23646,
       "index": 6
     },
     {
-      "id": "root__coordinate_service",
+      "id": "coordinate_service.py",
       "name": "coordinate_service",
       "stem": "coordinate_service",
       "folder": "root",
-      "color": "#E3F2FD",
+      "color": "#45B7D1",
       "file_path": "coordinate_service.py",
       "imports_count": 0,
-      "importance": 0.8463930548017129,
+      "importance": 0.8393819270529076,
       "is_test": false,
       "is_init": false,
       "size": 13690,
       "index": 7
     },
     {
-      "id": "root__dataframe_optimizer",
+      "id": "dataframe_optimizer.py",
       "name": "dataframe_optimizer",
       "stem": "dataframe_optimizer",
       "folder": "root",
-      "color": "#E3F2FD",
+      "color": "#45B7D1",
       "file_path": "dataframe_optimizer.py",
       "imports_count": 0,
-      "importance": 0.273398013417415,
+      "importance": 0.27822420294396744,
       "is_test": false,
       "is_init": false,
       "size": 10995,
       "index": 8
     },
     {
-      "id": "root__data_loader",
+      "id": "data_loader.py",
       "name": "data_loader",
       "stem": "data_loader",
       "folder": "root",
-      "color": "#E3F2FD",
+      "color": "#45B7D1",
       "file_path": "data_loader.py",
       "imports_count": 0,
-      "importance": 0.3702264765027495,
+      "importance": 0.37186099025033875,
       "is_test": false,
       "is_init": false,
       "size": 1730,
       "index": 9
     },
     {
-      "id": "root__debug_module",
+      "id": "debug_module.py",
       "name": "debug_module",
       "stem": "debug_module",
       "folder": "root",
-      "color": "#E3F2FD",
+      "color": "#45B7D1",
       "file_path": "debug_module.py",
       "imports_count": 1,
-      "importance": 0.20843558837414103,
+      "importance": 0.21211502130416832,
       "is_test": false,
       "is_init": false,
       "size": 1122,
       "index": 10
     },
     {
-      "id": "root__debug_offset_layout",
+      "id": "debug_offset_layout.py",
       "name": "debug_offset_layout",
       "stem": "debug_offset_layout",
       "folder": "root",
-      "color": "#E3F2FD",
+      "color": "#45B7D1",
       "file_path": "debug_offset_layout.py",
       "imports_count": 1,
-      "importance": 0.20843558837414103,
+      "importance": 0.21211502130416832,
       "is_test": false,
       "is_init": false,
       "size": 1803,
       "index": 11
     },
     {
-      "id": "root__enhanced_error_handling",
-      "name": "enhanced_error_handling",
-      "stem": "enhanced_error_handling",
+      "id": "enhanced_dependency_graph_modular.py",
+      "name": "enhanced_dependency_graph_modular",
+      "stem": "enhanced_dependency_graph_modular",
       "folder": "root",
-      "color": "#E3F2FD",
-      "file_path": "enhanced_error_handling.py",
-      "imports_count": 2,
-      "importance": 0.252728150903646,
+      "color": "#45B7D1",
+      "file_path": "enhanced_dependency_graph_modular.py",
+      "imports_count": 1,
+      "importance": 0.21211502130416832,
       "is_test": false,
       "is_init": false,
-      "size": 12371,
+      "size": 915,
       "index": 12
     },
     {
-      "id": "root__error_handling",
-      "name": "error_handling",
-      "stem": "error_handling",
+      "id": "enhanced_error_handling.py",
+      "name": "enhanced_error_handling",
+      "stem": "enhanced_error_handling",
       "folder": "root",
-      "color": "#E3F2FD",
-      "file_path": "error_handling.py",
-      "imports_count": 0,
-      "importance": 0.392163598444446,
+      "color": "#45B7D1",
+      "file_path": "enhanced_error_handling.py",
+      "imports_count": 2,
+      "importance": 0.2571894633313041,
       "is_test": false,
       "is_init": false,
-      "size": 13039,
+      "size": 12371,
       "index": 13
     },
     {
-      "id": "root__error_recovery",
-      "name": "error_recovery",
-      "stem": "error_recovery",
+      "id": "error_handling.py",
+      "name": "error_handling",
+      "stem": "error_handling",
       "folder": "root",
-      "color": "#E3F2FD",
-      "file_path": "error_recovery.py",
-      "imports_count": 1,
-      "importance": 0.20843558837414103,
+      "color": "#45B7D1",
+      "file_path": "error_handling.py",
+      "imports_count": 0,
+      "importance": 0.36927219094766917,
       "is_test": false,
       "is_init": false,
-      "size": 16853,
+      "size": 13039,
       "index": 14
     },
     {
-      "id": "root__final_validation",
-      "name": "final_validation",
-      "stem": "final_validation",
+      "id": "error_recovery.py",
+      "name": "error_recovery",
+      "stem": "error_recovery",
       "folder": "root",
-      "color": "#E3F2FD",
-      "file_path": "final_validation.py",
-      "imports_count": 0,
-      "importance": 0.20843558837414103,
+      "color": "#45B7D1",
+      "file_path": "error_recovery.py",
+      "imports_count": 1,
+      "importance": 0.21211502130416832,
       "is_test": false,
       "is_init": false,
-      "size": 3910,
+      "size": 16853,
       "index": 15
     },
     {
-      "id": "root__geology_code_utils",
+      "id": "geology_code_utils.py",
       "name": "geology_code_utils",
       "stem": "geology_code_utils",
       "folder": "root",
-      "color": "#E3F2FD",
+      "color": "#45B7D1",
       "file_path": "geology_code_utils.py",
       "imports_count": 0,
       "importance": 1.0,
@@ -652,484 +757,572 @@
       "index": 16
     },
     {
-      "id": "root__interactive_validation",
-      "name": "interactive_validation",
-      "stem": "interactive_validation",
-      "folder": "root",
-      "color": "#E3F2FD",
-      "file_path": "interactive_validation.py",
-      "imports_count": 0,
-      "importance": 0.20843558837414103,
-      "is_test": false,
-      "is_init": false,
-      "size": 22052,
-      "index": 17
-    },
-    {
-      "id": "root__lazy_marker_manager",
+      "id": "lazy_marker_manager.py",
       "name": "lazy_marker_manager",
       "stem": "lazy_marker_manager",
       "folder": "root",
-      "color": "#E3F2FD",
+      "color": "#45B7D1",
       "file_path": "lazy_marker_manager.py",
       "imports_count": 0,
-      "importance": 0.3499134151871348,
+      "importance": 0.3532314133246789,
       "is_test": false,
       "is_init": false,
       "size": 16437,
-      "index": 18
+      "index": 17
     },
     {
-      "id": "root__loading_indicators",
+      "id": "loading_indicators.py",
       "name": "loading_indicators",
       "stem": "loading_indicators",
       "folder": "root",
-      "color": "#E3F2FD",
+      "color": "#45B7D1",
       "file_path": "loading_indicators.py",
       "imports_count": 1,
-      "importance": 0.22910545088791,
+      "importance": 0.23314976091683168,
       "is_test": false,
       "is_init": false,
       "size": 14236,
-      "index": 19
+      "index": 18
     },
     {
-      "id": "root__map_utils",
+      "id": "map_utils.py",
       "name": "map_utils",
       "stem": "map_utils",
       "folder": "root",
-      "color": "#E3F2FD",
+      "color": "#45B7D1",
       "file_path": "map_utils.py",
       "imports_count": 0,
-      "importance": 0.25438912199850244,
+      "importance": 0.2560208666861561,
       "is_test": false,
       "is_init": false,
       "size": 12405,
-      "index": 20
+      "index": 19
     },
     {
-      "id": "root__memory_manager",
+      "id": "memory_manager.py",
       "name": "memory_manager",
       "stem": "memory_manager",
       "folder": "root",
-      "color": "#E3F2FD",
+      "color": "#45B7D1",
       "file_path": "memory_manager.py",
       "imports_count": 2,
-      "importance": 0.273398013417415,
+      "importance": 0.27822420294396744,
       "is_test": false,
       "is_init": false,
       "size": 14105,
-      "index": 21
+      "index": 20
     },
     {
-      "id": "root__migration_validation",
-      "name": "migration_validation",
-      "stem": "migration_validation",
-      "folder": "root",
-      "color": "#E3F2FD",
-      "file_path": "migration_validation.py",
-      "imports_count": 1,
-      "importance": 0.20843558837414103,
-      "is_test": false,
-      "is_init": false,
-      "size": 8451,
-      "index": 22
-    },
-    {
-      "id": "root__options_exploration",
-      "name": "options_exploration",
-      "stem": "options_exploration",
-      "folder": "root",
-      "color": "#E3F2FD",
-      "file_path": "options_exploration.py",
-      "imports_count": 0,
-      "importance": 0.20843558837414103,
-      "is_test": false,
-      "is_init": false,
-      "size": 19788,
-      "index": 23
-    },
-    {
-      "id": "root__polyline_utils",
+      "id": "polyline_utils.py",
       "name": "polyline_utils",
       "stem": "polyline_utils",
       "folder": "root",
-      "color": "#E3F2FD",
+      "color": "#45B7D1",
       "file_path": "polyline_utils.py",
       "imports_count": 1,
-      "importance": 0.25438912199850244,
+      "importance": 0.2560208666861561,
       "is_test": false,
       "is_init": false,
       "size": 15171,
-      "index": 24
+      "index": 21
     },
     {
-      "id": "root__section_plot_professional",
+      "id": "section_plot_professional.py",
       "name": "section_plot_professional",
       "stem": "section_plot_professional",
       "folder": "root",
-      "color": "#E3F2FD",
+      "color": "#45B7D1",
       "file_path": "section_plot_professional.py",
       "imports_count": 1,
-      "importance": 0.47416820209542654,
+      "importance": 0.47034739401179626,
       "is_test": false,
       "is_init": false,
       "size": 29723,
-      "index": 25
+      "index": 22
     },
     {
-      "id": "root__test_enhanced_dependency_graph",
-      "name": "test_enhanced_dependency_graph",
-      "stem": "test_enhanced_dependency_graph",
-      "folder": "root",
-      "color": "#E3F2FD",
-      "file_path": "test_enhanced_dependency_graph.py",
-      "imports_count": 0,
-      "importance": 0.20843558837414103,
-      "is_test": true,
-      "is_init": false,
-      "size": 12394,
-      "index": 26
-    },
-    {
-      "id": "root__test_force_directed_layout",
-      "name": "test_force_directed_layout",
-      "stem": "test_force_directed_layout",
-      "folder": "root",
-      "color": "#E3F2FD",
-      "file_path": "test_force_directed_layout.py",
-      "imports_count": 0,
-      "importance": 0.20843558837414103,
-      "is_test": true,
-      "is_init": false,
-      "size": 7430,
-      "index": 27
-    },
-    {
-      "id": "root__test_internal_imports",
-      "name": "test_internal_imports",
-      "stem": "test_internal_imports",
-      "folder": "root",
-      "color": "#E3F2FD",
-      "file_path": "test_internal_imports.py",
-      "imports_count": 0,
-      "importance": 0.20843558837414103,
-      "is_test": true,
-      "is_init": false,
-      "size": 6669,
-      "index": 28
-    },
-    {
-      "id": "root__validate_features",
-      "name": "validate_features",
-      "stem": "validate_features",
-      "folder": "root",
-      "color": "#E3F2FD",
-      "file_path": "validate_features.py",
-      "imports_count": 0,
-      "importance": 0.20843558837414103,
-      "is_test": false,
-      "is_init": false,
-      "size": 3453,
-      "index": 29
-    },
-    {
-      "id": "root__workspace_audit",
-      "name": "workspace_audit",
-      "stem": "workspace_audit",
-      "folder": "root",
-      "color": "#E3F2FD",
-      "file_path": "workspace_audit.py",
-      "imports_count": 0,
-      "importance": 0.20843558837414103,
-      "is_test": false,
-      "is_init": false,
-      "size": 5834,
-      "index": 30
-    },
-    {
-      "id": "callbacks__base",
-      "name": "base (callbacks)",
+      "id": "callbacks/base.py",
+      "name": "callbacks/base",
       "stem": "base",
       "folder": "callbacks",
-      "color": "#E8F5E8",
+      "color": "#FF6B6B",
       "file_path": "callbacks\\base.py",
       "imports_count": 0,
-      "importance": 0.42169197346411597,
+      "importance": 0.3993218189657597,
       "is_test": false,
       "is_init": false,
       "size": 1528,
-      "index": 31
+      "index": 23
     },
     {
-      "id": "callbacks__file_upload",
-      "name": "file_upload (callbacks)",
+      "id": "callbacks/file_upload.py",
+      "name": "callbacks/file_upload",
       "stem": "file_upload",
       "folder": "callbacks",
-      "color": "#E8F5E8",
+      "color": "#FF6B6B",
       "file_path": "callbacks\\file_upload.py",
-      "imports_count": 6,
-      "importance": 0.237963963393811,
+      "imports_count": 7,
+      "importance": 0.24216464932225884,
       "is_test": false,
       "is_init": false,
       "size": 17399,
-      "index": 32
+      "index": 24
     },
     {
-      "id": "callbacks__map_interactions",
-      "name": "map_interactions (callbacks)",
+      "id": "callbacks/map_interactions.py",
+      "name": "callbacks/map_interactions",
       "stem": "map_interactions",
       "folder": "callbacks",
-      "color": "#E8F5E8",
+      "color": "#FF6B6B",
       "file_path": "callbacks\\map_interactions.py",
-      "imports_count": 8,
-      "importance": 0.237963963393811,
+      "imports_count": 9,
+      "importance": 0.24216464932225884,
       "is_test": false,
       "is_init": false,
       "size": 23327,
-      "index": 33
+      "index": 25
     },
     {
-      "id": "callbacks__marker_handling",
-      "name": "marker_handling (callbacks)",
+      "id": "callbacks/marker_handling.py",
+      "name": "callbacks/marker_handling",
       "stem": "marker_handling",
       "folder": "callbacks",
-      "color": "#E8F5E8",
+      "color": "#FF6B6B",
       "file_path": "callbacks\\marker_handling.py",
-      "imports_count": 4,
-      "importance": 0.237963963393811,
+      "imports_count": 5,
+      "importance": 0.24216464932225884,
       "is_test": false,
       "is_init": false,
       "size": 12731,
-      "index": 34
+      "index": 26
     },
     {
-      "id": "callbacks__plot_generation",
-      "name": "plot_generation (callbacks)",
+      "id": "callbacks/plot_generation.py",
+      "name": "callbacks/plot_generation",
       "stem": "plot_generation",
       "folder": "callbacks",
-      "color": "#E8F5E8",
+      "color": "#FF6B6B",
       "file_path": "callbacks\\plot_generation.py",
-      "imports_count": 6,
-      "importance": 0.237963963393811,
+      "imports_count": 7,
+      "importance": 0.24216464932225884,
       "is_test": false,
       "is_init": false,
       "size": 11066,
-      "index": 35
+      "index": 27
     },
     {
-      "id": "callbacks__search_functionality",
-      "name": "search_functionality (callbacks)",
+      "id": "callbacks/search_functionality.py",
+      "name": "callbacks/search_functionality",
       "stem": "search_functionality",
       "folder": "callbacks",
-      "color": "#E8F5E8",
+      "color": "#FF6B6B",
       "file_path": "callbacks\\search_functionality.py",
-      "imports_count": 5,
-      "importance": 0.237963963393811,
+      "imports_count": 6,
+      "importance": 0.24216464932225884,
       "is_test": false,
       "is_init": false,
       "size": 12485,
-      "index": 36
+      "index": 28
     },
     {
-      "id": "callbacks____init__",
-      "name": "__init__ (callbacks)",
+      "id": "callbacks/__init__.py",
+      "name": "callbacks/__init__",
       "stem": "__init__",
       "folder": "callbacks",
-      "color": "#E8F5E8",
+      "color": "#FF6B6B",
       "file_path": "callbacks\\__init__.py",
       "imports_count": 6,
-      "importance": 0.20843558837414103,
+      "importance": 0.21211502130416832,
       "is_test": false,
       "is_init": true,
       "size": 4225,
+      "index": 29
+    },
+    {
+      "id": "graph_modules/dependency_analyzer.py",
+      "name": "graph_modules/dependency_analyzer",
+      "stem": "dependency_analyzer",
+      "folder": "graph_modules",
+      "color": "#4ECDC4",
+      "file_path": "graph_modules\\dependency_analyzer.py",
+      "imports_count": 0,
+      "importance": 0.45212140028465714,
+      "is_test": false,
+      "is_init": false,
+      "size": 16504,
+      "index": 30
+    },
+    {
+      "id": "graph_modules/force_directed_layout.py",
+      "name": "graph_modules/force_directed_layout",
+      "stem": "force_directed_layout",
+      "folder": "graph_modules",
+      "color": "#4ECDC4",
+      "file_path": "graph_modules\\force_directed_layout.py",
+      "imports_count": 0,
+      "importance": 0.2802375280211795,
+      "is_test": false,
+      "is_init": false,
+      "size": 10853,
+      "index": 31
+    },
+    {
+      "id": "graph_modules/graph_controls.py",
+      "name": "graph_modules/graph_controls",
+      "stem": "graph_controls",
+      "folder": "graph_modules",
+      "color": "#4ECDC4",
+      "file_path": "graph_modules\\graph_controls.py",
+      "imports_count": 0,
+      "importance": 0.2802375280211795,
+      "is_test": false,
+      "is_init": false,
+      "size": 18052,
+      "index": 32
+    },
+    {
+      "id": "graph_modules/graph_styles.py",
+      "name": "graph_modules/graph_styles",
+      "stem": "graph_styles",
+      "folder": "graph_modules",
+      "color": "#4ECDC4",
+      "file_path": "graph_modules\\graph_styles.py",
+      "imports_count": 0,
+      "importance": 0.2802375280211795,
+      "is_test": false,
+      "is_init": false,
+      "size": 10981,
+      "index": 33
+    },
+    {
+      "id": "graph_modules/graph_visualization.py",
+      "name": "graph_modules/graph_visualization",
+      "stem": "graph_visualization",
+      "folder": "graph_modules",
+      "color": "#4ECDC4",
+      "file_path": "graph_modules\\graph_visualization.py",
+      "imports_count": 0,
+      "importance": 0.2802375280211795,
+      "is_test": false,
+      "is_init": false,
+      "size": 16119,
+      "index": 34
+    },
+    {
+      "id": "graph_modules/hierarchical_layout.py",
+      "name": "graph_modules/hierarchical_layout",
+      "stem": "hierarchical_layout",
+      "folder": "graph_modules",
+      "color": "#4ECDC4",
+      "file_path": "graph_modules\\hierarchical_layout.py",
+      "imports_count": 0,
+      "importance": 0.2802375280211795,
+      "is_test": false,
+      "is_init": false,
+      "size": 9062,
+      "index": 35
+    },
+    {
+      "id": "graph_modules/html_generator.py",
+      "name": "graph_modules/html_generator",
+      "stem": "html_generator",
+      "folder": "graph_modules",
+      "color": "#4ECDC4",
+      "file_path": "graph_modules\\html_generator.py",
+      "imports_count": 6,
+      "importance": 0.3960187447748822,
+      "is_test": false,
+      "is_init": false,
+      "size": 9949,
+      "index": 36
+    },
+    {
+      "id": "graph_modules/__init__.py",
+      "name": "graph_modules/__init__",
+      "stem": "__init__",
+      "folder": "graph_modules",
+      "color": "#4ECDC4",
+      "file_path": "graph_modules\\__init__.py",
+      "imports_count": 2,
+      "importance": 0.40443264061994755,
+      "is_test": false,
+      "is_init": true,
+      "size": 858,
       "index": 37
     },
     {
-      "id": "graph_output__enhanced_dependency_graph",
-      "name": "enhanced_dependency_graph (graph_output)",
-      "stem": "enhanced_dependency_graph",
-      "folder": "graph_output",
-      "color": "#FAFAFA",
-      "file_path": "graph_output\\enhanced_dependency_graph.py",
-      "imports_count": 0,
-      "importance": 0.20843558837414103,
-      "is_test": false,
-      "is_init": false,
-      "size": 64446,
-      "index": 38
-    },
-    {
-      "id": "graph_output__enhanced_dependency_graph_backup - Copy",
-      "name": "enhanced_dependency_graph_backup - Copy (graph_output)",
-      "stem": "enhanced_dependency_graph_backup - Copy",
-      "folder": "graph_output",
-      "color": "#FAFAFA",
-      "file_path": "graph_output\\enhanced_dependency_graph_backup - Copy.py",
-      "imports_count": 0,
-      "importance": 0.20843558837414103,
-      "is_test": false,
-      "is_init": false,
-      "size": 56559,
-      "index": 39
-    },
-    {
-      "id": "graph_output__html_dependency_graph",
-      "name": "html_dependency_graph (graph_output)",
-      "stem": "html_dependency_graph",
-      "folder": "graph_output",
-      "color": "#FAFAFA",
-      "file_path": "graph_output\\html_dependency_graph.py",
-      "imports_count": 0,
-      "importance": 0.3856058384921609,
-      "is_test": false,
-      "is_init": false,
-      "size": 36597,
-      "index": 40
-    },
-    {
-      "id": "state_management__app_state",
-      "name": "app_state (state_management)",
+      "id": "state_management/app_state.py",
+      "name": "state_management/app_state",
       "stem": "app_state",
       "folder": "state_management",
-      "color": "#F3E5F5",
+      "color": "#96CEB4",
       "file_path": "state_management\\app_state.py",
       "imports_count": 1,
-      "importance": 0.297020713433151,
+      "importance": 0.3690557024569277,
       "is_test": false,
       "is_init": false,
       "size": 10646,
-      "index": 41
+      "index": 38
     },
     {
-      "id": "state_management__state_models",
-      "name": "state_models (state_management)",
+      "id": "state_management/state_models.py",
+      "name": "state_management/state_models",
       "stem": "state_models",
       "folder": "state_management",
-      "color": "#F3E5F5",
+      "color": "#96CEB4",
       "file_path": "state_management\\state_models.py",
       "imports_count": 0,
-      "importance": 0.5494883198513293,
+      "importance": 0.6827530495453162,
       "is_test": false,
       "is_init": false,
       "size": 5982,
-      "index": 42
+      "index": 39
     },
     {
-      "id": "state_management____init__",
-      "name": "__init__ (state_management)",
+      "id": "state_management/__init__.py",
+      "name": "state_management/__init__",
       "stem": "__init__",
       "folder": "state_management",
-      "color": "#F3E5F5",
+      "color": "#96CEB4",
       "file_path": "state_management\\__init__.py",
       "imports_count": 2,
-      "importance": 0.20843558837414103,
+      "importance": 0.36927219094766917,
       "is_test": false,
       "is_init": true,
       "size": 513,
+      "index": 40
+    },
+    {
+      "id": "tests/comprehensive_validation.py",
+      "name": "tests/comprehensive_validation",
+      "stem": "comprehensive_validation",
+      "folder": "tests",
+      "color": "#FFEAA7",
+      "file_path": "tests\\comprehensive_validation.py",
+      "imports_count": 0,
+      "importance": 0.21211502130416832,
+      "is_test": true,
+      "is_init": false,
+      "size": 11761,
+      "index": 41
+    },
+    {
+      "id": "tests/final_validation.py",
+      "name": "tests/final_validation",
+      "stem": "final_validation",
+      "folder": "tests",
+      "color": "#FFEAA7",
+      "file_path": "tests\\final_validation.py",
+      "imports_count": 0,
+      "importance": 0.21211502130416832,
+      "is_test": true,
+      "is_init": false,
+      "size": 3910,
+      "index": 42
+    },
+    {
+      "id": "tests/fix_brace_mismatch.py",
+      "name": "tests/fix_brace_mismatch",
+      "stem": "fix_brace_mismatch",
+      "folder": "tests",
+      "color": "#FFEAA7",
+      "file_path": "tests\\fix_brace_mismatch.py",
+      "imports_count": 0,
+      "importance": 0.21211502130416832,
+      "is_test": true,
+      "is_init": false,
+      "size": 5578,
       "index": 43
     },
     {
-      "id": "tests__comprehensive_validation",
-      "name": "comprehensive_validation (tests)",
-      "stem": "comprehensive_validation",
+      "id": "tests/interactive_validation.py",
+      "name": "tests/interactive_validation",
+      "stem": "interactive_validation",
       "folder": "tests",
-      "color": "#FFF3E0",
-      "file_path": "tests\\comprehensive_validation.py",
+      "color": "#FFEAA7",
+      "file_path": "tests\\interactive_validation.py",
       "imports_count": 0,
-      "importance": 0.20843558837414103,
-      "is_test": false,
+      "importance": 0.21211502130416832,
+      "is_test": true,
       "is_init": false,
-      "size": 11761,
+      "size": 22052,
       "index": 44
     },
     {
-      "id": "tests__fix_brace_mismatch",
-      "name": "fix_brace_mismatch (tests)",
-      "stem": "fix_brace_mismatch",
+      "id": "tests/migration_validation.py",
+      "name": "tests/migration_validation",
+      "stem": "migration_validation",
       "folder": "tests",
-      "color": "#FFF3E0",
-      "file_path": "tests\\fix_brace_mismatch.py",
+      "color": "#FFEAA7",
+      "file_path": "tests\\migration_validation.py",
       "imports_count": 0,
-      "importance": 0.20843558837414103,
-      "is_test": false,
+      "importance": 0.21211502130416832,
+      "is_test": true,
       "is_init": false,
-      "size": 5578,
+      "size": 8451,
       "index": 45
     },
     {
-      "id": "tests__test_graph_data_integrity",
-      "name": "test_graph_data_integrity (tests)",
-      "stem": "test_graph_data_integrity",
+      "id": "tests/options_exploration.py",
+      "name": "tests/options_exploration",
+      "stem": "options_exploration",
       "folder": "tests",
-      "color": "#FFF3E0",
-      "file_path": "tests\\test_graph_data_integrity.py",
+      "color": "#FFEAA7",
+      "file_path": "tests\\options_exploration.py",
       "imports_count": 0,
-      "importance": 0.20843558837414103,
+      "importance": 0.21211502130416832,
       "is_test": true,
       "is_init": false,
-      "size": 21154,
+      "size": 19788,
       "index": 46
     },
     {
-      "id": "tests__test_html_data_extraction",
-      "name": "test_html_data_extraction (tests)",
-      "stem": "test_html_data_extraction",
+      "id": "tests/test_enhanced_dependency_graph.py",
+      "name": "tests/test_enhanced_dependency_graph",
+      "stem": "test_enhanced_dependency_graph",
       "folder": "tests",
-      "color": "#FFF3E0",
-      "file_path": "tests\\test_html_data_extraction.py",
+      "color": "#FFEAA7",
+      "file_path": "tests\\test_enhanced_dependency_graph.py",
       "imports_count": 0,
-      "importance": 0.20843558837414103,
+      "importance": 0.21211502130416832,
       "is_test": true,
       "is_init": false,
-      "size": 14350,
+      "size": 12394,
       "index": 47
     },
     {
-      "id": "tests__test_javascript_errors",
-      "name": "test_javascript_errors (tests)",
-      "stem": "test_javascript_errors",
+      "id": "tests/test_force_directed_layout.py",
+      "name": "tests/test_force_directed_layout",
+      "stem": "test_force_directed_layout",
       "folder": "tests",
-      "color": "#FFF3E0",
-      "file_path": "tests\\test_javascript_errors.py",
+      "color": "#FFEAA7",
+      "file_path": "tests\\test_force_directed_layout.py",
       "imports_count": 0,
-      "importance": 0.20843558837414103,
+      "importance": 0.21211502130416832,
       "is_test": true,
       "is_init": false,
-      "size": 15035,
+      "size": 7430,
       "index": 48
     },
     {
-      "id": "tests__validate_fix",
-      "name": "validate_fix (tests)",
+      "id": "tests/test_graph_data_integrity.py",
+      "name": "tests/test_graph_data_integrity",
+      "stem": "test_graph_data_integrity",
+      "folder": "tests",
+      "color": "#FFEAA7",
+      "file_path": "tests\\test_graph_data_integrity.py",
+      "imports_count": 0,
+      "importance": 0.21211502130416832,
+      "is_test": true,
+      "is_init": false,
+      "size": 21154,
+      "index": 49
+    },
+    {
+      "id": "tests/test_html_data_extraction.py",
+      "name": "tests/test_html_data_extraction",
+      "stem": "test_html_data_extraction",
+      "folder": "tests",
+      "color": "#FFEAA7",
+      "file_path": "tests\\test_html_data_extraction.py",
+      "imports_count": 0,
+      "importance": 0.21211502130416832,
+      "is_test": true,
+      "is_init": false,
+      "size": 14350,
+      "index": 50
+    },
+    {
+      "id": "tests/test_internal_imports.py",
+      "name": "tests/test_internal_imports",
+      "stem": "test_internal_imports",
+      "folder": "tests",
+      "color": "#FFEAA7",
+      "file_path": "tests\\test_internal_imports.py",
+      "imports_count": 0,
+      "importance": 0.21211502130416832,
+      "is_test": true,
+      "is_init": false,
+      "size": 6669,
+      "index": 51
+    },
+    {
+      "id": "tests/test_javascript_errors.py",
+      "name": "tests/test_javascript_errors",
+      "stem": "test_javascript_errors",
+      "folder": "tests",
+      "color": "#FFEAA7",
+      "file_path": "tests\\test_javascript_errors.py",
+      "imports_count": 0,
+      "importance": 0.21211502130416832,
+      "is_test": true,
+      "is_init": false,
+      "size": 15035,
+      "index": 52
+    },
+    {
+      "id": "tests/test_modular_graph.py",
+      "name": "tests/test_modular_graph",
+      "stem": "test_modular_graph",
+      "folder": "tests",
+      "color": "#FFEAA7",
+      "file_path": "tests\\test_modular_graph.py",
+      "imports_count": 15,
+      "importance": 0.21211502130416832,
+      "is_test": true,
+      "is_init": false,
+      "size": 5833,
+      "index": 53
+    },
+    {
+      "id": "tests/validate_features.py",
+      "name": "tests/validate_features",
+      "stem": "validate_features",
+      "folder": "tests",
+      "color": "#FFEAA7",
+      "file_path": "tests\\validate_features.py",
+      "imports_count": 0,
+      "importance": 0.21211502130416832,
+      "is_test": true,
+      "is_init": false,
+      "size": 3453,
+      "index": 54
+    },
+    {
+      "id": "tests/validate_fix.py",
+      "name": "tests/validate_fix",
       "stem": "validate_fix",
       "folder": "tests",
-      "color": "#FFF3E0",
+      "color": "#FFEAA7",
       "file_path": "tests\\validate_fix.py",
       "imports_count": 0,
-      "importance": 0.20843558837414103,
-      "is_test": false,
+      "importance": 0.21211502130416832,
+      "is_test": true,
       "is_init": false,
       "size": 2779,
-      "index": 49
+      "index": 55
+    },
+    {
+      "id": "tests/workspace_audit.py",
+      "name": "tests/workspace_audit",
+      "stem": "workspace_audit",
+      "folder": "tests",
+      "color": "#FFEAA7",
+      "file_path": "tests\\workspace_audit.py",
+      "imports_count": 0,
+      "importance": 0.21211502130416832,
+      "is_test": true,
+      "is_init": false,
+      "size": 5834,
+      "index": 56
     }
   ],
   "edges": [
     {
       "source": 0,
       "target": 6,
-      "source_name": "root__app",
-      "target_name": "root__config",
-      "source_folder": "root",
-      "target_folder": "root",
-      "is_cross_folder": false,
-      "is_test_related": false
-    },
-    {
-      "source": 0,
-      "target": 2,
-      "source_name": "root__app",
-      "target_name": "root__app_factory",
+      "source_name": "app.py",
+      "target_name": "config.py",
       "source_folder": "root",
       "target_folder": "root",
       "is_cross_folder": false,
@@ -1138,18 +1331,18 @@
     {
       "source": 0,
       "target": 4,
-      "source_name": "root__app",
-      "target_name": "root__callbacks_split",
+      "source_name": "app.py",
+      "target_name": "callbacks_split.py",
       "source_folder": "root",
       "target_folder": "root",
       "is_cross_folder": false,
       "is_test_related": false
     },
     {
-      "source": 3,
-      "target": 25,
-      "source_name": "root__borehole_log_professional",
-      "target_name": "root__section_plot_professional",
+      "source": 0,
+      "target": 2,
+      "source_name": "app.py",
+      "target_name": "app_factory.py",
       "source_folder": "root",
       "target_folder": "root",
       "is_cross_folder": false,
@@ -1158,8 +1351,18 @@
     {
       "source": 3,
       "target": 16,
-      "source_name": "root__borehole_log_professional",
-      "target_name": "root__geology_code_utils",
+      "source_name": "borehole_log_professional.py",
+      "target_name": "geology_code_utils.py",
+      "source_folder": "root",
+      "target_folder": "root",
+      "is_cross_folder": false,
+      "is_test_related": false
+    },
+    {
+      "source": 3,
+      "target": 22,
+      "source_name": "borehole_log_professional.py",
+      "target_name": "section_plot_professional.py",
       "source_folder": "root",
       "target_folder": "root",
       "is_cross_folder": false,
@@ -1168,8 +1371,8 @@
     {
       "source": 4,
       "target": 6,
-      "source_name": "root__callbacks_split",
-      "target_name": "root__config",
+      "source_name": "callbacks_split.py",
+      "target_name": "config.py",
       "source_folder": "root",
       "target_folder": "root",
       "is_cross_folder": false,
@@ -1177,29 +1380,9 @@
     },
     {
       "source": 4,
-      "target": 1,
-      "source_name": "root__callbacks_split",
-      "target_name": "root__app_constants",
-      "source_folder": "root",
-      "target_folder": "root",
-      "is_cross_folder": false,
-      "is_test_related": false
-    },
-    {
-      "source": 4,
-      "target": 7,
-      "source_name": "root__callbacks_split",
-      "target_name": "root__coordinate_service",
-      "source_folder": "root",
-      "target_folder": "root",
-      "is_cross_folder": false,
-      "is_test_related": false
-    },
-    {
-      "source": 4,
-      "target": 3,
-      "source_name": "root__callbacks_split",
-      "target_name": "root__borehole_log_professional",
+      "target": 9,
+      "source_name": "callbacks_split.py",
+      "target_name": "data_loader.py",
       "source_folder": "root",
       "target_folder": "root",
       "is_cross_folder": false,
@@ -1208,8 +1391,18 @@
     {
       "source": 4,
       "target": 19,
-      "source_name": "root__callbacks_split",
-      "target_name": "root__loading_indicators",
+      "source_name": "callbacks_split.py",
+      "target_name": "map_utils.py",
+      "source_folder": "root",
+      "target_folder": "root",
+      "is_cross_folder": false,
+      "is_test_related": false
+    },
+    {
+      "source": 4,
+      "target": 7,
+      "source_name": "callbacks_split.py",
+      "target_name": "coordinate_service.py",
       "source_folder": "root",
       "target_folder": "root",
       "is_cross_folder": false,
@@ -1218,8 +1411,8 @@
     {
       "source": 4,
       "target": 8,
-      "source_name": "root__callbacks_split",
-      "target_name": "root__dataframe_optimizer",
+      "source_name": "callbacks_split.py",
+      "target_name": "dataframe_optimizer.py",
       "source_folder": "root",
       "target_folder": "root",
       "is_cross_folder": false,
@@ -1227,9 +1420,19 @@
     },
     {
       "source": 4,
-      "target": 9,
-      "source_name": "root__callbacks_split",
-      "target_name": "root__data_loader",
+      "target": 1,
+      "source_name": "callbacks_split.py",
+      "target_name": "app_constants.py",
+      "source_folder": "root",
+      "target_folder": "root",
+      "is_cross_folder": false,
+      "is_test_related": false
+    },
+    {
+      "source": 4,
+      "target": 18,
+      "source_name": "callbacks_split.py",
+      "target_name": "loading_indicators.py",
       "source_folder": "root",
       "target_folder": "root",
       "is_cross_folder": false,
@@ -1238,8 +1441,8 @@
     {
       "source": 4,
       "target": 20,
-      "source_name": "root__callbacks_split",
-      "target_name": "root__map_utils",
+      "source_name": "callbacks_split.py",
+      "target_name": "memory_manager.py",
       "source_folder": "root",
       "target_folder": "root",
       "is_cross_folder": false,
@@ -1247,9 +1450,9 @@
     },
     {
       "source": 4,
-      "target": 25,
-      "source_name": "root__callbacks_split",
-      "target_name": "root__section_plot_professional",
+      "target": 22,
+      "source_name": "callbacks_split.py",
+      "target_name": "section_plot_professional.py",
       "source_folder": "root",
       "target_folder": "root",
       "is_cross_folder": false,
@@ -1257,9 +1460,9 @@
     },
     {
       "source": 4,
-      "target": 24,
-      "source_name": "root__callbacks_split",
-      "target_name": "root__polyline_utils",
+      "target": 3,
+      "source_name": "callbacks_split.py",
+      "target_name": "borehole_log_professional.py",
       "source_folder": "root",
       "target_folder": "root",
       "is_cross_folder": false,
@@ -1268,38 +1471,8 @@
     {
       "source": 4,
       "target": 21,
-      "source_name": "root__callbacks_split",
-      "target_name": "root__memory_manager",
-      "source_folder": "root",
-      "target_folder": "root",
-      "is_cross_folder": false,
-      "is_test_related": false
-    },
-    {
-      "source": 5,
-      "target": 21,
-      "source_name": "root__comprehensive_optimization_validation",
-      "target_name": "root__memory_manager",
-      "source_folder": "root",
-      "target_folder": "root",
-      "is_cross_folder": false,
-      "is_test_related": false
-    },
-    {
-      "source": 5,
-      "target": 8,
-      "source_name": "root__comprehensive_optimization_validation",
-      "target_name": "root__dataframe_optimizer",
-      "source_folder": "root",
-      "target_folder": "root",
-      "is_cross_folder": false,
-      "is_test_related": false
-    },
-    {
-      "source": 5,
-      "target": 12,
-      "source_name": "root__comprehensive_optimization_validation",
-      "target_name": "root__enhanced_error_handling",
+      "source_name": "callbacks_split.py",
+      "target_name": "polyline_utils.py",
       "source_folder": "root",
       "target_folder": "root",
       "is_cross_folder": false,
@@ -1308,8 +1481,38 @@
     {
       "source": 5,
       "target": 7,
-      "source_name": "root__comprehensive_optimization_validation",
-      "target_name": "root__coordinate_service",
+      "source_name": "comprehensive_optimization_validation.py",
+      "target_name": "coordinate_service.py",
+      "source_folder": "root",
+      "target_folder": "root",
+      "is_cross_folder": false,
+      "is_test_related": false
+    },
+    {
+      "source": 5,
+      "target": 8,
+      "source_name": "comprehensive_optimization_validation.py",
+      "target_name": "dataframe_optimizer.py",
+      "source_folder": "root",
+      "target_folder": "root",
+      "is_cross_folder": false,
+      "is_test_related": false
+    },
+    {
+      "source": 5,
+      "target": 13,
+      "source_name": "comprehensive_optimization_validation.py",
+      "target_name": "enhanced_error_handling.py",
+      "source_folder": "root",
+      "target_folder": "root",
+      "is_cross_folder": false,
+      "is_test_related": false
+    },
+    {
+      "source": 5,
+      "target": 20,
+      "source_name": "comprehensive_optimization_validation.py",
+      "target_name": "memory_manager.py",
       "source_folder": "root",
       "target_folder": "root",
       "is_cross_folder": false,
@@ -1318,8 +1521,8 @@
     {
       "source": 10,
       "target": 16,
-      "source_name": "root__debug_module",
-      "target_name": "root__geology_code_utils",
+      "source_name": "debug_module.py",
+      "target_name": "geology_code_utils.py",
       "source_folder": "root",
       "target_folder": "root",
       "is_cross_folder": false,
@@ -1328,8 +1531,8 @@
     {
       "source": 11,
       "target": 3,
-      "source_name": "root__debug_offset_layout",
-      "target_name": "root__borehole_log_professional",
+      "source_name": "debug_offset_layout.py",
+      "target_name": "borehole_log_professional.py",
       "source_folder": "root",
       "target_folder": "root",
       "is_cross_folder": false,
@@ -1337,39 +1540,69 @@
     },
     {
       "source": 12,
+      "target": 37,
+      "source_name": "enhanced_dependency_graph_modular.py",
+      "target_name": "graph_modules/__init__.py",
+      "source_folder": "root",
+      "target_folder": "graph_modules",
+      "is_cross_folder": true,
+      "is_test_related": false
+    },
+    {
+      "source": 13,
+      "target": 7,
+      "source_name": "enhanced_error_handling.py",
+      "target_name": "coordinate_service.py",
+      "source_folder": "root",
+      "target_folder": "root",
+      "is_cross_folder": false,
+      "is_test_related": false
+    },
+    {
+      "source": 13,
       "target": 9,
-      "source_name": "root__enhanced_error_handling",
-      "target_name": "root__data_loader",
+      "source_name": "enhanced_error_handling.py",
+      "target_name": "data_loader.py",
       "source_folder": "root",
       "target_folder": "root",
       "is_cross_folder": false,
       "is_test_related": false
     },
     {
-      "source": 12,
+      "source": 15,
+      "target": 1,
+      "source_name": "error_recovery.py",
+      "target_name": "app_constants.py",
+      "source_folder": "root",
+      "target_folder": "root",
+      "is_cross_folder": false,
+      "is_test_related": false
+    },
+    {
+      "source": 18,
+      "target": 1,
+      "source_name": "loading_indicators.py",
+      "target_name": "app_constants.py",
+      "source_folder": "root",
+      "target_folder": "root",
+      "is_cross_folder": false,
+      "is_test_related": false
+    },
+    {
+      "source": 20,
+      "target": 17,
+      "source_name": "memory_manager.py",
+      "target_name": "lazy_marker_manager.py",
+      "source_folder": "root",
+      "target_folder": "root",
+      "is_cross_folder": false,
+      "is_test_related": false
+    },
+    {
+      "source": 20,
       "target": 7,
-      "source_name": "root__enhanced_error_handling",
-      "target_name": "root__coordinate_service",
-      "source_folder": "root",
-      "target_folder": "root",
-      "is_cross_folder": false,
-      "is_test_related": false
-    },
-    {
-      "source": 14,
-      "target": 1,
-      "source_name": "root__error_recovery",
-      "target_name": "root__app_constants",
-      "source_folder": "root",
-      "target_folder": "root",
-      "is_cross_folder": false,
-      "is_test_related": false
-    },
-    {
-      "source": 19,
-      "target": 1,
-      "source_name": "root__loading_indicators",
-      "target_name": "root__app_constants",
+      "source_name": "memory_manager.py",
+      "target_name": "coordinate_service.py",
       "source_folder": "root",
       "target_folder": "root",
       "is_cross_folder": false,
@@ -1377,19 +1610,9 @@
     },
     {
       "source": 21,
-      "target": 18,
-      "source_name": "root__memory_manager",
-      "target_name": "root__lazy_marker_manager",
-      "source_folder": "root",
-      "target_folder": "root",
-      "is_cross_folder": false,
-      "is_test_related": false
-    },
-    {
-      "source": 21,
       "target": 7,
-      "source_name": "root__memory_manager",
-      "target_name": "root__coordinate_service",
+      "source_name": "polyline_utils.py",
+      "target_name": "coordinate_service.py",
       "source_folder": "root",
       "target_folder": "root",
       "is_cross_folder": false,
@@ -1397,269 +1620,409 @@
     },
     {
       "source": 22,
-      "target": 40,
-      "source_name": "root__migration_validation",
-      "target_name": "graph_output__html_dependency_graph",
+      "target": 16,
+      "source_name": "section_plot_professional.py",
+      "target_name": "geology_code_utils.py",
       "source_folder": "root",
-      "target_folder": "graph_output",
+      "target_folder": "root",
+      "is_cross_folder": false,
+      "is_test_related": false
+    },
+    {
+      "source": 24,
+      "target": 23,
+      "source_name": "callbacks/file_upload.py",
+      "target_name": "callbacks/base.py",
+      "source_folder": "callbacks",
+      "target_folder": "callbacks",
+      "is_cross_folder": false,
+      "is_test_related": false
+    },
+    {
+      "source": 24,
+      "target": 9,
+      "source_name": "callbacks/file_upload.py",
+      "target_name": "data_loader.py",
+      "source_folder": "callbacks",
+      "target_folder": "root",
       "is_cross_folder": true,
       "is_test_related": false
     },
     {
       "source": 24,
       "target": 7,
-      "source_name": "root__polyline_utils",
-      "target_name": "root__coordinate_service",
-      "source_folder": "root",
+      "source_name": "callbacks/file_upload.py",
+      "target_name": "coordinate_service.py",
+      "source_folder": "callbacks",
       "target_folder": "root",
+      "is_cross_folder": true,
+      "is_test_related": false
+    },
+    {
+      "source": 24,
+      "target": 1,
+      "source_name": "callbacks/file_upload.py",
+      "target_name": "app_constants.py",
+      "source_folder": "callbacks",
+      "target_folder": "root",
+      "is_cross_folder": true,
+      "is_test_related": false
+    },
+    {
+      "source": 24,
+      "target": 14,
+      "source_name": "callbacks/file_upload.py",
+      "target_name": "error_handling.py",
+      "source_folder": "callbacks",
+      "target_folder": "root",
+      "is_cross_folder": true,
+      "is_test_related": false
+    },
+    {
+      "source": 24,
+      "target": 40,
+      "source_name": "callbacks/file_upload.py",
+      "target_name": "state_management/__init__.py",
+      "source_folder": "callbacks",
+      "target_folder": "state_management",
+      "is_cross_folder": true,
+      "is_test_related": false
+    },
+    {
+      "source": 24,
+      "target": 6,
+      "source_name": "callbacks/file_upload.py",
+      "target_name": "config.py",
+      "source_folder": "callbacks",
+      "target_folder": "root",
+      "is_cross_folder": true,
+      "is_test_related": false
+    },
+    {
+      "source": 25,
+      "target": 23,
+      "source_name": "callbacks/map_interactions.py",
+      "target_name": "callbacks/base.py",
+      "source_folder": "callbacks",
+      "target_folder": "callbacks",
       "is_cross_folder": false,
       "is_test_related": false
     },
     {
       "source": 25,
-      "target": 16,
-      "source_name": "root__section_plot_professional",
-      "target_name": "root__geology_code_utils",
-      "source_folder": "root",
-      "target_folder": "root",
-      "is_cross_folder": false,
-      "is_test_related": false
-    },
-    {
-      "source": 32,
-      "target": 13,
-      "source_name": "callbacks__file_upload",
-      "target_name": "root__error_handling",
+      "target": 19,
+      "source_name": "callbacks/map_interactions.py",
+      "target_name": "map_utils.py",
       "source_folder": "callbacks",
       "target_folder": "root",
       "is_cross_folder": true,
       "is_test_related": false
     },
     {
-      "source": 32,
-      "target": 6,
-      "source_name": "callbacks__file_upload",
-      "target_name": "root__config",
+      "source": 25,
+      "target": 21,
+      "source_name": "callbacks/map_interactions.py",
+      "target_name": "polyline_utils.py",
       "source_folder": "callbacks",
       "target_folder": "root",
       "is_cross_folder": true,
       "is_test_related": false
     },
     {
-      "source": 32,
-      "target": 1,
-      "source_name": "callbacks__file_upload",
-      "target_name": "root__app_constants",
-      "source_folder": "callbacks",
-      "target_folder": "root",
-      "is_cross_folder": true,
-      "is_test_related": false
-    },
-    {
-      "source": 32,
+      "source": 25,
       "target": 7,
-      "source_name": "callbacks__file_upload",
-      "target_name": "root__coordinate_service",
+      "source_name": "callbacks/map_interactions.py",
+      "target_name": "coordinate_service.py",
       "source_folder": "callbacks",
       "target_folder": "root",
       "is_cross_folder": true,
       "is_test_related": false
     },
     {
-      "source": 32,
-      "target": 9,
-      "source_name": "callbacks__file_upload",
-      "target_name": "root__data_loader",
+      "source": 25,
+      "target": 1,
+      "source_name": "callbacks/map_interactions.py",
+      "target_name": "app_constants.py",
       "source_folder": "callbacks",
       "target_folder": "root",
       "is_cross_folder": true,
       "is_test_related": false
     },
     {
-      "source": 32,
-      "target": 31,
-      "source_name": "callbacks__file_upload",
-      "target_name": "callbacks__base",
+      "source": 25,
+      "target": 14,
+      "source_name": "callbacks/map_interactions.py",
+      "target_name": "error_handling.py",
+      "source_folder": "callbacks",
+      "target_folder": "root",
+      "is_cross_folder": true,
+      "is_test_related": false
+    },
+    {
+      "source": 25,
+      "target": 40,
+      "source_name": "callbacks/map_interactions.py",
+      "target_name": "state_management/__init__.py",
+      "source_folder": "callbacks",
+      "target_folder": "state_management",
+      "is_cross_folder": true,
+      "is_test_related": false
+    },
+    {
+      "source": 25,
+      "target": 6,
+      "source_name": "callbacks/map_interactions.py",
+      "target_name": "config.py",
+      "source_folder": "callbacks",
+      "target_folder": "root",
+      "is_cross_folder": true,
+      "is_test_related": false
+    },
+    {
+      "source": 25,
+      "target": 17,
+      "source_name": "callbacks/map_interactions.py",
+      "target_name": "lazy_marker_manager.py",
+      "source_folder": "callbacks",
+      "target_folder": "root",
+      "is_cross_folder": true,
+      "is_test_related": false
+    },
+    {
+      "source": 26,
+      "target": 23,
+      "source_name": "callbacks/marker_handling.py",
+      "target_name": "callbacks/base.py",
       "source_folder": "callbacks",
       "target_folder": "callbacks",
       "is_cross_folder": false,
       "is_test_related": false
     },
     {
-      "source": 33,
-      "target": 13,
-      "source_name": "callbacks__map_interactions",
-      "target_name": "root__error_handling",
+      "source": 26,
+      "target": 40,
+      "source_name": "callbacks/marker_handling.py",
+      "target_name": "state_management/__init__.py",
+      "source_folder": "callbacks",
+      "target_folder": "state_management",
+      "is_cross_folder": true,
+      "is_test_related": false
+    },
+    {
+      "source": 26,
+      "target": 14,
+      "source_name": "callbacks/marker_handling.py",
+      "target_name": "error_handling.py",
       "source_folder": "callbacks",
       "target_folder": "root",
       "is_cross_folder": true,
       "is_test_related": false
     },
     {
-      "source": 33,
-      "target": 6,
-      "source_name": "callbacks__map_interactions",
-      "target_name": "root__config",
-      "source_folder": "callbacks",
-      "target_folder": "root",
-      "is_cross_folder": true,
-      "is_test_related": false
-    },
-    {
-      "source": 33,
+      "source": 26,
       "target": 1,
-      "source_name": "callbacks__map_interactions",
-      "target_name": "root__app_constants",
+      "source_name": "callbacks/marker_handling.py",
+      "target_name": "app_constants.py",
       "source_folder": "callbacks",
       "target_folder": "root",
       "is_cross_folder": true,
       "is_test_related": false
     },
     {
-      "source": 33,
-      "target": 18,
-      "source_name": "callbacks__map_interactions",
-      "target_name": "root__lazy_marker_manager",
+      "source": 26,
+      "target": 3,
+      "source_name": "callbacks/marker_handling.py",
+      "target_name": "borehole_log_professional.py",
       "source_folder": "callbacks",
       "target_folder": "root",
       "is_cross_folder": true,
       "is_test_related": false
     },
     {
-      "source": 33,
+      "source": 27,
+      "target": 23,
+      "source_name": "callbacks/plot_generation.py",
+      "target_name": "callbacks/base.py",
+      "source_folder": "callbacks",
+      "target_folder": "callbacks",
+      "is_cross_folder": false,
+      "is_test_related": false
+    },
+    {
+      "source": 27,
+      "target": 40,
+      "source_name": "callbacks/plot_generation.py",
+      "target_name": "state_management/__init__.py",
+      "source_folder": "callbacks",
+      "target_folder": "state_management",
+      "is_cross_folder": true,
+      "is_test_related": false
+    },
+    {
+      "source": 27,
+      "target": 14,
+      "source_name": "callbacks/plot_generation.py",
+      "target_name": "error_handling.py",
+      "source_folder": "callbacks",
+      "target_folder": "root",
+      "is_cross_folder": true,
+      "is_test_related": false
+    },
+    {
+      "source": 27,
       "target": 7,
-      "source_name": "callbacks__map_interactions",
-      "target_name": "root__coordinate_service",
+      "source_name": "callbacks/plot_generation.py",
+      "target_name": "coordinate_service.py",
       "source_folder": "callbacks",
       "target_folder": "root",
       "is_cross_folder": true,
       "is_test_related": false
     },
     {
-      "source": 33,
-      "target": 20,
-      "source_name": "callbacks__map_interactions",
-      "target_name": "root__map_utils",
+      "source": 27,
+      "target": 6,
+      "source_name": "callbacks/plot_generation.py",
+      "target_name": "config.py",
       "source_folder": "callbacks",
       "target_folder": "root",
       "is_cross_folder": true,
       "is_test_related": false
     },
     {
-      "source": 33,
+      "source": 27,
+      "target": 1,
+      "source_name": "callbacks/plot_generation.py",
+      "target_name": "app_constants.py",
+      "source_folder": "callbacks",
+      "target_folder": "root",
+      "is_cross_folder": true,
+      "is_test_related": false
+    },
+    {
+      "source": 27,
+      "target": 22,
+      "source_name": "callbacks/plot_generation.py",
+      "target_name": "section_plot_professional.py",
+      "source_folder": "callbacks",
+      "target_folder": "root",
+      "is_cross_folder": true,
+      "is_test_related": false
+    },
+    {
+      "source": 28,
+      "target": 23,
+      "source_name": "callbacks/search_functionality.py",
+      "target_name": "callbacks/base.py",
+      "source_folder": "callbacks",
+      "target_folder": "callbacks",
+      "is_cross_folder": false,
+      "is_test_related": false
+    },
+    {
+      "source": 28,
+      "target": 40,
+      "source_name": "callbacks/search_functionality.py",
+      "target_name": "state_management/__init__.py",
+      "source_folder": "callbacks",
+      "target_folder": "state_management",
+      "is_cross_folder": true,
+      "is_test_related": false
+    },
+    {
+      "source": 28,
+      "target": 14,
+      "source_name": "callbacks/search_functionality.py",
+      "target_name": "error_handling.py",
+      "source_folder": "callbacks",
+      "target_folder": "root",
+      "is_cross_folder": true,
+      "is_test_related": false
+    },
+    {
+      "source": 28,
+      "target": 7,
+      "source_name": "callbacks/search_functionality.py",
+      "target_name": "coordinate_service.py",
+      "source_folder": "callbacks",
+      "target_folder": "root",
+      "is_cross_folder": true,
+      "is_test_related": false
+    },
+    {
+      "source": 28,
+      "target": 3,
+      "source_name": "callbacks/search_functionality.py",
+      "target_name": "borehole_log_professional.py",
+      "source_folder": "callbacks",
+      "target_folder": "root",
+      "is_cross_folder": true,
+      "is_test_related": false
+    },
+    {
+      "source": 28,
+      "target": 6,
+      "source_name": "callbacks/search_functionality.py",
+      "target_name": "config.py",
+      "source_folder": "callbacks",
+      "target_folder": "root",
+      "is_cross_folder": true,
+      "is_test_related": false
+    },
+    {
+      "source": 29,
+      "target": 23,
+      "source_name": "callbacks/__init__.py",
+      "target_name": "callbacks/base.py",
+      "source_folder": "callbacks",
+      "target_folder": "callbacks",
+      "is_cross_folder": false,
+      "is_test_related": false
+    },
+    {
+      "source": 29,
       "target": 24,
-      "source_name": "callbacks__map_interactions",
-      "target_name": "root__polyline_utils",
-      "source_folder": "callbacks",
-      "target_folder": "root",
-      "is_cross_folder": true,
-      "is_test_related": false
-    },
-    {
-      "source": 33,
-      "target": 31,
-      "source_name": "callbacks__map_interactions",
-      "target_name": "callbacks__base",
+      "source_name": "callbacks/__init__.py",
+      "target_name": "callbacks/file_upload.py",
       "source_folder": "callbacks",
       "target_folder": "callbacks",
       "is_cross_folder": false,
       "is_test_related": false
     },
     {
-      "source": 34,
-      "target": 1,
-      "source_name": "callbacks__marker_handling",
-      "target_name": "root__app_constants",
-      "source_folder": "callbacks",
-      "target_folder": "root",
-      "is_cross_folder": true,
-      "is_test_related": false
-    },
-    {
-      "source": 34,
-      "target": 3,
-      "source_name": "callbacks__marker_handling",
-      "target_name": "root__borehole_log_professional",
-      "source_folder": "callbacks",
-      "target_folder": "root",
-      "is_cross_folder": true,
-      "is_test_related": false
-    },
-    {
-      "source": 34,
-      "target": 13,
-      "source_name": "callbacks__marker_handling",
-      "target_name": "root__error_handling",
-      "source_folder": "callbacks",
-      "target_folder": "root",
-      "is_cross_folder": true,
-      "is_test_related": false
-    },
-    {
-      "source": 34,
-      "target": 31,
-      "source_name": "callbacks__marker_handling",
-      "target_name": "callbacks__base",
-      "source_folder": "callbacks",
-      "target_folder": "callbacks",
-      "is_cross_folder": false,
-      "is_test_related": false
-    },
-    {
-      "source": 35,
-      "target": 13,
-      "source_name": "callbacks__plot_generation",
-      "target_name": "root__error_handling",
-      "source_folder": "callbacks",
-      "target_folder": "root",
-      "is_cross_folder": true,
-      "is_test_related": false
-    },
-    {
-      "source": 35,
-      "target": 6,
-      "source_name": "callbacks__plot_generation",
-      "target_name": "root__config",
-      "source_folder": "callbacks",
-      "target_folder": "root",
-      "is_cross_folder": true,
-      "is_test_related": false
-    },
-    {
-      "source": 35,
-      "target": 1,
-      "source_name": "callbacks__plot_generation",
-      "target_name": "root__app_constants",
-      "source_folder": "callbacks",
-      "target_folder": "root",
-      "is_cross_folder": true,
-      "is_test_related": false
-    },
-    {
-      "source": 35,
-      "target": 7,
-      "source_name": "callbacks__plot_generation",
-      "target_name": "root__coordinate_service",
-      "source_folder": "callbacks",
-      "target_folder": "root",
-      "is_cross_folder": true,
-      "is_test_related": false
-    },
-    {
-      "source": 35,
+      "source": 29,
       "target": 25,
-      "source_name": "callbacks__plot_generation",
-      "target_name": "root__section_plot_professional",
+      "source_name": "callbacks/__init__.py",
+      "target_name": "callbacks/map_interactions.py",
       "source_folder": "callbacks",
-      "target_folder": "root",
-      "is_cross_folder": true,
+      "target_folder": "callbacks",
+      "is_cross_folder": false,
       "is_test_related": false
     },
     {
-      "source": 35,
-      "target": 31,
-      "source_name": "callbacks__plot_generation",
-      "target_name": "callbacks__base",
+      "source": 29,
+      "target": 27,
+      "source_name": "callbacks/__init__.py",
+      "target_name": "callbacks/plot_generation.py",
+      "source_folder": "callbacks",
+      "target_folder": "callbacks",
+      "is_cross_folder": false,
+      "is_test_related": false
+    },
+    {
+      "source": 29,
+      "target": 28,
+      "source_name": "callbacks/__init__.py",
+      "target_name": "callbacks/search_functionality.py",
+      "source_folder": "callbacks",
+      "target_folder": "callbacks",
+      "is_cross_folder": false,
+      "is_test_related": false
+    },
+    {
+      "source": 29,
+      "target": 26,
+      "source_name": "callbacks/__init__.py",
+      "target_name": "callbacks/marker_handling.py",
       "source_folder": "callbacks",
       "target_folder": "callbacks",
       "is_cross_folder": false,
@@ -1667,174 +2030,296 @@
     },
     {
       "source": 36,
-      "target": 13,
-      "source_name": "callbacks__search_functionality",
-      "target_name": "root__error_handling",
-      "source_folder": "callbacks",
-      "target_folder": "root",
-      "is_cross_folder": true,
-      "is_test_related": false
-    },
-    {
-      "source": 36,
-      "target": 6,
-      "source_name": "callbacks__search_functionality",
-      "target_name": "root__config",
-      "source_folder": "callbacks",
-      "target_folder": "root",
-      "is_cross_folder": true,
-      "is_test_related": false
-    },
-    {
-      "source": 36,
-      "target": 7,
-      "source_name": "callbacks__search_functionality",
-      "target_name": "root__coordinate_service",
-      "source_folder": "callbacks",
-      "target_folder": "root",
-      "is_cross_folder": true,
-      "is_test_related": false
-    },
-    {
-      "source": 36,
-      "target": 3,
-      "source_name": "callbacks__search_functionality",
-      "target_name": "root__borehole_log_professional",
-      "source_folder": "callbacks",
-      "target_folder": "root",
-      "is_cross_folder": true,
-      "is_test_related": false
-    },
-    {
-      "source": 36,
-      "target": 31,
-      "source_name": "callbacks__search_functionality",
-      "target_name": "callbacks__base",
-      "source_folder": "callbacks",
-      "target_folder": "callbacks",
-      "is_cross_folder": false,
-      "is_test_related": false
-    },
-    {
-      "source": 37,
       "target": 33,
-      "source_name": "callbacks____init__",
-      "target_name": "callbacks__map_interactions",
-      "source_folder": "callbacks",
-      "target_folder": "callbacks",
+      "source_name": "graph_modules/html_generator.py",
+      "target_name": "graph_modules/graph_styles.py",
+      "source_folder": "graph_modules",
+      "target_folder": "graph_modules",
       "is_cross_folder": false,
       "is_test_related": false
     },
     {
-      "source": 37,
-      "target": 32,
-      "source_name": "callbacks____init__",
-      "target_name": "callbacks__file_upload",
-      "source_folder": "callbacks",
-      "target_folder": "callbacks",
-      "is_cross_folder": false,
-      "is_test_related": false
-    },
-    {
-      "source": 37,
+      "source": 36,
       "target": 34,
-      "source_name": "callbacks____init__",
-      "target_name": "callbacks__marker_handling",
-      "source_folder": "callbacks",
-      "target_folder": "callbacks",
+      "source_name": "graph_modules/html_generator.py",
+      "target_name": "graph_modules/graph_visualization.py",
+      "source_folder": "graph_modules",
+      "target_folder": "graph_modules",
+      "is_cross_folder": false,
+      "is_test_related": false
+    },
+    {
+      "source": 36,
+      "target": 35,
+      "source_name": "graph_modules/html_generator.py",
+      "target_name": "graph_modules/hierarchical_layout.py",
+      "source_folder": "graph_modules",
+      "target_folder": "graph_modules",
+      "is_cross_folder": false,
+      "is_test_related": false
+    },
+    {
+      "source": 36,
+      "target": 31,
+      "source_name": "graph_modules/html_generator.py",
+      "target_name": "graph_modules/force_directed_layout.py",
+      "source_folder": "graph_modules",
+      "target_folder": "graph_modules",
+      "is_cross_folder": false,
+      "is_test_related": false
+    },
+    {
+      "source": 36,
+      "target": 32,
+      "source_name": "graph_modules/html_generator.py",
+      "target_name": "graph_modules/graph_controls.py",
+      "source_folder": "graph_modules",
+      "target_folder": "graph_modules",
+      "is_cross_folder": false,
+      "is_test_related": false
+    },
+    {
+      "source": 36,
+      "target": 30,
+      "source_name": "graph_modules/html_generator.py",
+      "target_name": "graph_modules/dependency_analyzer.py",
+      "source_folder": "graph_modules",
+      "target_folder": "graph_modules",
+      "is_cross_folder": false,
+      "is_test_related": false
+    },
+    {
+      "source": 37,
+      "target": 30,
+      "source_name": "graph_modules/__init__.py",
+      "target_name": "graph_modules/dependency_analyzer.py",
+      "source_folder": "graph_modules",
+      "target_folder": "graph_modules",
       "is_cross_folder": false,
       "is_test_related": false
     },
     {
       "source": 37,
       "target": 36,
-      "source_name": "callbacks____init__",
-      "target_name": "callbacks__search_functionality",
-      "source_folder": "callbacks",
-      "target_folder": "callbacks",
+      "source_name": "graph_modules/__init__.py",
+      "target_name": "graph_modules/html_generator.py",
+      "source_folder": "graph_modules",
+      "target_folder": "graph_modules",
       "is_cross_folder": false,
       "is_test_related": false
     },
     {
-      "source": 37,
+      "source": 38,
+      "target": 39,
+      "source_name": "state_management/app_state.py",
+      "target_name": "state_management/state_models.py",
+      "source_folder": "state_management",
+      "target_folder": "state_management",
+      "is_cross_folder": false,
+      "is_test_related": false
+    },
+    {
+      "source": 40,
+      "target": 38,
+      "source_name": "state_management/__init__.py",
+      "target_name": "state_management/app_state.py",
+      "source_folder": "state_management",
+      "target_folder": "state_management",
+      "is_cross_folder": false,
+      "is_test_related": false
+    },
+    {
+      "source": 40,
+      "target": 39,
+      "source_name": "state_management/__init__.py",
+      "target_name": "state_management/state_models.py",
+      "source_folder": "state_management",
+      "target_folder": "state_management",
+      "is_cross_folder": false,
+      "is_test_related": false
+    },
+    {
+      "source": 53,
+      "target": 30,
+      "source_name": "tests/test_modular_graph.py",
+      "target_name": "graph_modules/dependency_analyzer.py",
+      "source_folder": "tests",
+      "target_folder": "graph_modules",
+      "is_cross_folder": true,
+      "is_test_related": true
+    },
+    {
+      "source": 53,
+      "target": 33,
+      "source_name": "tests/test_modular_graph.py",
+      "target_name": "graph_modules/graph_styles.py",
+      "source_folder": "tests",
+      "target_folder": "graph_modules",
+      "is_cross_folder": true,
+      "is_test_related": true
+    },
+    {
+      "source": 53,
       "target": 35,
-      "source_name": "callbacks____init__",
-      "target_name": "callbacks__plot_generation",
-      "source_folder": "callbacks",
-      "target_folder": "callbacks",
-      "is_cross_folder": false,
-      "is_test_related": false
+      "source_name": "tests/test_modular_graph.py",
+      "target_name": "graph_modules/hierarchical_layout.py",
+      "source_folder": "tests",
+      "target_folder": "graph_modules",
+      "is_cross_folder": true,
+      "is_test_related": true
     },
     {
-      "source": 37,
+      "source": 53,
       "target": 31,
-      "source_name": "callbacks____init__",
-      "target_name": "callbacks__base",
-      "source_folder": "callbacks",
-      "target_folder": "callbacks",
-      "is_cross_folder": false,
-      "is_test_related": false
+      "source_name": "tests/test_modular_graph.py",
+      "target_name": "graph_modules/force_directed_layout.py",
+      "source_folder": "tests",
+      "target_folder": "graph_modules",
+      "is_cross_folder": true,
+      "is_test_related": true
     },
     {
-      "source": 41,
-      "target": 42,
-      "source_name": "state_management__app_state",
-      "target_name": "state_management__state_models",
-      "source_folder": "state_management",
-      "target_folder": "state_management",
-      "is_cross_folder": false,
-      "is_test_related": false
+      "source": 53,
+      "target": 34,
+      "source_name": "tests/test_modular_graph.py",
+      "target_name": "graph_modules/graph_visualization.py",
+      "source_folder": "tests",
+      "target_folder": "graph_modules",
+      "is_cross_folder": true,
+      "is_test_related": true
     },
     {
-      "source": 43,
-      "target": 41,
-      "source_name": "state_management____init__",
-      "target_name": "state_management__app_state",
-      "source_folder": "state_management",
-      "target_folder": "state_management",
-      "is_cross_folder": false,
-      "is_test_related": false
+      "source": 53,
+      "target": 32,
+      "source_name": "tests/test_modular_graph.py",
+      "target_name": "graph_modules/graph_controls.py",
+      "source_folder": "tests",
+      "target_folder": "graph_modules",
+      "is_cross_folder": true,
+      "is_test_related": true
     },
     {
-      "source": 43,
-      "target": 42,
-      "source_name": "state_management____init__",
-      "target_name": "state_management__state_models",
-      "source_folder": "state_management",
-      "target_folder": "state_management",
-      "is_cross_folder": false,
-      "is_test_related": false
+      "source": 53,
+      "target": 36,
+      "source_name": "tests/test_modular_graph.py",
+      "target_name": "graph_modules/html_generator.py",
+      "source_folder": "tests",
+      "target_folder": "graph_modules",
+      "is_cross_folder": true,
+      "is_test_related": true
+    },
+    {
+      "source": 53,
+      "target": 37,
+      "source_name": "tests/test_modular_graph.py",
+      "target_name": "graph_modules/__init__.py",
+      "source_folder": "tests",
+      "target_folder": "graph_modules",
+      "is_cross_folder": true,
+      "is_test_related": true
+    },
+    {
+      "source": 53,
+      "target": 37,
+      "source_name": "tests/test_modular_graph.py",
+      "target_name": "graph_modules/__init__.py",
+      "source_folder": "tests",
+      "target_folder": "graph_modules",
+      "is_cross_folder": true,
+      "is_test_related": true
+    },
+    {
+      "source": 53,
+      "target": 33,
+      "source_name": "tests/test_modular_graph.py",
+      "target_name": "graph_modules/graph_styles.py",
+      "source_folder": "tests",
+      "target_folder": "graph_modules",
+      "is_cross_folder": true,
+      "is_test_related": true
+    },
+    {
+      "source": 53,
+      "target": 35,
+      "source_name": "tests/test_modular_graph.py",
+      "target_name": "graph_modules/hierarchical_layout.py",
+      "source_folder": "tests",
+      "target_folder": "graph_modules",
+      "is_cross_folder": true,
+      "is_test_related": true
+    },
+    {
+      "source": 53,
+      "target": 31,
+      "source_name": "tests/test_modular_graph.py",
+      "target_name": "graph_modules/force_directed_layout.py",
+      "source_folder": "tests",
+      "target_folder": "graph_modules",
+      "is_cross_folder": true,
+      "is_test_related": true
+    },
+    {
+      "source": 53,
+      "target": 34,
+      "source_name": "tests/test_modular_graph.py",
+      "target_name": "graph_modules/graph_visualization.py",
+      "source_folder": "tests",
+      "target_folder": "graph_modules",
+      "is_cross_folder": true,
+      "is_test_related": true
+    },
+    {
+      "source": 53,
+      "target": 32,
+      "source_name": "tests/test_modular_graph.py",
+      "target_name": "graph_modules/graph_controls.py",
+      "source_folder": "tests",
+      "target_folder": "graph_modules",
+      "is_cross_folder": true,
+      "is_test_related": true
+    },
+    {
+      "source": 53,
+      "target": 36,
+      "source_name": "tests/test_modular_graph.py",
+      "target_name": "graph_modules/html_generator.py",
+      "source_folder": "tests",
+      "target_folder": "graph_modules",
+      "is_cross_folder": true,
+      "is_test_related": true
     }
   ],
   "dependencies": {
-    "root__app": {
+    "app.py": {
       "file_path": "app.py",
       "folder": "root",
       "stem": "app",
       "display_name": "app",
       "imports": [
-        "root__config",
-        "root__app_factory",
-        "root__callbacks_split"
+        "config.py",
+        "callbacks_split.py",
+        "app_factory.py"
       ],
       "all_imports": [
         "dash",
-        "app_factory",
-        "webbrowser",
-        "callbacks_split",
-        "sys",
-        "logging",
+        "dash",
         "dash_leaflet",
+        "dash_leaflet",
+        "logging",
+        "sys",
+        "webbrowser",
+        "datetime",
         "config",
-        "datetime"
+        "callbacks_split",
+        "app_factory"
       ],
-      "imports_count": 9,
+      "imports_count": 11,
       "internal_imports_count": 3,
       "is_test": false,
       "is_init": false,
       "size": 23005
     },
-    "root__app_constants": {
+    "app_constants.py": {
       "file_path": "app_constants.py",
       "folder": "root",
       "stem": "app_constants",
@@ -1847,7 +2332,7 @@
       "is_init": false,
       "size": 8612
     },
-    "root__app_factory": {
+    "app_factory.py": {
       "file_path": "app_factory.py",
       "folder": "root",
       "stem": "app_factory",
@@ -1862,30 +2347,30 @@
       "is_init": false,
       "size": 576
     },
-    "root__borehole_log_professional": {
+    "borehole_log_professional.py": {
       "file_path": "borehole_log_professional.py",
       "folder": "root",
       "stem": "borehole_log_professional",
       "display_name": "borehole_log_professional",
       "imports": [
-        "root__section_plot_professional",
-        "root__geology_code_utils"
+        "geology_code_utils.py",
+        "section_plot_professional.py"
       ],
       "all_imports": [
-        "matplotlib.patches",
         "geology_code_utils",
+        "matplotlib.pyplot",
         "matplotlib",
+        "matplotlib.patches",
+        "pandas",
+        "logging",
+        "numpy",
+        "base64",
         "io",
         "textwrap",
-        "matplotlib.pyplot",
-        "contextlib",
         "csv",
-        "section_plot_professional",
         "typing",
-        "logging",
-        "pandas",
-        "numpy",
-        "base64"
+        "contextlib",
+        "section_plot_professional"
       ],
       "imports_count": 14,
       "internal_imports_count": 2,
@@ -1893,81 +2378,82 @@
       "is_init": false,
       "size": 63204
     },
-    "root__callbacks_split": {
+    "callbacks_split.py": {
       "file_path": "callbacks_split.py",
       "folder": "root",
       "stem": "callbacks_split",
       "display_name": "callbacks_split",
       "imports": [
-        "root__config",
-        "root__app_constants",
-        "root__coordinate_service",
-        "root__borehole_log_professional",
-        "root__loading_indicators",
-        "root__dataframe_optimizer",
-        "root__data_loader",
-        "root__map_utils",
-        "root__section_plot_professional",
-        "root__polyline_utils",
-        "root__memory_manager"
+        "config.py",
+        "data_loader.py",
+        "map_utils.py",
+        "coordinate_service.py",
+        "dataframe_optimizer.py",
+        "app_constants.py",
+        "loading_indicators.py",
+        "memory_manager.py",
+        "section_plot_professional.py",
+        "borehole_log_professional.py",
+        "polyline_utils.py"
       ],
       "all_imports": [
-        "sklearn.decomposition",
+        "dash",
+        "dash",
+        "dash_leaflet",
+        "pandas",
+        "logging",
         "statistics",
-        "data_loader",
-        "loading_indicators",
-        "datetime",
+        "base64",
+        "io",
+        "sklearn.decomposition",
         "matplotlib",
+        "matplotlib.pyplot",
+        "datetime",
+        "config",
+        "data_loader",
         "map_utils",
         "coordinate_service",
-        "section_plot_professional",
-        "borehole_log_professional",
-        "traceback",
-        "polyline_utils",
-        "pandas",
-        "base64",
-        "matplotlib.pyplot",
-        "config",
-        "memory_manager",
-        "dash",
-        "io",
-        "logging",
         "dataframe_optimizer",
         "app_constants",
-        "dash_leaflet",
-        "numpy"
+        "loading_indicators",
+        "memory_manager",
+        "section_plot_professional",
+        "borehole_log_professional",
+        "polyline_utils",
+        "numpy",
+        "traceback"
       ],
-      "imports_count": 24,
+      "imports_count": 25,
       "internal_imports_count": 11,
       "is_test": false,
       "is_init": false,
       "size": 98589
     },
-    "root__comprehensive_optimization_validation": {
+    "comprehensive_optimization_validation.py": {
       "file_path": "comprehensive_optimization_validation.py",
       "folder": "root",
       "stem": "comprehensive_optimization_validation",
       "display_name": "comprehensive_optimization_validation",
       "imports": [
-        "root__memory_manager",
-        "root__dataframe_optimizer",
-        "root__enhanced_error_handling",
-        "root__coordinate_service"
+        "coordinate_service.py",
+        "dataframe_optimizer.py",
+        "enhanced_error_handling.py",
+        "memory_manager.py"
       ],
       "all_imports": [
-        "enhanced_error_handling",
-        "matplotlib",
-        "io",
-        "matplotlib.pyplot",
-        "coordinate_service",
-        "time",
-        "traceback",
-        "sys",
         "logging",
-        "dataframe_optimizer",
+        "time",
+        "sys",
         "pandas",
         "numpy",
-        "memory_manager"
+        "matplotlib.pyplot",
+        "io",
+        "coordinate_service",
+        "dataframe_optimizer",
+        "enhanced_error_handling",
+        "memory_manager",
+        "matplotlib",
+        "traceback"
       ],
       "imports_count": 13,
       "internal_imports_count": 4,
@@ -1975,7 +2461,7 @@
       "is_init": false,
       "size": 24553
     },
-    "root__config": {
+    "config.py": {
       "file_path": "config.py",
       "folder": "root",
       "stem": "config",
@@ -1988,19 +2474,19 @@
       "is_init": false,
       "size": 23646
     },
-    "root__coordinate_service": {
+    "coordinate_service.py": {
       "file_path": "coordinate_service.py",
       "folder": "root",
       "stem": "coordinate_service",
       "display_name": "coordinate_service",
       "imports": [],
       "all_imports": [
-        "functools",
-        "pyproj",
-        "typing",
         "logging",
+        "numpy",
         "pandas",
-        "numpy"
+        "pyproj",
+        "functools",
+        "typing"
       ],
       "imports_count": 6,
       "internal_imports_count": 0,
@@ -2008,17 +2494,17 @@
       "is_init": false,
       "size": 13690
     },
-    "root__dataframe_optimizer": {
+    "dataframe_optimizer.py": {
       "file_path": "dataframe_optimizer.py",
       "folder": "root",
       "stem": "dataframe_optimizer",
       "display_name": "dataframe_optimizer",
       "imports": [],
       "all_imports": [
+        "pandas",
         "numpy",
         "logging",
-        "typing",
-        "pandas"
+        "typing"
       ],
       "imports_count": 4,
       "internal_imports_count": 0,
@@ -2026,7 +2512,7 @@
       "is_init": false,
       "size": 10995
     },
-    "root__data_loader": {
+    "data_loader.py": {
       "file_path": "data_loader.py",
       "folder": "root",
       "stem": "data_loader",
@@ -2043,21 +2529,21 @@
       "is_init": false,
       "size": 1730
     },
-    "root__debug_module": {
+    "debug_module.py": {
       "file_path": "debug_module.py",
       "folder": "root",
       "stem": "debug_module",
       "display_name": "debug_module",
       "imports": [
-        "root__geology_code_utils"
+        "geology_code_utils.py"
       ],
       "all_imports": [
-        "matplotlib.patches",
-        "geology_code_utils",
         "matplotlib.pyplot",
-        "typing",
+        "matplotlib.patches",
+        "pandas",
         "logging",
-        "pandas"
+        "typing",
+        "geology_code_utils"
       ],
       "imports_count": 6,
       "internal_imports_count": 1,
@@ -2065,19 +2551,19 @@
       "is_init": false,
       "size": 1122
     },
-    "root__debug_offset_layout": {
+    "debug_offset_layout.py": {
       "file_path": "debug_offset_layout.py",
       "folder": "root",
       "stem": "debug_offset_layout",
       "display_name": "debug_offset_layout",
       "imports": [
-        "root__borehole_log_professional"
+        "borehole_log_professional.py"
       ],
       "all_imports": [
-        "logging",
-        "borehole_log_professional",
         "traceback",
-        "sys"
+        "sys",
+        "logging",
+        "borehole_log_professional"
       ],
       "imports_count": 4,
       "internal_imports_count": 1,
@@ -2085,24 +2571,41 @@
       "is_init": false,
       "size": 1803
     },
-    "root__enhanced_error_handling": {
+    "enhanced_dependency_graph_modular.py": {
+      "file_path": "enhanced_dependency_graph_modular.py",
+      "folder": "root",
+      "stem": "enhanced_dependency_graph_modular",
+      "display_name": "enhanced_dependency_graph_modular",
+      "imports": [
+        "graph_modules/__init__.py"
+      ],
+      "all_imports": [
+        "graph_modules"
+      ],
+      "imports_count": 1,
+      "internal_imports_count": 1,
+      "is_test": false,
+      "is_init": false,
+      "size": 915
+    },
+    "enhanced_error_handling.py": {
       "file_path": "enhanced_error_handling.py",
       "folder": "root",
       "stem": "enhanced_error_handling",
       "display_name": "enhanced_error_handling",
       "imports": [
-        "root__data_loader",
-        "root__coordinate_service"
+        "coordinate_service.py",
+        "data_loader.py"
       ],
       "all_imports": [
-        "functools",
-        "dataclasses",
-        "coordinate_service",
-        "time",
-        "typing",
-        "data_loader",
         "logging",
-        "enum"
+        "time",
+        "functools",
+        "typing",
+        "dataclasses",
+        "enum",
+        "coordinate_service",
+        "data_loader"
       ],
       "imports_count": 8,
       "internal_imports_count": 2,
@@ -2110,42 +2613,43 @@
       "is_init": false,
       "size": 12371
     },
-    "root__error_handling": {
+    "error_handling.py": {
       "file_path": "error_handling.py",
       "folder": "root",
       "stem": "error_handling",
       "display_name": "error_handling",
       "imports": [],
       "all_imports": [
-        "dash",
-        "dataclasses",
-        "traceback",
-        "typing",
-        "enum",
         "logging",
-        "datetime"
+        "traceback",
+        "enum",
+        "dataclasses",
+        "typing",
+        "datetime",
+        "dash",
+        "dash"
       ],
-      "imports_count": 7,
+      "imports_count": 8,
       "internal_imports_count": 0,
       "is_test": false,
       "is_init": false,
       "size": 13039
     },
-    "root__error_recovery": {
+    "error_recovery.py": {
       "file_path": "error_recovery.py",
       "folder": "root",
       "stem": "error_recovery",
       "display_name": "error_recovery",
       "imports": [
-        "root__app_constants"
+        "app_constants.py"
       ],
       "all_imports": [
-        "functools",
-        "time",
-        "contextlib",
-        "traceback",
-        "typing",
         "logging",
+        "time",
+        "traceback",
+        "functools",
+        "typing",
+        "contextlib",
         "app_constants"
       ],
       "imports_count": 7,
@@ -2154,23 +2658,7 @@
       "is_init": false,
       "size": 16853
     },
-    "root__final_validation": {
-      "file_path": "final_validation.py",
-      "folder": "root",
-      "stem": "final_validation",
-      "display_name": "final_validation",
-      "imports": [],
-      "all_imports": [
-        "pathlib",
-        "json"
-      ],
-      "imports_count": 2,
-      "internal_imports_count": 0,
-      "is_test": false,
-      "is_init": false,
-      "size": 3910
-    },
-    "root__geology_code_utils": {
+    "geology_code_utils.py": {
       "file_path": "geology_code_utils.py",
       "folder": "root",
       "stem": "geology_code_utils",
@@ -2186,35 +2674,18 @@
       "is_init": false,
       "size": 1795
     },
-    "root__interactive_validation": {
-      "file_path": "interactive_validation.py",
-      "folder": "root",
-      "stem": "interactive_validation",
-      "display_name": "interactive_validation",
-      "imports": [],
-      "all_imports": [
-        "re",
-        "json",
-        "datetime"
-      ],
-      "imports_count": 3,
-      "internal_imports_count": 0,
-      "is_test": false,
-      "is_init": false,
-      "size": 22052
-    },
-    "root__lazy_marker_manager": {
+    "lazy_marker_manager.py": {
       "file_path": "lazy_marker_manager.py",
       "folder": "root",
       "stem": "lazy_marker_manager",
       "display_name": "lazy_marker_manager",
       "imports": [],
       "all_imports": [
-        "dataclasses",
-        "typing",
         "logging",
         "pandas",
-        "dash_leaflet"
+        "dash_leaflet",
+        "typing",
+        "dataclasses"
       ],
       "imports_count": 5,
       "internal_imports_count": 0,
@@ -2222,38 +2693,39 @@
       "is_init": false,
       "size": 16437
     },
-    "root__loading_indicators": {
+    "loading_indicators.py": {
       "file_path": "loading_indicators.py",
       "folder": "root",
       "stem": "loading_indicators",
       "display_name": "loading_indicators",
       "imports": [
-        "root__app_constants"
+        "app_constants.py"
       ],
       "all_imports": [
         "dash",
+        "dash",
         "time",
-        "app_constants",
-        "typing"
+        "typing",
+        "app_constants"
       ],
-      "imports_count": 4,
+      "imports_count": 5,
       "internal_imports_count": 1,
       "is_test": false,
       "is_init": false,
       "size": 14236
     },
-    "root__map_utils": {
+    "map_utils.py": {
       "file_path": "map_utils.py",
       "folder": "root",
       "stem": "map_utils",
       "display_name": "map_utils",
       "imports": [],
       "all_imports": [
-        "shapely.ops",
-        "pyproj",
-        "logging",
         "pandas",
-        "shapely.geometry"
+        "logging",
+        "shapely.geometry",
+        "shapely.ops",
+        "pyproj"
       ],
       "imports_count": 5,
       "internal_imports_count": 0,
@@ -2261,26 +2733,26 @@
       "is_init": false,
       "size": 12405
     },
-    "root__memory_manager": {
+    "memory_manager.py": {
       "file_path": "memory_manager.py",
       "folder": "root",
       "stem": "memory_manager",
       "display_name": "memory_manager",
       "imports": [
-        "root__lazy_marker_manager",
-        "root__coordinate_service"
+        "lazy_marker_manager.py",
+        "coordinate_service.py"
       ],
       "all_imports": [
-        "dataclasses",
-        "coordinate_service",
-        "typing",
-        "sys",
         "gc",
-        "psutil",
         "logging",
-        "lazy_marker_manager",
+        "psutil",
+        "sys",
+        "typing",
+        "datetime",
+        "dataclasses",
         "pandas",
-        "datetime"
+        "lazy_marker_manager",
+        "coordinate_service"
       ],
       "imports_count": 10,
       "internal_imports_count": 2,
@@ -2288,60 +2760,23 @@
       "is_init": false,
       "size": 14105
     },
-    "root__migration_validation": {
-      "file_path": "migration_validation.py",
-      "folder": "root",
-      "stem": "migration_validation",
-      "display_name": "migration_validation",
-      "imports": [
-        "graph_output__html_dependency_graph"
-      ],
-      "all_imports": [
-        "time",
-        "json",
-        "sys",
-        "html_dependency_graph",
-        "os"
-      ],
-      "imports_count": 5,
-      "internal_imports_count": 1,
-      "is_test": false,
-      "is_init": false,
-      "size": 8451
-    },
-    "root__options_exploration": {
-      "file_path": "options_exploration.py",
-      "folder": "root",
-      "stem": "options_exploration",
-      "display_name": "options_exploration",
-      "imports": [],
-      "all_imports": [
-        "json",
-        "math"
-      ],
-      "imports_count": 2,
-      "internal_imports_count": 0,
-      "is_test": false,
-      "is_init": false,
-      "size": 19788
-    },
-    "root__polyline_utils": {
+    "polyline_utils.py": {
       "file_path": "polyline_utils.py",
       "folder": "root",
       "stem": "polyline_utils",
       "display_name": "polyline_utils",
       "imports": [
-        "root__coordinate_service"
+        "coordinate_service.py"
       ],
       "all_imports": [
-        "shapely.ops",
-        "coordinate_service",
-        "pyproj",
         "logging",
-        "dash_leaflet",
-        "pandas",
+        "pyproj",
         "shapely.geometry",
-        "numpy"
+        "shapely.ops",
+        "dash_leaflet",
+        "numpy",
+        "coordinate_service",
+        "pandas"
       ],
       "imports_count": 8,
       "internal_imports_count": 1,
@@ -2349,134 +2784,45 @@
       "is_init": false,
       "size": 15171
     },
-    "root__section_plot_professional": {
+    "section_plot_professional.py": {
       "file_path": "section_plot_professional.py",
       "folder": "root",
       "stem": "section_plot_professional",
       "display_name": "section_plot_professional",
       "imports": [
-        "root__geology_code_utils"
+        "geology_code_utils.py"
       ],
       "all_imports": [
-        "matplotlib",
         "geology_code_utils",
-        "matplotlib.patches",
-        "io",
-        "shapely.geometry",
-        "matplotlib.pyplot",
-        "pyproj",
-        "contextlib",
         "csv",
-        "typing",
-        "logging",
         "pandas",
-        "matplotlib.ticker",
         "numpy",
+        "pyproj",
+        "re",
+        "matplotlib.pyplot",
+        "matplotlib",
+        "matplotlib.ticker",
+        "matplotlib.patches",
         "base64",
-        "re"
+        "io",
+        "logging",
+        "typing",
+        "contextlib",
+        "matplotlib.patches",
+        "shapely.geometry",
+        "shapely.geometry"
       ],
-      "imports_count": 16,
+      "imports_count": 18,
       "internal_imports_count": 1,
       "is_test": false,
       "is_init": false,
       "size": 29723
     },
-    "root__test_enhanced_dependency_graph": {
-      "file_path": "test_enhanced_dependency_graph.py",
-      "folder": "root",
-      "stem": "test_enhanced_dependency_graph",
-      "display_name": "test_enhanced_dependency_graph",
-      "imports": [],
-      "all_imports": [
-        "pathlib",
-        "webbrowser",
-        "json",
-        "sys",
-        "subprocess",
-        "graph_output.enhanced_dependency_graph",
-        "os"
-      ],
-      "imports_count": 7,
-      "internal_imports_count": 0,
-      "is_test": true,
-      "is_init": false,
-      "size": 12394
-    },
-    "root__test_force_directed_layout": {
-      "file_path": "test_force_directed_layout.py",
-      "folder": "root",
-      "stem": "test_force_directed_layout",
-      "display_name": "test_force_directed_layout",
-      "imports": [],
-      "all_imports": [
-        "pathlib",
-        "re",
-        "os"
-      ],
-      "imports_count": 3,
-      "internal_imports_count": 0,
-      "is_test": true,
-      "is_init": false,
-      "size": 7430
-    },
-    "root__test_internal_imports": {
-      "file_path": "test_internal_imports.py",
-      "folder": "root",
-      "stem": "test_internal_imports",
-      "display_name": "test_internal_imports",
-      "imports": [],
-      "all_imports": [
-        "pathlib",
-        "typing",
-        "json",
-        "ast"
-      ],
-      "imports_count": 4,
-      "internal_imports_count": 0,
-      "is_test": true,
-      "is_init": false,
-      "size": 6669
-    },
-    "root__validate_features": {
-      "file_path": "validate_features.py",
-      "folder": "root",
-      "stem": "validate_features",
-      "display_name": "validate_features",
-      "imports": [],
-      "all_imports": [
-        "pathlib",
-        "json",
-        "os"
-      ],
-      "imports_count": 3,
-      "internal_imports_count": 0,
-      "is_test": false,
-      "is_init": false,
-      "size": 3453
-    },
-    "root__workspace_audit": {
-      "file_path": "workspace_audit.py",
-      "folder": "root",
-      "stem": "workspace_audit",
-      "display_name": "workspace_audit",
-      "imports": [],
-      "all_imports": [
-        "pathlib",
-        "typing",
-        "json",
-        "ast"
-      ],
-      "imports_count": 4,
-      "internal_imports_count": 0,
-      "is_test": false,
-      "is_init": false,
-      "size": 5834
-    },
-    "callbacks__base": {
+    "callbacks/base.py": {
       "file_path": "callbacks\\base.py",
       "folder": "callbacks",
       "stem": "base",
-      "display_name": "base (callbacks)",
+      "display_name": "callbacks/base",
       "imports": [],
       "all_imports": [
         "logging",
@@ -2488,196 +2834,206 @@
       "is_init": false,
       "size": 1528
     },
-    "callbacks__file_upload": {
+    "callbacks/file_upload.py": {
       "file_path": "callbacks\\file_upload.py",
       "folder": "callbacks",
       "stem": "file_upload",
-      "display_name": "file_upload (callbacks)",
+      "display_name": "callbacks/file_upload",
       "imports": [
-        "root__error_handling",
-        "root__config",
-        "root__app_constants",
-        "root__coordinate_service",
-        "root__data_loader",
-        "callbacks__base"
+        "callbacks/base.py",
+        "data_loader.py",
+        "coordinate_service.py",
+        "app_constants.py",
+        "error_handling.py",
+        "state_management/__init__.py",
+        "config.py"
       ],
       "all_imports": [
-        "config",
-        "dash",
+        "logging",
+        "base64",
         "statistics",
-        "coordinate_service",
+        "datetime",
         "typing",
+        "pandas",
+        "dash",
+        "dash",
         "base",
         "data_loader",
-        "logging",
+        "coordinate_service",
         "app_constants",
+        "error_handling",
         "state_management",
-        "pandas",
         "dash_leaflet",
-        "base64",
-        "datetime",
-        "error_handling"
+        "config"
       ],
-      "imports_count": 15,
-      "internal_imports_count": 6,
+      "imports_count": 16,
+      "internal_imports_count": 7,
       "is_test": false,
       "is_init": false,
       "size": 17399
     },
-    "callbacks__map_interactions": {
+    "callbacks/map_interactions.py": {
       "file_path": "callbacks\\map_interactions.py",
       "folder": "callbacks",
       "stem": "map_interactions",
-      "display_name": "map_interactions (callbacks)",
+      "display_name": "callbacks/map_interactions",
       "imports": [
-        "root__error_handling",
-        "root__config",
-        "root__app_constants",
-        "root__lazy_marker_manager",
-        "root__coordinate_service",
-        "root__map_utils",
-        "root__polyline_utils",
-        "callbacks__base"
+        "callbacks/base.py",
+        "map_utils.py",
+        "polyline_utils.py",
+        "coordinate_service.py",
+        "app_constants.py",
+        "error_handling.py",
+        "state_management/__init__.py",
+        "config.py",
+        "lazy_marker_manager.py"
       ],
       "all_imports": [
+        "logging",
+        "datetime",
+        "typing",
+        "pandas",
+        "dash",
         "dash",
         "sklearn.decomposition",
-        "error_handling",
-        "coordinate_service",
-        "typing",
-        "base",
-        "logging",
-        "polyline_utils",
-        "app_constants",
-        "state_management",
-        "pandas",
         "dash_leaflet",
-        "lazy_marker_manager",
+        "base",
+        "map_utils",
+        "polyline_utils",
+        "coordinate_service",
+        "app_constants",
+        "error_handling",
+        "state_management",
         "config",
-        "datetime",
-        "map_utils"
+        "dash",
+        "lazy_marker_manager"
       ],
-      "imports_count": 16,
-      "internal_imports_count": 8,
+      "imports_count": 18,
+      "internal_imports_count": 9,
       "is_test": false,
       "is_init": false,
       "size": 23327
     },
-    "callbacks__marker_handling": {
+    "callbacks/marker_handling.py": {
       "file_path": "callbacks\\marker_handling.py",
       "folder": "callbacks",
       "stem": "marker_handling",
-      "display_name": "marker_handling (callbacks)",
+      "display_name": "callbacks/marker_handling",
       "imports": [
-        "root__app_constants",
-        "root__borehole_log_professional",
-        "root__error_handling",
-        "callbacks__base"
+        "callbacks/base.py",
+        "state_management/__init__.py",
+        "error_handling.py",
+        "app_constants.py",
+        "borehole_log_professional.py"
       ],
       "all_imports": [
-        "dash",
-        "borehole_log_professional",
-        "base",
         "logging",
-        "state_management",
-        "app_constants",
+        "dash",
+        "dash",
         "pandas",
         "dash_leaflet",
-        "error_handling"
+        "base",
+        "state_management",
+        "error_handling",
+        "app_constants",
+        "borehole_log_professional"
       ],
-      "imports_count": 9,
-      "internal_imports_count": 4,
+      "imports_count": 10,
+      "internal_imports_count": 5,
       "is_test": false,
       "is_init": false,
       "size": 12731
     },
-    "callbacks__plot_generation": {
+    "callbacks/plot_generation.py": {
       "file_path": "callbacks\\plot_generation.py",
       "folder": "callbacks",
       "stem": "plot_generation",
-      "display_name": "plot_generation (callbacks)",
+      "display_name": "callbacks/plot_generation",
       "imports": [
-        "root__error_handling",
-        "root__config",
-        "root__app_constants",
-        "root__coordinate_service",
-        "root__section_plot_professional",
-        "callbacks__base"
+        "callbacks/base.py",
+        "state_management/__init__.py",
+        "error_handling.py",
+        "coordinate_service.py",
+        "config.py",
+        "app_constants.py",
+        "section_plot_professional.py"
       ],
       "all_imports": [
-        "config",
-        "dash",
-        "io",
-        "matplotlib.pyplot",
-        "coordinate_service",
-        "section_plot_professional",
-        "base",
         "logging",
-        "state_management",
-        "app_constants",
-        "pandas",
-        "shapely.geometry",
+        "io",
         "base64",
         "datetime",
-        "error_handling"
+        "dash",
+        "dash",
+        "pandas",
+        "matplotlib.pyplot",
+        "base",
+        "state_management",
+        "error_handling",
+        "coordinate_service",
+        "config",
+        "app_constants",
+        "section_plot_professional",
+        "shapely.geometry"
       ],
-      "imports_count": 15,
-      "internal_imports_count": 6,
+      "imports_count": 16,
+      "internal_imports_count": 7,
       "is_test": false,
       "is_init": false,
       "size": 11066
     },
-    "callbacks__search_functionality": {
+    "callbacks/search_functionality.py": {
       "file_path": "callbacks\\search_functionality.py",
       "folder": "callbacks",
       "stem": "search_functionality",
-      "display_name": "search_functionality (callbacks)",
+      "display_name": "callbacks/search_functionality",
       "imports": [
-        "root__error_handling",
-        "root__config",
-        "root__coordinate_service",
-        "root__borehole_log_professional",
-        "callbacks__base"
+        "callbacks/base.py",
+        "state_management/__init__.py",
+        "error_handling.py",
+        "coordinate_service.py",
+        "borehole_log_professional.py",
+        "config.py"
       ],
       "all_imports": [
+        "logging",
         "dash",
+        "pandas",
+        "base",
+        "state_management",
+        "error_handling",
         "coordinate_service",
         "borehole_log_professional",
-        "base",
-        "logging",
-        "state_management",
-        "pandas",
-        "config",
-        "error_handling"
+        "config"
       ],
       "imports_count": 9,
-      "internal_imports_count": 5,
+      "internal_imports_count": 6,
       "is_test": false,
       "is_init": false,
       "size": 12485
     },
-    "callbacks____init__": {
+    "callbacks/__init__.py": {
       "file_path": "callbacks\\__init__.py",
       "folder": "callbacks",
       "stem": "__init__",
-      "display_name": "__init__ (callbacks)",
+      "display_name": "callbacks/__init__",
       "imports": [
-        "callbacks__map_interactions",
-        "callbacks__file_upload",
-        "callbacks__marker_handling",
-        "callbacks__search_functionality",
-        "callbacks__plot_generation",
-        "callbacks__base"
+        "callbacks/base.py",
+        "callbacks/file_upload.py",
+        "callbacks/map_interactions.py",
+        "callbacks/plot_generation.py",
+        "callbacks/search_functionality.py",
+        "callbacks/marker_handling.py"
       ],
       "all_imports": [
-        "file_upload",
-        "map_interactions",
+        "logging",
         "typing",
         "base",
+        "file_upload",
+        "map_interactions",
+        "plot_generation",
         "search_functionality",
-        "logging",
-        "marker_handling",
-        "plot_generation"
+        "marker_handling"
       ],
       "imports_count": 8,
       "internal_imports_count": 6,
@@ -2685,78 +3041,153 @@
       "is_init": true,
       "size": 4225
     },
-    "graph_output__enhanced_dependency_graph": {
-      "file_path": "graph_output\\enhanced_dependency_graph.py",
-      "folder": "graph_output",
-      "stem": "enhanced_dependency_graph",
-      "display_name": "enhanced_dependency_graph (graph_output)",
+    "graph_modules/dependency_analyzer.py": {
+      "file_path": "graph_modules\\dependency_analyzer.py",
+      "folder": "graph_modules",
+      "stem": "dependency_analyzer",
+      "display_name": "graph_modules/dependency_analyzer",
       "imports": [],
       "all_imports": [
-        "pathlib",
-        "json",
-        "typing",
         "ast",
-        "os"
+        "os",
+        "pathlib",
+        "typing"
       ],
-      "imports_count": 5,
+      "imports_count": 4,
       "internal_imports_count": 0,
       "is_test": false,
       "is_init": false,
-      "size": 64446
+      "size": 16504
     },
-    "graph_output__enhanced_dependency_graph_backup - Copy": {
-      "file_path": "graph_output\\enhanced_dependency_graph_backup - Copy.py",
-      "folder": "graph_output",
-      "stem": "enhanced_dependency_graph_backup - Copy",
-      "display_name": "enhanced_dependency_graph_backup - Copy (graph_output)",
+    "graph_modules/force_directed_layout.py": {
+      "file_path": "graph_modules\\force_directed_layout.py",
+      "folder": "graph_modules",
+      "stem": "force_directed_layout",
+      "display_name": "graph_modules/force_directed_layout",
       "imports": [],
-      "all_imports": [
-        "pathlib",
-        "json",
-        "typing",
-        "ast",
-        "os"
-      ],
-      "imports_count": 5,
+      "all_imports": [],
+      "imports_count": 0,
       "internal_imports_count": 0,
       "is_test": false,
       "is_init": false,
-      "size": 56559
+      "size": 10853
     },
-    "graph_output__html_dependency_graph": {
-      "file_path": "graph_output\\html_dependency_graph.py",
-      "folder": "graph_output",
-      "stem": "html_dependency_graph",
-      "display_name": "html_dependency_graph (graph_output)",
+    "graph_modules/graph_controls.py": {
+      "file_path": "graph_modules\\graph_controls.py",
+      "folder": "graph_modules",
+      "stem": "graph_controls",
+      "display_name": "graph_modules/graph_controls",
       "imports": [],
-      "all_imports": [
-        "pathlib",
-        "json",
-        "typing",
-        "ast",
-        "os"
-      ],
-      "imports_count": 5,
+      "all_imports": [],
+      "imports_count": 0,
       "internal_imports_count": 0,
       "is_test": false,
       "is_init": false,
-      "size": 36597
+      "size": 18052
     },
-    "state_management__app_state": {
+    "graph_modules/graph_styles.py": {
+      "file_path": "graph_modules\\graph_styles.py",
+      "folder": "graph_modules",
+      "stem": "graph_styles",
+      "display_name": "graph_modules/graph_styles",
+      "imports": [],
+      "all_imports": [],
+      "imports_count": 0,
+      "internal_imports_count": 0,
+      "is_test": false,
+      "is_init": false,
+      "size": 10981
+    },
+    "graph_modules/graph_visualization.py": {
+      "file_path": "graph_modules\\graph_visualization.py",
+      "folder": "graph_modules",
+      "stem": "graph_visualization",
+      "display_name": "graph_modules/graph_visualization",
+      "imports": [],
+      "all_imports": [],
+      "imports_count": 0,
+      "internal_imports_count": 0,
+      "is_test": false,
+      "is_init": false,
+      "size": 16119
+    },
+    "graph_modules/hierarchical_layout.py": {
+      "file_path": "graph_modules\\hierarchical_layout.py",
+      "folder": "graph_modules",
+      "stem": "hierarchical_layout",
+      "display_name": "graph_modules/hierarchical_layout",
+      "imports": [],
+      "all_imports": [],
+      "imports_count": 0,
+      "internal_imports_count": 0,
+      "is_test": false,
+      "is_init": false,
+      "size": 9062
+    },
+    "graph_modules/html_generator.py": {
+      "file_path": "graph_modules\\html_generator.py",
+      "folder": "graph_modules",
+      "stem": "html_generator",
+      "display_name": "graph_modules/html_generator",
+      "imports": [
+        "graph_modules/graph_styles.py",
+        "graph_modules/graph_visualization.py",
+        "graph_modules/hierarchical_layout.py",
+        "graph_modules/force_directed_layout.py",
+        "graph_modules/graph_controls.py",
+        "graph_modules/dependency_analyzer.py"
+      ],
+      "all_imports": [
+        "json",
+        "pathlib",
+        "typing",
+        "graph_styles",
+        "graph_visualization",
+        "hierarchical_layout",
+        "force_directed_layout",
+        "graph_controls",
+        "dependency_analyzer"
+      ],
+      "imports_count": 9,
+      "internal_imports_count": 6,
+      "is_test": false,
+      "is_init": false,
+      "size": 9949
+    },
+    "graph_modules/__init__.py": {
+      "file_path": "graph_modules\\__init__.py",
+      "folder": "graph_modules",
+      "stem": "__init__",
+      "display_name": "graph_modules/__init__",
+      "imports": [
+        "graph_modules/dependency_analyzer.py",
+        "graph_modules/html_generator.py"
+      ],
+      "all_imports": [
+        "dependency_analyzer",
+        "html_generator"
+      ],
+      "imports_count": 2,
+      "internal_imports_count": 2,
+      "is_test": false,
+      "is_init": true,
+      "size": 858
+    },
+    "state_management/app_state.py": {
       "file_path": "state_management\\app_state.py",
       "folder": "state_management",
       "stem": "app_state",
-      "display_name": "app_state (state_management)",
+      "display_name": "state_management/app_state",
       "imports": [
-        "state_management__state_models"
+        "state_management/state_models.py"
       ],
       "all_imports": [
-        "threading",
-        "state_models",
-        "typing",
         "logging",
-        "pandas",
-        "datetime"
+        "threading",
+        "typing",
+        "datetime",
+        "state_models",
+        "pandas"
       ],
       "imports_count": 6,
       "internal_imports_count": 1,
@@ -2764,16 +3195,16 @@
       "is_init": false,
       "size": 10646
     },
-    "state_management__state_models": {
+    "state_management/state_models.py": {
       "file_path": "state_management\\state_models.py",
       "folder": "state_management",
       "stem": "state_models",
-      "display_name": "state_models (state_management)",
+      "display_name": "state_management/state_models",
       "imports": [],
       "all_imports": [
+        "dataclasses",
         "typing",
         "pandas",
-        "dataclasses",
         "datetime"
       ],
       "imports_count": 4,
@@ -2782,18 +3213,18 @@
       "is_init": false,
       "size": 5982
     },
-    "state_management____init__": {
+    "state_management/__init__.py": {
       "file_path": "state_management\\__init__.py",
       "folder": "state_management",
       "stem": "__init__",
-      "display_name": "__init__ (state_management)",
+      "display_name": "state_management/__init__",
       "imports": [
-        "state_management__app_state",
-        "state_management__state_models"
+        "state_management/app_state.py",
+        "state_management/state_models.py"
       ],
       "all_imports": [
-        "state_models",
-        "app_state"
+        "app_state",
+        "state_models"
       ],
       "imports_count": 2,
       "internal_imports_count": 2,
@@ -2801,59 +3232,167 @@
       "is_init": true,
       "size": 513
     },
-    "tests__comprehensive_validation": {
+    "tests/comprehensive_validation.py": {
       "file_path": "tests\\comprehensive_validation.py",
       "folder": "tests",
       "stem": "comprehensive_validation",
-      "display_name": "comprehensive_validation (tests)",
+      "display_name": "tests/comprehensive_validation",
       "imports": [],
       "all_imports": [
-        "pathlib",
         "json",
-        "typing",
-        "sys",
         "re",
+        "sys",
+        "pathlib",
+        "typing",
+        "graph_output.enhanced_dependency_graph",
         "graph_output.enhanced_dependency_graph"
       ],
-      "imports_count": 6,
+      "imports_count": 7,
       "internal_imports_count": 0,
-      "is_test": false,
+      "is_test": true,
       "is_init": false,
       "size": 11761
     },
-    "tests__fix_brace_mismatch": {
-      "file_path": "tests\\fix_brace_mismatch.py",
+    "tests/final_validation.py": {
+      "file_path": "tests\\final_validation.py",
       "folder": "tests",
-      "stem": "fix_brace_mismatch",
-      "display_name": "fix_brace_mismatch (tests)",
+      "stem": "final_validation",
+      "display_name": "tests/final_validation",
       "imports": [],
       "all_imports": [
-        "pathlib",
-        "re"
+        "json",
+        "pathlib"
       ],
       "imports_count": 2,
       "internal_imports_count": 0,
-      "is_test": false,
+      "is_test": true,
+      "is_init": false,
+      "size": 3910
+    },
+    "tests/fix_brace_mismatch.py": {
+      "file_path": "tests\\fix_brace_mismatch.py",
+      "folder": "tests",
+      "stem": "fix_brace_mismatch",
+      "display_name": "tests/fix_brace_mismatch",
+      "imports": [],
+      "all_imports": [
+        "re",
+        "pathlib"
+      ],
+      "imports_count": 2,
+      "internal_imports_count": 0,
+      "is_test": true,
       "is_init": false,
       "size": 5578
     },
-    "tests__test_graph_data_integrity": {
+    "tests/interactive_validation.py": {
+      "file_path": "tests\\interactive_validation.py",
+      "folder": "tests",
+      "stem": "interactive_validation",
+      "display_name": "tests/interactive_validation",
+      "imports": [],
+      "all_imports": [
+        "json",
+        "re",
+        "datetime"
+      ],
+      "imports_count": 3,
+      "internal_imports_count": 0,
+      "is_test": true,
+      "is_init": false,
+      "size": 22052
+    },
+    "tests/migration_validation.py": {
+      "file_path": "tests\\migration_validation.py",
+      "folder": "tests",
+      "stem": "migration_validation",
+      "display_name": "tests/migration_validation",
+      "imports": [],
+      "all_imports": [
+        "os",
+        "json",
+        "time",
+        "sys",
+        "html_dependency_graph"
+      ],
+      "imports_count": 5,
+      "internal_imports_count": 0,
+      "is_test": true,
+      "is_init": false,
+      "size": 8451
+    },
+    "tests/options_exploration.py": {
+      "file_path": "tests\\options_exploration.py",
+      "folder": "tests",
+      "stem": "options_exploration",
+      "display_name": "tests/options_exploration",
+      "imports": [],
+      "all_imports": [
+        "json",
+        "math"
+      ],
+      "imports_count": 2,
+      "internal_imports_count": 0,
+      "is_test": true,
+      "is_init": false,
+      "size": 19788
+    },
+    "tests/test_enhanced_dependency_graph.py": {
+      "file_path": "tests\\test_enhanced_dependency_graph.py",
+      "folder": "tests",
+      "stem": "test_enhanced_dependency_graph",
+      "display_name": "tests/test_enhanced_dependency_graph",
+      "imports": [],
+      "all_imports": [
+        "json",
+        "os",
+        "pathlib",
+        "webbrowser",
+        "subprocess",
+        "sys",
+        "graph_output.enhanced_dependency_graph",
+        "graph_output.enhanced_dependency_graph"
+      ],
+      "imports_count": 8,
+      "internal_imports_count": 0,
+      "is_test": true,
+      "is_init": false,
+      "size": 12394
+    },
+    "tests/test_force_directed_layout.py": {
+      "file_path": "tests\\test_force_directed_layout.py",
+      "folder": "tests",
+      "stem": "test_force_directed_layout",
+      "display_name": "tests/test_force_directed_layout",
+      "imports": [],
+      "all_imports": [
+        "os",
+        "re",
+        "pathlib"
+      ],
+      "imports_count": 3,
+      "internal_imports_count": 0,
+      "is_test": true,
+      "is_init": false,
+      "size": 7430
+    },
+    "tests/test_graph_data_integrity.py": {
       "file_path": "tests\\test_graph_data_integrity.py",
       "folder": "tests",
       "stem": "test_graph_data_integrity",
-      "display_name": "test_graph_data_integrity (tests)",
+      "display_name": "tests/test_graph_data_integrity",
       "imports": [],
       "all_imports": [
-        "pathlib",
-        "html",
-        "json",
+        "os",
         "sys",
-        "traceback",
-        "typing",
+        "json",
         "re",
         "ast",
-        "graph_output.enhanced_dependency_graph",
-        "os"
+        "traceback",
+        "pathlib",
+        "typing",
+        "html",
+        "graph_output.enhanced_dependency_graph"
       ],
       "imports_count": 10,
       "internal_imports_count": 0,
@@ -2861,19 +3400,19 @@
       "is_init": false,
       "size": 21154
     },
-    "tests__test_html_data_extraction": {
+    "tests/test_html_data_extraction.py": {
       "file_path": "tests\\test_html_data_extraction.py",
       "folder": "tests",
       "stem": "test_html_data_extraction",
-      "display_name": "test_html_data_extraction (tests)",
+      "display_name": "tests/test_html_data_extraction",
       "imports": [],
       "all_imports": [
-        "pathlib",
-        "html",
-        "json",
-        "typing",
         "re",
-        "ast"
+        "json",
+        "ast",
+        "pathlib",
+        "typing",
+        "html"
       ],
       "imports_count": 6,
       "internal_imports_count": 0,
@@ -2881,16 +3420,34 @@
       "is_init": false,
       "size": 14350
     },
-    "tests__test_javascript_errors": {
+    "tests/test_internal_imports.py": {
+      "file_path": "tests\\test_internal_imports.py",
+      "folder": "tests",
+      "stem": "test_internal_imports",
+      "display_name": "tests/test_internal_imports",
+      "imports": [],
+      "all_imports": [
+        "ast",
+        "json",
+        "pathlib",
+        "typing"
+      ],
+      "imports_count": 4,
+      "internal_imports_count": 0,
+      "is_test": true,
+      "is_init": false,
+      "size": 6669
+    },
+    "tests/test_javascript_errors.py": {
       "file_path": "tests\\test_javascript_errors.py",
       "folder": "tests",
       "stem": "test_javascript_errors",
-      "display_name": "test_javascript_errors (tests)",
+      "display_name": "tests/test_javascript_errors",
       "imports": [],
       "all_imports": [
-        "pathlib",
         "re",
         "json",
+        "pathlib",
         "typing"
       ],
       "imports_count": 4,
@@ -2899,26 +3456,138 @@
       "is_init": false,
       "size": 15035
     },
-    "tests__validate_fix": {
+    "tests/test_modular_graph.py": {
+      "file_path": "tests\\test_modular_graph.py",
+      "folder": "tests",
+      "stem": "test_modular_graph",
+      "display_name": "tests/test_modular_graph",
+      "imports": [
+        "graph_modules/dependency_analyzer.py",
+        "graph_modules/graph_styles.py",
+        "graph_modules/hierarchical_layout.py",
+        "graph_modules/force_directed_layout.py",
+        "graph_modules/graph_visualization.py",
+        "graph_modules/graph_controls.py",
+        "graph_modules/html_generator.py",
+        "graph_modules/__init__.py",
+        "graph_modules/__init__.py",
+        "graph_modules/graph_styles.py",
+        "graph_modules/hierarchical_layout.py",
+        "graph_modules/force_directed_layout.py",
+        "graph_modules/graph_visualization.py",
+        "graph_modules/graph_controls.py",
+        "graph_modules/html_generator.py"
+      ],
+      "all_imports": [
+        "sys",
+        "traceback",
+        "pathlib",
+        "graph_modules.dependency_analyzer",
+        "graph_modules.graph_styles",
+        "graph_modules.hierarchical_layout",
+        "graph_modules.force_directed_layout",
+        "graph_modules.graph_visualization",
+        "graph_modules.graph_controls",
+        "graph_modules.html_generator",
+        "graph_modules",
+        "graph_modules",
+        "graph_modules.graph_styles",
+        "graph_modules.hierarchical_layout",
+        "graph_modules.force_directed_layout",
+        "graph_modules.graph_visualization",
+        "graph_modules.graph_controls",
+        "graph_modules.html_generator"
+      ],
+      "imports_count": 18,
+      "internal_imports_count": 15,
+      "is_test": true,
+      "is_init": false,
+      "size": 5833
+    },
+    "tests/validate_features.py": {
+      "file_path": "tests\\validate_features.py",
+      "folder": "tests",
+      "stem": "validate_features",
+      "display_name": "tests/validate_features",
+      "imports": [],
+      "all_imports": [
+        "json",
+        "os",
+        "pathlib"
+      ],
+      "imports_count": 3,
+      "internal_imports_count": 0,
+      "is_test": true,
+      "is_init": false,
+      "size": 3453
+    },
+    "tests/validate_fix.py": {
       "file_path": "tests\\validate_fix.py",
       "folder": "tests",
       "stem": "validate_fix",
-      "display_name": "validate_fix (tests)",
+      "display_name": "tests/validate_fix",
       "imports": [],
       "all_imports": [
-        "pathlib",
-        "re"
+        "re",
+        "pathlib"
       ],
       "imports_count": 2,
       "internal_imports_count": 0,
-      "is_test": false,
+      "is_test": true,
       "is_init": false,
       "size": 2779
+    },
+    "tests/workspace_audit.py": {
+      "file_path": "tests\\workspace_audit.py",
+      "folder": "tests",
+      "stem": "workspace_audit",
+      "display_name": "tests/workspace_audit",
+      "imports": [],
+      "all_imports": [
+        "ast",
+        "json",
+        "pathlib",
+        "typing"
+      ],
+      "imports_count": 4,
+      "internal_imports_count": 0,
+      "is_test": true,
+      "is_init": false,
+      "size": 5834
     }
   },
   "subfolder_info": {
+    "callbacks": {
+      "color": "#FF6B6B",
+      "modules": [
+        "callbacks/base",
+        "callbacks/file_upload",
+        "callbacks/map_interactions",
+        "callbacks/marker_handling",
+        "callbacks/plot_generation",
+        "callbacks/search_functionality",
+        "callbacks/__init__"
+      ],
+      "test_modules": [],
+      "count": 7
+    },
+    "graph_modules": {
+      "color": "#4ECDC4",
+      "modules": [
+        "graph_modules/dependency_analyzer",
+        "graph_modules/force_directed_layout",
+        "graph_modules/graph_controls",
+        "graph_modules/graph_styles",
+        "graph_modules/graph_visualization",
+        "graph_modules/hierarchical_layout",
+        "graph_modules/html_generator",
+        "graph_modules/__init__"
+      ],
+      "test_modules": [],
+      "count": 8
+    },
     "root": {
-      "color": "#E3F2FD",
+      "color": "#45B7D1",
       "modules": [
         "app",
         "app_constants",
@@ -2932,176 +3601,141 @@
         "data_loader",
         "debug_module",
         "debug_offset_layout",
+        "enhanced_dependency_graph_modular",
         "enhanced_error_handling",
         "error_handling",
         "error_recovery",
-        "final_validation",
         "geology_code_utils",
-        "interactive_validation",
         "lazy_marker_manager",
         "loading_indicators",
         "map_utils",
         "memory_manager",
-        "migration_validation",
-        "options_exploration",
         "polyline_utils",
-        "section_plot_professional",
-        "test_enhanced_dependency_graph",
-        "test_force_directed_layout",
-        "test_internal_imports",
-        "validate_features",
-        "workspace_audit"
-      ],
-      "test_modules": [
-        "test_enhanced_dependency_graph",
-        "test_force_directed_layout",
-        "test_internal_imports"
-      ],
-      "count": 31
-    },
-    "archive": {
-      "color": "#FFEBEE",
-      "modules": [],
-      "test_modules": [],
-      "count": 0
-    },
-    "callbacks": {
-      "color": "#E8F5E8",
-      "modules": [
-        "base (callbacks)",
-        "file_upload (callbacks)",
-        "map_interactions (callbacks)",
-        "marker_handling (callbacks)",
-        "plot_generation (callbacks)",
-        "search_functionality (callbacks)",
-        "__init__ (callbacks)"
+        "section_plot_professional"
       ],
       "test_modules": [],
-      "count": 7
-    },
-    "flowchart_visualization": {
-      "color": "#E0F2F1",
-      "modules": [],
-      "test_modules": [],
-      "count": 0
-    },
-    "graph_output": {
-      "color": "#FAFAFA",
-      "modules": [
-        "enhanced_dependency_graph (graph_output)",
-        "enhanced_dependency_graph_backup - Copy (graph_output)",
-        "html_dependency_graph (graph_output)"
-      ],
-      "test_modules": [],
-      "count": 3
-    },
-    "old_streamlit_files": {
-      "color": "#FFF8E1",
-      "modules": [],
-      "test_modules": [],
-      "count": 0
+      "count": 23
     },
     "state_management": {
-      "color": "#F3E5F5",
+      "color": "#96CEB4",
       "modules": [
-        "app_state (state_management)",
-        "state_models (state_management)",
-        "__init__ (state_management)"
+        "state_management/app_state",
+        "state_management/state_models",
+        "state_management/__init__"
       ],
       "test_modules": [],
       "count": 3
     },
     "tests": {
-      "color": "#FFF3E0",
+      "color": "#FFEAA7",
       "modules": [
-        "comprehensive_validation (tests)",
-        "fix_brace_mismatch (tests)",
-        "test_graph_data_integrity (tests)",
-        "test_html_data_extraction (tests)",
-        "test_javascript_errors (tests)",
-        "validate_fix (tests)"
+        "tests/comprehensive_validation",
+        "tests/final_validation",
+        "tests/fix_brace_mismatch",
+        "tests/interactive_validation",
+        "tests/migration_validation",
+        "tests/options_exploration",
+        "tests/test_enhanced_dependency_graph",
+        "tests/test_force_directed_layout",
+        "tests/test_graph_data_integrity",
+        "tests/test_html_data_extraction",
+        "tests/test_internal_imports",
+        "tests/test_javascript_errors",
+        "tests/test_modular_graph",
+        "tests/validate_features",
+        "tests/validate_fix",
+        "tests/workspace_audit"
       ],
       "test_modules": [
-        "test_graph_data_integrity (tests)",
-        "test_html_data_extraction (tests)",
-        "test_javascript_errors (tests)"
+        "tests/comprehensive_validation",
+        "tests/final_validation",
+        "tests/fix_brace_mismatch",
+        "tests/interactive_validation",
+        "tests/migration_validation",
+        "tests/options_exploration",
+        "tests/test_enhanced_dependency_graph",
+        "tests/test_force_directed_layout",
+        "tests/test_graph_data_integrity",
+        "tests/test_html_data_extraction",
+        "tests/test_internal_imports",
+        "tests/test_javascript_errors",
+        "tests/test_modular_graph",
+        "tests/validate_features",
+        "tests/validate_fix",
+        "tests/workspace_audit"
       ],
-      "count": 6
-    },
-    "assets": {
-      "color": "#F1F8E9",
-      "modules": [],
-      "test_modules": [],
-      "count": 0
-    },
-    "reports": {
-      "color": "#FCE4EC",
-      "modules": [],
-      "test_modules": [],
-      "count": 0
+      "count": 16
     }
   },
   "importance_scores": {
-    "root__app": 0.20843558837414103,
-    "root__app_constants": 0.7442894705540104,
-    "root__app_factory": 0.26749233841348097,
-    "root__borehole_log_professional": 0.4972969170040626,
-    "root__callbacks_split": 0.26749233841348097,
-    "root__comprehensive_optimization_validation": 0.20843558837414103,
-    "root__config": 0.4213228687763701,
-    "root__coordinate_service": 0.8463930548017129,
-    "root__dataframe_optimizer": 0.273398013417415,
-    "root__data_loader": 0.3702264765027495,
-    "root__debug_module": 0.20843558837414103,
-    "root__debug_offset_layout": 0.20843558837414103,
-    "root__enhanced_error_handling": 0.252728150903646,
-    "root__error_handling": 0.392163598444446,
-    "root__error_recovery": 0.20843558837414103,
-    "root__final_validation": 0.20843558837414103,
-    "root__geology_code_utils": 1.0,
-    "root__interactive_validation": 0.20843558837414103,
-    "root__lazy_marker_manager": 0.3499134151871348,
-    "root__loading_indicators": 0.22910545088791,
-    "root__map_utils": 0.25438912199850244,
-    "root__memory_manager": 0.273398013417415,
-    "root__migration_validation": 0.20843558837414103,
-    "root__options_exploration": 0.20843558837414103,
-    "root__polyline_utils": 0.25438912199850244,
-    "root__section_plot_professional": 0.47416820209542654,
-    "root__test_enhanced_dependency_graph": 0.20843558837414103,
-    "root__test_force_directed_layout": 0.20843558837414103,
-    "root__test_internal_imports": 0.20843558837414103,
-    "root__validate_features": 0.20843558837414103,
-    "root__workspace_audit": 0.20843558837414103,
-    "callbacks__base": 0.42169197346411597,
-    "callbacks__file_upload": 0.237963963393811,
-    "callbacks__map_interactions": 0.237963963393811,
-    "callbacks__marker_handling": 0.237963963393811,
-    "callbacks__plot_generation": 0.237963963393811,
-    "callbacks__search_functionality": 0.237963963393811,
-    "callbacks____init__": 0.20843558837414103,
-    "graph_output__enhanced_dependency_graph": 0.20843558837414103,
-    "graph_output__enhanced_dependency_graph_backup - Copy": 0.20843558837414103,
-    "graph_output__html_dependency_graph": 0.3856058384921609,
-    "state_management__app_state": 0.297020713433151,
-    "state_management__state_models": 0.5494883198513293,
-    "state_management____init__": 0.20843558837414103,
-    "tests__comprehensive_validation": 0.20843558837414103,
-    "tests__fix_brace_mismatch": 0.20843558837414103,
-    "tests__test_graph_data_integrity": 0.20843558837414103,
-    "tests__test_html_data_extraction": 0.20843558837414103,
-    "tests__test_javascript_errors": 0.20843558837414103,
-    "tests__validate_fix": 0.20843558837414103
+    "app.py": 0.21211502130416832,
+    "app_constants.py": 0.734475336794196,
+    "app_factory.py": 0.27221427734034936,
+    "borehole_log_professional.py": 0.48892217806414534,
+    "callbacks_split.py": 0.27221427734034936,
+    "comprehensive_optimization_validation.py": 0.21211502130416832,
+    "config.py": 0.40923819621172947,
+    "coordinate_service.py": 0.8393819270529076,
+    "dataframe_optimizer.py": 0.27822420294396744,
+    "data_loader.py": 0.37186099025033875,
+    "debug_module.py": 0.21211502130416832,
+    "debug_offset_layout.py": 0.21211502130416832,
+    "enhanced_dependency_graph_modular.py": 0.21211502130416832,
+    "enhanced_error_handling.py": 0.2571894633313041,
+    "error_handling.py": 0.36927219094766917,
+    "error_recovery.py": 0.21211502130416832,
+    "geology_code_utils.py": 1.0,
+    "lazy_marker_manager.py": 0.3532314133246789,
+    "loading_indicators.py": 0.23314976091683168,
+    "map_utils.py": 0.2560208666861561,
+    "memory_manager.py": 0.27822420294396744,
+    "polyline_utils.py": 0.2560208666861561,
+    "section_plot_professional.py": 0.47034739401179626,
+    "callbacks/base.py": 0.3993218189657597,
+    "callbacks/file_upload.py": 0.24216464932225884,
+    "callbacks/map_interactions.py": 0.24216464932225884,
+    "callbacks/marker_handling.py": 0.24216464932225884,
+    "callbacks/plot_generation.py": 0.24216464932225884,
+    "callbacks/search_functionality.py": 0.24216464932225884,
+    "callbacks/__init__.py": 0.21211502130416832,
+    "graph_modules/dependency_analyzer.py": 0.45212140028465714,
+    "graph_modules/force_directed_layout.py": 0.2802375280211795,
+    "graph_modules/graph_controls.py": 0.2802375280211795,
+    "graph_modules/graph_styles.py": 0.2802375280211795,
+    "graph_modules/graph_visualization.py": 0.2802375280211795,
+    "graph_modules/hierarchical_layout.py": 0.2802375280211795,
+    "graph_modules/html_generator.py": 0.3960187447748822,
+    "graph_modules/__init__.py": 0.40443264061994755,
+    "state_management/app_state.py": 0.3690557024569277,
+    "state_management/state_models.py": 0.6827530495453162,
+    "state_management/__init__.py": 0.36927219094766917,
+    "tests/comprehensive_validation.py": 0.21211502130416832,
+    "tests/final_validation.py": 0.21211502130416832,
+    "tests/fix_brace_mismatch.py": 0.21211502130416832,
+    "tests/interactive_validation.py": 0.21211502130416832,
+    "tests/migration_validation.py": 0.21211502130416832,
+    "tests/options_exploration.py": 0.21211502130416832,
+    "tests/test_enhanced_dependency_graph.py": 0.21211502130416832,
+    "tests/test_force_directed_layout.py": 0.21211502130416832,
+    "tests/test_graph_data_integrity.py": 0.21211502130416832,
+    "tests/test_html_data_extraction.py": 0.21211502130416832,
+    "tests/test_internal_imports.py": 0.21211502130416832,
+    "tests/test_javascript_errors.py": 0.21211502130416832,
+    "tests/test_modular_graph.py": 0.21211502130416832,
+    "tests/validate_features.py": 0.21211502130416832,
+    "tests/validate_fix.py": 0.21211502130416832,
+    "tests/workspace_audit.py": 0.21211502130416832
   },
   "statistics": {
-    "total_files": 50,
-    "total_dependencies": 69,
-    "cross_folder_dependencies": 25,
-    "test_files": 6,
-    "folders": 10
+    "total_files": 57,
+    "total_dependencies": 97,
+    "cross_folder_dependencies": 45,
+    "test_files": 16,
+    "folders": 5
   }
 };
 
+        
         // Enhanced state management
         let checkedFolders = new Set(Object.keys(graphData.subfolder_info));
         let showTestDependencies = true;
@@ -3129,130 +3763,30 @@
             svg.attr("width", width).attr("height", height);
         }
 
-        // Enhanced layout calculation with dependency-aware positioning (from backup)
-        function calculateEnhancedHierarchicalLayout() {
-            // ...backup logic here...
-            // Calculate node dimensions with importance weighting
-            graphData.nodes.forEach(d => {
-                const importance = d.importance || 0;
-                const baseWidth = Math.max(120, d.stem.length * 8 + 20);
-                const baseHeight = d.folder !== "root" ? 40 : 30;
-                // Scale size based on importance
-                const importanceScale = 1 + (importance * 0.5);
-                d.width = Math.round(baseWidth * importanceScale);
-                d.height = Math.round(baseHeight * importanceScale);
-            });
-            // Build adjacency maps
-            const incomingEdges = new Map();
-            const outgoingEdges = new Map();
-            graphData.nodes.forEach(node => {
-                incomingEdges.set(node.index, []);
-                outgoingEdges.set(node.index, []);
-            });
-            graphData.edges.forEach(edge => {
-                if (shouldShowEdge(edge)) {
-                    incomingEdges.get(edge.target).push(edge.source);
-                    outgoingEdges.get(edge.source).push(edge.target);
-                }
-            });
-            // Layer assignment
-            const levels = [];
-            const nodeToLevel = new Map();
-            const visited = new Set();
-            const inDegree = new Map();
-            graphData.nodes.forEach(node => {
-                inDegree.set(node.index, incomingEdges.get(node.index).length);
-            });
-            let currentLevel = 0;
-            while (visited.size < graphData.nodes.length) {
-                levels[currentLevel] = [];
-                const candidateNodes = [];
-                for (const node of graphData.nodes) {
-                    if (!visited.has(node.index) && inDegree.get(node.index) === 0) {
-                        candidateNodes.push(node);
-                    }
-                }
-                if (candidateNodes.length === 0) {
-                    const remainingNodes = graphData.nodes.filter(n => !visited.has(n.index));
-                    if (remainingNodes.length > 0) {
-                        candidateNodes.push(remainingNodes[0]);
-                    }
-                }
-                for (const node of candidateNodes) {
-                    levels[currentLevel].push(node.index);
-                    nodeToLevel.set(node.index, currentLevel);
-                    visited.add(node.index);
-                    for (const targetIdx of outgoingEdges.get(node.index)) {
-                        if (!visited.has(targetIdx)) {
-                            inDegree.set(targetIdx, Math.max(0, inDegree.get(targetIdx) - 1));
-                        }
-                    }
-                }
-                currentLevel++;
-                if (currentLevel > graphData.nodes.length) break;
-            }
-            // Position assignment
-            const margin = 60;
-            const levelWidth = Math.max(300, (width - 2 * margin) / Math.max(1, levels.length));
-            const nodeSpacing = 45;
-            levels.forEach((level, levelIndex) => {
-                const x = margin + levelIndex * levelWidth;
-                const totalHeight = level.length * nodeSpacing;
-                const startY = Math.max(margin, (height - totalHeight) / 2);
-                level.forEach((nodeIdx, positionIndex) => {
-                    const node = graphData.nodes[nodeIdx];
-                    node.x = x;
-                    node.y = startY + positionIndex * nodeSpacing;
-                });
-            });
-            return { levels, nodeToLevel };
-        }
-
-        // Enhanced cubic Bézier curve generation (from backup)
-        function createEnhancedCubicBezierPath(d) {
-            const source = graphData.nodes[d.source];
-            const target = graphData.nodes[d.target];
-            const sourceX = source.x + source.width/2;
-            const sourceY = source.y;
-            const targetX = target.x - target.width/2;
-            const targetY = target.y;
-            const dx = targetX - sourceX;
-            const dy = targetY - sourceY;
-            const distance = Math.sqrt(dx * dx + dy * dy);
-            const curveFactor = Math.min(0.6, Math.max(0.2, distance / 400));
-            const offsetFactor = Math.abs(dy) / 100;
-            const cp1x = sourceX + dx * 0.3 + offsetFactor * 20;
-            const cp1y = sourceY + dy * 0.1;
-            const cp2x = targetX - dx * 0.3 - offsetFactor * 20;
-            const cp2y = targetY - dy * 0.1;
-            return `M${sourceX},${sourceY} C${cp1x},${cp1y} ${cp2x},${cp2y} ${targetX},${targetY}`;
-        }
-
-        // Enhanced visibility logic (from backup)
-        function shouldShowEdge(edge) {
-            const sourceNode = graphData.nodes.find(n => n.id === edge.source_name);
-            const targetNode = graphData.nodes.find(n => n.id === edge.target_name);
-            if (!sourceNode || !targetNode) return false;
-            if (!shouldShowNode(sourceNode) || !shouldShowNode(targetNode)) return false;
-            if (!showTestDependencies && edge.is_test_related) {
-                return false;
-            }
-            return true;
-        }
-
-        // Initialize enhanced visualization (from backup)
+        // Initialize enhanced visualization
         function initializeEnhancedVisualization() {
+            console.log("🚀 Initializing enhanced dependency graph visualization...");
+            
             updateDimensions();
             svg.selectAll("*").remove();
+            
             const g = svg.append("g").attr("id", "main-group");
+            
+            // Setup zoom behavior
             const zoom = d3.zoom()
                 .scaleExtent([0.1, 8])
                 .on("zoom", (event) => {
                     g.attr("transform", event.transform);
                 });
             svg.call(zoom);
+            
+            // Calculate initial layout
             const layout = calculateEnhancedHierarchicalLayout();
+            
+            // Create arrow markers
             createEnhancedArrowMarkers();
+            
+            // Create links
             const linkGroup = g.append("g").attr("class", "links");
             const link = linkGroup.selectAll("path")
                 .data(graphData.edges)
@@ -3264,6 +3798,8 @@
                 })
                 .attr("d", d => createEnhancedCubicBezierPath(d))
                 .attr("marker-end", "url(#arrowhead)");
+            
+            // Create nodes
             const nodeGroup = g.append("g").attr("class", "nodes");
             const node = nodeGroup.selectAll("g")
                 .data(graphData.nodes)
@@ -3274,6 +3810,8 @@
                     .on("start", dragstarted)
                     .on("drag", dragged)
                     .on("end", dragended));
+            
+            // Add node rectangles
             const rect = node.append("rect")
                 .attr("class", "node-rect")
                 .attr("width", d => d.width)
@@ -3281,6 +3819,8 @@
                 .attr("x", d => -d.width/2)
                 .attr("y", d => -d.height/2)
                 .attr("fill", d => d.color);
+            
+            // Add importance indicators
             node.filter(d => d.importance > 0.3)
                 .append("circle")
                 .attr("class", d => {
@@ -3291,29 +3831,43 @@
                 .attr("cx", d => d.width/2 - 8)
                 .attr("cy", d => -d.height/2 + 8)
                 .attr("r", 6);
+            
+            // Add node labels
             node.append("text")
                 .attr("class", "node-label")
                 .text(d => d.stem)
                 .attr("dy", "-2px");
+            
+            // Add folder labels
             node.filter(d => d.folder !== "root")
                 .append("text")
                 .attr("class", "folder-label-text")
                 .text(d => `(${d.folder})`)
                 .attr("dy", "10px");
+            
+            // Setup event handlers
             node.on("click", handleEnhancedNodeClick)
                 .on("mouseover", handleEnhancedMouseOver)
                 .on("mouseout", handleEnhancedMouseOut);
+            
+            // Global click handler
             svg.on("click", function(event) {
                 if (event.target === this) {
                     resetHighlighting();
                 }
             });
+            
+            // Store references for later use
             window.graphElements = { node, link, g };
+            
+            // Initialize components
             setupAdvancedFilters();
             updateEnhancedControls();
             updateEnhancedStats();
             updateEnhancedVisibility();
             setupLayoutToggle();
+            
+            console.log("✅ Enhanced visualization initialized successfully");
         }
 
         // Enhanced arrow markers creation
@@ -3368,7 +3922,7 @@
         
         function handleEnhancedMouseOver(event, d) {
             const depInfo = graphData.dependencies[d.id];
-            const imports = depInfo.imports || [];
+            const imports = depInfo?.imports || [];
             const importNames = imports.map(id => {
                 const dep = graphData.dependencies[id];
                 return dep ? dep.stem : id;
@@ -3468,7 +4022,560 @@
                 .attr("marker-end", "url(#arrowhead)");
         }
         
-        // Enhanced controls
+        // Enhanced drag functions with layout awareness
+        function dragstarted(event, d) {
+            if (currentLayout === "force" && simulation) {
+                if (!event.active) simulation.alphaTarget(0.3).restart();
+            }
+            d.fx = d.x;
+            d.fy = d.y;
+        }
+        
+        function dragged(event, d) {
+            d.fx = event.x;
+            d.fy = event.y;
+            d.x = event.x;
+            d.y = event.y;
+            
+            if (currentLayout === "hierarchical") {
+                updatePositions();
+            }
+            // For force layout, the simulation handles position updates
+        }
+        
+        function dragended(event, d) {
+            if (currentLayout === "force" && simulation) {
+                if (!event.active) simulation.alphaTarget(0);
+            }
+            d.fx = null;
+            d.fy = null;
+        }
+        
+        function updatePositions() {
+            const { node, link } = window.graphElements;
+            if (!node || !link) return;
+            
+            node.attr("transform", d => `translate(${d.x},${d.y})`);
+            
+            if (currentLayout === "hierarchical") {
+                link.attr("d", d => createEnhancedCubicBezierPath(d));
+            } else {
+                // For force layout, use the force layout position update
+                updatePositionsForceLayout();
+            }
+        }
+        
+        // Enhanced visibility logic
+        function shouldShowEdge(edge) {
+            const sourceNode = graphData.nodes.find(n => n.id === edge.source_name);
+            const targetNode = graphData.nodes.find(n => n.id === edge.target_name);
+            
+            if (!sourceNode || !targetNode) return false;
+            if (!shouldShowNode(sourceNode) || !shouldShowNode(targetNode)) return false;
+            
+            if (!showTestDependencies && edge.is_test_related) {
+                return false;
+            }
+            
+            return true;
+        }
+        
+        function shouldShowNode(node) {
+            // Check folder visibility
+            if (!checkedFolders.has(node.folder)) return false;
+            
+            // Check advanced filters
+            if (node.imports_count > maxImportsFilter) return false;
+            
+            // Count outgoing dependencies
+            const outgoingDeps = graphData.edges.filter(e => e.source_name === node.id).length;
+            if (outgoingDeps > maxDependenciesFilter) return false;
+            
+            // Check file size (convert bytes to KB)
+            const sizeKB = node.size / 1024;
+            if (sizeKB > maxSizeFilter) return false;
+            
+            return true;
+        }
+        
+        // Update visibility based on current filters
+        function updateEnhancedVisibility() {
+            if (!window.graphElements) return;
+            
+            // Update node visibility with advanced filtering
+            window.graphElements.node
+                .style("opacity", d => {
+                    if (!shouldShowNode(d)) return 0.1;
+                    if (!showTestDependencies && d.is_test) return 0.3;
+                    return 1;
+                })
+                .style("display", d => shouldShowNode(d) ? "block" : "none");
+            
+            // Update link visibility
+            window.graphElements.link
+                .classed("hidden", d => !shouldShowEdge(d))
+                .style("opacity", d => {
+                    if (!shouldShowEdge(d)) return 0;
+                    return d.is_test_related && !showTestDependencies ? 0.3 : 0.8;
+                });
+        }
+        
+        // Resize handler
+        window.addEventListener("resize", function() {
+            updateDimensions();
+            
+            // Recalculate layout if needed
+            if (currentLayout === "hierarchical") {
+                updateHierarchicalLayout();
+            } else if (currentLayout === "force" && simulation) {
+                // Update force center
+                simulation.force("center", d3.forceCenter(width / 2, height / 2));
+                simulation.alpha(0.3).restart();
+            }
+        });
+    
+        
+        // Enhanced hierarchical layout calculation with dependency-aware positioning
+        function calculateEnhancedHierarchicalLayout() {
+            console.log("📐 Calculating enhanced hierarchical layout...");
+            
+            // Calculate node dimensions with importance weighting
+            graphData.nodes.forEach(d => {
+                const importance = d.importance || 0;
+                const baseWidth = Math.max(120, d.stem.length * 8 + 20);
+                const baseHeight = d.folder !== "root" ? 40 : 30;
+                // Scale size based on importance
+                const importanceScale = 1 + (importance * 0.5);
+                d.width = Math.round(baseWidth * importanceScale);
+                d.height = Math.round(baseHeight * importanceScale);
+            });
+            
+            // Build adjacency maps
+            const incomingEdges = new Map();
+            const outgoingEdges = new Map();
+            graphData.nodes.forEach(node => {
+                incomingEdges.set(node.index, []);
+                outgoingEdges.set(node.index, []);
+            });
+            
+            graphData.edges.forEach(edge => {
+                if (shouldShowEdge(edge)) {
+                    incomingEdges.get(edge.target).push(edge.source);
+                    outgoingEdges.get(edge.source).push(edge.target);
+                }
+            });
+            
+            // Enhanced topological sort with cycle handling
+            const levels = [];
+            const nodeToLevel = new Map();
+            const visited = new Set();
+            const inDegree = new Map();
+            
+            // Initialize in-degree counts
+            graphData.nodes.forEach(node => {
+                inDegree.set(node.index, incomingEdges.get(node.index).length);
+            });
+            
+            let currentLevel = 0;
+            while (visited.size < graphData.nodes.length) {
+                levels[currentLevel] = [];
+                const candidateNodes = [];
+                
+                // Find nodes with no incoming edges
+                for (const node of graphData.nodes) {
+                    if (!visited.has(node.index) && inDegree.get(node.index) === 0) {
+                        candidateNodes.push(node);
+                    }
+                }
+                
+                // If no candidates (cycle detected), pick node with lowest in-degree
+                if (candidateNodes.length === 0) {
+                    const remainingNodes = graphData.nodes.filter(n => !visited.has(n.index));
+                    if (remainingNodes.length > 0) {
+                        const minInDegree = Math.min(...remainingNodes.map(n => inDegree.get(n.index)));
+                        const nodeWithMinDegree = remainingNodes.find(n => inDegree.get(n.index) === minInDegree);
+                        candidateNodes.push(nodeWithMinDegree);
+                    }
+                }
+                
+                // Sort candidates by importance (most important first)
+                candidateNodes.sort((a, b) => (b.importance || 0) - (a.importance || 0));
+                
+                // Add candidates to current level
+                for (const node of candidateNodes) {
+                    levels[currentLevel].push(node.index);
+                    nodeToLevel.set(node.index, currentLevel);
+                    visited.add(node.index);
+                    
+                    // Reduce in-degree of target nodes
+                    for (const targetIdx of outgoingEdges.get(node.index)) {
+                        if (!visited.has(targetIdx)) {
+                            inDegree.set(targetIdx, Math.max(0, inDegree.get(targetIdx) - 1));
+                        }
+                    }
+                }
+                
+                currentLevel++;
+                if (currentLevel > graphData.nodes.length) break; // Safety check
+            }
+            
+            // Enhanced position assignment with better spacing
+            const margin = 60;
+            const levelWidth = Math.max(300, (width - 2 * margin) / Math.max(1, levels.length));
+            const nodeSpacing = 45;
+            
+            levels.forEach((level, levelIndex) => {
+                const x = margin + levelIndex * levelWidth;
+                
+                // Sort nodes in level by importance and folder
+                const sortedLevel = level.map(idx => graphData.nodes[idx])
+                    .sort((a, b) => {
+                        // First by folder to group related nodes
+                        if (a.folder !== b.folder) {
+                            return a.folder.localeCompare(b.folder);
+                        }
+                        // Then by importance
+                        return (b.importance || 0) - (a.importance || 0);
+                    });
+                
+                const totalHeight = sortedLevel.length * nodeSpacing;
+                const startY = Math.max(margin, (height - totalHeight) / 2);
+                
+                sortedLevel.forEach((node, positionIndex) => {
+                    node.x = x;
+                    node.y = startY + positionIndex * nodeSpacing;
+                });
+            });
+            
+            console.log(`✅ Hierarchical layout complete: ${levels.length} levels, ${visited.size} nodes positioned`);
+            return { levels, nodeToLevel };
+        }
+        
+        // Animate nodes to hierarchical positions
+        function animateToHierarchicalLayout() {
+            if (!window.graphElements) return;
+            
+            console.log("🎬 Animating to hierarchical layout...");
+            const { node, link } = window.graphElements;
+            
+            // Animate nodes to hierarchical positions
+            node.transition()
+                .duration(1000)
+                .ease(d3.easeQuadInOut)
+                .attr("transform", d => `translate(${d.x},${d.y})`);
+            
+            // Animate links to hierarchical curves
+            link.transition()
+                .duration(1000)
+                .ease(d3.easeQuadInOut)
+                .attr("d", d => createEnhancedCubicBezierPath(d));
+                
+            console.log("✅ Hierarchical animation complete");
+        }
+        
+        // Enhanced cubic Bézier curve generation for hierarchical layout
+        function createEnhancedCubicBezierPath(d) {
+            const source = graphData.nodes[d.source];
+            const target = graphData.nodes[d.target];
+            
+            if (!source || !target) return "";
+            
+            const sourceX = source.x + (source.width || 120) / 2;
+            const sourceY = source.y;
+            const targetX = target.x - (target.width || 120) / 2;
+            const targetY = target.y;
+            
+            const dx = targetX - sourceX;
+            const dy = targetY - sourceY;
+            const distance = Math.sqrt(dx * dx + dy * dy);
+            
+            // Adaptive curve parameters based on distance and direction
+            const curveFactor = Math.min(0.6, Math.max(0.2, distance / 400));
+            const offsetFactor = Math.abs(dy) / 100;
+            
+            // Calculate control points for smooth curves
+            const cp1x = sourceX + dx * 0.3 + offsetFactor * 20;
+            const cp1y = sourceY + dy * 0.1;
+            const cp2x = targetX - dx * 0.3 - offsetFactor * 20;
+            const cp2y = targetY - dy * 0.1;
+            
+            return `M${sourceX},${sourceY} C${cp1x},${cp1y} ${cp2x},${cp2y} ${targetX},${targetY}`;
+        }
+        
+        // Handle hierarchical layout updates when filters change
+        function updateHierarchicalLayout() {
+            if (currentLayout !== "hierarchical") return;
+            
+            console.log("🔄 Updating hierarchical layout after filter change...");
+            
+            // Recalculate layout with current visibility settings
+            const layout = calculateEnhancedHierarchicalLayout();
+            
+            // Update positions with animation
+            if (window.graphElements) {
+                const { node, link } = window.graphElements;
+                
+                node.transition()
+                    .duration(500)
+                    .ease(d3.easeQuadInOut)
+                    .attr("transform", d => `translate(${d.x},${d.y})`);
+                
+                link.transition()
+                    .duration(500)
+                    .ease(d3.easeQuadInOut)
+                    .attr("d", d => createEnhancedCubicBezierPath(d));
+            }
+            
+            console.log("✅ Hierarchical layout update complete");
+        }
+    
+        
+        // Force-directed layout using D3 force simulation
+        function initializeForceDirectedLayout() {
+            console.log("🌐 Initializing force-directed layout...");
+            
+            // Calculate node dimensions for force layout
+            graphData.nodes.forEach(d => {
+                const importance = d.importance || 0;
+                const baseWidth = Math.max(120, d.stem.length * 8 + 20);
+                const baseHeight = d.folder !== "root" ? 40 : 30;
+                
+                // Scale size based on importance
+                const importanceScale = 1 + (importance * 0.5);
+                d.width = Math.round(baseWidth * importanceScale);
+                d.height = Math.round(baseHeight * importanceScale);
+                
+                // Set initial positions if not set
+                if (d.x === undefined) d.x = width / 2 + (Math.random() - 0.5) * 200;
+                if (d.y === undefined) d.y = height / 2 + (Math.random() - 0.5) * 200;
+            });
+            
+            // Create filtered links for simulation
+            const validLinks = graphData.edges
+                .filter(edge => shouldShowEdge(edge))
+                .map(edge => ({
+                    source: edge.source,
+                    target: edge.target,
+                    strength: 0.5 + (graphData.nodes[edge.source]?.importance || 0) * 0.3
+                }));
+            
+            // Stop any existing simulation
+            if (simulation) {
+                simulation.stop();
+            }
+            
+            // Create force simulation with enhanced parameters
+            simulation = d3.forceSimulation(graphData.nodes)
+                .force("link", d3.forceLink(validLinks)
+                    .id(d => d.index)
+                    .distance(d => {
+                        const sourceNode = graphData.nodes[d.source.index || d.source];
+                        const targetNode = graphData.nodes[d.target.index || d.target];
+                        const baseDistance = 150;
+                        const importanceBonus = ((sourceNode?.importance || 0) + (targetNode?.importance || 0)) * 50;
+                        return baseDistance + importanceBonus;
+                    })
+                    .strength(d => d.strength || 0.5)
+                )
+                .force("charge", d3.forceManyBody()
+                    .strength(d => {
+                        const importance = d.importance || 0;
+                        const baseCharge = -800;
+                        const importanceMultiplier = 1 + importance * 2;
+                        return baseCharge * importanceMultiplier;
+                    })
+                )
+                .force("center", d3.forceCenter(width / 2, height / 2))
+                .force("collision", d3.forceCollide()
+                    .radius(d => Math.max(d.width, d.height) / 2 + 10)
+                    .strength(0.7)
+                )
+                .force("x", d3.forceX(width / 2).strength(0.1))
+                .force("y", d3.forceY(height / 2).strength(0.1));
+            
+            // Update positions during simulation
+            simulation.on("tick", () => {
+                updatePositionsForceLayout();
+            });
+            
+            // Reduce alpha target for smoother convergence
+            simulation.alphaTarget(0.1).restart();
+            
+            console.log("✅ Force-directed layout initialized");
+            return simulation;
+        }
+        
+        // Update positions for force layout
+        function updatePositionsForceLayout() {
+            if (!window.graphElements) return;
+            
+            const { node, link } = window.graphElements;
+            
+            // Update node positions
+            node.attr("transform", d => `translate(${d.x},${d.y})`);
+            
+            // Update link paths with force layout positions
+            link.attr("d", d => {
+                const source = d.source.x !== undefined ? d.source : graphData.nodes[d.source];
+                const target = d.target.x !== undefined ? d.target : graphData.nodes[d.target];
+                
+                if (!source || !target) return "";
+                
+                return createForceDirectedLinkPath({
+                    source: source.index,
+                    target: target.index
+                });
+            });
+        }
+        
+        // Create optimized link paths for force-directed layout
+        function createForceDirectedLinkPath(d) {
+            const source = graphData.nodes[d.source];
+            const target = graphData.nodes[d.target];
+            
+            if (!source || !target) return "";
+            
+            const sourceX = source.x;
+            const sourceY = source.y;
+            const targetX = target.x;
+            const targetY = target.y;
+            
+            // For force layout, use simpler straight lines or gentle curves
+            const dx = targetX - sourceX;
+            const dy = targetY - sourceY;
+            const distance = Math.sqrt(dx * dx + dy * dy);
+            
+            if (distance < 100) {
+                // Short distances: straight line
+                return `M${sourceX},${sourceY} L${targetX},${targetY}`;
+            } else {
+                // Longer distances: gentle curve
+                const midX = (sourceX + targetX) / 2;
+                const midY = (sourceY + targetY) / 2;
+                const perpX = -dy / distance * 20; // Perpendicular offset
+                const perpY = dx / distance * 20;
+                const cpX = midX + perpX;
+                const cpY = midY + perpY;
+                
+                return `M${sourceX},${sourceY} Q${cpX},${cpY} ${targetX},${targetY}`;
+            }
+        }
+        
+        // Restart force simulation with new parameters
+        function restartForceSimulation() {
+            if (!simulation || currentLayout !== "force") return;
+            
+            console.log("🔄 Restarting force simulation...");
+            
+            // Update links based on current visibility
+            const validLinks = graphData.edges
+                .filter(edge => shouldShowEdge(edge))
+                .map(edge => ({
+                    source: edge.source,
+                    target: edge.target,
+                    strength: 0.5 + (graphData.nodes[edge.source]?.importance || 0) * 0.3
+                }));
+            
+            // Update force simulation
+            simulation.force("link")
+                .links(validLinks);
+            
+            // Restart with higher alpha for more movement
+            simulation.alpha(0.3).restart();
+            
+            console.log("✅ Force simulation restarted");
+        }
+        
+        // Stop force simulation
+        function stopForceSimulation() {
+            if (simulation) {
+                console.log("⏹️ Stopping force simulation...");
+                simulation.stop();
+                simulation = null;
+                console.log("✅ Force simulation stopped");
+            }
+        }
+        
+        // Apply force-directed clustering by folder
+        function applyFolderClustering() {
+            if (!simulation || currentLayout !== "force") return;
+            
+            console.log("📁 Applying folder clustering...");
+            
+            // Create folder-based positioning forces
+            const folderCenters = {};
+            const folders = [...new Set(graphData.nodes.map(n => n.folder))];
+            
+            // Calculate cluster centers in a circle
+            folders.forEach((folder, index) => {
+                const angle = (index / folders.length) * 2 * Math.PI;
+                const radius = Math.min(width, height) * 0.3;
+                folderCenters[folder] = {
+                    x: width / 2 + radius * Math.cos(angle),
+                    y: height / 2 + radius * Math.sin(angle)
+                };
+            });
+            
+            // Add clustering force
+            simulation.force("cluster", d3.forceX(d => folderCenters[d.folder]?.x || width / 2).strength(0.05))
+                     .force("clusterY", d3.forceY(d => folderCenters[d.folder]?.y || height / 2).strength(0.05));
+            
+            // Restart simulation
+            simulation.alpha(0.3).restart();
+            
+            console.log("✅ Folder clustering applied");
+        }
+        
+        // Remove folder clustering
+        function removeFolderClustering() {
+            if (!simulation) return;
+            
+            console.log("🔄 Removing folder clustering...");
+            
+            simulation.force("cluster", null)
+                     .force("clusterY", null);
+            
+            simulation.alpha(0.3).restart();
+            
+            console.log("✅ Folder clustering removed");
+        }
+        
+        // Adjust force parameters based on graph size
+        function adjustForceParameters() {
+            if (!simulation) return;
+            
+            const nodeCount = graphData.nodes.length;
+            const edgeCount = graphData.edges.filter(shouldShowEdge).length;
+            
+            console.log(`⚙️ Adjusting force parameters for ${nodeCount} nodes, ${edgeCount} edges`);
+            
+            // Adjust charge strength based on node count
+            const baseCharge = nodeCount > 50 ? -300 : -800;
+            simulation.force("charge", d3.forceManyBody()
+                .strength(d => {
+                    const importance = d.importance || 0;
+                    const importanceMultiplier = 1 + importance * 2;
+                    return baseCharge * importanceMultiplier;
+                })
+            );
+            
+            // Adjust link distance based on density
+            const density = edgeCount / Math.max(1, nodeCount - 1);
+            const baseDistance = density > 2 ? 120 : 150;
+            
+            simulation.force("link")
+                .distance(d => {
+                    const sourceNode = graphData.nodes[d.source.index || d.source];
+                    const targetNode = graphData.nodes[d.target.index || d.target];
+                    const importanceBonus = ((sourceNode?.importance || 0) + (targetNode?.importance || 0)) * 30;
+                    return baseDistance + importanceBonus;
+                });
+            
+            console.log(`✅ Force parameters adjusted: charge=${baseCharge}, distance=${baseDistance}`);
+        }
+    
+        
+        // Enhanced controls management
         function updateEnhancedControls() {
             const container = d3.select("#folder-controls");
             container.selectAll("*").remove();
@@ -3544,27 +4651,6 @@
             });
         }
         
-        function updateEnhancedVisibility() {
-            if (!window.graphElements) return;
-            
-            // Update node visibility with advanced filtering
-            window.graphElements.node
-                .style("opacity", d => {
-                    if (!shouldShowNode(d)) return 0.1;
-                    if (!showTestDependencies && d.is_test) return 0.3;
-                    return 1;
-                })
-                .style("display", d => shouldShowNode(d) ? "block" : "none");
-            
-            // Update link visibility
-            window.graphElements.link
-                .classed("hidden", d => !shouldShowEdge(d))
-                .style("opacity", d => {
-                    if (!shouldShowEdge(d)) return 0;
-                    return d.is_test_related && !showTestDependencies ? 0.3 : 0.8;
-                });
-        }
-        
         function toggleFolder(folder) {
             if (checkedFolders.has(folder)) {
                 checkedFolders.delete(folder);
@@ -3574,6 +4660,13 @@
             updateEnhancedControls();
             updateEnhancedVisibility();
             updateEnhancedStats();
+            
+            // Update layout if needed
+            if (currentLayout === "hierarchical") {
+                updateHierarchicalLayout();
+            } else if (currentLayout === "force") {
+                restartForceSimulation();
+            }
         }
         
         function toggleTestDependencies() {
@@ -3581,6 +4674,13 @@
             updateEnhancedControls();
             updateEnhancedVisibility();
             updateEnhancedStats();
+            
+            // Update layout if needed
+            if (currentLayout === "hierarchical") {
+                updateHierarchicalLayout();
+            } else if (currentLayout === "force") {
+                restartForceSimulation();
+            }
         }
         
         function resetAllFilters() {
@@ -3602,6 +4702,13 @@
             updateEnhancedControls();
             updateEnhancedVisibility();
             updateEnhancedStats();
+            
+            // Update layout
+            if (currentLayout === "hierarchical") {
+                updateHierarchicalLayout();
+            } else if (currentLayout === "force") {
+                restartForceSimulation();
+            }
         }
         
         // Advanced filter functions
@@ -3619,6 +4726,12 @@
                 updateFilterLabels();
                 updateEnhancedVisibility();
                 updateEnhancedStats();
+                
+                if (currentLayout === "hierarchical") {
+                    updateHierarchicalLayout();
+                } else if (currentLayout === "force") {
+                    restartForceSimulation();
+                }
             });
             
             // Dependencies filter  
@@ -3628,6 +4741,12 @@
                 updateFilterLabels();
                 updateEnhancedVisibility();
                 updateEnhancedStats();
+                
+                if (currentLayout === "hierarchical") {
+                    updateHierarchicalLayout();
+                } else if (currentLayout === "force") {
+                    restartForceSimulation();
+                }
             });
             
             // Size filter
@@ -3637,6 +4756,12 @@
                 updateFilterLabels();
                 updateEnhancedVisibility();
                 updateEnhancedStats();
+                
+                if (currentLayout === "hierarchical") {
+                    updateHierarchicalLayout();
+                } else if (currentLayout === "force") {
+                    restartForceSimulation();
+                }
             });
             
             // Select all toggle
@@ -3654,125 +4779,15 @@
                 updateEnhancedControls();
                 updateEnhancedVisibility();
                 updateEnhancedStats();
+                
+                if (currentLayout === "hierarchical") {
+                    updateHierarchicalLayout();
+                } else if (currentLayout === "force") {
+                    restartForceSimulation();
+                }
             });
             
             updateFilterLabels();
-        }
-        
-        function shouldShowNode(node) {
-            // Check folder visibility
-            if (!checkedFolders.has(node.folder)) return false;
-            
-            // Check advanced filters
-            if (node.imports_count > maxImportsFilter) return false;
-            
-            // Count outgoing dependencies
-            const outgoingDeps = graphData.edges.filter(e => e.source_name === node.id).length;
-            if (outgoingDeps > maxDependenciesFilter) return false;
-            
-            // Check file size (convert bytes to KB)
-            const sizeKB = node.size / 1024;
-            if (sizeKB > maxSizeFilter) return false;
-            
-            return true;
-        }
-        
-        // Force-directed layout using D3 force simulation
-        function initializeForceDirectedLayout() {
-            console.log("🌐 Initializing force-directed layout...");
-            
-            // Calculate node dimensions for force layout
-            graphData.nodes.forEach(d => {
-                const importance = d.importance || 0;
-                const baseWidth = Math.max(120, d.stem.length * 8 + 20);
-                const baseHeight = d.folder !== "root" ? 40 : 30;
-                
-                // Scale size based on importance
-                const importanceScale = 1 + (importance * 0.5);
-                d.width = Math.round(baseWidth * importanceScale);
-                d.height = Math.round(baseHeight * importanceScale);
-                
-                // Set initial positions if not set
-                if (d.x === undefined) d.x = width / 2 + (Math.random() - 0.5) * 200;
-                if (d.y === undefined) d.y = height / 2 + (Math.random() - 0.5) * 200;
-            });
-            
-            // Create filtered links for simulation
-            const validLinks = graphData.edges
-                .filter(edge => shouldShowEdge(edge))
-                .map(edge => ({
-                    source: edge.source,
-                    target: edge.target,
-                    strength: 0.5 + (graphData.nodes[edge.source]?.importance || 0) * 0.3
-                }));
-            
-            // Stop any existing simulation
-            if (simulation) {
-                simulation.stop();
-            }
-            
-            // Create force simulation
-            simulation = d3.forceSimulation(graphData.nodes)
-                .force("link", d3.forceLink(validLinks)
-                    .id(d => d.index)
-                    .distance(d => {
-                        const sourceNode = graphData.nodes[d.source.index || d.source];
-                        const targetNode = graphData.nodes[d.target.index || d.target];
-                        const baseDistance = 150;
-                        const importanceBonus = ((sourceNode?.importance || 0) + (targetNode?.importance || 0)) * 50;
-                        return baseDistance + importanceBonus;
-                    })
-                    .strength(d => d.strength || 0.5)
-                )
-                .force("charge", d3.forceManyBody()
-                    .strength(d => {
-                        const importance = d.importance || 0;
-                        const baseCharge = -800;
-                        const importanceMultiplier = 1 + importance * 2;
-                        return baseCharge * importanceMultiplier;
-                    })
-                )
-                .force("center", d3.forceCenter(width / 2, height / 2))
-                .force("collision", d3.forceCollide()
-                    .radius(d => Math.max(d.width, d.height) / 2 + 10)
-                    .strength(0.7)
-                )
-                .force("x", d3.forceX(width / 2).strength(0.1))
-                .force("y", d3.forceY(height / 2).strength(0.1));
-            
-            // Update positions during simulation
-            simulation.on("tick", () => {
-                updatePositionsForceLayout();
-            });
-            
-            // Reduce alpha target for smoother convergence
-            simulation.alphaTarget(0.1).restart();
-            
-            console.log("✅ Force-directed layout initialized");
-            return simulation;
-        }
-        
-        // Update positions for force layout
-        function updatePositionsForceLayout() {
-            if (!window.graphElements) return;
-            
-            const { node, link } = window.graphElements;
-            
-            // Update node positions
-            node.attr("transform", d => `translate(${d.x},${d.y})`);
-            
-            // Update link paths with force layout positions
-            link.attr("d", d => {
-                const source = d.source.x !== undefined ? d.source : graphData.nodes[d.source];
-                const target = d.target.x !== undefined ? d.target : graphData.nodes[d.target];
-                
-                if (!source || !target) return "";
-                
-                return createEnhancedCubicBezierPath({
-                    source: source.index,
-                    target: target.index
-                });
-            });
         }
         
         // Switch between hierarchical and force-directed layouts
@@ -3798,10 +4813,7 @@
                 layoutIndicator.textContent = "Current: Hierarchical Layout";
                 
                 // Stop force simulation
-                if (simulation) {
-                    simulation.stop();
-                    simulation = null;
-                }
+                stopForceSimulation();
                 
                 // Recalculate hierarchical layout
                 const layout = calculateEnhancedHierarchicalLayout();
@@ -3809,25 +4821,6 @@
                 // Animate to hierarchical positions
                 animateToHierarchicalLayout();
             }
-        }
-        
-        // Animate nodes to hierarchical positions
-        function animateToHierarchicalLayout() {
-            if (!window.graphElements) return;
-            
-            const { node, link } = window.graphElements;
-            
-            // Animate nodes to hierarchical positions
-            node.transition()
-                .duration(1000)
-                .ease(d3.easeQuadInOut)
-                .attr("transform", d => `translate(${d.x},${d.y})`);
-            
-            // Animate links to hierarchical curves
-            link.transition()
-                .duration(1000)
-                .ease(d3.easeQuadInOut)
-                .attr("d", d => createEnhancedCubicBezierPath(d));
         }
         
         // Setup layout toggle functionality
@@ -3861,51 +4854,143 @@
             toggleSwitch.setAttribute('aria-checked', 'false');
         }
         
-        // Enhanced drag functions with layout awareness
-        function dragstarted(event, d) {
-            if (currentLayout === "force" && simulation) {
-                if (!event.active) simulation.alphaTarget(0.3).restart();
-            }
-            d.fx = d.x;
-            d.fy = d.y;
+        // Export/import functions for saving/loading graph state
+        function exportGraphState() {
+            const state = {
+                checkedFolders: Array.from(checkedFolders),
+                showTestDependencies: showTestDependencies,
+                maxImportsFilter: maxImportsFilter,
+                maxDependenciesFilter: maxDependenciesFilter,
+                maxSizeFilter: maxSizeFilter,
+                currentLayout: currentLayout,
+                selectedNode: selectedNode?.id || null,
+                timestamp: new Date().toISOString()
+            };
+            
+            const blob = new Blob([JSON.stringify(state, null, 2)], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'dependency-graph-state.json';
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+            
+            console.log("📤 Graph state exported");
         }
         
-        function dragged(event, d) {
-            d.fx = event.x;
-            d.fy = event.y;
-            d.x = event.x;
-            d.y = event.y;
+        function importGraphState(event) {
+            const file = event.target.files[0];
+            if (!file) return;
             
-            if (currentLayout === "hierarchical") {
-                updatePositions();
-            }
-            // For force layout, the simulation handles position updates
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                try {
+                    const state = JSON.parse(e.target.result);
+                    
+                    // Restore state
+                    checkedFolders = new Set(state.checkedFolders || []);
+                    showTestDependencies = state.showTestDependencies !== undefined ? state.showTestDependencies : true;
+                    maxImportsFilter = state.maxImportsFilter || 20;
+                    maxDependenciesFilter = state.maxDependenciesFilter || 20;
+                    maxSizeFilter = state.maxSizeFilter || 100;
+                    
+                    // Update UI
+                    document.getElementById('imports-filter').value = maxImportsFilter;
+                    document.getElementById('dependencies-filter').value = maxDependenciesFilter;
+                    document.getElementById('size-filter').value = maxSizeFilter;
+                    updateFilterLabels();
+                    
+                    updateEnhancedControls();
+                    updateEnhancedVisibility();
+                    updateEnhancedStats();
+                    
+                    // Restore layout
+                    if (state.currentLayout && state.currentLayout !== currentLayout) {
+                        switchLayout(state.currentLayout);
+                    }
+                    
+                    console.log("📥 Graph state imported from", state.timestamp);
+                } catch (error) {
+                    console.error("❌ Failed to import graph state:", error);
+                    alert("Failed to import graph state. Please check the file format.");
+                }
+            };
+            reader.readAsText(file);
         }
         
-        function dragended(event, d) {
-            if (currentLayout === "force" && simulation) {
-                if (!event.active) simulation.alphaTarget(0);
-            }
-            d.fx = null;
-            d.fy = null;
+        // Search functionality
+        function setupSearchFunctionality() {
+            const searchInput = document.getElementById('search-input');
+            if (!searchInput) return;
+            
+            searchInput.addEventListener('input', function() {
+                const query = this.value.toLowerCase().trim();
+                
+                if (query === '') {
+                    resetHighlighting();
+                    return;
+                }
+                
+                // Find matching nodes
+                const matchingNodes = graphData.nodes.filter(node => 
+                    node.stem.toLowerCase().includes(query) ||
+                    node.folder.toLowerCase().includes(query) ||
+                    node.name.toLowerCase().includes(query)
+                );
+                
+                if (matchingNodes.length > 0) {
+                    // Highlight matching nodes
+                    const matchingIds = new Set(matchingNodes.map(n => n.id));
+                    
+                    window.graphElements.node
+                        .classed("highlighted", d => matchingIds.has(d.id))
+                        .classed("dimmed", d => !matchingIds.has(d.id));
+                    
+                    window.graphElements.node.selectAll(".node-rect")
+                        .classed("highlighted", function() {
+                            const nodeData = d3.select(this.parentNode).datum();
+                            return matchingIds.has(nodeData.id);
+                        })
+                        .classed("dimmed", function() {
+                            const nodeData = d3.select(this.parentNode).datum();
+                            return !matchingIds.has(nodeData.id);
+                        });
+                    
+                    window.graphElements.link.classed("dimmed", true);
+                }
+            });
         }
         
-        function updatePositions() {
-            const { node, link } = window.graphElements;
-            if (!node || !link) return;
+        // Performance monitoring
+        function setupPerformanceMonitoring() {
+            let frameCount = 0;
+            let lastTime = performance.now();
             
-            node.attr("transform", d => `translate(${d.x},${d.y})`);
-            
-            if (currentLayout === "hierarchical") {
-                link.attr("d", d => createEnhancedCubicBezierPath(d));
-            } else {
-                // For force layout, use the force layout position update
-                updatePositionsForceLayout();
+            function updateFPS() {
+                const now = performance.now();
+                frameCount++;
+                
+                if (now - lastTime >= 1000) {
+                    const fps = Math.round(frameCount * 1000 / (now - lastTime));
+                    const fpsElement = document.getElementById('fps-counter');
+                    if (fpsElement) {
+                        fpsElement.textContent = `FPS: ${fps}`;
+                    }
+                    
+                    frameCount = 0;
+                    lastTime = now;
+                }
+                
+                requestAnimationFrame(updateFPS);
             }
+            
+            requestAnimationFrame(updateFPS);
         }
+    
         
         // Initialize on load
-        window.addEventListener("resize", updateDimensions);
         document.addEventListener("DOMContentLoaded", initializeEnhancedVisualization);
     </script>
 </body>
