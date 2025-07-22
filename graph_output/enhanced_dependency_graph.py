@@ -1004,6 +1004,7 @@ def generate_enhanced_html_visualization(graph_data: Dict[str, Any]) -> str:
             updateEnhancedControls();
             updateEnhancedStats();
             updateEnhancedVisibility();
+            setupLayoutToggle();
         }}
 
         // Enhanced arrow markers creation
@@ -1365,6 +1366,190 @@ def generate_enhanced_html_visualization(graph_data: Dict[str, Any]) -> str:
             if (sizeKB > maxSizeFilter) return false;
             
             return true;
+        }}
+        
+        // Force-directed layout using D3 force simulation
+        function initializeForceDirectedLayout() {{
+            console.log("🌐 Initializing force-directed layout...");
+            
+            // Calculate node dimensions for force layout
+            graphData.nodes.forEach(d => {{
+                const importance = d.importance || 0;
+                const baseWidth = Math.max(120, d.stem.length * 8 + 20);
+                const baseHeight = d.folder !== "root" ? 40 : 30;
+                
+                // Scale size based on importance
+                const importanceScale = 1 + (importance * 0.5);
+                d.width = Math.round(baseWidth * importanceScale);
+                d.height = Math.round(baseHeight * importanceScale);
+                
+                // Set initial positions if not set
+                if (d.x === undefined) d.x = width / 2 + (Math.random() - 0.5) * 200;
+                if (d.y === undefined) d.y = height / 2 + (Math.random() - 0.5) * 200;
+            }});
+            
+            // Create filtered links for simulation
+            const validLinks = graphData.edges
+                .filter(edge => shouldShowEdge(edge))
+                .map(edge => ({{
+                    source: edge.source,
+                    target: edge.target,
+                    strength: 0.5 + (graphData.nodes[edge.source]?.importance || 0) * 0.3
+                }}));
+            
+            // Stop any existing simulation
+            if (simulation) {{
+                simulation.stop();
+            }}
+            
+            // Create force simulation
+            simulation = d3.forceSimulation(graphData.nodes)
+                .force("link", d3.forceLink(validLinks)
+                    .id(d => d.index)
+                    .distance(d => {{
+                        const sourceNode = graphData.nodes[d.source.index || d.source];
+                        const targetNode = graphData.nodes[d.target.index || d.target];
+                        const baseDistance = 150;
+                        const importanceBonus = ((sourceNode?.importance || 0) + (targetNode?.importance || 0)) * 50;
+                        return baseDistance + importanceBonus;
+                    }})
+                    .strength(d => d.strength || 0.5)
+                )
+                .force("charge", d3.forceManyBody()
+                    .strength(d => {{
+                        const importance = d.importance || 0;
+                        const baseCharge = -800;
+                        const importanceMultiplier = 1 + importance * 2;
+                        return baseCharge * importanceMultiplier;
+                    }})
+                )
+                .force("center", d3.forceCenter(width / 2, height / 2))
+                .force("collision", d3.forceCollide()
+                    .radius(d => Math.max(d.width, d.height) / 2 + 10)
+                    .strength(0.7)
+                )
+                .force("x", d3.forceX(width / 2).strength(0.1))
+                .force("y", d3.forceY(height / 2).strength(0.1));
+            
+            // Update positions during simulation
+            simulation.on("tick", () => {{
+                updatePositionsForceLayout();
+            }});
+            
+            // Reduce alpha target for smoother convergence
+            simulation.alphaTarget(0.1).restart();
+            
+            console.log("✅ Force-directed layout initialized");
+            return simulation;
+        }}
+        
+        // Update positions for force layout
+        function updatePositionsForceLayout() {{
+            if (!window.graphElements) return;
+            
+            const {{ node, link }} = window.graphElements;
+            
+            // Update node positions
+            node.attr("transform", d => `translate(${{d.x}},${{d.y}})`);
+            
+            // Update link paths with force layout positions
+            link.attr("d", d => {{
+                const source = d.source.x !== undefined ? d.source : graphData.nodes[d.source];
+                const target = d.target.x !== undefined ? d.target : graphData.nodes[d.target];
+                
+                if (!source || !target) return "";
+                
+                return createEnhancedCubicBezierPath({{
+                    source: source.index,
+                    target: target.index
+                }});
+            }});
+        }}
+        
+        // Switch between hierarchical and force-directed layouts
+        function switchLayout(newLayout) {{
+            if (newLayout === currentLayout) return;
+            
+            console.log(`🔄 Switching from ${{currentLayout}} to ${{newLayout}} layout`);
+            currentLayout = newLayout;
+            
+            // Update toggle UI
+            const toggleSwitch = document.getElementById('toggle-switch');
+            const layoutIndicator = document.getElementById('layout-indicator');
+            
+            if (newLayout === "force") {{
+                toggleSwitch.classList.add('active');
+                layoutIndicator.textContent = "Current: Force-Directed Layout";
+                
+                // Initialize force-directed layout
+                initializeForceDirectedLayout();
+                
+            }} else {{
+                toggleSwitch.classList.remove('active');
+                layoutIndicator.textContent = "Current: Hierarchical Layout";
+                
+                // Stop force simulation
+                if (simulation) {{
+                    simulation.stop();
+                    simulation = null;
+                }}
+                
+                // Recalculate hierarchical layout
+                const layout = calculateEnhancedHierarchicalLayout();
+                
+                // Animate to hierarchical positions
+                animateToHierarchicalLayout();
+            }}
+        }}
+        
+        // Animate nodes to hierarchical positions
+        function animateToHierarchicalLayout() {{
+            if (!window.graphElements) return;
+            
+            const {{ node, link }} = window.graphElements;
+            
+            // Animate nodes to hierarchical positions
+            node.transition()
+                .duration(1000)
+                .ease(d3.easeQuadInOut)
+                .attr("transform", d => `translate(${{d.x}},${{d.y}})`);
+            
+            // Animate links to hierarchical curves
+            link.transition()
+                .duration(1000)
+                .ease(d3.easeQuadInOut)
+                .attr("d", d => createEnhancedCubicBezierPath(d));
+        }}
+        
+        // Setup layout toggle functionality
+        function setupLayoutToggle() {{
+            const toggleSwitch = document.getElementById('toggle-switch');
+            const layoutToggle = document.getElementById('layout-toggle');
+            
+            function handleToggle() {{
+                const newLayout = currentLayout === "hierarchical" ? "force" : "hierarchical";
+                switchLayout(newLayout);
+            }}
+            
+            toggleSwitch.addEventListener('click', handleToggle);
+            layoutToggle.addEventListener('click', function(event) {{
+                if (event.target === toggleSwitch || event.target.closest('.toggle-switch')) {{
+                    return; // Let the toggle switch handle it
+                }}
+                handleToggle();
+            }});
+            
+            // Keyboard accessibility
+            toggleSwitch.addEventListener('keydown', function(event) {{
+                if (event.key === 'Enter' || event.key === ' ') {{
+                    event.preventDefault();
+                    handleToggle();
+                }}
+            }});
+            
+            toggleSwitch.setAttribute('tabindex', '0');
+            toggleSwitch.setAttribute('role', 'switch');
+            toggleSwitch.setAttribute('aria-checked', 'false');
         }}
         
         // Enhanced drag functions with layout awareness

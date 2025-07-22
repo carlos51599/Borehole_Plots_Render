@@ -3,6 +3,46 @@ applyTo: '**'
 ---
 Provide project context and coding guidelines that AI should follow when generating code, answering questions, or reviewing changes.
 
+**Timestamp Guideline:**
+Include a timestamp in every chat message for traceability and context. The timestamp must include both the current date and the time (in 24-hour format, e.g., 2025-07-22 15:41) of the message.
+
+**Multi-Stage Action Plan Guideline:**
+For any task assigned, first create a detailed action plan before coding. Follow this multi-stage approach:
+
+1. **Analyse the task thoroughly:**
+   - Read the prompt carefully.
+   - Review all related parts of the existing codebase.
+   - Identify what the current logic does and where it may be lacking.
+
+2. **Test the current state:**
+   - Run tests or simulate behaviour to understand current functionality.
+   - Note down bugs, limitations, or architectural constraints.
+
+3. **Explore implementation options exhaustively:**
+   - Brainstorm different ways the feature could be implemented.
+   - Compare for maintainability, efficiency, integration difficulty.
+
+4. **Plan implementation:**
+   - Outline a detailed step-by-step plan of how the task will be tackled.
+   - Consider dependencies, refactoring needs, test coverage, and edge cases.
+
+5. **Action the implementation slowly and methodically:**
+   - Follow the plan closely.
+   - Write clean, well-commented code in small commits.
+   - Continuously validate progress against the original goals.
+
+6. **Test creatively and exhaustively:**
+   - Think beyond common cases.
+   - Simulate edge conditions, input failures, concurrency, etc.
+   - Aim for deployment-level confidence.
+
+7. **Prepare for deployment:**
+   - Ensure all tests pass.
+   - Confirm changes integrate seamlessly.
+   - Clean up dead code, update docs, and finalise commits.
+
+🧷 **Note:** This process should be slow, deliberate, and comprehensive. Do not rush to code. Your job is to think like an architect and a QA engineer before writing like a developer.
+
 **Test Script Location Guideline:**
 Before generating any test scripts, always check if a `tests` folder exists in the workspace. If it does, save all new test scripts in that folder.
 
