@@ -75,7 +75,7 @@ def get_graph_styles() -> str:
         }
         
         .node-rect.dimmed {
-            opacity: 0.1;
+            opacity: 0.05;
         }
         
         /* Enhanced link styles */
@@ -99,7 +99,7 @@ def get_graph_styles() -> str:
         }
         
         .link.dimmed {
-            opacity: 0.05;
+            opacity: 0.01;
         }
         
         .link.hidden {
@@ -117,6 +117,10 @@ def get_graph_styles() -> str:
             text-anchor: middle;
             pointer-events: none;
             fill: #333;
+        }
+
+        .node-label.dimmed {
+            opacity: 0.01;
         }
         
         .folder-label-text {

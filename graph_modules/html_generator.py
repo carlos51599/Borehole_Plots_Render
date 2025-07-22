@@ -76,22 +76,22 @@ def get_html_body() -> str:
             <div class="section">
                 <h3>🔍 Advanced Filters</h3>
                 <div style="margin-bottom: 15px;">
-                    <label for="imports-filter" class="filter-label">
-                        📥 Max Internal Imports:
+                    <label for="predecessors-filter" class="filter-label">
+                        📥 Max Predecessors (incoming):
                     </label>
-                    <input type="range" id="imports-filter" min="0" max="20" value="20" style="width: 100%; margin-bottom: 5px;">
+                    <input type="range" id="predecessors-filter" min="0" max="20" value="20" style="width: 100%; margin-bottom: 5px;">
                     <div class="filter-value">
-                        <span id="imports-filter-value">20</span> imports
+                        <span id="predecessors-filter-value">20</span> predecessors
                     </div>
                 </div>
                 
                 <div style="margin-bottom: 15px;">
-                    <label for="dependencies-filter" class="filter-label">
-                        📤 Max Dependencies (outgoing):
+                    <label for="successors-filter" class="filter-label">
+                        📤 Max Successors (outgoing):
                     </label>
-                    <input type="range" id="dependencies-filter" min="0" max="20" value="20" style="width: 100%; margin-bottom: 5px;">
+                    <input type="range" id="successors-filter" min="0" max="20" value="20" style="width: 100%; margin-bottom: 5px;">
                     <div class="filter-value">
-                        <span id="dependencies-filter-value">20</span> dependencies
+                        <span id="successors-filter-value">20</span> successors
                     </div>
                 </div>
                 

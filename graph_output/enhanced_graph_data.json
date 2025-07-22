@@ -459,7 +459,7 @@
       "importance": 0.2802375280211795,
       "is_test": false,
       "is_init": false,
-      "size": 18052,
+      "size": 18166,
       "index": 32
     },
     {
@@ -473,7 +473,7 @@
       "importance": 0.2802375280211795,
       "is_test": false,
       "is_init": false,
-      "size": 10981,
+      "size": 11049,
       "index": 33
     },
     {
@@ -487,7 +487,7 @@
       "importance": 0.2802375280211795,
       "is_test": false,
       "is_init": false,
-      "size": 16119,
+      "size": 16973,
       "index": 34
     },
     {
@@ -515,7 +515,7 @@
       "importance": 0.3960187447748822,
       "is_test": false,
       "is_init": false,
-      "size": 9949,
+      "size": 9966,
       "index": 36
     },
     {
@@ -2565,7 +2565,7 @@
       "internal_imports_count": 0,
       "is_test": false,
       "is_init": false,
-      "size": 18052
+      "size": 18166
     },
     "graph_modules/graph_styles.py": {
       "file_path": "graph_modules\\graph_styles.py",
@@ -2578,7 +2578,7 @@
       "internal_imports_count": 0,
       "is_test": false,
       "is_init": false,
-      "size": 10981
+      "size": 11049
     },
     "graph_modules/graph_visualization.py": {
       "file_path": "graph_modules\\graph_visualization.py",
@@ -2591,7 +2591,7 @@
       "internal_imports_count": 0,
       "is_test": false,
       "is_init": false,
-      "size": 16119
+      "size": 16973
     },
     "graph_modules/hierarchical_layout.py": {
       "file_path": "graph_modules\\hierarchical_layout.py",
@@ -2634,7 +2634,7 @@
       "internal_imports_count": 6,
       "is_test": false,
       "is_init": false,
-      "size": 9949
+      "size": 9966
     },
     "graph_modules/__init__.py": {
       "file_path": "graph_modules\\__init__.py",

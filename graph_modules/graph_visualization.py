@@ -26,8 +26,8 @@ def get_graph_visualization_js() -> str:
         let simulation = null;
 
         // Advanced filter state
-        let maxImportsFilter = 20;
-        let maxDependenciesFilter = 20;
+        let maxPredecessorsFilter = 20;
+        let maxSuccessorsFilter = 20;
         let maxSizeFilter = 100; // KB
 
         // D3.js setup with enhanced features
@@ -200,12 +200,19 @@ def get_graph_visualization_js() -> str:
         }
         
         function handleEnhancedMouseOver(event, d) {
-            const depInfo = graphData.dependencies[d.id];
-            const imports = depInfo?.imports || [];
-            const importNames = imports.map(id => {
-                const dep = graphData.dependencies[id];
-                return dep ? dep.stem : id;
-            }).join(", ");
+            // Calculate predecessors (incoming) and successors (outgoing)
+            const predecessors = graphData.edges.filter(e => e.target_name === d.id).length;
+            const successors = graphData.edges.filter(e => e.source_name === d.id).length;
+            const predecessorNames = graphData.edges.filter(e => e.target_name === d.id)
+                .map(e => {
+                    const dep = graphData.nodes.find(n => n.id === e.source_name);
+                    return dep ? dep.stem : e.source_name;
+                }).join(", ");
+            const successorNames = graphData.edges.filter(e => e.source_name === d.id)
+                .map(e => {
+                    const dep = graphData.nodes.find(n => n.id === e.target_name);
+                    return dep ? dep.stem : e.target_name;
+                }).join(", ");
             
             const importanceLevel = d.importance > 0.7 ? "High" : 
                                   d.importance > 0.5 ? "Medium" : 
@@ -217,10 +224,10 @@ def get_graph_visualization_js() -> str:
                     <strong>${d.stem}</strong><br/>
                     <strong>Folder:</strong> ${d.folder}<br/>
                     <strong>Importance:</strong> ${importanceLevel} (${(d.importance * 100).toFixed(1)}%)<br/>
-                    <strong>Dependencies:</strong> ${imports.length}<br/>
+                    <strong>Predecessors:</strong> ${predecessors} ${predecessorNames ? `<span style='color:#888'>[${predecessorNames}]</span>` : ''}<br/>
+                    <strong>Successors:</strong> ${successors} ${successorNames ? `<span style='color:#888'>[${successorNames}]</span>` : ''}<br/>
                     <strong>File Size:</strong> ${(d.size / 1024).toFixed(1)}KB<br/>
                     ${d.is_test ? "<strong>Type:</strong> Test File<br/>" : ""}
-                    <strong>Imports:</strong> ${importNames || "None"}
                 `)
                 .style("left", (event.pageX + 10) + "px")
                 .style("top", (event.pageY - 10) + "px");
@@ -364,11 +371,13 @@ def get_graph_visualization_js() -> str:
             if (!checkedFolders.has(node.folder)) return false;
             
             // Check advanced filters
-            if (node.imports_count > maxImportsFilter) return false;
+            // Count predecessors (incoming edges)
+            const predecessors = graphData.edges.filter(e => e.target_name === node.id).length;
+            if (predecessors > maxPredecessorsFilter) return false;
             
-            // Count outgoing dependencies
-            const outgoingDeps = graphData.edges.filter(e => e.source_name === node.id).length;
-            if (outgoingDeps > maxDependenciesFilter) return false;
+            // Count successors (outgoing edges)
+            const successors = graphData.edges.filter(e => e.source_name === node.id).length;
+            if (successors > maxSuccessorsFilter) return false;
             
             // Check file size (convert bytes to KB)
             const sizeKB = node.size / 1024;

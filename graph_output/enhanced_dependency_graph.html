@@ -66,7 +66,7 @@
         }
         
         .node-rect.dimmed {
-            opacity: 0.1;
+            opacity: 0.05;
         }
         
         /* Enhanced link styles */
@@ -90,7 +90,7 @@
         }
         
         .link.dimmed {
-            opacity: 0.05;
+            opacity: 0.01;
         }
         
         .link.hidden {
@@ -108,6 +108,10 @@
             text-anchor: middle;
             pointer-events: none;
             fill: #333;
+        }
+
+        .node-label.dimmed {
+            opacity: 0.01;
         }
         
         .folder-label-text {
@@ -464,22 +468,22 @@
             <div class="section">
                 <h3>🔍 Advanced Filters</h3>
                 <div style="margin-bottom: 15px;">
-                    <label for="imports-filter" class="filter-label">
-                        📥 Max Internal Imports:
+                    <label for="predecessors-filter" class="filter-label">
+                        📥 Max Predecessors (incoming):
                     </label>
-                    <input type="range" id="imports-filter" min="0" max="20" value="20" style="width: 100%; margin-bottom: 5px;">
+                    <input type="range" id="predecessors-filter" min="0" max="20" value="20" style="width: 100%; margin-bottom: 5px;">
                     <div class="filter-value">
-                        <span id="imports-filter-value">20</span> imports
+                        <span id="predecessors-filter-value">20</span> predecessors
                     </div>
                 </div>
                 
                 <div style="margin-bottom: 15px;">
-                    <label for="dependencies-filter" class="filter-label">
-                        📤 Max Dependencies (outgoing):
+                    <label for="successors-filter" class="filter-label">
+                        📤 Max Successors (outgoing):
                     </label>
-                    <input type="range" id="dependencies-filter" min="0" max="20" value="20" style="width: 100%; margin-bottom: 5px;">
+                    <input type="range" id="successors-filter" min="0" max="20" value="20" style="width: 100%; margin-bottom: 5px;">
                     <div class="filter-value">
-                        <span id="dependencies-filter-value">20</span> dependencies
+                        <span id="successors-filter-value">20</span> successors
                     </div>
                 </div>
                 
@@ -977,7 +981,7 @@
       "importance": 0.2802375280211795,
       "is_test": false,
       "is_init": false,
-      "size": 18052,
+      "size": 18166,
       "index": 32
     },
     {
@@ -991,7 +995,7 @@
       "importance": 0.2802375280211795,
       "is_test": false,
       "is_init": false,
-      "size": 10981,
+      "size": 11049,
       "index": 33
     },
     {
@@ -1005,7 +1009,7 @@
       "importance": 0.2802375280211795,
       "is_test": false,
       "is_init": false,
-      "size": 16119,
+      "size": 16973,
       "index": 34
     },
     {
@@ -1033,7 +1037,7 @@
       "importance": 0.3960187447748822,
       "is_test": false,
       "is_init": false,
-      "size": 9949,
+      "size": 9966,
       "index": 36
     },
     {
@@ -3083,7 +3087,7 @@
       "internal_imports_count": 0,
       "is_test": false,
       "is_init": false,
-      "size": 18052
+      "size": 18166
     },
     "graph_modules/graph_styles.py": {
       "file_path": "graph_modules\\graph_styles.py",
@@ -3096,7 +3100,7 @@
       "internal_imports_count": 0,
       "is_test": false,
       "is_init": false,
-      "size": 10981
+      "size": 11049
     },
     "graph_modules/graph_visualization.py": {
       "file_path": "graph_modules\\graph_visualization.py",
@@ -3109,7 +3113,7 @@
       "internal_imports_count": 0,
       "is_test": false,
       "is_init": false,
-      "size": 16119
+      "size": 16973
     },
     "graph_modules/hierarchical_layout.py": {
       "file_path": "graph_modules\\hierarchical_layout.py",
@@ -3152,7 +3156,7 @@
       "internal_imports_count": 6,
       "is_test": false,
       "is_init": false,
-      "size": 9949
+      "size": 9966
     },
     "graph_modules/__init__.py": {
       "file_path": "graph_modules\\__init__.py",
@@ -3747,8 +3751,8 @@
         let simulation = null;
 
         // Advanced filter state
-        let maxImportsFilter = 20;
-        let maxDependenciesFilter = 20;
+        let maxPredecessorsFilter = 20;
+        let maxSuccessorsFilter = 20;
         let maxSizeFilter = 100; // KB
 
         // D3.js setup with enhanced features
@@ -3921,12 +3925,19 @@
         }
         
         function handleEnhancedMouseOver(event, d) {
-            const depInfo = graphData.dependencies[d.id];
-            const imports = depInfo?.imports || [];
-            const importNames = imports.map(id => {
-                const dep = graphData.dependencies[id];
-                return dep ? dep.stem : id;
-            }).join(", ");
+            // Calculate predecessors (incoming) and successors (outgoing)
+            const predecessors = graphData.edges.filter(e => e.target_name === d.id).length;
+            const successors = graphData.edges.filter(e => e.source_name === d.id).length;
+            const predecessorNames = graphData.edges.filter(e => e.target_name === d.id)
+                .map(e => {
+                    const dep = graphData.nodes.find(n => n.id === e.source_name);
+                    return dep ? dep.stem : e.source_name;
+                }).join(", ");
+            const successorNames = graphData.edges.filter(e => e.source_name === d.id)
+                .map(e => {
+                    const dep = graphData.nodes.find(n => n.id === e.target_name);
+                    return dep ? dep.stem : e.target_name;
+                }).join(", ");
             
             const importanceLevel = d.importance > 0.7 ? "High" : 
                                   d.importance > 0.5 ? "Medium" : 
@@ -3938,10 +3949,10 @@
                     <strong>${d.stem}</strong><br/>
                     <strong>Folder:</strong> ${d.folder}<br/>
                     <strong>Importance:</strong> ${importanceLevel} (${(d.importance * 100).toFixed(1)}%)<br/>
-                    <strong>Dependencies:</strong> ${imports.length}<br/>
+                    <strong>Predecessors:</strong> ${predecessors} ${predecessorNames ? `<span style='color:#888'>[${predecessorNames}]</span>` : ''}<br/>
+                    <strong>Successors:</strong> ${successors} ${successorNames ? `<span style='color:#888'>[${successorNames}]</span>` : ''}<br/>
                     <strong>File Size:</strong> ${(d.size / 1024).toFixed(1)}KB<br/>
                     ${d.is_test ? "<strong>Type:</strong> Test File<br/>" : ""}
-                    <strong>Imports:</strong> ${importNames || "None"}
                 `)
                 .style("left", (event.pageX + 10) + "px")
                 .style("top", (event.pageY - 10) + "px");
@@ -4085,11 +4096,13 @@
             if (!checkedFolders.has(node.folder)) return false;
             
             // Check advanced filters
-            if (node.imports_count > maxImportsFilter) return false;
+            // Count predecessors (incoming edges)
+            const predecessors = graphData.edges.filter(e => e.target_name === node.id).length;
+            if (predecessors > maxPredecessorsFilter) return false;
             
-            // Count outgoing dependencies
-            const outgoingDeps = graphData.edges.filter(e => e.source_name === node.id).length;
-            if (outgoingDeps > maxDependenciesFilter) return false;
+            // Count successors (outgoing edges)
+            const successors = graphData.edges.filter(e => e.source_name === node.id).length;
+            if (successors > maxSuccessorsFilter) return false;
             
             // Check file size (convert bytes to KB)
             const sizeKB = node.size / 1024;
@@ -4580,7 +4593,9 @@
             const container = d3.select("#folder-controls");
             container.selectAll("*").remove();
             
-            Object.entries(graphData.subfolder_info).forEach(([folder, info]) => {
+            Object.entries(graphData.subfolder_info)
+                .sort((a, b) => Number(b[1].count) - Number(a[1].count))
+                .forEach(([folder, info]) => {
                 const item = container.append("div")
                     .attr("class", "folder-item")
                     .attr("role", "checkbox")
@@ -4635,8 +4650,8 @@
             const stats = [
                 { value: graphData.nodes.length, label: "Total Files" },
                 { value: visibleNodes.length, label: "Visible Files" },
-                { value: graphData.edges.length, label: "Dependencies" },
-                { value: visibleEdges.length, label: "Visible Deps" },
+                { value: graphData.edges.length, label: "Edges" },
+                { value: visibleEdges.length, label: "Visible Edges" },
                 { value: Object.keys(graphData.subfolder_info).length, label: "Directories" },
                 { value: testFiles, label: "Test Files" }
             ];
@@ -4688,13 +4703,13 @@
             showTestDependencies = true;
             
             // Reset advanced filters
-            maxImportsFilter = 20;
-            maxDependenciesFilter = 20;
+            maxPredecessorsFilter = 20;
+            maxSuccessorsFilter = 20;
             maxSizeFilter = 100;
             
             // Update UI controls
-            document.getElementById('imports-filter').value = maxImportsFilter;
-            document.getElementById('dependencies-filter').value = maxDependenciesFilter;
+            document.getElementById('predecessors-filter').value = maxPredecessorsFilter;
+            document.getElementById('successors-filter').value = maxSuccessorsFilter;
             document.getElementById('size-filter').value = maxSizeFilter;
             updateFilterLabels();
             
@@ -4713,16 +4728,16 @@
         
         // Advanced filter functions
         function updateFilterLabels() {
-            document.getElementById('imports-filter-value').textContent = maxImportsFilter;
-            document.getElementById('dependencies-filter-value').textContent = maxDependenciesFilter;
+            document.getElementById('predecessors-filter-value').textContent = maxPredecessorsFilter;
+            document.getElementById('successors-filter-value').textContent = maxSuccessorsFilter;
             document.getElementById('size-filter-value').textContent = maxSizeFilter;
         }
         
         function setupAdvancedFilters() {
-            // Imports filter
-            const importsSlider = document.getElementById('imports-filter');
-            importsSlider.addEventListener('input', function() {
-                maxImportsFilter = parseInt(this.value);
+            // Predecessors filter
+            const predecessorsSlider = document.getElementById('predecessors-filter');
+            predecessorsSlider.addEventListener('input', function() {
+                maxPredecessorsFilter = parseInt(this.value);
                 updateFilterLabels();
                 updateEnhancedVisibility();
                 updateEnhancedStats();
@@ -4734,10 +4749,10 @@
                 }
             });
             
-            // Dependencies filter  
-            const dependenciesSlider = document.getElementById('dependencies-filter');
-            dependenciesSlider.addEventListener('input', function() {
-                maxDependenciesFilter = parseInt(this.value);
+            // Successors filter  
+            const successorsSlider = document.getElementById('successors-filter');
+            successorsSlider.addEventListener('input', function() {
+                maxSuccessorsFilter = parseInt(this.value);
                 updateFilterLabels();
                 updateEnhancedVisibility();
                 updateEnhancedStats();

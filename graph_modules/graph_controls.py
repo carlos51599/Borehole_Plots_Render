@@ -20,7 +20,9 @@ def get_graph_controls_js() -> str:
             const container = d3.select("#folder-controls");
             container.selectAll("*").remove();
             
-            Object.entries(graphData.subfolder_info).forEach(([folder, info]) => {
+            Object.entries(graphData.subfolder_info)
+                .sort((a, b) => Number(b[1].count) - Number(a[1].count))
+                .forEach(([folder, info]) => {
                 const item = container.append("div")
                     .attr("class", "folder-item")
                     .attr("role", "checkbox")
@@ -75,8 +77,8 @@ def get_graph_controls_js() -> str:
             const stats = [
                 { value: graphData.nodes.length, label: "Total Files" },
                 { value: visibleNodes.length, label: "Visible Files" },
-                { value: graphData.edges.length, label: "Dependencies" },
-                { value: visibleEdges.length, label: "Visible Deps" },
+                { value: graphData.edges.length, label: "Edges" },
+                { value: visibleEdges.length, label: "Visible Edges" },
                 { value: Object.keys(graphData.subfolder_info).length, label: "Directories" },
                 { value: testFiles, label: "Test Files" }
             ];
@@ -128,13 +130,13 @@ def get_graph_controls_js() -> str:
             showTestDependencies = true;
             
             // Reset advanced filters
-            maxImportsFilter = 20;
-            maxDependenciesFilter = 20;
+            maxPredecessorsFilter = 20;
+            maxSuccessorsFilter = 20;
             maxSizeFilter = 100;
             
             // Update UI controls
-            document.getElementById('imports-filter').value = maxImportsFilter;
-            document.getElementById('dependencies-filter').value = maxDependenciesFilter;
+            document.getElementById('predecessors-filter').value = maxPredecessorsFilter;
+            document.getElementById('successors-filter').value = maxSuccessorsFilter;
             document.getElementById('size-filter').value = maxSizeFilter;
             updateFilterLabels();
             
@@ -153,16 +155,16 @@ def get_graph_controls_js() -> str:
         
         // Advanced filter functions
         function updateFilterLabels() {
-            document.getElementById('imports-filter-value').textContent = maxImportsFilter;
-            document.getElementById('dependencies-filter-value').textContent = maxDependenciesFilter;
+            document.getElementById('predecessors-filter-value').textContent = maxPredecessorsFilter;
+            document.getElementById('successors-filter-value').textContent = maxSuccessorsFilter;
             document.getElementById('size-filter-value').textContent = maxSizeFilter;
         }
         
         function setupAdvancedFilters() {
-            // Imports filter
-            const importsSlider = document.getElementById('imports-filter');
-            importsSlider.addEventListener('input', function() {
-                maxImportsFilter = parseInt(this.value);
+            // Predecessors filter
+            const predecessorsSlider = document.getElementById('predecessors-filter');
+            predecessorsSlider.addEventListener('input', function() {
+                maxPredecessorsFilter = parseInt(this.value);
                 updateFilterLabels();
                 updateEnhancedVisibility();
                 updateEnhancedStats();
@@ -174,10 +176,10 @@ def get_graph_controls_js() -> str:
                 }
             });
             
-            // Dependencies filter  
-            const dependenciesSlider = document.getElementById('dependencies-filter');
-            dependenciesSlider.addEventListener('input', function() {
-                maxDependenciesFilter = parseInt(this.value);
+            // Successors filter  
+            const successorsSlider = document.getElementById('successors-filter');
+            successorsSlider.addEventListener('input', function() {
+                maxSuccessorsFilter = parseInt(this.value);
                 updateFilterLabels();
                 updateEnhancedVisibility();
                 updateEnhancedStats();
