@@ -648,61 +648,6 @@ def generate_enhanced_html_visualization(graph_data: Dict[str, Any]) -> str:
             display: block;
             background: #ffc107;
         }}
-        
-        /* Layout toggle styles */
-        .layout-toggle {{
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 12px;
-            background: white;
-            border: 1px solid #dee2e6;
-            border-radius: 6px;
-            margin-bottom: 15px;
-        }}
-        
-        .layout-toggle-label {{
-            font-size: 13px;
-            font-weight: 500;
-            color: #495057;
-        }}
-        
-        .toggle-switch {{
-            position: relative;
-            width: 50px;
-            height: 24px;
-            background-color: #ccc;
-            border-radius: 12px;
-            cursor: pointer;
-            transition: background-color 0.3s ease;
-        }}
-        
-        .toggle-switch.active {{
-            background-color: #007bff;
-        }}
-        
-        .toggle-slider {{
-            position: absolute;
-            top: 2px;
-            left: 2px;
-            width: 20px;
-            height: 20px;
-            background-color: white;
-            border-radius: 50%;
-            transition: transform 0.3s ease;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
-        }}
-        
-        .toggle-switch.active .toggle-slider {{
-            transform: translateX(26px);
-        }}
-        
-        .layout-mode-indicator {{
-            font-size: 11px;
-            color: #6c757d;
-            margin-top: 5px;
-            text-align: center;
-        }}
     </style>
 </head>
 <body>
@@ -711,20 +656,6 @@ def generate_enhanced_html_visualization(graph_data: Dict[str, Any]) -> str:
             <div class="section">
                 <h3>📊 Statistics</h3>
                 <div id="stats-content" class="stats-grid"></div>
-            </div>
-            
-            <div class="section">
-                <h3>🎛️ Layout Control</h3>
-                <div class="layout-toggle" id="layout-toggle">
-                    <span class="layout-toggle-label">📐 Hierarchical</span>
-                    <div class="toggle-switch" id="toggle-switch">
-                        <div class="toggle-slider"></div>
-                    </div>
-                    <span class="layout-toggle-label">🌐 Force-Directed</span>
-                </div>
-                <div class="layout-mode-indicator" id="layout-indicator">
-                    Current: Hierarchical Layout
-                </div>
             </div>
             
             <div class="section">
@@ -792,158 +723,228 @@ def generate_enhanced_html_visualization(graph_data: Dict[str, Any]) -> str:
     <script>
         // Enhanced graph data with complete directory inclusion
         const graphData = {graph_data_json};
-
+        
         // Enhanced state management
         let checkedFolders = new Set(Object.keys(graphData.subfolder_info));
         let showTestDependencies = true;
         let selectedNode = null;
         let highlightedNodes = new Set();
-
-        // Layout state management
-        let currentLayout = "hierarchical";
-        let simulation = null;
-
+        
         // Advanced filter state
         let maxImportsFilter = 20;
         let maxDependenciesFilter = 20;
         let maxSizeFilter = 100; // KB
-
+        
         // D3.js setup with enhanced features
         const svg = d3.select("#graph");
         const tooltip = d3.select("#tooltip");
         let width, height;
-
+        
         function updateDimensions() {{
             const container = document.querySelector('.graph-container');
             width = container.clientWidth;
             height = container.clientHeight;
             svg.attr("width", width).attr("height", height);
         }}
-
-        // Enhanced layout calculation with dependency-aware positioning (from backup)
+        
+        // Enhanced layout calculation with dependency-aware positioning
         function calculateEnhancedHierarchicalLayout() {{
-            // ...backup logic here...
+            console.log("🔧 Enhanced layout calculation starting...");
+            
             // Calculate node dimensions with importance weighting
             graphData.nodes.forEach(d => {{
                 const importance = d.importance || 0;
                 const baseWidth = Math.max(120, d.stem.length * 8 + 20);
                 const baseHeight = d.folder !== "root" ? 40 : 30;
+                
                 // Scale size based on importance
                 const importanceScale = 1 + (importance * 0.5);
                 d.width = Math.round(baseWidth * importanceScale);
                 d.height = Math.round(baseHeight * importanceScale);
             }});
-            // Build adjacency maps
+            
+            // Build enhanced adjacency maps
             const incomingEdges = new Map();
             const outgoingEdges = new Map();
+            const importanceWeights = new Map();
+            
             graphData.nodes.forEach(node => {{
                 incomingEdges.set(node.index, []);
                 outgoingEdges.set(node.index, []);
+                importanceWeights.set(node.index, node.importance || 0);
             }});
+            
             graphData.edges.forEach(edge => {{
                 if (shouldShowEdge(edge)) {{
                     incomingEdges.get(edge.target).push(edge.source);
                     outgoingEdges.get(edge.source).push(edge.target);
                 }}
             }});
-            // Layer assignment
+            
+            // Enhanced layer assignment with importance consideration
             const levels = [];
             const nodeToLevel = new Map();
             const visited = new Set();
             const inDegree = new Map();
+            
+            // Calculate weighted in-degrees
             graphData.nodes.forEach(node => {{
-                inDegree.set(node.index, incomingEdges.get(node.index).length);
+                const edges = incomingEdges.get(node.index);
+                let weightedDegree = 0;
+                
+                for (const sourceIdx of edges) {{
+                    const sourceImportance = importanceWeights.get(sourceIdx) || 0;
+                    weightedDegree += 1 + sourceImportance;
+                }}
+                
+                inDegree.set(node.index, weightedDegree);
             }});
+            
+            // Process nodes level by level
             let currentLevel = 0;
             while (visited.size < graphData.nodes.length) {{
                 levels[currentLevel] = [];
+                
+                // Find nodes for current level
                 const candidateNodes = [];
                 for (const node of graphData.nodes) {{
                     if (!visited.has(node.index) && inDegree.get(node.index) === 0) {{
                         candidateNodes.push(node);
                     }}
                 }}
+                
+                // If no zero in-degree nodes, pick highest importance unvisited nodes
                 if (candidateNodes.length === 0) {{
                     const remainingNodes = graphData.nodes.filter(n => !visited.has(n.index));
                     if (remainingNodes.length > 0) {{
+                        // Sort by importance descending, then by in-degree ascending
+                        remainingNodes.sort((a, b) => {{
+                            const importanceDiff = (b.importance || 0) - (a.importance || 0);
+                            if (Math.abs(importanceDiff) > 0.01) return importanceDiff;
+                            return inDegree.get(a.index) - inDegree.get(b.index);
+                        }});
+                        
                         candidateNodes.push(remainingNodes[0]);
                     }}
                 }}
+                
+                // Sort candidates by importance within level
+                candidateNodes.sort((a, b) => (b.importance || 0) - (a.importance || 0));
+                
                 for (const node of candidateNodes) {{
                     levels[currentLevel].push(node.index);
                     nodeToLevel.set(node.index, currentLevel);
                     visited.add(node.index);
+                    
+                    // Update in-degrees
                     for (const targetIdx of outgoingEdges.get(node.index)) {{
                         if (!visited.has(targetIdx)) {{
-                            inDegree.set(targetIdx, Math.max(0, inDegree.get(targetIdx) - 1));
+                            const currentDegree = inDegree.get(targetIdx);
+                            const nodeImportance = node.importance || 0;
+                            inDegree.set(targetIdx, Math.max(0, currentDegree - (1 + nodeImportance)));
                         }}
                     }}
                 }}
+                
                 currentLevel++;
-                if (currentLevel > graphData.nodes.length) break;
+                if (currentLevel > graphData.nodes.length) break; // Safety
             }}
-            // Position assignment
+            
+            console.log(`✅ Created ${{levels.length}} levels with enhanced positioning`);
+            
+            // Enhanced position assignment
             const margin = 60;
             const levelWidth = Math.max(300, (width - 2 * margin) / Math.max(1, levels.length));
             const nodeSpacing = 45;
+            
             levels.forEach((level, levelIndex) => {{
                 const x = margin + levelIndex * levelWidth;
-                const totalHeight = level.length * nodeSpacing;
+                
+                // Sort nodes in level by importance (highest first)
+                const sortedLevelNodes = level
+                    .map(nodeIdx => graphData.nodes[nodeIdx])
+                    .sort((a, b) => (b.importance || 0) - (a.importance || 0));
+                
+                const totalHeight = sortedLevelNodes.length * nodeSpacing;
                 const startY = Math.max(margin, (height - totalHeight) / 2);
-                level.forEach((nodeIdx, positionIndex) => {{
-                    const node = graphData.nodes[nodeIdx];
+                
+                sortedLevelNodes.forEach((node, positionIndex) => {{
                     node.x = x;
                     node.y = startY + positionIndex * nodeSpacing;
                 }});
             }});
+            
             return {{ levels, nodeToLevel }};
         }}
-
-        // Enhanced cubic Bézier curve generation (from backup)
+        
+        // Enhanced cubic Bézier curve generation
         function createEnhancedCubicBezierPath(d) {{
             const source = graphData.nodes[d.source];
             const target = graphData.nodes[d.target];
+            
             const sourceX = source.x + source.width/2;
             const sourceY = source.y;
             const targetX = target.x - target.width/2;
             const targetY = target.y;
+            
             const dx = targetX - sourceX;
             const dy = targetY - sourceY;
             const distance = Math.sqrt(dx * dx + dy * dy);
+            
+            // Adaptive control point calculation
             const curveFactor = Math.min(0.6, Math.max(0.2, distance / 400));
             const offsetFactor = Math.abs(dy) / 100;
+            
+            // Control points for smooth cubic Bézier
             const cp1x = sourceX + dx * 0.3 + offsetFactor * 20;
             const cp1y = sourceY + dy * 0.1;
             const cp2x = targetX - dx * 0.3 - offsetFactor * 20;
             const cp2y = targetY - dy * 0.1;
+            
             return `M${{sourceX}},${{sourceY}} C${{cp1x}},${{cp1y}} ${{cp2x}},${{cp2y}} ${{targetX}},${{targetY}}`;
         }}
-
-        // Enhanced visibility logic (from backup)
+        
+        // Enhanced visibility logic
         function shouldShowEdge(edge) {{
+            // Get source and target nodes
             const sourceNode = graphData.nodes.find(n => n.id === edge.source_name);
             const targetNode = graphData.nodes.find(n => n.id === edge.target_name);
+            
+            // Both nodes must be visible
             if (!sourceNode || !targetNode) return false;
             if (!shouldShowNode(sourceNode) || !shouldShowNode(targetNode)) return false;
+            
+            // Check test dependencies filter
             if (!showTestDependencies && edge.is_test_related) {{
                 return false;
             }}
+            
             return true;
         }}
-
-        // Initialize enhanced visualization (from backup)
+        
+        // Initialize enhanced visualization
         function initializeEnhancedVisualization() {{
             updateDimensions();
             svg.selectAll("*").remove();
+            
             const g = svg.append("g").attr("id", "main-group");
+            
+            // Enhanced zoom with better constraints
             const zoom = d3.zoom()
                 .scaleExtent([0.1, 8])
                 .on("zoom", (event) => {{
                     g.attr("transform", event.transform);
                 }});
+            
             svg.call(zoom);
+            
+            // Calculate enhanced layout
             const layout = calculateEnhancedHierarchicalLayout();
+            
+            // Create enhanced arrow markers
             createEnhancedArrowMarkers();
+            
+            // Create enhanced links with cubic Bézier curves
             const linkGroup = g.append("g").attr("class", "links");
             const link = linkGroup.selectAll("path")
                 .data(graphData.edges)
@@ -955,6 +956,8 @@ def generate_enhanced_html_visualization(graph_data: Dict[str, Any]) -> str:
                 }})
                 .attr("d", d => createEnhancedCubicBezierPath(d))
                 .attr("marker-end", "url(#arrowhead)");
+            
+            // Create enhanced node groups
             const nodeGroup = g.append("g").attr("class", "nodes");
             const node = nodeGroup.selectAll("g")
                 .data(graphData.nodes)
@@ -965,6 +968,8 @@ def generate_enhanced_html_visualization(graph_data: Dict[str, Any]) -> str:
                     .on("start", dragstarted)
                     .on("drag", dragged)
                     .on("end", dragended));
+            
+            // Enhanced rectangles with importance indicators
             const rect = node.append("rect")
                 .attr("class", "node-rect")
                 .attr("width", d => d.width)
@@ -972,6 +977,8 @@ def generate_enhanced_html_visualization(graph_data: Dict[str, Any]) -> str:
                 .attr("x", d => -d.width/2)
                 .attr("y", d => -d.height/2)
                 .attr("fill", d => d.color);
+            
+            // Importance indicators
             node.filter(d => d.importance > 0.3)
                 .append("circle")
                 .attr("class", d => {{
@@ -982,31 +989,39 @@ def generate_enhanced_html_visualization(graph_data: Dict[str, Any]) -> str:
                 .attr("cx", d => d.width/2 - 8)
                 .attr("cy", d => -d.height/2 + 8)
                 .attr("r", 6);
+            
+            // Enhanced text labels
             node.append("text")
                 .attr("class", "node-label")
                 .text(d => d.stem)
                 .attr("dy", "-2px");
+            
             node.filter(d => d.folder !== "root")
                 .append("text")
                 .attr("class", "folder-label-text")
                 .text(d => `(${{d.folder}})`)
                 .attr("dy", "10px");
+            
+            // Enhanced event listeners
             node.on("click", handleEnhancedNodeClick)
                 .on("mouseover", handleEnhancedMouseOver)
                 .on("mouseout", handleEnhancedMouseOut);
+            
             svg.on("click", function(event) {{
                 if (event.target === this) {{
                     resetHighlighting();
                 }}
             }});
+            
             window.graphElements = {{ node, link, g }};
+            
             setupAdvancedFilters();
             updateEnhancedControls();
             updateEnhancedStats();
             updateEnhancedVisibility();
         }}
-
-        // Enhanced arrow markers creation
+        
+        // Enhanced arrow markers
         function createEnhancedArrowMarkers() {{
             const defs = svg.select("defs").empty() ? svg.append("defs") : svg.select("defs");
             
@@ -1367,11 +1382,8 @@ def generate_enhanced_html_visualization(graph_data: Dict[str, Any]) -> str:
             return true;
         }}
         
-        // Enhanced drag functions with layout awareness
+        // Drag functions
         function dragstarted(event, d) {{
-            if (currentLayout === "force" && simulation) {{
-                if (!event.active) simulation.alphaTarget(0.3).restart();
-            }}
             d.fx = d.x;
             d.fy = d.y;
         }}
@@ -1381,17 +1393,10 @@ def generate_enhanced_html_visualization(graph_data: Dict[str, Any]) -> str:
             d.fy = event.y;
             d.x = event.x;
             d.y = event.y;
-            
-            if (currentLayout === "hierarchical") {{
-                updatePositions();
-            }}
-            // For force layout, the simulation handles position updates
+            updatePositions();
         }}
         
         function dragended(event, d) {{
-            if (currentLayout === "force" && simulation) {{
-                if (!event.active) simulation.alphaTarget(0);
-            }}
             d.fx = null;
             d.fy = null;
         }}
@@ -1401,13 +1406,7 @@ def generate_enhanced_html_visualization(graph_data: Dict[str, Any]) -> str:
             if (!node || !link) return;
             
             node.attr("transform", d => `translate(${{d.x}},${{d.y}})`);
-            
-            if (currentLayout === "hierarchical") {{
-                link.attr("d", d => createEnhancedCubicBezierPath(d));
-            }} else {{
-                // For force layout, use the force layout position update
-                updatePositionsForceLayout();
-            }}
+            link.attr("d", d => createEnhancedCubicBezierPath(d));
         }}
         
         // Initialize on load
@@ -1460,20 +1459,17 @@ def main():
     print(f"   - Test files included: {stats['test_files']}")
     print(f"   - Directories included: {stats['folders']}")
 
-    print("\n🎯 Key Enhancements:")
-    print("   ✅ Complete directory inclusion (including tests, assets, reports)")
-    print("   ✅ Enhanced hierarchical layout with importance-based positioning")
-    print("   ✅ Force-directed layout toggle with D3.js simulation")
-    print("   ✅ Smooth layout transitions and animations")
-    print("   ✅ Cubic Bézier curves with adaptive control points")
-    print("   ✅ Node importance visualization with PageRank algorithm")
-    print("   ✅ Test dependency toggle and visual indicators")
-    print("   ✅ Enhanced tooltips with detailed information")
-    print("   ✅ Interactive layout switching controls")
+    print(f"\n🎯 Key Enhancements:")
+    print(f"   ✅ Complete directory inclusion (including tests, assets, reports)")
+    print(f"   ✅ Enhanced hierarchical layout with importance-based positioning")
+    print(f"   ✅ Cubic Bézier curves with adaptive control points")
+    print(f"   ✅ Node importance visualization with PageRank algorithm")
+    print(f"   ✅ Test dependency toggle and visual indicators")
+    print(f"   ✅ Enhanced tooltips with detailed information")
 
-    print("\n📄 Generated Files:")
-    print("   - Enhanced graph data: graph_output/enhanced_graph_data.json")
-    print("   - Enhanced visualization: graph_output/enhanced_dependency_graph.html")
+    print(f"\n📄 Generated Files:")
+    print(f"   - Enhanced graph data: graph_output/enhanced_graph_data.json")
+    print(f"   - Enhanced visualization: graph_output/enhanced_dependency_graph.html")
 
     return graph_data
 

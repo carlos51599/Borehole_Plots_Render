@@ -7,8 +7,8 @@
       "folder": "root",
       "color": "#E3F2FD",
       "file_path": "app.py",
-      "imports_count": 0,
-      "importance": 0.2623034431880798,
+      "imports_count": 3,
+      "importance": 0.20843558837414103,
       "is_test": false,
       "is_init": false,
       "size": 23005,
@@ -22,7 +22,7 @@
       "color": "#E3F2FD",
       "file_path": "app_constants.py",
       "imports_count": 0,
-      "importance": 1.0,
+      "importance": 0.7442894705540104,
       "is_test": false,
       "is_init": false,
       "size": 8612,
@@ -36,7 +36,7 @@
       "color": "#E3F2FD",
       "file_path": "app_factory.py",
       "imports_count": 0,
-      "importance": 0.2623034431880798,
+      "importance": 0.26749233841348097,
       "is_test": false,
       "is_init": false,
       "size": 576,
@@ -49,8 +49,8 @@
       "folder": "root",
       "color": "#E3F2FD",
       "file_path": "borehole_log_professional.py",
-      "imports_count": 0,
-      "importance": 0.7112849681000761,
+      "imports_count": 2,
+      "importance": 0.4972969170040626,
       "is_test": false,
       "is_init": false,
       "size": 63204,
@@ -63,8 +63,8 @@
       "folder": "root",
       "color": "#E3F2FD",
       "file_path": "callbacks_split.py",
-      "imports_count": 2,
-      "importance": 0.2623034431880798,
+      "imports_count": 11,
+      "importance": 0.26749233841348097,
       "is_test": false,
       "is_init": false,
       "size": 98589,
@@ -77,8 +77,8 @@
       "folder": "root",
       "color": "#E3F2FD",
       "file_path": "comprehensive_optimization_validation.py",
-      "imports_count": 0,
-      "importance": 0.2623034431880798,
+      "imports_count": 4,
+      "importance": 0.20843558837414103,
       "is_test": false,
       "is_init": false,
       "size": 24553,
@@ -92,7 +92,7 @@
       "color": "#E3F2FD",
       "file_path": "config.py",
       "imports_count": 0,
-      "importance": 0.4298780015756422,
+      "importance": 0.4213228687763701,
       "is_test": false,
       "is_init": false,
       "size": 23646,
@@ -106,7 +106,7 @@
       "color": "#E3F2FD",
       "file_path": "coordinate_service.py",
       "imports_count": 0,
-      "importance": 0.9028391160009656,
+      "importance": 0.8463930548017129,
       "is_test": false,
       "is_init": false,
       "size": 13690,
@@ -120,7 +120,7 @@
       "color": "#E3F2FD",
       "file_path": "dataframe_optimizer.py",
       "imports_count": 0,
-      "importance": 0.2623034431880798,
+      "importance": 0.273398013417415,
       "is_test": false,
       "is_init": false,
       "size": 10995,
@@ -134,7 +134,7 @@
       "color": "#E3F2FD",
       "file_path": "data_loader.py",
       "imports_count": 0,
-      "importance": 0.41620634537530793,
+      "importance": 0.3702264765027495,
       "is_test": false,
       "is_init": false,
       "size": 1730,
@@ -147,8 +147,8 @@
       "folder": "root",
       "color": "#E3F2FD",
       "file_path": "debug_module.py",
-      "imports_count": 0,
-      "importance": 0.2623034431880798,
+      "imports_count": 1,
+      "importance": 0.20843558837414103,
       "is_test": false,
       "is_init": false,
       "size": 1122,
@@ -162,7 +162,7 @@
       "color": "#E3F2FD",
       "file_path": "debug_offset_layout.py",
       "imports_count": 1,
-      "importance": 0.2623034431880798,
+      "importance": 0.20843558837414103,
       "is_test": false,
       "is_init": false,
       "size": 1803,
@@ -176,7 +176,7 @@
       "color": "#E3F2FD",
       "file_path": "enhanced_error_handling.py",
       "imports_count": 2,
-      "importance": 0.2623034431880798,
+      "importance": 0.252728150903646,
       "is_test": false,
       "is_init": false,
       "size": 12371,
@@ -190,7 +190,7 @@
       "color": "#E3F2FD",
       "file_path": "error_handling.py",
       "imports_count": 0,
-      "importance": 0.4935139098240837,
+      "importance": 0.392163598444446,
       "is_test": false,
       "is_init": false,
       "size": 13039,
@@ -204,11 +204,25 @@
       "color": "#E3F2FD",
       "file_path": "error_recovery.py",
       "imports_count": 1,
-      "importance": 0.2623034431880798,
+      "importance": 0.20843558837414103,
       "is_test": false,
       "is_init": false,
       "size": 16853,
       "index": 14
+    },
+    {
+      "id": "root__final_validation",
+      "name": "final_validation",
+      "stem": "final_validation",
+      "folder": "root",
+      "color": "#E3F2FD",
+      "file_path": "final_validation.py",
+      "imports_count": 0,
+      "importance": 0.20843558837414103,
+      "is_test": false,
+      "is_init": false,
+      "size": 3910,
+      "index": 15
     },
     {
       "id": "root__geology_code_utils",
@@ -218,11 +232,11 @@
       "color": "#E3F2FD",
       "file_path": "geology_code_utils.py",
       "imports_count": 0,
-      "importance": 0.5213217179053977,
+      "importance": 1.0,
       "is_test": false,
       "is_init": false,
       "size": 1795,
-      "index": 15
+      "index": 16
     },
     {
       "id": "root__interactive_validation",
@@ -232,11 +246,11 @@
       "color": "#E3F2FD",
       "file_path": "interactive_validation.py",
       "imports_count": 0,
-      "importance": 0.2623034431880798,
+      "importance": 0.20843558837414103,
       "is_test": false,
       "is_init": false,
       "size": 22052,
-      "index": 16
+      "index": 17
     },
     {
       "id": "root__lazy_marker_manager",
@@ -246,11 +260,11 @@
       "color": "#E3F2FD",
       "file_path": "lazy_marker_manager.py",
       "imports_count": 0,
-      "importance": 0.40560036066723437,
+      "importance": 0.3499134151871348,
       "is_test": false,
       "is_init": false,
       "size": 16437,
-      "index": 17
+      "index": 18
     },
     {
       "id": "root__loading_indicators",
@@ -260,11 +274,11 @@
       "color": "#E3F2FD",
       "file_path": "loading_indicators.py",
       "imports_count": 1,
-      "importance": 0.2623034431880798,
+      "importance": 0.22910545088791,
       "is_test": false,
       "is_init": false,
       "size": 14236,
-      "index": 18
+      "index": 19
     },
     {
       "id": "root__map_utils",
@@ -274,11 +288,11 @@
       "color": "#E3F2FD",
       "file_path": "map_utils.py",
       "imports_count": 0,
-      "importance": 0.29412139731230047,
+      "importance": 0.25438912199850244,
       "is_test": false,
       "is_init": false,
       "size": 12405,
-      "index": 19
+      "index": 20
     },
     {
       "id": "root__memory_manager",
@@ -288,11 +302,11 @@
       "color": "#E3F2FD",
       "file_path": "memory_manager.py",
       "imports_count": 2,
-      "importance": 0.2623034431880798,
+      "importance": 0.273398013417415,
       "is_test": false,
       "is_init": false,
       "size": 14105,
-      "index": 20
+      "index": 21
     },
     {
       "id": "root__migration_validation",
@@ -301,12 +315,12 @@
       "folder": "root",
       "color": "#E3F2FD",
       "file_path": "migration_validation.py",
-      "imports_count": 0,
-      "importance": 0.2623034431880798,
+      "imports_count": 1,
+      "importance": 0.20843558837414103,
       "is_test": false,
       "is_init": false,
       "size": 8451,
-      "index": 21
+      "index": 22
     },
     {
       "id": "root__options_exploration",
@@ -316,11 +330,11 @@
       "color": "#E3F2FD",
       "file_path": "options_exploration.py",
       "imports_count": 0,
-      "importance": 0.2623034431880798,
+      "importance": 0.20843558837414103,
       "is_test": false,
       "is_init": false,
       "size": 19788,
-      "index": 22
+      "index": 23
     },
     {
       "id": "root__polyline_utils",
@@ -330,11 +344,11 @@
       "color": "#E3F2FD",
       "file_path": "polyline_utils.py",
       "imports_count": 1,
-      "importance": 0.29412139731230047,
+      "importance": 0.25438912199850244,
       "is_test": false,
       "is_init": false,
       "size": 15171,
-      "index": 23
+      "index": 24
     },
     {
       "id": "root__section_plot_professional",
@@ -344,25 +358,53 @@
       "color": "#E3F2FD",
       "file_path": "section_plot_professional.py",
       "imports_count": 1,
-      "importance": 0.304727382020374,
+      "importance": 0.47416820209542654,
       "is_test": false,
       "is_init": false,
       "size": 29723,
-      "index": 24
+      "index": 25
     },
     {
-      "id": "root__utils",
-      "name": "utils",
-      "stem": "utils",
+      "id": "root__test_enhanced_dependency_graph",
+      "name": "test_enhanced_dependency_graph",
+      "stem": "test_enhanced_dependency_graph",
       "folder": "root",
       "color": "#E3F2FD",
-      "file_path": "utils.py",
+      "file_path": "test_enhanced_dependency_graph.py",
       "imports_count": 0,
-      "importance": 0.2623034431880798,
-      "is_test": false,
+      "importance": 0.20843558837414103,
+      "is_test": true,
       "is_init": false,
-      "size": 86,
-      "index": 25
+      "size": 12394,
+      "index": 26
+    },
+    {
+      "id": "root__test_force_directed_layout",
+      "name": "test_force_directed_layout",
+      "stem": "test_force_directed_layout",
+      "folder": "root",
+      "color": "#E3F2FD",
+      "file_path": "test_force_directed_layout.py",
+      "imports_count": 0,
+      "importance": 0.20843558837414103,
+      "is_test": true,
+      "is_init": false,
+      "size": 7430,
+      "index": 27
+    },
+    {
+      "id": "root__test_internal_imports",
+      "name": "test_internal_imports",
+      "stem": "test_internal_imports",
+      "folder": "root",
+      "color": "#E3F2FD",
+      "file_path": "test_internal_imports.py",
+      "imports_count": 0,
+      "importance": 0.20843558837414103,
+      "is_test": true,
+      "is_init": false,
+      "size": 6669,
+      "index": 28
     },
     {
       "id": "root__validate_features",
@@ -372,11 +414,25 @@
       "color": "#E3F2FD",
       "file_path": "validate_features.py",
       "imports_count": 0,
-      "importance": 0.2623034431880798,
+      "importance": 0.20843558837414103,
       "is_test": false,
       "is_init": false,
       "size": 3453,
-      "index": 26
+      "index": 29
+    },
+    {
+      "id": "root__workspace_audit",
+      "name": "workspace_audit",
+      "stem": "workspace_audit",
+      "folder": "root",
+      "color": "#E3F2FD",
+      "file_path": "workspace_audit.py",
+      "imports_count": 0,
+      "importance": 0.20843558837414103,
+      "is_test": false,
+      "is_init": false,
+      "size": 5834,
+      "index": 30
     },
     {
       "id": "callbacks__base",
@@ -386,11 +442,11 @@
       "color": "#E8F5E8",
       "file_path": "callbacks\\base.py",
       "imports_count": 0,
-      "importance": 0.5306735642757284,
+      "importance": 0.42169197346411597,
       "is_test": false,
       "is_init": false,
       "size": 1528,
-      "index": 27
+      "index": 31
     },
     {
       "id": "callbacks__file_upload",
@@ -400,11 +456,11 @@
       "color": "#E8F5E8",
       "file_path": "callbacks\\file_upload.py",
       "imports_count": 6,
-      "importance": 0.29946309763972445,
+      "importance": 0.237963963393811,
       "is_test": false,
       "is_init": false,
       "size": 17399,
-      "index": 28
+      "index": 32
     },
     {
       "id": "callbacks__map_interactions",
@@ -414,11 +470,11 @@
       "color": "#E8F5E8",
       "file_path": "callbacks\\map_interactions.py",
       "imports_count": 8,
-      "importance": 0.29946309763972445,
+      "importance": 0.237963963393811,
       "is_test": false,
       "is_init": false,
       "size": 23327,
-      "index": 29
+      "index": 33
     },
     {
       "id": "callbacks__marker_handling",
@@ -428,11 +484,11 @@
       "color": "#E8F5E8",
       "file_path": "callbacks\\marker_handling.py",
       "imports_count": 4,
-      "importance": 0.29946309763972445,
+      "importance": 0.237963963393811,
       "is_test": false,
       "is_init": false,
       "size": 12731,
-      "index": 30
+      "index": 34
     },
     {
       "id": "callbacks__plot_generation",
@@ -442,11 +498,11 @@
       "color": "#E8F5E8",
       "file_path": "callbacks\\plot_generation.py",
       "imports_count": 6,
-      "importance": 0.29946309763972445,
+      "importance": 0.237963963393811,
       "is_test": false,
       "is_init": false,
       "size": 11066,
-      "index": 31
+      "index": 35
     },
     {
       "id": "callbacks__search_functionality",
@@ -456,11 +512,11 @@
       "color": "#E8F5E8",
       "file_path": "callbacks\\search_functionality.py",
       "imports_count": 5,
-      "importance": 0.29946309763972445,
+      "importance": 0.237963963393811,
       "is_test": false,
       "is_init": false,
       "size": 12485,
-      "index": 32
+      "index": 36
     },
     {
       "id": "callbacks____init__",
@@ -470,11 +526,11 @@
       "color": "#E8F5E8",
       "file_path": "callbacks\\__init__.py",
       "imports_count": 6,
-      "importance": 0.2623034431880798,
+      "importance": 0.20843558837414103,
       "is_test": false,
       "is_init": true,
       "size": 4225,
-      "index": 33
+      "index": 37
     },
     {
       "id": "graph_output__enhanced_dependency_graph",
@@ -484,11 +540,25 @@
       "color": "#FAFAFA",
       "file_path": "graph_output\\enhanced_dependency_graph.py",
       "imports_count": 0,
-      "importance": 0.2623034431880798,
+      "importance": 0.20843558837414103,
       "is_test": false,
       "is_init": false,
-      "size": 47417,
-      "index": 34
+      "size": 56505,
+      "index": 38
+    },
+    {
+      "id": "graph_output__enhanced_dependency_graph_backup - Copy",
+      "name": "enhanced_dependency_graph_backup - Copy (graph_output)",
+      "stem": "enhanced_dependency_graph_backup - Copy",
+      "folder": "graph_output",
+      "color": "#FAFAFA",
+      "file_path": "graph_output\\enhanced_dependency_graph_backup - Copy.py",
+      "imports_count": 0,
+      "importance": 0.20843558837414103,
+      "is_test": false,
+      "is_init": false,
+      "size": 56559,
+      "index": 39
     },
     {
       "id": "graph_output__html_dependency_graph",
@@ -498,11 +568,11 @@
       "color": "#FAFAFA",
       "file_path": "graph_output\\html_dependency_graph.py",
       "imports_count": 0,
-      "importance": 0.2623034431880798,
+      "importance": 0.3856058384921609,
       "is_test": false,
       "is_init": false,
       "size": 36597,
-      "index": 35
+      "index": 40
     },
     {
       "id": "state_management__app_state",
@@ -511,12 +581,12 @@
       "folder": "state_management",
       "color": "#F3E5F5",
       "file_path": "state_management\\app_state.py",
-      "imports_count": 0,
-      "importance": 0.3737824065430137,
+      "imports_count": 1,
+      "importance": 0.297020713433151,
       "is_test": false,
       "is_init": false,
       "size": 10646,
-      "index": 36
+      "index": 41
     },
     {
       "id": "state_management__state_models",
@@ -526,11 +596,11 @@
       "color": "#F3E5F5",
       "file_path": "state_management\\state_models.py",
       "imports_count": 0,
-      "importance": 0.3737824065430137,
+      "importance": 0.5494883198513293,
       "is_test": false,
       "is_init": false,
       "size": 5982,
-      "index": 37
+      "index": 42
     },
     {
       "id": "state_management____init__",
@@ -540,14 +610,218 @@
       "color": "#F3E5F5",
       "file_path": "state_management\\__init__.py",
       "imports_count": 2,
-      "importance": 0.2623034431880798,
+      "importance": 0.20843558837414103,
       "is_test": false,
       "is_init": true,
       "size": 513,
-      "index": 38
+      "index": 43
+    },
+    {
+      "id": "tests__comprehensive_validation",
+      "name": "comprehensive_validation (tests)",
+      "stem": "comprehensive_validation",
+      "folder": "tests",
+      "color": "#FFF3E0",
+      "file_path": "tests\\comprehensive_validation.py",
+      "imports_count": 0,
+      "importance": 0.20843558837414103,
+      "is_test": false,
+      "is_init": false,
+      "size": 11761,
+      "index": 44
+    },
+    {
+      "id": "tests__fix_brace_mismatch",
+      "name": "fix_brace_mismatch (tests)",
+      "stem": "fix_brace_mismatch",
+      "folder": "tests",
+      "color": "#FFF3E0",
+      "file_path": "tests\\fix_brace_mismatch.py",
+      "imports_count": 0,
+      "importance": 0.20843558837414103,
+      "is_test": false,
+      "is_init": false,
+      "size": 5578,
+      "index": 45
+    },
+    {
+      "id": "tests__test_graph_data_integrity",
+      "name": "test_graph_data_integrity (tests)",
+      "stem": "test_graph_data_integrity",
+      "folder": "tests",
+      "color": "#FFF3E0",
+      "file_path": "tests\\test_graph_data_integrity.py",
+      "imports_count": 0,
+      "importance": 0.20843558837414103,
+      "is_test": true,
+      "is_init": false,
+      "size": 21154,
+      "index": 46
+    },
+    {
+      "id": "tests__test_html_data_extraction",
+      "name": "test_html_data_extraction (tests)",
+      "stem": "test_html_data_extraction",
+      "folder": "tests",
+      "color": "#FFF3E0",
+      "file_path": "tests\\test_html_data_extraction.py",
+      "imports_count": 0,
+      "importance": 0.20843558837414103,
+      "is_test": true,
+      "is_init": false,
+      "size": 14350,
+      "index": 47
+    },
+    {
+      "id": "tests__test_javascript_errors",
+      "name": "test_javascript_errors (tests)",
+      "stem": "test_javascript_errors",
+      "folder": "tests",
+      "color": "#FFF3E0",
+      "file_path": "tests\\test_javascript_errors.py",
+      "imports_count": 0,
+      "importance": 0.20843558837414103,
+      "is_test": true,
+      "is_init": false,
+      "size": 15035,
+      "index": 48
+    },
+    {
+      "id": "tests__validate_fix",
+      "name": "validate_fix (tests)",
+      "stem": "validate_fix",
+      "folder": "tests",
+      "color": "#FFF3E0",
+      "file_path": "tests\\validate_fix.py",
+      "imports_count": 0,
+      "importance": 0.20843558837414103,
+      "is_test": false,
+      "is_init": false,
+      "size": 2779,
+      "index": 49
     }
   ],
   "edges": [
+    {
+      "source": 0,
+      "target": 2,
+      "source_name": "root__app",
+      "target_name": "root__app_factory",
+      "source_folder": "root",
+      "target_folder": "root",
+      "is_cross_folder": false,
+      "is_test_related": false
+    },
+    {
+      "source": 0,
+      "target": 6,
+      "source_name": "root__app",
+      "target_name": "root__config",
+      "source_folder": "root",
+      "target_folder": "root",
+      "is_cross_folder": false,
+      "is_test_related": false
+    },
+    {
+      "source": 0,
+      "target": 4,
+      "source_name": "root__app",
+      "target_name": "root__callbacks_split",
+      "source_folder": "root",
+      "target_folder": "root",
+      "is_cross_folder": false,
+      "is_test_related": false
+    },
+    {
+      "source": 3,
+      "target": 16,
+      "source_name": "root__borehole_log_professional",
+      "target_name": "root__geology_code_utils",
+      "source_folder": "root",
+      "target_folder": "root",
+      "is_cross_folder": false,
+      "is_test_related": false
+    },
+    {
+      "source": 3,
+      "target": 25,
+      "source_name": "root__borehole_log_professional",
+      "target_name": "root__section_plot_professional",
+      "source_folder": "root",
+      "target_folder": "root",
+      "is_cross_folder": false,
+      "is_test_related": false
+    },
+    {
+      "source": 4,
+      "target": 24,
+      "source_name": "root__callbacks_split",
+      "target_name": "root__polyline_utils",
+      "source_folder": "root",
+      "target_folder": "root",
+      "is_cross_folder": false,
+      "is_test_related": false
+    },
+    {
+      "source": 4,
+      "target": 6,
+      "source_name": "root__callbacks_split",
+      "target_name": "root__config",
+      "source_folder": "root",
+      "target_folder": "root",
+      "is_cross_folder": false,
+      "is_test_related": false
+    },
+    {
+      "source": 4,
+      "target": 8,
+      "source_name": "root__callbacks_split",
+      "target_name": "root__dataframe_optimizer",
+      "source_folder": "root",
+      "target_folder": "root",
+      "is_cross_folder": false,
+      "is_test_related": false
+    },
+    {
+      "source": 4,
+      "target": 19,
+      "source_name": "root__callbacks_split",
+      "target_name": "root__loading_indicators",
+      "source_folder": "root",
+      "target_folder": "root",
+      "is_cross_folder": false,
+      "is_test_related": false
+    },
+    {
+      "source": 4,
+      "target": 25,
+      "source_name": "root__callbacks_split",
+      "target_name": "root__section_plot_professional",
+      "source_folder": "root",
+      "target_folder": "root",
+      "is_cross_folder": false,
+      "is_test_related": false
+    },
+    {
+      "source": 4,
+      "target": 9,
+      "source_name": "root__callbacks_split",
+      "target_name": "root__data_loader",
+      "source_folder": "root",
+      "target_folder": "root",
+      "is_cross_folder": false,
+      "is_test_related": false
+    },
+    {
+      "source": 4,
+      "target": 1,
+      "source_name": "root__callbacks_split",
+      "target_name": "root__app_constants",
+      "source_folder": "root",
+      "target_folder": "root",
+      "is_cross_folder": false,
+      "is_test_related": false
+    },
     {
       "source": 4,
       "target": 3,
@@ -560,9 +834,79 @@
     },
     {
       "source": 4,
-      "target": 1,
+      "target": 21,
       "source_name": "root__callbacks_split",
-      "target_name": "root__app_constants",
+      "target_name": "root__memory_manager",
+      "source_folder": "root",
+      "target_folder": "root",
+      "is_cross_folder": false,
+      "is_test_related": false
+    },
+    {
+      "source": 4,
+      "target": 7,
+      "source_name": "root__callbacks_split",
+      "target_name": "root__coordinate_service",
+      "source_folder": "root",
+      "target_folder": "root",
+      "is_cross_folder": false,
+      "is_test_related": false
+    },
+    {
+      "source": 4,
+      "target": 20,
+      "source_name": "root__callbacks_split",
+      "target_name": "root__map_utils",
+      "source_folder": "root",
+      "target_folder": "root",
+      "is_cross_folder": false,
+      "is_test_related": false
+    },
+    {
+      "source": 5,
+      "target": 8,
+      "source_name": "root__comprehensive_optimization_validation",
+      "target_name": "root__dataframe_optimizer",
+      "source_folder": "root",
+      "target_folder": "root",
+      "is_cross_folder": false,
+      "is_test_related": false
+    },
+    {
+      "source": 5,
+      "target": 21,
+      "source_name": "root__comprehensive_optimization_validation",
+      "target_name": "root__memory_manager",
+      "source_folder": "root",
+      "target_folder": "root",
+      "is_cross_folder": false,
+      "is_test_related": false
+    },
+    {
+      "source": 5,
+      "target": 7,
+      "source_name": "root__comprehensive_optimization_validation",
+      "target_name": "root__coordinate_service",
+      "source_folder": "root",
+      "target_folder": "root",
+      "is_cross_folder": false,
+      "is_test_related": false
+    },
+    {
+      "source": 5,
+      "target": 12,
+      "source_name": "root__comprehensive_optimization_validation",
+      "target_name": "root__enhanced_error_handling",
+      "source_folder": "root",
+      "target_folder": "root",
+      "is_cross_folder": false,
+      "is_test_related": false
+    },
+    {
+      "source": 10,
+      "target": 16,
+      "source_name": "root__debug_module",
+      "target_name": "root__geology_code_utils",
       "source_folder": "root",
       "target_folder": "root",
       "is_cross_folder": false,
@@ -609,7 +953,7 @@
       "is_test_related": false
     },
     {
-      "source": 18,
+      "source": 19,
       "target": 1,
       "source_name": "root__loading_indicators",
       "target_name": "root__app_constants",
@@ -619,8 +963,8 @@
       "is_test_related": false
     },
     {
-      "source": 20,
-      "target": 17,
+      "source": 21,
+      "target": 18,
       "source_name": "root__memory_manager",
       "target_name": "root__lazy_marker_manager",
       "source_folder": "root",
@@ -629,7 +973,7 @@
       "is_test_related": false
     },
     {
-      "source": 20,
+      "source": 21,
       "target": 7,
       "source_name": "root__memory_manager",
       "target_name": "root__coordinate_service",
@@ -639,7 +983,17 @@
       "is_test_related": false
     },
     {
-      "source": 23,
+      "source": 22,
+      "target": 40,
+      "source_name": "root__migration_validation",
+      "target_name": "graph_output__html_dependency_graph",
+      "source_folder": "root",
+      "target_folder": "graph_output",
+      "is_cross_folder": true,
+      "is_test_related": false
+    },
+    {
+      "source": 24,
       "target": 7,
       "source_name": "root__polyline_utils",
       "target_name": "root__coordinate_service",
@@ -649,8 +1003,8 @@
       "is_test_related": false
     },
     {
-      "source": 24,
-      "target": 15,
+      "source": 25,
+      "target": 16,
       "source_name": "root__section_plot_professional",
       "target_name": "root__geology_code_utils",
       "source_folder": "root",
@@ -659,7 +1013,37 @@
       "is_test_related": false
     },
     {
-      "source": 28,
+      "source": 32,
+      "target": 6,
+      "source_name": "callbacks__file_upload",
+      "target_name": "root__config",
+      "source_folder": "callbacks",
+      "target_folder": "root",
+      "is_cross_folder": true,
+      "is_test_related": false
+    },
+    {
+      "source": 32,
+      "target": 31,
+      "source_name": "callbacks__file_upload",
+      "target_name": "callbacks__base",
+      "source_folder": "callbacks",
+      "target_folder": "callbacks",
+      "is_cross_folder": false,
+      "is_test_related": false
+    },
+    {
+      "source": 32,
+      "target": 13,
+      "source_name": "callbacks__file_upload",
+      "target_name": "root__error_handling",
+      "source_folder": "callbacks",
+      "target_folder": "root",
+      "is_cross_folder": true,
+      "is_test_related": false
+    },
+    {
+      "source": 32,
       "target": 9,
       "source_name": "callbacks__file_upload",
       "target_name": "root__data_loader",
@@ -669,7 +1053,7 @@
       "is_test_related": false
     },
     {
-      "source": 28,
+      "source": 32,
       "target": 1,
       "source_name": "callbacks__file_upload",
       "target_name": "root__app_constants",
@@ -679,37 +1063,7 @@
       "is_test_related": false
     },
     {
-      "source": 28,
-      "target": 27,
-      "source_name": "callbacks__file_upload",
-      "target_name": "callbacks__base",
-      "source_folder": "callbacks",
-      "target_folder": "callbacks",
-      "is_cross_folder": false,
-      "is_test_related": false
-    },
-    {
-      "source": 28,
-      "target": 13,
-      "source_name": "callbacks__file_upload",
-      "target_name": "root__error_handling",
-      "source_folder": "callbacks",
-      "target_folder": "root",
-      "is_cross_folder": true,
-      "is_test_related": false
-    },
-    {
-      "source": 28,
-      "target": 6,
-      "source_name": "callbacks__file_upload",
-      "target_name": "root__config",
-      "source_folder": "callbacks",
-      "target_folder": "root",
-      "is_cross_folder": true,
-      "is_test_related": false
-    },
-    {
-      "source": 28,
+      "source": 32,
       "target": 7,
       "source_name": "callbacks__file_upload",
       "target_name": "root__coordinate_service",
@@ -719,58 +1073,8 @@
       "is_test_related": false
     },
     {
-      "source": 29,
-      "target": 19,
-      "source_name": "callbacks__map_interactions",
-      "target_name": "root__map_utils",
-      "source_folder": "callbacks",
-      "target_folder": "root",
-      "is_cross_folder": true,
-      "is_test_related": false
-    },
-    {
-      "source": 29,
-      "target": 1,
-      "source_name": "callbacks__map_interactions",
-      "target_name": "root__app_constants",
-      "source_folder": "callbacks",
-      "target_folder": "root",
-      "is_cross_folder": true,
-      "is_test_related": false
-    },
-    {
-      "source": 29,
-      "target": 27,
-      "source_name": "callbacks__map_interactions",
-      "target_name": "callbacks__base",
-      "source_folder": "callbacks",
-      "target_folder": "callbacks",
-      "is_cross_folder": false,
-      "is_test_related": false
-    },
-    {
-      "source": 29,
-      "target": 13,
-      "source_name": "callbacks__map_interactions",
-      "target_name": "root__error_handling",
-      "source_folder": "callbacks",
-      "target_folder": "root",
-      "is_cross_folder": true,
-      "is_test_related": false
-    },
-    {
-      "source": 29,
-      "target": 6,
-      "source_name": "callbacks__map_interactions",
-      "target_name": "root__config",
-      "source_folder": "callbacks",
-      "target_folder": "root",
-      "is_cross_folder": true,
-      "is_test_related": false
-    },
-    {
-      "source": 29,
-      "target": 23,
+      "source": 33,
+      "target": 24,
       "source_name": "callbacks__map_interactions",
       "target_name": "root__polyline_utils",
       "source_folder": "callbacks",
@@ -779,8 +1083,48 @@
       "is_test_related": false
     },
     {
-      "source": 29,
-      "target": 17,
+      "source": 33,
+      "target": 6,
+      "source_name": "callbacks__map_interactions",
+      "target_name": "root__config",
+      "source_folder": "callbacks",
+      "target_folder": "root",
+      "is_cross_folder": true,
+      "is_test_related": false
+    },
+    {
+      "source": 33,
+      "target": 31,
+      "source_name": "callbacks__map_interactions",
+      "target_name": "callbacks__base",
+      "source_folder": "callbacks",
+      "target_folder": "callbacks",
+      "is_cross_folder": false,
+      "is_test_related": false
+    },
+    {
+      "source": 33,
+      "target": 13,
+      "source_name": "callbacks__map_interactions",
+      "target_name": "root__error_handling",
+      "source_folder": "callbacks",
+      "target_folder": "root",
+      "is_cross_folder": true,
+      "is_test_related": false
+    },
+    {
+      "source": 33,
+      "target": 1,
+      "source_name": "callbacks__map_interactions",
+      "target_name": "root__app_constants",
+      "source_folder": "callbacks",
+      "target_folder": "root",
+      "is_cross_folder": true,
+      "is_test_related": false
+    },
+    {
+      "source": 33,
+      "target": 18,
       "source_name": "callbacks__map_interactions",
       "target_name": "root__lazy_marker_manager",
       "source_folder": "callbacks",
@@ -789,7 +1133,7 @@
       "is_test_related": false
     },
     {
-      "source": 29,
+      "source": 33,
       "target": 7,
       "source_name": "callbacks__map_interactions",
       "target_name": "root__coordinate_service",
@@ -799,7 +1143,17 @@
       "is_test_related": false
     },
     {
-      "source": 30,
+      "source": 33,
+      "target": 20,
+      "source_name": "callbacks__map_interactions",
+      "target_name": "root__map_utils",
+      "source_folder": "callbacks",
+      "target_folder": "root",
+      "is_cross_folder": true,
+      "is_test_related": false
+    },
+    {
+      "source": 34,
       "target": 3,
       "source_name": "callbacks__marker_handling",
       "target_name": "root__borehole_log_professional",
@@ -809,7 +1163,17 @@
       "is_test_related": false
     },
     {
-      "source": 30,
+      "source": 34,
+      "target": 31,
+      "source_name": "callbacks__marker_handling",
+      "target_name": "callbacks__base",
+      "source_folder": "callbacks",
+      "target_folder": "callbacks",
+      "is_cross_folder": false,
+      "is_test_related": false
+    },
+    {
+      "source": 34,
       "target": 1,
       "source_name": "callbacks__marker_handling",
       "target_name": "root__app_constants",
@@ -819,17 +1183,7 @@
       "is_test_related": false
     },
     {
-      "source": 30,
-      "target": 27,
-      "source_name": "callbacks__marker_handling",
-      "target_name": "callbacks__base",
-      "source_folder": "callbacks",
-      "target_folder": "callbacks",
-      "is_cross_folder": false,
-      "is_test_related": false
-    },
-    {
-      "source": 30,
+      "source": 34,
       "target": 13,
       "source_name": "callbacks__marker_handling",
       "target_name": "root__error_handling",
@@ -839,37 +1193,7 @@
       "is_test_related": false
     },
     {
-      "source": 31,
-      "target": 1,
-      "source_name": "callbacks__plot_generation",
-      "target_name": "root__app_constants",
-      "source_folder": "callbacks",
-      "target_folder": "root",
-      "is_cross_folder": true,
-      "is_test_related": false
-    },
-    {
-      "source": 31,
-      "target": 27,
-      "source_name": "callbacks__plot_generation",
-      "target_name": "callbacks__base",
-      "source_folder": "callbacks",
-      "target_folder": "callbacks",
-      "is_cross_folder": false,
-      "is_test_related": false
-    },
-    {
-      "source": 31,
-      "target": 13,
-      "source_name": "callbacks__plot_generation",
-      "target_name": "root__error_handling",
-      "source_folder": "callbacks",
-      "target_folder": "root",
-      "is_cross_folder": true,
-      "is_test_related": false
-    },
-    {
-      "source": 31,
+      "source": 35,
       "target": 6,
       "source_name": "callbacks__plot_generation",
       "target_name": "root__config",
@@ -879,8 +1203,8 @@
       "is_test_related": false
     },
     {
-      "source": 31,
-      "target": 24,
+      "source": 35,
+      "target": 25,
       "source_name": "callbacks__plot_generation",
       "target_name": "root__section_plot_professional",
       "source_folder": "callbacks",
@@ -889,7 +1213,37 @@
       "is_test_related": false
     },
     {
-      "source": 31,
+      "source": 35,
+      "target": 31,
+      "source_name": "callbacks__plot_generation",
+      "target_name": "callbacks__base",
+      "source_folder": "callbacks",
+      "target_folder": "callbacks",
+      "is_cross_folder": false,
+      "is_test_related": false
+    },
+    {
+      "source": 35,
+      "target": 13,
+      "source_name": "callbacks__plot_generation",
+      "target_name": "root__error_handling",
+      "source_folder": "callbacks",
+      "target_folder": "root",
+      "is_cross_folder": true,
+      "is_test_related": false
+    },
+    {
+      "source": 35,
+      "target": 1,
+      "source_name": "callbacks__plot_generation",
+      "target_name": "root__app_constants",
+      "source_folder": "callbacks",
+      "target_folder": "root",
+      "is_cross_folder": true,
+      "is_test_related": false
+    },
+    {
+      "source": 35,
       "target": 7,
       "source_name": "callbacks__plot_generation",
       "target_name": "root__coordinate_service",
@@ -899,37 +1253,7 @@
       "is_test_related": false
     },
     {
-      "source": 32,
-      "target": 3,
-      "source_name": "callbacks__search_functionality",
-      "target_name": "root__borehole_log_professional",
-      "source_folder": "callbacks",
-      "target_folder": "root",
-      "is_cross_folder": true,
-      "is_test_related": false
-    },
-    {
-      "source": 32,
-      "target": 27,
-      "source_name": "callbacks__search_functionality",
-      "target_name": "callbacks__base",
-      "source_folder": "callbacks",
-      "target_folder": "callbacks",
-      "is_cross_folder": false,
-      "is_test_related": false
-    },
-    {
-      "source": 32,
-      "target": 13,
-      "source_name": "callbacks__search_functionality",
-      "target_name": "root__error_handling",
-      "source_folder": "callbacks",
-      "target_folder": "root",
-      "is_cross_folder": true,
-      "is_test_related": false
-    },
-    {
-      "source": 32,
+      "source": 36,
       "target": 6,
       "source_name": "callbacks__search_functionality",
       "target_name": "root__config",
@@ -939,7 +1263,37 @@
       "is_test_related": false
     },
     {
-      "source": 32,
+      "source": 36,
+      "target": 31,
+      "source_name": "callbacks__search_functionality",
+      "target_name": "callbacks__base",
+      "source_folder": "callbacks",
+      "target_folder": "callbacks",
+      "is_cross_folder": false,
+      "is_test_related": false
+    },
+    {
+      "source": 36,
+      "target": 13,
+      "source_name": "callbacks__search_functionality",
+      "target_name": "root__error_handling",
+      "source_folder": "callbacks",
+      "target_folder": "root",
+      "is_cross_folder": true,
+      "is_test_related": false
+    },
+    {
+      "source": 36,
+      "target": 3,
+      "source_name": "callbacks__search_functionality",
+      "target_name": "root__borehole_log_professional",
+      "source_folder": "callbacks",
+      "target_folder": "root",
+      "is_cross_folder": true,
+      "is_test_related": false
+    },
+    {
+      "source": 36,
       "target": 7,
       "source_name": "callbacks__search_functionality",
       "target_name": "root__coordinate_service",
@@ -949,48 +1303,8 @@
       "is_test_related": false
     },
     {
-      "source": 33,
-      "target": 29,
-      "source_name": "callbacks____init__",
-      "target_name": "callbacks__map_interactions",
-      "source_folder": "callbacks",
-      "target_folder": "callbacks",
-      "is_cross_folder": false,
-      "is_test_related": false
-    },
-    {
-      "source": 33,
-      "target": 32,
-      "source_name": "callbacks____init__",
-      "target_name": "callbacks__search_functionality",
-      "source_folder": "callbacks",
-      "target_folder": "callbacks",
-      "is_cross_folder": false,
-      "is_test_related": false
-    },
-    {
-      "source": 33,
-      "target": 28,
-      "source_name": "callbacks____init__",
-      "target_name": "callbacks__file_upload",
-      "source_folder": "callbacks",
-      "target_folder": "callbacks",
-      "is_cross_folder": false,
-      "is_test_related": false
-    },
-    {
-      "source": 33,
-      "target": 30,
-      "source_name": "callbacks____init__",
-      "target_name": "callbacks__marker_handling",
-      "source_folder": "callbacks",
-      "target_folder": "callbacks",
-      "is_cross_folder": false,
-      "is_test_related": false
-    },
-    {
-      "source": 33,
-      "target": 31,
+      "source": 37,
+      "target": 35,
       "source_name": "callbacks____init__",
       "target_name": "callbacks__plot_generation",
       "source_folder": "callbacks",
@@ -999,8 +1313,8 @@
       "is_test_related": false
     },
     {
-      "source": 33,
-      "target": 27,
+      "source": 37,
+      "target": 31,
       "source_name": "callbacks____init__",
       "target_name": "callbacks__base",
       "source_folder": "callbacks",
@@ -1009,20 +1323,70 @@
       "is_test_related": false
     },
     {
-      "source": 38,
+      "source": 37,
+      "target": 33,
+      "source_name": "callbacks____init__",
+      "target_name": "callbacks__map_interactions",
+      "source_folder": "callbacks",
+      "target_folder": "callbacks",
+      "is_cross_folder": false,
+      "is_test_related": false
+    },
+    {
+      "source": 37,
       "target": 36,
-      "source_name": "state_management____init__",
-      "target_name": "state_management__app_state",
+      "source_name": "callbacks____init__",
+      "target_name": "callbacks__search_functionality",
+      "source_folder": "callbacks",
+      "target_folder": "callbacks",
+      "is_cross_folder": false,
+      "is_test_related": false
+    },
+    {
+      "source": 37,
+      "target": 34,
+      "source_name": "callbacks____init__",
+      "target_name": "callbacks__marker_handling",
+      "source_folder": "callbacks",
+      "target_folder": "callbacks",
+      "is_cross_folder": false,
+      "is_test_related": false
+    },
+    {
+      "source": 37,
+      "target": 32,
+      "source_name": "callbacks____init__",
+      "target_name": "callbacks__file_upload",
+      "source_folder": "callbacks",
+      "target_folder": "callbacks",
+      "is_cross_folder": false,
+      "is_test_related": false
+    },
+    {
+      "source": 41,
+      "target": 42,
+      "source_name": "state_management__app_state",
+      "target_name": "state_management__state_models",
       "source_folder": "state_management",
       "target_folder": "state_management",
       "is_cross_folder": false,
       "is_test_related": false
     },
     {
-      "source": 38,
-      "target": 37,
+      "source": 43,
+      "target": 42,
       "source_name": "state_management____init__",
       "target_name": "state_management__state_models",
+      "source_folder": "state_management",
+      "target_folder": "state_management",
+      "is_cross_folder": false,
+      "is_test_related": false
+    },
+    {
+      "source": 43,
+      "target": 41,
+      "source_name": "state_management____init__",
+      "target_name": "state_management__app_state",
       "source_folder": "state_management",
       "target_folder": "state_management",
       "is_cross_folder": false,
@@ -1035,7 +1399,24 @@
       "folder": "root",
       "stem": "app",
       "display_name": "app",
-      "imports": [],
+      "imports": [
+        "root__app_factory",
+        "root__config",
+        "root__callbacks_split"
+      ],
+      "all_imports": [
+        "config",
+        "dash_leaflet",
+        "sys",
+        "app_factory",
+        "dash",
+        "callbacks_split",
+        "webbrowser",
+        "datetime",
+        "logging"
+      ],
+      "imports_count": 9,
+      "internal_imports_count": 3,
       "is_test": false,
       "is_init": false,
       "size": 23005
@@ -1046,6 +1427,9 @@
       "stem": "app_constants",
       "display_name": "app_constants",
       "imports": [],
+      "all_imports": [],
+      "imports_count": 0,
+      "internal_imports_count": 0,
       "is_test": false,
       "is_init": false,
       "size": 8612
@@ -1056,6 +1440,11 @@
       "stem": "app_factory",
       "display_name": "app_factory",
       "imports": [],
+      "all_imports": [
+        "dash"
+      ],
+      "imports_count": 1,
+      "internal_imports_count": 0,
       "is_test": false,
       "is_init": false,
       "size": 576
@@ -1065,7 +1454,28 @@
       "folder": "root",
       "stem": "borehole_log_professional",
       "display_name": "borehole_log_professional",
-      "imports": [],
+      "imports": [
+        "root__geology_code_utils",
+        "root__section_plot_professional"
+      ],
+      "all_imports": [
+        "pandas",
+        "numpy",
+        "csv",
+        "contextlib",
+        "matplotlib",
+        "base64",
+        "io",
+        "matplotlib.patches",
+        "matplotlib.pyplot",
+        "textwrap",
+        "typing",
+        "geology_code_utils",
+        "section_plot_professional",
+        "logging"
+      ],
+      "imports_count": 14,
+      "internal_imports_count": 2,
       "is_test": false,
       "is_init": false,
       "size": 63204
@@ -1076,9 +1486,46 @@
       "stem": "callbacks_split",
       "display_name": "callbacks_split",
       "imports": [
+        "root__polyline_utils",
+        "root__config",
+        "root__dataframe_optimizer",
+        "root__loading_indicators",
+        "root__section_plot_professional",
+        "root__data_loader",
+        "root__app_constants",
         "root__borehole_log_professional",
-        "root__app_constants"
+        "root__memory_manager",
+        "root__coordinate_service",
+        "root__map_utils"
       ],
+      "all_imports": [
+        "memory_manager",
+        "logging",
+        "borehole_log_professional",
+        "statistics",
+        "config",
+        "dash_leaflet",
+        "pandas",
+        "matplotlib.pyplot",
+        "traceback",
+        "app_constants",
+        "dash",
+        "base64",
+        "io",
+        "polyline_utils",
+        "section_plot_professional",
+        "dataframe_optimizer",
+        "loading_indicators",
+        "numpy",
+        "sklearn.decomposition",
+        "matplotlib",
+        "coordinate_service",
+        "datetime",
+        "map_utils",
+        "data_loader"
+      ],
+      "imports_count": 24,
+      "internal_imports_count": 11,
       "is_test": false,
       "is_init": false,
       "size": 98589
@@ -1088,7 +1535,29 @@
       "folder": "root",
       "stem": "comprehensive_optimization_validation",
       "display_name": "comprehensive_optimization_validation",
-      "imports": [],
+      "imports": [
+        "root__dataframe_optimizer",
+        "root__memory_manager",
+        "root__coordinate_service",
+        "root__enhanced_error_handling"
+      ],
+      "all_imports": [
+        "sys",
+        "pandas",
+        "numpy",
+        "memory_manager",
+        "matplotlib",
+        "coordinate_service",
+        "time",
+        "io",
+        "traceback",
+        "matplotlib.pyplot",
+        "dataframe_optimizer",
+        "logging",
+        "enhanced_error_handling"
+      ],
+      "imports_count": 13,
+      "internal_imports_count": 4,
       "is_test": false,
       "is_init": false,
       "size": 24553
@@ -1099,6 +1568,9 @@
       "stem": "config",
       "display_name": "config",
       "imports": [],
+      "all_imports": [],
+      "imports_count": 0,
+      "internal_imports_count": 0,
       "is_test": false,
       "is_init": false,
       "size": 23646
@@ -1109,6 +1581,16 @@
       "stem": "coordinate_service",
       "display_name": "coordinate_service",
       "imports": [],
+      "all_imports": [
+        "pandas",
+        "numpy",
+        "functools",
+        "typing",
+        "pyproj",
+        "logging"
+      ],
+      "imports_count": 6,
+      "internal_imports_count": 0,
       "is_test": false,
       "is_init": false,
       "size": 13690
@@ -1119,6 +1601,14 @@
       "stem": "dataframe_optimizer",
       "display_name": "dataframe_optimizer",
       "imports": [],
+      "all_imports": [
+        "logging",
+        "pandas",
+        "numpy",
+        "typing"
+      ],
+      "imports_count": 4,
+      "internal_imports_count": 0,
       "is_test": false,
       "is_init": false,
       "size": 10995
@@ -1129,6 +1619,13 @@
       "stem": "data_loader",
       "display_name": "data_loader",
       "imports": [],
+      "all_imports": [
+        "pandas",
+        "os",
+        "csv"
+      ],
+      "imports_count": 3,
+      "internal_imports_count": 0,
       "is_test": false,
       "is_init": false,
       "size": 1730
@@ -1138,7 +1635,19 @@
       "folder": "root",
       "stem": "debug_module",
       "display_name": "debug_module",
-      "imports": [],
+      "imports": [
+        "root__geology_code_utils"
+      ],
+      "all_imports": [
+        "pandas",
+        "matplotlib.patches",
+        "matplotlib.pyplot",
+        "typing",
+        "geology_code_utils",
+        "logging"
+      ],
+      "imports_count": 6,
+      "internal_imports_count": 1,
       "is_test": false,
       "is_init": false,
       "size": 1122
@@ -1151,6 +1660,14 @@
       "imports": [
         "root__borehole_log_professional"
       ],
+      "all_imports": [
+        "logging",
+        "sys",
+        "borehole_log_professional",
+        "traceback"
+      ],
+      "imports_count": 4,
+      "internal_imports_count": 1,
       "is_test": false,
       "is_init": false,
       "size": 1803
@@ -1164,6 +1681,18 @@
         "root__data_loader",
         "root__coordinate_service"
       ],
+      "all_imports": [
+        "coordinate_service",
+        "time",
+        "functools",
+        "typing",
+        "logging",
+        "dataclasses",
+        "enum",
+        "data_loader"
+      ],
+      "imports_count": 8,
+      "internal_imports_count": 2,
       "is_test": false,
       "is_init": false,
       "size": 12371
@@ -1174,6 +1703,17 @@
       "stem": "error_handling",
       "display_name": "error_handling",
       "imports": [],
+      "all_imports": [
+        "dash",
+        "datetime",
+        "typing",
+        "traceback",
+        "logging",
+        "dataclasses",
+        "enum"
+      ],
+      "imports_count": 7,
+      "internal_imports_count": 0,
       "is_test": false,
       "is_init": false,
       "size": 13039
@@ -1186,9 +1726,36 @@
       "imports": [
         "root__app_constants"
       ],
+      "all_imports": [
+        "contextlib",
+        "time",
+        "functools",
+        "typing",
+        "traceback",
+        "logging",
+        "app_constants"
+      ],
+      "imports_count": 7,
+      "internal_imports_count": 1,
       "is_test": false,
       "is_init": false,
       "size": 16853
+    },
+    "root__final_validation": {
+      "file_path": "final_validation.py",
+      "folder": "root",
+      "stem": "final_validation",
+      "display_name": "final_validation",
+      "imports": [],
+      "all_imports": [
+        "json",
+        "pathlib"
+      ],
+      "imports_count": 2,
+      "internal_imports_count": 0,
+      "is_test": false,
+      "is_init": false,
+      "size": 3910
     },
     "root__geology_code_utils": {
       "file_path": "geology_code_utils.py",
@@ -1196,6 +1763,12 @@
       "stem": "geology_code_utils",
       "display_name": "geology_code_utils",
       "imports": [],
+      "all_imports": [
+        "os",
+        "csv"
+      ],
+      "imports_count": 2,
+      "internal_imports_count": 0,
       "is_test": false,
       "is_init": false,
       "size": 1795
@@ -1206,6 +1779,13 @@
       "stem": "interactive_validation",
       "display_name": "interactive_validation",
       "imports": [],
+      "all_imports": [
+        "re",
+        "datetime",
+        "json"
+      ],
+      "imports_count": 3,
+      "internal_imports_count": 0,
       "is_test": false,
       "is_init": false,
       "size": 22052
@@ -1216,6 +1796,15 @@
       "stem": "lazy_marker_manager",
       "display_name": "lazy_marker_manager",
       "imports": [],
+      "all_imports": [
+        "dash_leaflet",
+        "pandas",
+        "typing",
+        "logging",
+        "dataclasses"
+      ],
+      "imports_count": 5,
+      "internal_imports_count": 0,
       "is_test": false,
       "is_init": false,
       "size": 16437
@@ -1228,6 +1817,14 @@
       "imports": [
         "root__app_constants"
       ],
+      "all_imports": [
+        "time",
+        "typing",
+        "dash",
+        "app_constants"
+      ],
+      "imports_count": 4,
+      "internal_imports_count": 1,
       "is_test": false,
       "is_init": false,
       "size": 14236
@@ -1238,6 +1835,15 @@
       "stem": "map_utils",
       "display_name": "map_utils",
       "imports": [],
+      "all_imports": [
+        "pandas",
+        "shapely.ops",
+        "shapely.geometry",
+        "pyproj",
+        "logging"
+      ],
+      "imports_count": 5,
+      "internal_imports_count": 0,
       "is_test": false,
       "is_init": false,
       "size": 12405
@@ -1251,6 +1857,20 @@
         "root__lazy_marker_manager",
         "root__coordinate_service"
       ],
+      "all_imports": [
+        "sys",
+        "pandas",
+        "psutil",
+        "lazy_marker_manager",
+        "coordinate_service",
+        "datetime",
+        "typing",
+        "gc",
+        "logging",
+        "dataclasses"
+      ],
+      "imports_count": 10,
+      "internal_imports_count": 2,
       "is_test": false,
       "is_init": false,
       "size": 14105
@@ -1260,7 +1880,18 @@
       "folder": "root",
       "stem": "migration_validation",
       "display_name": "migration_validation",
-      "imports": [],
+      "imports": [
+        "graph_output__html_dependency_graph"
+      ],
+      "all_imports": [
+        "sys",
+        "os",
+        "time",
+        "html_dependency_graph",
+        "json"
+      ],
+      "imports_count": 5,
+      "internal_imports_count": 1,
       "is_test": false,
       "is_init": false,
       "size": 8451
@@ -1271,6 +1902,12 @@
       "stem": "options_exploration",
       "display_name": "options_exploration",
       "imports": [],
+      "all_imports": [
+        "json",
+        "math"
+      ],
+      "imports_count": 2,
+      "internal_imports_count": 0,
       "is_test": false,
       "is_init": false,
       "size": 19788
@@ -1283,6 +1920,18 @@
       "imports": [
         "root__coordinate_service"
       ],
+      "all_imports": [
+        "dash_leaflet",
+        "pandas",
+        "numpy",
+        "coordinate_service",
+        "shapely.ops",
+        "shapely.geometry",
+        "pyproj",
+        "logging"
+      ],
+      "imports_count": 8,
+      "internal_imports_count": 1,
       "is_test": false,
       "is_init": false,
       "size": 15171
@@ -1295,19 +1944,85 @@
       "imports": [
         "root__geology_code_utils"
       ],
+      "all_imports": [
+        "matplotlib.ticker",
+        "pandas",
+        "numpy",
+        "csv",
+        "contextlib",
+        "matplotlib",
+        "re",
+        "base64",
+        "io",
+        "matplotlib.patches",
+        "matplotlib.pyplot",
+        "typing",
+        "shapely.geometry",
+        "pyproj",
+        "geology_code_utils",
+        "logging"
+      ],
+      "imports_count": 16,
+      "internal_imports_count": 1,
       "is_test": false,
       "is_init": false,
       "size": 29723
     },
-    "root__utils": {
-      "file_path": "utils.py",
+    "root__test_enhanced_dependency_graph": {
+      "file_path": "test_enhanced_dependency_graph.py",
       "folder": "root",
-      "stem": "utils",
-      "display_name": "utils",
+      "stem": "test_enhanced_dependency_graph",
+      "display_name": "test_enhanced_dependency_graph",
       "imports": [],
-      "is_test": false,
+      "all_imports": [
+        "sys",
+        "subprocess",
+        "graph_output.enhanced_dependency_graph",
+        "os",
+        "webbrowser",
+        "json",
+        "pathlib"
+      ],
+      "imports_count": 7,
+      "internal_imports_count": 0,
+      "is_test": true,
       "is_init": false,
-      "size": 86
+      "size": 12394
+    },
+    "root__test_force_directed_layout": {
+      "file_path": "test_force_directed_layout.py",
+      "folder": "root",
+      "stem": "test_force_directed_layout",
+      "display_name": "test_force_directed_layout",
+      "imports": [],
+      "all_imports": [
+        "re",
+        "os",
+        "pathlib"
+      ],
+      "imports_count": 3,
+      "internal_imports_count": 0,
+      "is_test": true,
+      "is_init": false,
+      "size": 7430
+    },
+    "root__test_internal_imports": {
+      "file_path": "test_internal_imports.py",
+      "folder": "root",
+      "stem": "test_internal_imports",
+      "display_name": "test_internal_imports",
+      "imports": [],
+      "all_imports": [
+        "ast",
+        "json",
+        "typing",
+        "pathlib"
+      ],
+      "imports_count": 4,
+      "internal_imports_count": 0,
+      "is_test": true,
+      "is_init": false,
+      "size": 6669
     },
     "root__validate_features": {
       "file_path": "validate_features.py",
@@ -1315,9 +2030,34 @@
       "stem": "validate_features",
       "display_name": "validate_features",
       "imports": [],
+      "all_imports": [
+        "os",
+        "json",
+        "pathlib"
+      ],
+      "imports_count": 3,
+      "internal_imports_count": 0,
       "is_test": false,
       "is_init": false,
       "size": 3453
+    },
+    "root__workspace_audit": {
+      "file_path": "workspace_audit.py",
+      "folder": "root",
+      "stem": "workspace_audit",
+      "display_name": "workspace_audit",
+      "imports": [],
+      "all_imports": [
+        "ast",
+        "json",
+        "typing",
+        "pathlib"
+      ],
+      "imports_count": 4,
+      "internal_imports_count": 0,
+      "is_test": false,
+      "is_init": false,
+      "size": 5834
     },
     "callbacks__base": {
       "file_path": "callbacks\\base.py",
@@ -1325,6 +2065,12 @@
       "stem": "base",
       "display_name": "base (callbacks)",
       "imports": [],
+      "all_imports": [
+        "logging",
+        "abc"
+      ],
+      "imports_count": 2,
+      "internal_imports_count": 0,
       "is_test": false,
       "is_init": false,
       "size": 1528
@@ -1335,13 +2081,32 @@
       "stem": "file_upload",
       "display_name": "file_upload (callbacks)",
       "imports": [
-        "root__data_loader",
-        "root__app_constants",
+        "root__config",
         "callbacks__base",
         "root__error_handling",
-        "root__config",
+        "root__data_loader",
+        "root__app_constants",
         "root__coordinate_service"
       ],
+      "all_imports": [
+        "config",
+        "app_constants",
+        "pandas",
+        "dash_leaflet",
+        "dash",
+        "base64",
+        "coordinate_service",
+        "state_management",
+        "error_handling",
+        "datetime",
+        "typing",
+        "base",
+        "logging",
+        "data_loader",
+        "statistics"
+      ],
+      "imports_count": 15,
+      "internal_imports_count": 6,
       "is_test": false,
       "is_init": false,
       "size": 17399
@@ -1352,15 +2117,35 @@
       "stem": "map_interactions",
       "display_name": "map_interactions (callbacks)",
       "imports": [
-        "root__map_utils",
-        "root__app_constants",
+        "root__polyline_utils",
+        "root__config",
         "callbacks__base",
         "root__error_handling",
-        "root__config",
-        "root__polyline_utils",
+        "root__app_constants",
         "root__lazy_marker_manager",
-        "root__coordinate_service"
+        "root__coordinate_service",
+        "root__map_utils"
       ],
+      "all_imports": [
+        "config",
+        "dash_leaflet",
+        "pandas",
+        "dash",
+        "sklearn.decomposition",
+        "state_management",
+        "coordinate_service",
+        "lazy_marker_manager",
+        "error_handling",
+        "datetime",
+        "typing",
+        "base",
+        "map_utils",
+        "polyline_utils",
+        "logging",
+        "app_constants"
+      ],
+      "imports_count": 16,
+      "internal_imports_count": 8,
       "is_test": false,
       "is_init": false,
       "size": 23327
@@ -1372,10 +2157,23 @@
       "display_name": "marker_handling (callbacks)",
       "imports": [
         "root__borehole_log_professional",
-        "root__app_constants",
         "callbacks__base",
+        "root__app_constants",
         "root__error_handling"
       ],
+      "all_imports": [
+        "dash_leaflet",
+        "pandas",
+        "dash",
+        "state_management",
+        "error_handling",
+        "base",
+        "logging",
+        "borehole_log_professional",
+        "app_constants"
+      ],
+      "imports_count": 9,
+      "internal_imports_count": 4,
       "is_test": false,
       "is_init": false,
       "size": 12731
@@ -1386,13 +2184,32 @@
       "stem": "plot_generation",
       "display_name": "plot_generation (callbacks)",
       "imports": [
-        "root__app_constants",
-        "callbacks__base",
-        "root__error_handling",
         "root__config",
         "root__section_plot_professional",
+        "callbacks__base",
+        "root__error_handling",
+        "root__app_constants",
         "root__coordinate_service"
       ],
+      "all_imports": [
+        "config",
+        "pandas",
+        "dash",
+        "base64",
+        "state_management",
+        "io",
+        "coordinate_service",
+        "error_handling",
+        "datetime",
+        "matplotlib.pyplot",
+        "base",
+        "section_plot_professional",
+        "shapely.geometry",
+        "logging",
+        "app_constants"
+      ],
+      "imports_count": 15,
+      "internal_imports_count": 6,
       "is_test": false,
       "is_init": false,
       "size": 11066
@@ -1403,12 +2220,25 @@
       "stem": "search_functionality",
       "display_name": "search_functionality (callbacks)",
       "imports": [
-        "root__borehole_log_professional",
+        "root__config",
         "callbacks__base",
         "root__error_handling",
-        "root__config",
+        "root__borehole_log_professional",
         "root__coordinate_service"
       ],
+      "all_imports": [
+        "config",
+        "pandas",
+        "dash",
+        "state_management",
+        "coordinate_service",
+        "error_handling",
+        "base",
+        "logging",
+        "borehole_log_professional"
+      ],
+      "imports_count": 9,
+      "internal_imports_count": 5,
       "is_test": false,
       "is_init": false,
       "size": 12485
@@ -1419,13 +2249,25 @@
       "stem": "__init__",
       "display_name": "__init__ (callbacks)",
       "imports": [
+        "callbacks__plot_generation",
+        "callbacks__base",
         "callbacks__map_interactions",
         "callbacks__search_functionality",
-        "callbacks__file_upload",
         "callbacks__marker_handling",
-        "callbacks__plot_generation",
-        "callbacks__base"
+        "callbacks__file_upload"
       ],
+      "all_imports": [
+        "file_upload",
+        "plot_generation",
+        "marker_handling",
+        "base",
+        "typing",
+        "map_interactions",
+        "logging",
+        "search_functionality"
+      ],
+      "imports_count": 8,
+      "internal_imports_count": 6,
       "is_test": false,
       "is_init": true,
       "size": 4225
@@ -1436,9 +2278,37 @@
       "stem": "enhanced_dependency_graph",
       "display_name": "enhanced_dependency_graph (graph_output)",
       "imports": [],
+      "all_imports": [
+        "ast",
+        "os",
+        "typing",
+        "json",
+        "pathlib"
+      ],
+      "imports_count": 5,
+      "internal_imports_count": 0,
       "is_test": false,
       "is_init": false,
-      "size": 47417
+      "size": 56505
+    },
+    "graph_output__enhanced_dependency_graph_backup - Copy": {
+      "file_path": "graph_output\\enhanced_dependency_graph_backup - Copy.py",
+      "folder": "graph_output",
+      "stem": "enhanced_dependency_graph_backup - Copy",
+      "display_name": "enhanced_dependency_graph_backup - Copy (graph_output)",
+      "imports": [],
+      "all_imports": [
+        "ast",
+        "os",
+        "typing",
+        "json",
+        "pathlib"
+      ],
+      "imports_count": 5,
+      "internal_imports_count": 0,
+      "is_test": false,
+      "is_init": false,
+      "size": 56559
     },
     "graph_output__html_dependency_graph": {
       "file_path": "graph_output\\html_dependency_graph.py",
@@ -1446,6 +2316,15 @@
       "stem": "html_dependency_graph",
       "display_name": "html_dependency_graph (graph_output)",
       "imports": [],
+      "all_imports": [
+        "ast",
+        "os",
+        "typing",
+        "json",
+        "pathlib"
+      ],
+      "imports_count": 5,
+      "internal_imports_count": 0,
       "is_test": false,
       "is_init": false,
       "size": 36597
@@ -1455,7 +2334,19 @@
       "folder": "state_management",
       "stem": "app_state",
       "display_name": "app_state (state_management)",
-      "imports": [],
+      "imports": [
+        "state_management__state_models"
+      ],
+      "all_imports": [
+        "pandas",
+        "state_models",
+        "datetime",
+        "typing",
+        "threading",
+        "logging"
+      ],
+      "imports_count": 6,
+      "internal_imports_count": 1,
       "is_test": false,
       "is_init": false,
       "size": 10646
@@ -1466,6 +2357,14 @@
       "stem": "state_models",
       "display_name": "state_models (state_management)",
       "imports": [],
+      "all_imports": [
+        "dataclasses",
+        "pandas",
+        "typing",
+        "datetime"
+      ],
+      "imports_count": 4,
+      "internal_imports_count": 0,
       "is_test": false,
       "is_init": false,
       "size": 5982
@@ -1476,12 +2375,132 @@
       "stem": "__init__",
       "display_name": "__init__ (state_management)",
       "imports": [
-        "state_management__app_state",
-        "state_management__state_models"
+        "state_management__state_models",
+        "state_management__app_state"
       ],
+      "all_imports": [
+        "state_models",
+        "app_state"
+      ],
+      "imports_count": 2,
+      "internal_imports_count": 2,
       "is_test": false,
       "is_init": true,
       "size": 513
+    },
+    "tests__comprehensive_validation": {
+      "file_path": "tests\\comprehensive_validation.py",
+      "folder": "tests",
+      "stem": "comprehensive_validation",
+      "display_name": "comprehensive_validation (tests)",
+      "imports": [],
+      "all_imports": [
+        "sys",
+        "graph_output.enhanced_dependency_graph",
+        "re",
+        "typing",
+        "json",
+        "pathlib"
+      ],
+      "imports_count": 6,
+      "internal_imports_count": 0,
+      "is_test": false,
+      "is_init": false,
+      "size": 11761
+    },
+    "tests__fix_brace_mismatch": {
+      "file_path": "tests\\fix_brace_mismatch.py",
+      "folder": "tests",
+      "stem": "fix_brace_mismatch",
+      "display_name": "fix_brace_mismatch (tests)",
+      "imports": [],
+      "all_imports": [
+        "re",
+        "pathlib"
+      ],
+      "imports_count": 2,
+      "internal_imports_count": 0,
+      "is_test": false,
+      "is_init": false,
+      "size": 5578
+    },
+    "tests__test_graph_data_integrity": {
+      "file_path": "tests\\test_graph_data_integrity.py",
+      "folder": "tests",
+      "stem": "test_graph_data_integrity",
+      "display_name": "test_graph_data_integrity (tests)",
+      "imports": [],
+      "all_imports": [
+        "sys",
+        "html",
+        "graph_output.enhanced_dependency_graph",
+        "re",
+        "ast",
+        "os",
+        "typing",
+        "traceback",
+        "json",
+        "pathlib"
+      ],
+      "imports_count": 10,
+      "internal_imports_count": 0,
+      "is_test": true,
+      "is_init": false,
+      "size": 21154
+    },
+    "tests__test_html_data_extraction": {
+      "file_path": "tests\\test_html_data_extraction.py",
+      "folder": "tests",
+      "stem": "test_html_data_extraction",
+      "display_name": "test_html_data_extraction (tests)",
+      "imports": [],
+      "all_imports": [
+        "html",
+        "re",
+        "ast",
+        "typing",
+        "json",
+        "pathlib"
+      ],
+      "imports_count": 6,
+      "internal_imports_count": 0,
+      "is_test": true,
+      "is_init": false,
+      "size": 14350
+    },
+    "tests__test_javascript_errors": {
+      "file_path": "tests\\test_javascript_errors.py",
+      "folder": "tests",
+      "stem": "test_javascript_errors",
+      "display_name": "test_javascript_errors (tests)",
+      "imports": [],
+      "all_imports": [
+        "re",
+        "json",
+        "typing",
+        "pathlib"
+      ],
+      "imports_count": 4,
+      "internal_imports_count": 0,
+      "is_test": true,
+      "is_init": false,
+      "size": 15035
+    },
+    "tests__validate_fix": {
+      "file_path": "tests\\validate_fix.py",
+      "folder": "tests",
+      "stem": "validate_fix",
+      "display_name": "validate_fix (tests)",
+      "imports": [],
+      "all_imports": [
+        "re",
+        "pathlib"
+      ],
+      "imports_count": 2,
+      "internal_imports_count": 0,
+      "is_test": false,
+      "is_init": false,
+      "size": 2779
     }
   },
   "subfolder_info": {
@@ -1503,6 +2522,7 @@
         "enhanced_error_handling",
         "error_handling",
         "error_recovery",
+        "final_validation",
         "geology_code_utils",
         "interactive_validation",
         "lazy_marker_manager",
@@ -1513,11 +2533,18 @@
         "options_exploration",
         "polyline_utils",
         "section_plot_professional",
-        "utils",
-        "validate_features"
+        "test_enhanced_dependency_graph",
+        "test_force_directed_layout",
+        "test_internal_imports",
+        "validate_features",
+        "workspace_audit"
       ],
-      "test_modules": [],
-      "count": 27
+      "test_modules": [
+        "test_enhanced_dependency_graph",
+        "test_force_directed_layout",
+        "test_internal_imports"
+      ],
+      "count": 31
     },
     "archive": {
       "color": "#FFEBEE",
@@ -1549,10 +2576,11 @@
       "color": "#FAFAFA",
       "modules": [
         "enhanced_dependency_graph (graph_output)",
+        "enhanced_dependency_graph_backup - Copy (graph_output)",
         "html_dependency_graph (graph_output)"
       ],
       "test_modules": [],
-      "count": 2
+      "count": 3
     },
     "old_streamlit_files": {
       "color": "#FFF8E1",
@@ -1572,9 +2600,20 @@
     },
     "tests": {
       "color": "#FFF3E0",
-      "modules": [],
-      "test_modules": [],
-      "count": 0
+      "modules": [
+        "comprehensive_validation (tests)",
+        "fix_brace_mismatch (tests)",
+        "test_graph_data_integrity (tests)",
+        "test_html_data_extraction (tests)",
+        "test_javascript_errors (tests)",
+        "validate_fix (tests)"
+      ],
+      "test_modules": [
+        "test_graph_data_integrity (tests)",
+        "test_html_data_extraction (tests)",
+        "test_javascript_errors (tests)"
+      ],
+      "count": 6
     },
     "assets": {
       "color": "#F1F8E9",
@@ -1590,51 +2629,62 @@
     }
   },
   "importance_scores": {
-    "root__app": 0.2623034431880798,
-    "root__app_constants": 1.0,
-    "root__app_factory": 0.2623034431880798,
-    "root__borehole_log_professional": 0.7112849681000761,
-    "root__callbacks_split": 0.2623034431880798,
-    "root__comprehensive_optimization_validation": 0.2623034431880798,
-    "root__config": 0.4298780015756422,
-    "root__coordinate_service": 0.9028391160009656,
-    "root__dataframe_optimizer": 0.2623034431880798,
-    "root__data_loader": 0.41620634537530793,
-    "root__debug_module": 0.2623034431880798,
-    "root__debug_offset_layout": 0.2623034431880798,
-    "root__enhanced_error_handling": 0.2623034431880798,
-    "root__error_handling": 0.4935139098240837,
-    "root__error_recovery": 0.2623034431880798,
-    "root__geology_code_utils": 0.5213217179053977,
-    "root__interactive_validation": 0.2623034431880798,
-    "root__lazy_marker_manager": 0.40560036066723437,
-    "root__loading_indicators": 0.2623034431880798,
-    "root__map_utils": 0.29412139731230047,
-    "root__memory_manager": 0.2623034431880798,
-    "root__migration_validation": 0.2623034431880798,
-    "root__options_exploration": 0.2623034431880798,
-    "root__polyline_utils": 0.29412139731230047,
-    "root__section_plot_professional": 0.304727382020374,
-    "root__utils": 0.2623034431880798,
-    "root__validate_features": 0.2623034431880798,
-    "callbacks__base": 0.5306735642757284,
-    "callbacks__file_upload": 0.29946309763972445,
-    "callbacks__map_interactions": 0.29946309763972445,
-    "callbacks__marker_handling": 0.29946309763972445,
-    "callbacks__plot_generation": 0.29946309763972445,
-    "callbacks__search_functionality": 0.29946309763972445,
-    "callbacks____init__": 0.2623034431880798,
-    "graph_output__enhanced_dependency_graph": 0.2623034431880798,
-    "graph_output__html_dependency_graph": 0.2623034431880798,
-    "state_management__app_state": 0.3737824065430137,
-    "state_management__state_models": 0.3737824065430137,
-    "state_management____init__": 0.2623034431880798
+    "root__app": 0.20843558837414103,
+    "root__app_constants": 0.7442894705540104,
+    "root__app_factory": 0.26749233841348097,
+    "root__borehole_log_professional": 0.4972969170040626,
+    "root__callbacks_split": 0.26749233841348097,
+    "root__comprehensive_optimization_validation": 0.20843558837414103,
+    "root__config": 0.4213228687763701,
+    "root__coordinate_service": 0.8463930548017129,
+    "root__dataframe_optimizer": 0.273398013417415,
+    "root__data_loader": 0.3702264765027495,
+    "root__debug_module": 0.20843558837414103,
+    "root__debug_offset_layout": 0.20843558837414103,
+    "root__enhanced_error_handling": 0.252728150903646,
+    "root__error_handling": 0.392163598444446,
+    "root__error_recovery": 0.20843558837414103,
+    "root__final_validation": 0.20843558837414103,
+    "root__geology_code_utils": 1.0,
+    "root__interactive_validation": 0.20843558837414103,
+    "root__lazy_marker_manager": 0.3499134151871348,
+    "root__loading_indicators": 0.22910545088791,
+    "root__map_utils": 0.25438912199850244,
+    "root__memory_manager": 0.273398013417415,
+    "root__migration_validation": 0.20843558837414103,
+    "root__options_exploration": 0.20843558837414103,
+    "root__polyline_utils": 0.25438912199850244,
+    "root__section_plot_professional": 0.47416820209542654,
+    "root__test_enhanced_dependency_graph": 0.20843558837414103,
+    "root__test_force_directed_layout": 0.20843558837414103,
+    "root__test_internal_imports": 0.20843558837414103,
+    "root__validate_features": 0.20843558837414103,
+    "root__workspace_audit": 0.20843558837414103,
+    "callbacks__base": 0.42169197346411597,
+    "callbacks__file_upload": 0.237963963393811,
+    "callbacks__map_interactions": 0.237963963393811,
+    "callbacks__marker_handling": 0.237963963393811,
+    "callbacks__plot_generation": 0.237963963393811,
+    "callbacks__search_functionality": 0.237963963393811,
+    "callbacks____init__": 0.20843558837414103,
+    "graph_output__enhanced_dependency_graph": 0.20843558837414103,
+    "graph_output__enhanced_dependency_graph_backup - Copy": 0.20843558837414103,
+    "graph_output__html_dependency_graph": 0.3856058384921609,
+    "state_management__app_state": 0.297020713433151,
+    "state_management__state_models": 0.5494883198513293,
+    "state_management____init__": 0.20843558837414103,
+    "tests__comprehensive_validation": 0.20843558837414103,
+    "tests__fix_brace_mismatch": 0.20843558837414103,
+    "tests__test_graph_data_integrity": 0.20843558837414103,
+    "tests__test_html_data_extraction": 0.20843558837414103,
+    "tests__test_javascript_errors": 0.20843558837414103,
+    "tests__validate_fix": 0.20843558837414103
   },
   "statistics": {
-    "total_files": 39,
-    "total_dependencies": 48,
-    "cross_folder_dependencies": 24,
-    "test_files": 0,
+    "total_files": 50,
+    "total_dependencies": 69,
+    "cross_folder_dependencies": 25,
+    "test_files": 6,
     "folders": 10
   }
 }

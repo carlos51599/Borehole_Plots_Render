@@ -1,0 +1,149 @@
+{
+  "nodes": [
+    {
+      "id": "root__enhanced_dependency_graph",
+      "name": "enhanced_dependency_graph",
+      "stem": "enhanced_dependency_graph",
+      "folder": "root",
+      "color": "#E3F2FD",
+      "file_path": "enhanced_dependency_graph.py",
+      "imports_count": 0,
+      "importance": 1.0,
+      "is_test": false,
+      "is_init": false,
+      "size": 49532,
+      "index": 0
+    },
+    {
+      "id": "root__html_dependency_graph",
+      "name": "html_dependency_graph",
+      "stem": "html_dependency_graph",
+      "folder": "root",
+      "color": "#E3F2FD",
+      "file_path": "html_dependency_graph.py",
+      "imports_count": 0,
+      "importance": 1.0,
+      "is_test": false,
+      "is_init": false,
+      "size": 36597,
+      "index": 1
+    }
+  ],
+  "edges": [],
+  "dependencies": {
+    "root__enhanced_dependency_graph": {
+      "file_path": "enhanced_dependency_graph.py",
+      "folder": "root",
+      "stem": "enhanced_dependency_graph",
+      "display_name": "enhanced_dependency_graph",
+      "imports": [],
+      "all_imports": [
+        "ast",
+        "json",
+        "typing",
+        "os",
+        "pathlib"
+      ],
+      "imports_count": 5,
+      "internal_imports_count": 0,
+      "is_test": false,
+      "is_init": false,
+      "size": 49532
+    },
+    "root__html_dependency_graph": {
+      "file_path": "html_dependency_graph.py",
+      "folder": "root",
+      "stem": "html_dependency_graph",
+      "display_name": "html_dependency_graph",
+      "imports": [],
+      "all_imports": [
+        "ast",
+        "json",
+        "typing",
+        "os",
+        "pathlib"
+      ],
+      "imports_count": 5,
+      "internal_imports_count": 0,
+      "is_test": false,
+      "is_init": false,
+      "size": 36597
+    }
+  },
+  "subfolder_info": {
+    "root": {
+      "color": "#E3F2FD",
+      "modules": [
+        "enhanced_dependency_graph",
+        "html_dependency_graph"
+      ],
+      "test_modules": [],
+      "count": 2
+    },
+    "archive": {
+      "color": "#FFEBEE",
+      "modules": [],
+      "test_modules": [],
+      "count": 0
+    },
+    "callbacks": {
+      "color": "#E8F5E8",
+      "modules": [],
+      "test_modules": [],
+      "count": 0
+    },
+    "flowchart_visualization": {
+      "color": "#E0F2F1",
+      "modules": [],
+      "test_modules": [],
+      "count": 0
+    },
+    "graph_output": {
+      "color": "#FAFAFA",
+      "modules": [],
+      "test_modules": [],
+      "count": 0
+    },
+    "old_streamlit_files": {
+      "color": "#FFF8E1",
+      "modules": [],
+      "test_modules": [],
+      "count": 0
+    },
+    "state_management": {
+      "color": "#F3E5F5",
+      "modules": [],
+      "test_modules": [],
+      "count": 0
+    },
+    "tests": {
+      "color": "#FFF3E0",
+      "modules": [],
+      "test_modules": [],
+      "count": 0
+    },
+    "assets": {
+      "color": "#F1F8E9",
+      "modules": [],
+      "test_modules": [],
+      "count": 0
+    },
+    "reports": {
+      "color": "#FCE4EC",
+      "modules": [],
+      "test_modules": [],
+      "count": 0
+    }
+  },
+  "importance_scores": {
+    "root__enhanced_dependency_graph": 1.0,
+    "root__html_dependency_graph": 1.0
+  },
+  "statistics": {
+    "total_files": 2,
+    "total_dependencies": 0,
+    "cross_folder_dependencies": 0,
+    "test_files": 0,
+    "folders": 10
+  }
+}

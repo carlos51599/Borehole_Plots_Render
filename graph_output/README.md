@@ -1,7 +1,31 @@
 # Enhanced Dependency Graph Usage Guide
 
 ## Overview
-The enhanced dependency graph provides an interactive visualization of your Python project's module dependencies with several powerful features.
+The enhanced dependency graph provides an interactive visualization of your Python project's module dependencies with powerful features including **dual layout modes**, advanced filtering, and comprehensive interaction capabilities.
+
+## 🆕 NEW: Force-Directed Layout Toggle
+
+### Layout Modes
+The visualization now supports **two distinct layout modes**:
+
+1. **📐 Hierarchical Layout** (Default)
+   - Traditional left-to-right dependency flow
+   - Nodes organized in layers by dependency depth
+   - Clear visual hierarchy and traceability
+   - Optimal for understanding dependency chains
+
+2. **🌐 Force-Directed Layout** (NEW!)
+   - Physics-based dynamic positioning using D3.js simulation
+   - Natural clustering of related modules
+   - Reduced edge crossings and visual clutter
+   - Interactive drag-and-drop positioning
+   - Importance-weighted node positioning
+
+### How to Switch Layouts
+- **Location**: Find the "🎛️ Layout Control" section in the control panel
+- **Toggle**: Click the switch or anywhere in the control area
+- **Transition**: Smooth 1-second animated transition between modes
+- **Indicator**: Current layout mode is clearly displayed
 
 ## Features
 
@@ -55,6 +79,32 @@ The enhanced dependency graph provides an interactive visualization of your Pyth
 ### Explore Module Relationships
 1. Click different nodes to see how modules are interconnected
 2. Use the distant highlighting to understand the full dependency chain
+
+### 🌐 Force-Directed Layout Specific Features
+- **Natural Clustering**: Related modules automatically group together
+- **Interactive Physics**: Drag nodes to reorganize the graph in real-time
+- **Importance-Based Forces**: High-importance nodes have stronger gravitational pull
+- **Collision Detection**: Nodes automatically avoid overlapping
+- **Dynamic Stabilization**: Graph settles into optimal positions over 2-3 seconds
+
+### 📐 Hierarchical Layout Benefits
+- **Dependency Flow**: Clear left-to-right progression shows import direction
+- **Layer Organization**: Modules organized by dependency depth
+- **Consistent Positioning**: Predictable layout for repeated analysis
+- **Easy Traceability**: Follow dependency chains visually from left to right
+
+## Layout Comparison
+
+| Feature | Hierarchical | Force-Directed |
+|---------|-------------|----------------|
+| **Dependency Direction** | ✅ Clear (left→right) | ⚡ Dynamic grouping |
+| **Visual Clustering** | ⚡ Layer-based | ✅ Natural clusters |
+| **Interactive Positioning** | ⚡ Drag only | ✅ Physics simulation |
+| **Edge Crossings** | ⚡ Moderate | ✅ Minimized |
+| **Consistency** | ✅ Predictable | ⚡ Dynamic |
+| **Learning Curve** | ✅ Intuitive | ⚡ Requires exploration |
+
+*Recommendation: Start with **Hierarchical** for analysis, switch to **Force-Directed** for exploration and presentation.*
 
 ## Technical Details
 
