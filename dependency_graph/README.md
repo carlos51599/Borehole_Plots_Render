@@ -1,21 +1,48 @@
-# Enhanced Dependency Graph System (graph/)
+# Enhanced Dependency Graph System (dependency_graph/)
 
 ## Overview
 This directory contains the complete modular implementation of the Enhanced Dependency Graph System for Python projects. It provides deep architectural analysis and interactive visualization of code dependencies, designed for maintainability, extensibility, and clarity.
 
+## 🆕 New Features (July 23, 2025)
+
+### 🎨 Light/Dark Theme Support
+- **Theme Toggle**: Click the theme button in the top-right corner
+- **Persistent Settings**: Theme preference saved in localStorage
+- **Smooth Transitions**: All elements transition smoothly between themes
+- **Full Theme Coverage**: All UI components and graph elements support both themes
+
+### 📊 Git Change Frequency Analysis
+- **Change Hotspots**: Files are analyzed for modification frequency over the last 30 days
+- **Churn Analysis**: Lines added/removed tracking from git history
+- **Hotspot Indicators**: Red dots on frequently changing files
+- **Change Badges**: Small numbers showing recent change count
+- **Classification System**: Files classified as very_low, low, medium, high, very_high change frequency
+
+### 🔍 Enhanced Module Importance
+- **Dynamic Node Sizing**: Node size now reflects module importance (PageRank-style calculation)
+- **Importance Indicators**: Colored circles for high-importance modules
+- **Visual Hierarchy**: More important modules are larger and more prominent
+
+### 📈 Git Integration
+- **Automatic Detection**: Git repository automatically detected and analyzed
+- **Development Patterns**: Understand which files change most frequently
+- **Stability Analysis**: Identify stable vs. volatile parts of the codebase
+- **Historical Insights**: 30-day rolling analysis of change patterns
+
 ## Directory Structure
 ```
-graph/
+dependency_graph/
 ├── enhanced_dependency_graph_modular.py   # Main entry point
 ├── graph_modules/                        # Modular analysis and visualization components
 │   ├── __init__.py
-│   ├── dependency_analyzer.py
-│   ├── graph_styles.py
-│   ├── hierarchical_layout.py
+│   ├── dependency_analyzer.py           # Core analysis with git integration
+│   ├── git_analysis.py                  # 🆕 Git history analysis
+│   ├── graph_styles.py                  # 🆕 Theme-aware CSS styling
+│   ├── hierarchical_layout.py           # 🆕 Importance-based node sizing
 │   ├── force_directed_layout.py
-│   ├── graph_visualization.py
-│   ├── graph_controls.py
-│   └── html_generator.py
+│   ├── graph_visualization.py           # 🆕 Hotspot indicators & enhanced nodes
+│   ├── graph_controls.py                # 🆕 Theme toggle functionality
+│   └── html_generator.py                # 🆕 Theme toggle UI integration
 ├── graph_output/                         # Generated HTML and JSON visualizations
 │   ├── enhanced_dependency_graph.html
 │   └── enhanced_graph_data.json

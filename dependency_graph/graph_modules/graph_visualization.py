@@ -90,9 +90,14 @@ def get_graph_visualization_js() -> str:
                     .on("drag", dragged)
                     .on("end", dragended));
             
-            // Add node rectangles
+            // Add node rectangles with enhanced styling
             const rect = node.append("rect")
-                .attr("class", "node-rect")
+                .attr("class", d => {
+                    let classes = "node-rect";
+                    if (d.hotspot_score && d.hotspot_score > 0.5) classes += " hotspot";
+                    if (d.change_classification === "very_high") classes += " very-active";
+                    return classes;
+                })
                 .attr("width", d => d.width)
                 .attr("height", d => d.height)
                 .attr("x", d => -d.width/2)
@@ -110,6 +115,27 @@ def get_graph_visualization_js() -> str:
                 .attr("cx", d => d.width/2 - 8)
                 .attr("cy", d => -d.height/2 + 8)
                 .attr("r", 6);
+            
+            // Add hotspot indicators for frequently changing files
+            node.filter(d => d.hotspot_score && d.hotspot_score > 0.4)
+                .append("circle")
+                .attr("class", "hotspot-indicator")
+                .attr("cx", d => -d.width/2 + 8)
+                .attr("cy", d => -d.height/2 + 8)
+                .attr("r", 4)
+                .attr("fill", "#ff3333")
+                .attr("stroke", "#ffffff")
+                .attr("stroke-width", 1);
+            
+            // Add change frequency badges
+            node.filter(d => d.change_count && d.change_count > 0)
+                .append("text")
+                .attr("class", "change-badge")
+                .attr("x", d => d.width/2 - 12)
+                .attr("y", d => d.height/2 - 4)
+                .attr("font-size", "10px")
+                .attr("fill", "#666")
+                .text(d => d.change_count);
             
             // Add node labels
             node.append("text")

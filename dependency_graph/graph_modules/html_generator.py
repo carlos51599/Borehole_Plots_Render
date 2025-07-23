@@ -121,6 +121,10 @@ def get_html_body() -> str:
         </div>
         
         <div class="graph-container">
+            <div class="theme-toggle" onclick="toggleTheme()">
+                <span class="theme-icon">🌙</span>
+                <span class="theme-text">Dark</span>
+            </div>
             <svg id="graph"></svg>
             <div id="tooltip" class="tooltip" aria-hidden="true"></div>
         </div>
@@ -136,7 +140,10 @@ def get_html_body() -> str:
         {controls_js}
         
         // Initialize on load
-        document.addEventListener("DOMContentLoaded", initializeEnhancedVisualization);
+        document.addEventListener("DOMContentLoaded", function() {{
+            initializeTheme();
+            initializeEnhancedVisualization();
+        }});
     </script>
 </body>
 </html>"""
@@ -218,7 +225,7 @@ def main():
 
     print("✅ MODULAR DEPENDENCY GRAPH COMPLETE!")
     print("=" * 50)
-    print(f"📊 Analysis Results:")
+    print("📊 Analysis Results:")
     stats = graph_data["statistics"]
     print(f"   - Total files analyzed: {stats['total_files']}")
     print(f"   - Total dependencies: {stats['total_dependencies']}")

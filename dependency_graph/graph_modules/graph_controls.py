@@ -15,6 +15,41 @@ def get_graph_controls_js() -> str:
         str: JavaScript code for controls and interaction
     """
     return """
+        // Theme management
+        let currentTheme = localStorage.getItem('dependency-graph-theme') || 'light';
+        
+        function initializeTheme() {
+            document.documentElement.setAttribute('data-theme', currentTheme);
+            updateThemeToggle();
+        }
+        
+        function toggleTheme() {
+            currentTheme = currentTheme === 'light' ? 'dark' : 'light';
+            document.documentElement.setAttribute('data-theme', currentTheme);
+            localStorage.setItem('dependency-graph-theme', currentTheme);
+            updateThemeToggle();
+            
+            // Update node and link colors for the current theme
+            if (typeof updateVisualizationForTheme === 'function') {
+                updateVisualizationForTheme();
+            }
+        }
+        
+        function updateThemeToggle() {
+            const toggle = document.querySelector('.theme-toggle');
+            if (toggle) {
+                const icon = toggle.querySelector('.theme-icon');
+                const text = toggle.querySelector('.theme-text');
+                if (currentTheme === 'dark') {
+                    icon.textContent = '☀️';
+                    text.textContent = 'Light';
+                } else {
+                    icon.textContent = '🌙';
+                    text.textContent = 'Dark';
+                }
+            }
+        }
+        
         // Enhanced controls management
         function updateEnhancedControls() {
             const container = d3.select("#folder-controls");

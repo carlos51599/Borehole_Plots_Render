@@ -31,4 +31,7 @@ Highlight unstable or frequently modified modules.
 Performance Hotspot Detection
 Integrate with profiling tools to highlight slow or resource-heavy modules.
 
-
+Transparency settings
+For unselected (dimmed) elements in visualisation;
+including links, nodes (already included) and node text.
+These should be common and only defines once for both the light and dark theme

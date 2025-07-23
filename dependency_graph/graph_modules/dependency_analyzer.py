@@ -45,33 +45,38 @@ import ast
 import os
 from pathlib import Path
 from typing import Dict, List, Set, Tuple, Any
+from .git_analysis import GitAnalyzer
 
 
 class EnhancedDependencyAnalyzer:
     """Enhanced dependency analyzer with complete directory inclusion."""
 
     def __init__(self, exclude_folders: List[str] = None):
-        # Remove test exclusion - include all directories, but exclude graph folder
-        self.exclude_folders = exclude_folders or ["__pycache__", "graph"]
+        # Remove test exclusion - include all directories, but exclude dependency_graph folder
+        self.exclude_folders = exclude_folders or ["__pycache__", "dependency_graph"]
         self.dependencies = {}
         self.node_importance = {}
         self.root_path = None  # Will be set in analyze_project
+        self.git_analyzer = None  # Will be initialized in analyze_project
 
     def analyze_project(self, root_path: str = ".") -> Dict[str, Any]:
         """Analyze entire project including previously excluded directories."""
-        # Auto-detect if we're running from within a graph folder
+        # Auto-detect if we're running from within a dependency_graph folder
         current_dir = Path.cwd()
-        if current_dir.name == "graph" or (current_dir / "graph_modules").exists():
-            # We're in the graph folder, so analyze the parent directory
+        if current_dir.name == "dependency_graph" or (current_dir / "graph_modules").exists():
+            # We're in the dependency_graph folder, so analyze the parent directory
             root_path = ".."
             print(
-                "🔍 Detected execution from graph folder - analyzing parent directory..."
+                "🔍 Detected execution from dependency_graph folder - analyzing parent directory..."
             )
         else:
             print("🔍 Enhanced dependency analysis - including ALL directories...")
 
         # Store root_path for use in other methods
         self.root_path = Path(root_path).resolve()
+
+        # Initialize git analyzer
+        self.git_analyzer = GitAnalyzer(self.root_path)
 
         # Scan for all Python files
         python_files = self._find_python_files(root_path)
@@ -86,8 +91,11 @@ class EnhancedDependencyAnalyzer:
         # Calculate node importance (PageRank-style)
         self._calculate_node_importance()
 
+        # Analyze git history for change patterns
+        git_analysis = self._analyze_git_history()
+
         # Build enhanced graph data
-        graph_data = self._build_enhanced_graph_data()
+        graph_data = self._build_enhanced_graph_data(git_analysis)
 
         return graph_data
 
@@ -388,7 +396,22 @@ class EnhancedDependencyAnalyzer:
             node: score / max_importance for node, score in importance.items()
         }
 
-    def _build_enhanced_graph_data(self) -> Dict[str, Any]:
+    def _analyze_git_history(self, days: int = 30) -> Dict[str, Any]:
+        """Analyze git history for change patterns and hotspots."""
+        if self.git_analyzer and self.git_analyzer.is_git_available:
+            return self.git_analyzer.get_combined_analysis(days)
+        else:
+            print("🚫 Git analysis not available - no change frequency data")
+            return {
+                'total_files_analyzed': 0,
+                'analysis_period_days': days,
+                'git_available': False,
+                'hotspots': [],
+                'stable_files': [],
+                'file_data': {}
+            }
+
+    def _build_enhanced_graph_data(self, git_analysis: Dict[str, Any] = None) -> Dict[str, Any]:
         """Build enhanced graph data with importance and visual properties."""
         print("🎨 Building enhanced graph visualization data...")
 
@@ -403,6 +426,12 @@ class EnhancedDependencyAnalyzer:
         # Create nodes with enhanced properties
         for i, (unique_id, info) in enumerate(self.dependencies.items()):
             importance = self.node_importance.get(unique_id, 0)
+            
+            # Get git analysis data for this file
+            git_data = {}
+            if git_analysis and git_analysis.get('file_data'):
+                file_path_normalized = info["file_path"].replace('\\', '/')
+                git_data = git_analysis['file_data'].get(file_path_normalized, {})
 
             nodes.append(
                 {
@@ -420,6 +449,14 @@ class EnhancedDependencyAnalyzer:
                     "is_init": info["is_init"],
                     "size": info["size"],
                     "index": i,
+                    # Git analysis data
+                    "change_count": git_data.get('change_count', 0),
+                    "change_frequency_score": git_data.get('change_frequency_score', 0.0),
+                    "change_classification": git_data.get('change_classification', 'none'),
+                    "total_churn": git_data.get('total_churn', 0),
+                    "churn_classification": git_data.get('churn_classification', 'none'),
+                    "hotspot_score": git_data.get('hotspot_score', 0.0),
+                    "last_modified": git_data.get('last_modified', 'unknown'),
                 }
             )
             node_index[unique_id] = i
@@ -466,6 +503,7 @@ class EnhancedDependencyAnalyzer:
             "dependencies": self.dependencies,
             "subfolder_info": subfolder_info,
             "importance_scores": self.node_importance,
+            "git_analysis": git_analysis or {},
             "statistics": {
                 "total_files": len(nodes),
                 "total_dependencies": len(edges),
@@ -474,6 +512,9 @@ class EnhancedDependencyAnalyzer:
                 ),
                 "test_files": sum(1 for n in nodes if n["is_test"]),
                 "folders": len(subfolder_info),
+                "git_analysis_available": git_analysis is not None and git_analysis.get('git_available', False),
+                "hotspots_detected": len(git_analysis.get('hotspots', [])) if git_analysis else 0,
+                "stable_files_detected": len(git_analysis.get('stable_files', [])) if git_analysis else 0,
             },
         }
 

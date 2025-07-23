@@ -3,22 +3,76 @@ Graph Styles Module
 ==================
 
 CSS styling definitions for the enhanced dependency graph visualization.
-Contains all visual styling including layout, animations, and theming.
+Contains all visual styling including layout, animations, and theming support.
 """
 
 
-def get_graph_styles() -> str:
+def get_graph_styles_with_theme_support() -> str:
     """
-    Get complete CSS styles for the dependency graph visualization.
+    Get complete CSS styles with light/dark theme support.
 
     Returns:
-        str: Complete CSS stylesheet as string
+        str: Complete CSS stylesheet with theme variables and toggle support
     """
     return """
+        :root {
+            /* Light theme variables (default) */
+            --bg-primary: #f8f9fa;
+            --bg-secondary: #ffffff;
+            --bg-container: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --text-primary: #333333;
+            --text-secondary: #666666;
+            --text-muted: #888888;
+            --border-color: #e9ecef;
+            --border-color-hover: #dee2e6;
+            --shadow-light: rgba(0,0,0,0.1);
+            --shadow-medium: rgba(0,0,0,0.2);
+            --shadow-heavy: rgba(0,0,0,0.3);
+            --accent-color: #ff6600;
+            --accent-color-hover: #e55a00;
+            --graph-bg: #ffffff;
+            --node-stroke: #333333;
+            --link-color: #666666;
+            --control-bg: #ffffff;
+            --control-border: #e9ecef;
+            --button-bg: #f8f9fa;
+            --button-hover: #e9ecef;
+            --input-bg: #ffffff;
+            --input-border: #ced4da;
+        }
+
+        [data-theme="dark"] {
+            /* Dark theme variables */
+            --bg-primary: #1a1a1a;
+            --bg-secondary: #2d2d2d;
+            --bg-container: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
+            --text-primary: #ffffff;
+            --text-secondary: #cccccc;
+            --text-muted: #999999;
+            --border-color: #404040;
+            --border-color-hover: #555555;
+            --shadow-light: rgba(0,0,0,0.3);
+            --shadow-medium: rgba(0,0,0,0.5);
+            --shadow-heavy: rgba(0,0,0,0.7);
+            --accent-color: #ff8533;
+            --accent-color-hover: #ff9955;
+            --graph-bg: #2d2d2d;
+            --node-stroke: #ffffff;
+            --link-color: #cccccc;
+            --control-bg: #2d2d2d;
+            --control-border: #404040;
+            --button-bg: #404040;
+            --button-hover: #555555;
+            --input-bg: #404040;
+            --input-border: #555555;
+        }
+
         body {
             margin: 0;
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: #f8f9fa;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            transition: background-color 0.3s ease, color 0.3s ease;
         }
         
         .container {
@@ -28,60 +82,108 @@ def get_graph_styles() -> str:
         }
         
         .controls {
-            width: 380px;  /* Increased width for new controls */
-            background: white;
-            border-right: 2px solid #e9ecef;
+            width: 400px;  /* Increased width for theme toggle */
+            background: var(--control-bg);
+            border-right: 2px solid var(--border-color);
             padding: 20px;
             overflow-y: auto;
-            box-shadow: 2px 0 8px rgba(0,0,0,0.1);
+            box-shadow: 2px 0 8px var(--shadow-light);
+            transition: background-color 0.3s ease, border-color 0.3s ease;
+        }
+        
+        .theme-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: var(--button-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 25px;
+            padding: 8px 16px;
+            cursor: pointer;
+            font-size: 14px;
+            color: var(--text-primary);
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            z-index: 1000;
+        }
+        
+        .theme-toggle:hover {
+            background: var(--button-hover);
+            border-color: var(--border-color-hover);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px var(--shadow-medium);
+        }
+        
+        .theme-icon {
+            font-size: 16px;
+            transition: transform 0.3s ease;
+        }
+        
+        .theme-toggle:hover .theme-icon {
+            transform: rotate(180deg);
         }
         
         .graph-container {
             flex: 1;
             position: relative;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: var(--bg-container);
+            transition: background 0.3s ease;
         }
         
         #graph {
             width: 100%;
             height: 100%;
-            background: white;
+            background: var(--graph-bg);
             cursor: grab;
+            transition: background-color 0.3s ease;
         }
         
         #graph:active {
             cursor: grabbing;
         }
         
-        /* Enhanced node styles */
+        /* Enhanced node styles with theme support */
         .node-rect {
-            stroke: #333;
+            stroke: var(--node-stroke);
             stroke-width: 1.5;
             rx: 8;
             ry: 8;
-            filter: drop-shadow(2px 2px 4px rgba(0,0,0,0.2));
+            filter: drop-shadow(2px 2px 4px var(--shadow-medium));
             transition: all 0.2s ease;
         }
         
         .node-rect:hover {
             stroke-width: 2.5;
-            filter: drop-shadow(3px 3px 8px rgba(0,0,0,0.3));
+            filter: drop-shadow(3px 3px 8px var(--shadow-heavy));
         }
         
         .node-rect.highlighted {
-            stroke: #ff6600;
+            stroke: var(--accent-color);
             stroke-width: 3;
-            filter: drop-shadow(0 0 12px rgba(255,102,0,0.6));
+            filter: drop-shadow(0 0 12px var(--accent-color));
         }
         
         .node-rect.dimmed {
             opacity: 0.05;
         }
         
-        /* Enhanced link styles */
+        .node-rect.hotspot {
+            stroke: #ff3333;
+            stroke-width: 2;
+            animation: pulse-hotspot 2s infinite;
+        }
+        
+        @keyframes pulse-hotspot {
+            0%, 100% { stroke-opacity: 0.8; }
+            50% { stroke-opacity: 1; }
+        }
+        
+        /* Enhanced link styles with theme support */
         .link {
             fill: none;
-            stroke: #666;
+            stroke: var(--link-color);
             stroke-width: 1.5;
             opacity: 0.8;
             transition: all 0.3s ease;
@@ -93,7 +195,7 @@ def get_graph_styles() -> str:
         }
         
         .link.highlighted {
-            stroke: #ff6600;
+            stroke: var(--accent-color);
             stroke-width: 3;
             opacity: 1;
         }
@@ -110,13 +212,14 @@ def get_graph_styles() -> str:
             stroke-dasharray: 4,4;
         }
         
-        /* Enhanced text styles */
+        /* Enhanced text styles with theme support */
         .node-label {
             font-size: 11px;
             font-weight: 600;
             text-anchor: middle;
             pointer-events: none;
-            fill: #333;
+            fill: var(--text-primary);
+            transition: fill 0.3s ease;
         }
 
         .node-label.dimmed {
@@ -127,26 +230,29 @@ def get_graph_styles() -> str:
             font-size: 9px;
             text-anchor: middle;
             pointer-events: none;
-            fill: #666;
+            fill: var(--text-secondary);
             font-style: italic;
+            transition: fill 0.3s ease;
         }
         
-        /* Control panel styles */
+        /* Control panel styles with theme support */
         .section {
             margin-bottom: 25px;
             padding: 15px;
-            background: #f8f9fa;
+            background: var(--bg-secondary);
             border-radius: 8px;
-            border: 1px solid #e9ecef;
+            border: 1px solid var(--border-color);
+            transition: all 0.3s ease;
         }
         
         .section h3 {
             margin: 0 0 15px 0;
-            color: #495057;
+            color: var(--text-primary);
             font-size: 14px;
             font-weight: 600;
             text-transform: uppercase;
             letter-spacing: 0.5px;
+            transition: color 0.3s ease;
         }
         
         .folder-item {
@@ -443,3 +549,14 @@ def get_graph_styles() -> str:
             }
         }
     """
+
+
+def get_graph_styles() -> str:
+    """
+    Get complete CSS styles for backward compatibility.
+    Uses the enhanced theme-aware styles by default.
+
+    Returns:
+        str: Complete CSS stylesheet as string
+    """
+    return get_graph_styles_with_theme_support()
