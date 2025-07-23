@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Circle Node Test</title>
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    <style>
+        .node-circle {
+            fill: lightblue;
+            stroke: black;
+            stroke-width: 2;
+        }
+        svg {
+            border: 1px solid #ccc;
+        }
+    </style>
+</head>
+<body>
+    <h1>Circle Node Test</h1>
+    <p>This tests if circle nodes are created correctly.</p>
+    <svg width="800" height="600" id="test-svg"></svg>
+    
+    <script>
+        // Test data
+        const testData = [
+            { id: 0, stem: "test1", importance: 0.2, x: 100, y: 100, color: "lightblue" },
+            { id: 1, stem: "test2", importance: 0.5, x: 200, y: 150, color: "lightgreen" },
+            { id: 2, stem: "test3", importance: 0.8, x: 300, y: 120, color: "lightcoral" }
+        ];
+        
+        // Setup
+        let currentLayout = "force";
+        const svg = d3.select("#test-svg");
+        
+        // Helper function from our implementation
+        function calculateCircleRadius(d) {
+            const baseRadius = 20;
+            const importance = d.importance || 0;
+            const importanceMultiplier = 1 + (importance * 1.5);
+            return Math.round(baseRadius * importanceMultiplier);
+        }
+        
+        // Helper function from our implementation
+        function addNodeShapes(nodeSelection) {
+            console.log("Adding node shapes, currentLayout:", currentLayout);
+            if (currentLayout === "force") {
+                console.log("Creating circles");
+                // Use circles for force-directed layout
+                nodeSelection.append("circle")
+                    .attr("class", d => {
+                        let classes = "node-circle";
+                        return classes;
+                    })
+                    .attr("r", d => {
+                        const radius = calculateCircleRadius(d);
+                        console.log(`Node ${d.stem}: importance=${d.importance}, radius=${radius}`);
+                        return radius;
+                    })
+                    .attr("fill", d => d.color);
+            } else {
+                console.log("Creating rectangles");
+                // Use rectangles for hierarchical layout
+                nodeSelection.append("rect")
+                    .attr("class", "node-rect")
+                    .attr("width", 60)
+                    .attr("height", 30)
+                    .attr("x", -30)
+                    .attr("y", -15)
+                    .attr("fill", d => d.color);
+            }
+        }
+        
+        // Create test nodes
+        const nodeGroup = svg.append("g").attr("class", "nodes");
+        const node = nodeGroup.selectAll("g")
+            .data(testData)
+            .enter().append("g")
+            .attr("class", "node")
+            .attr("transform", d => `translate(${d.x},${d.y})`);
+        
+        console.log("Created node groups:", node.size());
+        
+        // Add shapes
+        addNodeShapes(node);
+        
+        // Add labels
+        node.append("text")
+            .attr("dy", "0.3em")
+            .attr("text-anchor", "middle")
+            .text(d => d.stem)
+            .attr("font-size", "12px")
+            .attr("fill", "black");
+        
+        console.log("Test complete. Check console for debug info.");
+        
+        // Test switching layouts
+        setTimeout(() => {
+            console.log("Switching to hierarchical layout...");
+            currentLayout = "hierarchical";
+            node.selectAll(".node-circle").remove();
+            addNodeShapes(node);
+        }, 3000);
+        
+        setTimeout(() => {
+            console.log("Switching back to force layout...");
+            currentLayout = "force";
+            node.selectAll(".node-rect").remove();
+            addNodeShapes(node);
+        }, 6000);
+        
+    </script>
+</body>
+</html>

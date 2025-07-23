@@ -282,6 +282,15 @@ def get_graph_controls_js() -> str:
                 toggleSwitch.classList.add('active');
                 layoutIndicator.textContent = "Current: Force-Directed Layout";
                 
+                console.log("🔄 DEBUG: Switching to force layout");
+                
+                // Regenerate node shapes for force layout (circles)
+                if (typeof window.regenerateNodeShapes === 'function') {
+                    window.regenerateNodeShapes();
+                } else {
+                    console.error("❌ regenerateNodeShapes function not available!");
+                }
+                
                 // Initialize force-directed layout
                 initializeForceDirectedLayout();
                 
@@ -289,8 +298,17 @@ def get_graph_controls_js() -> str:
                 toggleSwitch.classList.remove('active');
                 layoutIndicator.textContent = "Current: Hierarchical Layout";
                 
+                console.log("🔄 DEBUG: Switching to hierarchical layout");
+                
                 // Stop force simulation
                 stopForceSimulation();
+                
+                // Regenerate node shapes for hierarchical layout (rectangles)
+                if (typeof window.regenerateNodeShapes === 'function') {
+                    window.regenerateNodeShapes();
+                } else {
+                    console.error("❌ regenerateNodeShapes function not available!");
+                }
                 
                 // Recalculate hierarchical layout
                 const layout = calculateEnhancedHierarchicalLayout();

@@ -39,6 +39,11 @@ def get_graph_styles_with_theme_support() -> str:
             --button-hover: #e9ecef;
             --input-bg: #ffffff;
             --input-border: #ced4da;
+            
+            /* Unified transparency settings for dimmed elements */
+            --dimmed-opacity: 0.05;
+            --dimmed-link-opacity: 0.01;
+            --dimmed-text-opacity: 0.01;
         }
 
         [data-theme="dark"] {
@@ -65,6 +70,11 @@ def get_graph_styles_with_theme_support() -> str:
             --button-hover: #555555;
             --input-bg: #404040;
             --input-border: #555555;
+            
+            /* Unified transparency settings remain the same for dark theme */
+            --dimmed-opacity: 0.05;
+            --dimmed-link-opacity: 0.01;
+            --dimmed-text-opacity: 0.01;
         }
 
         body {
@@ -166,7 +176,37 @@ def get_graph_styles_with_theme_support() -> str:
         }
         
         .node-rect.dimmed {
-            opacity: 0.05;
+            opacity: var(--dimmed-opacity);
+        }
+        
+        /* Force-directed circle node styles */
+        .node-circle {
+            fill: var(--bg-secondary);
+            stroke: var(--node-stroke);
+            stroke-width: 1.5;
+            filter: drop-shadow(2px 2px 4px var(--shadow-medium));
+            transition: all 0.2s ease;
+        }
+        
+        .node-circle:hover {
+            stroke-width: 2.5;
+            filter: drop-shadow(3px 3px 8px var(--shadow-heavy));
+        }
+        
+        .node-circle.highlighted {
+            stroke: var(--accent-color);
+            stroke-width: 3;
+            filter: drop-shadow(0 0 12px var(--accent-color));
+        }
+        
+        .node-circle.dimmed {
+            opacity: var(--dimmed-opacity);
+        }
+        
+        .node-circle.hotspot {
+            stroke: #ff3333;
+            stroke-width: 2;
+            animation: pulse-hotspot 2s infinite;
         }
         
         .node-rect.hotspot {
@@ -201,7 +241,7 @@ def get_graph_styles_with_theme_support() -> str:
         }
         
         .link.dimmed {
-            opacity: 0.01;
+            opacity: var(--dimmed-link-opacity);
         }
         
         .link.hidden {
@@ -223,7 +263,7 @@ def get_graph_styles_with_theme_support() -> str:
         }
 
         .node-label.dimmed {
-            opacity: 0.01;
+            opacity: var(--dimmed-text-opacity);
         }
         
         .folder-label-text {

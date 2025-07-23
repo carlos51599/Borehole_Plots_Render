@@ -48,6 +48,148 @@ def get_graph_visualization_js() -> str:
             
             updateDimensions();
             svg.selectAll("*").remove();
+        
+        // Helper function to add appropriate node shapes based on layout
+        function addNodeShapes(nodeSelection) {
+            console.log(`🔍 DEBUG: addNodeShapes called, currentLayout = "${currentLayout}"`);
+            console.log(`🔍 DEBUG: nodeSelection size = ${nodeSelection.size()}`);
+            
+            if (currentLayout === "force") {
+                console.log("🔍 DEBUG: Creating circles for force layout");
+                // Use circles for force-directed layout
+                const circles = nodeSelection.append("circle")
+                    .attr("class", d => {
+                        let classes = "node-circle";
+                        if (d.hotspot_score && d.hotspot_score > 0.5) classes += " hotspot";
+                        if (d.change_classification === "very_high") classes += " very-active";
+                        return classes;
+                    })
+                    .attr("r", d => {
+                        const radius = calculateCircleRadius(d);
+                        console.log(`🔍 DEBUG: Node ${d.stem}: importance=${d.importance}, radius=${radius}`);
+                        return radius;
+                    })
+                    .attr("fill", d => d.color);
+                console.log(`🔍 DEBUG: Created ${circles.size()} circles`);
+            } else {
+                console.log("🔍 DEBUG: Creating rectangles for hierarchical layout");
+                // Use rectangles for hierarchical layout
+                const rects = nodeSelection.append("rect")
+                    .attr("class", d => {
+                        let classes = "node-rect";
+                        if (d.hotspot_score && d.hotspot_score > 0.5) classes += " hotspot";
+                        if (d.change_classification === "very_high") classes += " very-active";
+                        return classes;
+                    })
+                    .attr("width", d => d.width)
+                    .attr("height", d => d.height)
+                    .attr("x", d => -d.width/2)
+                    .attr("y", d => -d.height/2)
+                    .attr("fill", d => d.color);
+                console.log(`🔍 DEBUG: Created ${rects.size()} rectangles`);
+            }
+        }
+        
+        // Helper function to calculate circle radius based on importance
+        function calculateCircleRadius(d) {
+            const baseRadius = 20;
+            const importance = d.importance || 0;
+            const importanceMultiplier = 1 + (importance * 1.5); // Scale up to 2.5x for max importance
+            return Math.round(baseRadius * importanceMultiplier);
+        }
+        
+        // Helper function to add importance indicators
+        function addImportanceIndicators(nodeSelection) {
+            // Only show indicators for rectangular nodes (hierarchical layout)
+            if (currentLayout !== "force") {
+                nodeSelection.filter(d => d.importance > 0.3)
+                    .append("circle")
+                    .attr("class", d => {
+                        if (d.importance > 0.7) return "importance-indicator high";
+                        if (d.importance > 0.5) return "importance-indicator medium";
+                        return "importance-indicator low";
+                    })
+                    .attr("cx", d => d.width/2 - 8)
+                    .attr("cy", d => -d.height/2 + 8)
+                    .attr("r", 6);
+            }
+        }
+        
+        // Helper function to add hotspot indicators
+        function addHotspotIndicators(nodeSelection) {
+            // Only show indicators for rectangular nodes (hierarchical layout)
+            if (currentLayout !== "force") {
+                nodeSelection.filter(d => d.hotspot_score && d.hotspot_score > 0.4)
+                    .append("circle")
+                    .attr("class", "hotspot-indicator")
+                    .attr("cx", d => -d.width/2 + 8)
+                    .attr("cy", d => -d.height/2 + 8)
+                    .attr("r", 4)
+                    .attr("fill", "#ff3333")
+                    .attr("stroke", "#ffffff")
+                    .attr("stroke-width", 1);
+            }
+        }
+        
+        // Function to regenerate node shapes when layout changes
+        function regenerateNodeShapes() {
+            if (!window.graphElements || !window.graphElements.node) return;
+            
+            console.log(`🔄 DEBUG: Regenerating node shapes for ${currentLayout} layout`);
+            
+            // Remove existing shapes (rect or circle)
+            window.graphElements.node.selectAll(".node-rect, .node-circle").remove();
+            
+            // Remove layout-specific indicators that only apply to hierarchical
+            if (currentLayout === "force") {
+                window.graphElements.node.selectAll(".importance-indicator, .hotspot-indicator").remove();
+            }
+            
+            // Remove change badges so they can be repositioned
+            window.graphElements.node.selectAll(".change-badge").remove();
+            
+            // Add new shapes based on current layout
+            addNodeShapes(window.graphElements.node);
+            
+            // Re-add change frequency badges with correct positioning
+            addChangeBadges(window.graphElements.node);
+            
+            // Re-add indicators for hierarchical layout
+            if (currentLayout === "hierarchical") {
+                addImportanceIndicators(window.graphElements.node);
+                addHotspotIndicators(window.graphElements.node);
+            }
+        }
+        
+        // Helper function to add change frequency badges with layout-aware positioning
+        function addChangeBadges(nodeSelection) {
+            nodeSelection.filter(d => d.change_count && d.change_count > 0)
+                .append("text")
+                .attr("class", "change-badge")
+                .attr("x", d => {
+                    if (currentLayout === "force") {
+                        // For circles, position badges at the right edge
+                        const radius = calculateCircleRadius(d);
+                        return radius - 8;
+                    } else {
+                        // For rectangles, use width-based positioning
+                        return d.width/2 - 12;
+                    }
+                })
+                .attr("y", d => {
+                    if (currentLayout === "force") {
+                        // For circles, position badges at the bottom edge
+                        const radius = calculateCircleRadius(d);
+                        return radius - 4;
+                    } else {
+                        // For rectangles, use height-based positioning
+                        return d.height/2 - 4;
+                    }
+                })
+                .attr("font-size", "10px")
+                .attr("fill", "#666")
+                .text(d => d.change_count);
+        }
             
             const g = svg.append("g").attr("id", "main-group");
             
@@ -90,52 +232,17 @@ def get_graph_visualization_js() -> str:
                     .on("drag", dragged)
                     .on("end", dragended));
             
-            // Add node rectangles with enhanced styling
-            const rect = node.append("rect")
-                .attr("class", d => {
-                    let classes = "node-rect";
-                    if (d.hotspot_score && d.hotspot_score > 0.5) classes += " hotspot";
-                    if (d.change_classification === "very_high") classes += " very-active";
-                    return classes;
-                })
-                .attr("width", d => d.width)
-                .attr("height", d => d.height)
-                .attr("x", d => -d.width/2)
-                .attr("y", d => -d.height/2)
-                .attr("fill", d => d.color);
+            // Add node shapes based on current layout type
+            addNodeShapes(node);
             
             // Add importance indicators
-            node.filter(d => d.importance > 0.3)
-                .append("circle")
-                .attr("class", d => {
-                    if (d.importance > 0.7) return "importance-indicator high";
-                    if (d.importance > 0.5) return "importance-indicator medium";
-                    return "importance-indicator low";
-                })
-                .attr("cx", d => d.width/2 - 8)
-                .attr("cy", d => -d.height/2 + 8)
-                .attr("r", 6);
+            addImportanceIndicators(node);
             
             // Add hotspot indicators for frequently changing files
-            node.filter(d => d.hotspot_score && d.hotspot_score > 0.4)
-                .append("circle")
-                .attr("class", "hotspot-indicator")
-                .attr("cx", d => -d.width/2 + 8)
-                .attr("cy", d => -d.height/2 + 8)
-                .attr("r", 4)
-                .attr("fill", "#ff3333")
-                .attr("stroke", "#ffffff")
-                .attr("stroke-width", 1);
+            addHotspotIndicators(node);
             
             // Add change frequency badges
-            node.filter(d => d.change_count && d.change_count > 0)
-                .append("text")
-                .attr("class", "change-badge")
-                .attr("x", d => d.width/2 - 12)
-                .attr("y", d => d.height/2 - 4)
-                .attr("font-size", "10px")
-                .attr("fill", "#666")
-                .text(d => d.change_count);
+            addChangeBadges(node);
             
             // Add node labels
             node.append("text")
@@ -270,7 +377,7 @@ def get_graph_visualization_js() -> str:
             
             // Reset all elements
             window.graphElements.node.classed("dimmed highlighted", false);
-            window.graphElements.node.selectAll(".node-rect").classed("dimmed highlighted", false);
+            window.graphElements.node.selectAll(".node-rect, .node-circle").classed("dimmed highlighted", false);
             window.graphElements.link
                 .classed("dimmed highlighted", false)
                 .attr("marker-end", "url(#arrowhead)");
@@ -280,7 +387,7 @@ def get_graph_visualization_js() -> str:
                 .classed("highlighted", d => connected.has(d.id))
                 .classed("dimmed", d => !connected.has(d.id));
             
-            window.graphElements.node.selectAll(".node-rect")
+            window.graphElements.node.selectAll(".node-rect, .node-circle")
                 .classed("highlighted", function() {
                     const nodeData = d3.select(this.parentNode).datum();
                     return connected.has(nodeData.id);
@@ -328,7 +435,7 @@ def get_graph_visualization_js() -> str:
             selectedNode = null;
             highlightedNodes.clear();
             window.graphElements.node.classed("dimmed highlighted", false);
-            window.graphElements.node.selectAll(".node-rect").classed("dimmed highlighted", false);
+            window.graphElements.node.selectAll(".node-rect, .node-circle").classed("dimmed highlighted", false);
             window.graphElements.link
                 .classed("dimmed highlighted", false)
                 .attr("marker-end", "url(#arrowhead)");
@@ -447,4 +554,10 @@ def get_graph_visualization_js() -> str:
                 simulation.alpha(0.3).restart();
             }
         });
+        
+        // Expose functions globally for access from other modules
+        window.regenerateNodeShapes = regenerateNodeShapes;
+        window.addNodeShapes = addNodeShapes;
+        window.calculateCircleRadius = calculateCircleRadius;
+        window.addChangeBadges = addChangeBadges;
     """

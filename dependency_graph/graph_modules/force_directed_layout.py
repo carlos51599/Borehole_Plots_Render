@@ -72,7 +72,13 @@ def get_force_directed_layout_js() -> str:
                 )
                 .force("center", d3.forceCenter(width / 2, height / 2))
                 .force("collision", d3.forceCollide()
-                    .radius(d => Math.max(d.width, d.height) / 2 + 10)
+                    .radius(d => {
+                        // Use circle radius for force-directed layout, rectangle dimensions for hierarchical
+                        const baseRadius = 20;
+                        const importance = d.importance || 0;
+                        const importanceMultiplier = 1 + (importance * 1.5);
+                        return baseRadius * importanceMultiplier + 10; // Add padding
+                    })
                     .strength(0.7)
                 )
                 .force("x", d3.forceX(width / 2).strength(0.1))
