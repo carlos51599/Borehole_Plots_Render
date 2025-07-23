@@ -63,7 +63,10 @@ class EnhancedDependencyAnalyzer:
         """Analyze entire project including previously excluded directories."""
         # Auto-detect if we're running from within a dependency_graph folder
         current_dir = Path.cwd()
-        if current_dir.name == "dependency_graph" or (current_dir / "graph_modules").exists():
+        if (
+            current_dir.name == "dependency_graph"
+            or (current_dir / "graph_modules").exists()
+        ):
             # We're in the dependency_graph folder, so analyze the parent directory
             root_path = ".."
             print(
@@ -403,15 +406,17 @@ class EnhancedDependencyAnalyzer:
         else:
             print("🚫 Git analysis not available - no change frequency data")
             return {
-                'total_files_analyzed': 0,
-                'analysis_period_days': days,
-                'git_available': False,
-                'hotspots': [],
-                'stable_files': [],
-                'file_data': {}
+                "total_files_analyzed": 0,
+                "analysis_period_days": days,
+                "git_available": False,
+                "hotspots": [],
+                "stable_files": [],
+                "file_data": {},
             }
 
-    def _build_enhanced_graph_data(self, git_analysis: Dict[str, Any] = None) -> Dict[str, Any]:
+    def _build_enhanced_graph_data(
+        self, git_analysis: Dict[str, Any] = None
+    ) -> Dict[str, Any]:
         """Build enhanced graph data with importance and visual properties."""
         print("🎨 Building enhanced graph visualization data...")
 
@@ -426,12 +431,12 @@ class EnhancedDependencyAnalyzer:
         # Create nodes with enhanced properties
         for i, (unique_id, info) in enumerate(self.dependencies.items()):
             importance = self.node_importance.get(unique_id, 0)
-            
+
             # Get git analysis data for this file
             git_data = {}
-            if git_analysis and git_analysis.get('file_data'):
-                file_path_normalized = info["file_path"].replace('\\', '/')
-                git_data = git_analysis['file_data'].get(file_path_normalized, {})
+            if git_analysis and git_analysis.get("file_data"):
+                file_path_normalized = info["file_path"].replace("\\", "/")
+                git_data = git_analysis["file_data"].get(file_path_normalized, {})
 
             nodes.append(
                 {
@@ -450,13 +455,19 @@ class EnhancedDependencyAnalyzer:
                     "size": info["size"],
                     "index": i,
                     # Git analysis data
-                    "change_count": git_data.get('change_count', 0),
-                    "change_frequency_score": git_data.get('change_frequency_score', 0.0),
-                    "change_classification": git_data.get('change_classification', 'none'),
-                    "total_churn": git_data.get('total_churn', 0),
-                    "churn_classification": git_data.get('churn_classification', 'none'),
-                    "hotspot_score": git_data.get('hotspot_score', 0.0),
-                    "last_modified": git_data.get('last_modified', 'unknown'),
+                    "change_count": git_data.get("change_count", 0),
+                    "change_frequency_score": git_data.get(
+                        "change_frequency_score", 0.0
+                    ),
+                    "change_classification": git_data.get(
+                        "change_classification", "none"
+                    ),
+                    "total_churn": git_data.get("total_churn", 0),
+                    "churn_classification": git_data.get(
+                        "churn_classification", "none"
+                    ),
+                    "hotspot_score": git_data.get("hotspot_score", 0.0),
+                    "last_modified": git_data.get("last_modified", "unknown"),
                 }
             )
             node_index[unique_id] = i
@@ -512,9 +523,14 @@ class EnhancedDependencyAnalyzer:
                 ),
                 "test_files": sum(1 for n in nodes if n["is_test"]),
                 "folders": len(subfolder_info),
-                "git_analysis_available": git_analysis is not None and git_analysis.get('git_available', False),
-                "hotspots_detected": len(git_analysis.get('hotspots', [])) if git_analysis else 0,
-                "stable_files_detected": len(git_analysis.get('stable_files', [])) if git_analysis else 0,
+                "git_analysis_available": git_analysis is not None
+                and git_analysis.get("git_available", False),
+                "hotspots_detected": (
+                    len(git_analysis.get("hotspots", [])) if git_analysis else 0
+                ),
+                "stable_files_detected": (
+                    len(git_analysis.get("stable_files", [])) if git_analysis else 0
+                ),
             },
         }
 
