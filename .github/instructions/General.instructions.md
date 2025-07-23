@@ -33,6 +33,7 @@ For any task assigned, first create a detailed action plan before coding. Follow
    - Think beyond common cases.
    - Simulate edge conditions, input failures, concurrency, etc.
    - Aim for deployment-level confidence.
+   - ALWAYS include a test for all imports and syntax in relevant files
 
 7. **Prepare for deployment:**
    - Ensure all tests pass.
