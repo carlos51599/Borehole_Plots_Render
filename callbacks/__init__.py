@@ -162,3 +162,7 @@ __all__ = [
     # Utility functions
     "register_all_callbacks",
 ]
+
+
+# Compatibility alias for backwards compatibility
+register_callbacks = register_all_callbacks

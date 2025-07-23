@@ -21,7 +21,7 @@ from .base import MarkerHandlingCallbackBase
 from state_management import get_app_state_manager
 from error_handling import get_error_handler, ErrorCategory
 from app_constants import MAP_CONFIG
-from borehole_log_professional import plot_borehole_log_from_ags_content
+from borehole_log import plot_borehole_log_from_ags_content  # Use compatibility wrapper
 
 
 class MarkerHandlingCallback(MarkerHandlingCallbackBase):

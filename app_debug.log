@@ -1,43 +1,66 @@
-2025-07-23 18:52:52,958 INFO [app.py:66 <module>] App starting at 2025-07-23 18:52:52.958734
-2025-07-23 18:52:52,958 INFO [app.py:67 <module>] Dash version: 3.1.1
-2025-07-23 18:52:52,964 INFO [app.py:68 <module>] Dash-leaflet version: 1.1.3
-2025-07-23 18:52:52,965 INFO [app.py:69 <module>] ✓ Matplotlib logging optimized for performance
-2025-07-23 18:52:53,107 INFO [app.py:76 <module>] Creating app layout...
-2025-07-23 18:52:53,181 INFO [app.py:397 <module>] App layout created successfully
-2025-07-23 18:52:53,181 INFO [app.py:432 <module>] === LAYOUT COMPONENT IDs ===
-2025-07-23 18:52:53,181 INFO [app.py:420 log_layout_ids] Found component ID: font-cache-warmed
-2025-07-23 18:52:53,181 INFO [app.py:420 log_layout_ids] Found component ID: logo-container
-2025-07-23 18:52:53,181 INFO [app.py:420 log_layout_ids] Found component ID: logo-img
-2025-07-23 18:52:53,197 INFO [app.py:420 log_layout_ids] Found component ID: light-theme-btn
-2025-07-23 18:52:53,197 INFO [app.py:420 log_layout_ids] Found component ID: dark-theme-btn
-2025-07-23 18:52:53,197 INFO [app.py:420 log_layout_ids] Found component ID: upload-ags
-2025-07-23 18:52:53,197 INFO [app.py:420 log_layout_ids] Found component ID: output-upload
-2025-07-23 18:52:53,197 INFO [app.py:420 log_layout_ids] Found component ID: borehole-search-section
-2025-07-23 18:52:53,197 INFO [app.py:420 log_layout_ids] Found component ID: borehole-search-dropdown
-2025-07-23 18:52:53,197 INFO [app.py:420 log_layout_ids] Found component ID: search-go-btn
-2025-07-23 18:52:53,197 INFO [app.py:420 log_layout_ids] Found component ID: search-feedback
-2025-07-23 18:52:53,202 INFO [app.py:420 log_layout_ids] Found component ID: borehole-map
-2025-07-23 18:52:53,202 INFO [app.py:420 log_layout_ids] Found component ID: borehole-markers
-2025-07-23 18:52:53,202 INFO [app.py:420 log_layout_ids] Found component ID: selection-shapes
-2025-07-23 18:52:53,202 INFO [app.py:420 log_layout_ids] Found component ID: pca-line-group
-2025-07-23 18:52:53,202 INFO [app.py:420 log_layout_ids] Found component ID: draw-feature-group
-2025-07-23 18:52:53,202 INFO [app.py:420 log_layout_ids] Found component ID: draw-control
-2025-07-23 18:52:53,202 INFO [app.py:420 log_layout_ids] Found component ID: buffer-controls
-2025-07-23 18:52:53,206 INFO [app.py:420 log_layout_ids] Found component ID: buffer-input
-2025-07-23 18:52:53,207 INFO [app.py:420 log_layout_ids] Found component ID: update-buffer-btn
-2025-07-23 18:52:53,207 INFO [app.py:420 log_layout_ids] Found component ID: selected-borehole-info
-2025-07-23 18:52:53,207 INFO [app.py:420 log_layout_ids] Found component ID: section-plot-output
-2025-07-23 18:52:53,207 INFO [app.py:420 log_layout_ids] Found component ID: log-plot-output
-2025-07-23 18:52:53,207 INFO [app.py:420 log_layout_ids] Found component ID: show-labels-checkbox
-2025-07-23 18:52:53,207 INFO [app.py:420 log_layout_ids] Found component ID: download-section-btn
-2025-07-23 18:52:53,207 INFO [app.py:420 log_layout_ids] Found component ID: download-section-plot
-2025-07-23 18:52:53,212 INFO [app.py:420 log_layout_ids] Found component ID: ui-feedback
-2025-07-23 18:52:53,214 INFO [app.py:420 log_layout_ids] Found component ID: subselection-checkbox-grid-container
-2025-07-23 18:52:53,214 INFO [app.py:420 log_layout_ids] Found component ID: subselection-checkbox-grid
-2025-07-23 18:52:53,214 INFO [app.py:420 log_layout_ids] Found component ID: upload-data-store
-2025-07-23 18:52:53,217 INFO [app.py:420 log_layout_ids] Found component ID: borehole-data-store
-2025-07-23 18:52:53,218 INFO [app.py:420 log_layout_ids] Found component ID: search-selected-borehole
-2025-07-23 18:52:53,218 INFO [app.py:434 <module>] === END LAYOUT IDs ===
-2025-07-23 18:52:53,223 INFO [app.py:519 <module>] Registering split callbacks...
-2025-07-23 18:52:53,223 INFO [callbacks_split.py:2182 register_callbacks] ✅ All split callbacks registered successfully!
-2025-07-23 18:52:53,226 INFO [app.py:521 <module>] ✅ All callbacks registered successfully!
+2025-07-23 20:46:01,002 INFO [app_setup.py:52 setup_logging] App starting at 2025-07-23 20:46:01.002801
+2025-07-23 20:46:01,004 INFO [app_setup.py:53 setup_logging] Dash version: 3.1.1
+2025-07-23 20:46:01,006 INFO [app_setup.py:54 setup_logging] Dash-leaflet version: 1.1.3
+2025-07-23 20:46:01,007 INFO [app_setup.py:55 setup_logging] ✓ Matplotlib logging optimized for performance
+2025-07-23 20:46:01,110 INFO [app_setup.py:70 create_application] Dash application created successfully
+2025-07-23 20:46:01,110 INFO [main.py:33 create_and_configure_app] Creating app layout...
+2025-07-23 20:46:01,125 INFO [main.py:35 create_and_configure_app] App layout created successfully
+2025-07-23 20:46:01,125 INFO [main.py:38 create_and_configure_app] === LAYOUT COMPONENT IDs ===
+2025-07-23 20:46:01,125 INFO [app_setup.py:93 log_layout_ids] Found component ID: font-cache-warmed
+2025-07-23 20:46:01,130 INFO [app_setup.py:93 log_layout_ids] Found component ID: logo-container
+2025-07-23 20:46:01,131 INFO [app_setup.py:93 log_layout_ids] Found component ID: logo-img
+2025-07-23 20:46:01,131 INFO [app_setup.py:93 log_layout_ids] Found component ID: light-theme-btn
+2025-07-23 20:46:01,131 INFO [app_setup.py:93 log_layout_ids] Found component ID: dark-theme-btn
+2025-07-23 20:46:01,131 INFO [app_setup.py:93 log_layout_ids] Found component ID: upload-ags
+2025-07-23 20:46:01,131 INFO [app_setup.py:93 log_layout_ids] Found component ID: output-upload
+2025-07-23 20:46:01,131 INFO [app_setup.py:93 log_layout_ids] Found component ID: borehole-search-section
+2025-07-23 20:46:01,131 INFO [app_setup.py:93 log_layout_ids] Found component ID: borehole-search-dropdown
+2025-07-23 20:46:01,131 INFO [app_setup.py:93 log_layout_ids] Found component ID: search-go-btn
+2025-07-23 20:46:01,135 INFO [app_setup.py:93 log_layout_ids] Found component ID: search-feedback
+2025-07-23 20:46:01,135 INFO [app_setup.py:93 log_layout_ids] Found component ID: borehole-map
+2025-07-23 20:46:01,136 INFO [app_setup.py:93 log_layout_ids] Found component ID: borehole-markers
+2025-07-23 20:46:01,136 INFO [app_setup.py:93 log_layout_ids] Found component ID: selection-shapes
+2025-07-23 20:46:01,136 INFO [app_setup.py:93 log_layout_ids] Found component ID: pca-line-group
+2025-07-23 20:46:01,136 INFO [app_setup.py:93 log_layout_ids] Found component ID: draw-feature-group
+2025-07-23 20:46:01,136 INFO [app_setup.py:93 log_layout_ids] Found component ID: draw-control
+2025-07-23 20:46:01,136 INFO [app_setup.py:93 log_layout_ids] Found component ID: buffer-controls
+2025-07-23 20:46:01,136 INFO [app_setup.py:93 log_layout_ids] Found component ID: buffer-input
+2025-07-23 20:46:01,136 INFO [app_setup.py:93 log_layout_ids] Found component ID: update-buffer-btn
+2025-07-23 20:46:01,136 INFO [app_setup.py:93 log_layout_ids] Found component ID: selected-borehole-info
+2025-07-23 20:46:01,140 INFO [app_setup.py:93 log_layout_ids] Found component ID: section-plot-output
+2025-07-23 20:46:01,141 INFO [app_setup.py:93 log_layout_ids] Found component ID: log-plot-output
+2025-07-23 20:46:01,141 INFO [app_setup.py:93 log_layout_ids] Found component ID: show-labels-checkbox
+2025-07-23 20:46:01,141 INFO [app_setup.py:93 log_layout_ids] Found component ID: download-section-btn
+2025-07-23 20:46:01,141 INFO [app_setup.py:93 log_layout_ids] Found component ID: download-section-plot
+2025-07-23 20:46:01,144 INFO [app_setup.py:93 log_layout_ids] Found component ID: ui-feedback
+2025-07-23 20:46:01,145 INFO [app_setup.py:93 log_layout_ids] Found component ID: subselection-checkbox-grid-container
+2025-07-23 20:46:01,145 INFO [app_setup.py:93 log_layout_ids] Found component ID: subselection-checkbox-grid
+2025-07-23 20:46:01,145 INFO [app_setup.py:93 log_layout_ids] Found component ID: upload-data-store
+2025-07-23 20:46:01,147 INFO [app_setup.py:93 log_layout_ids] Found component ID: borehole-data-store
+2025-07-23 20:46:01,147 INFO [app_setup.py:93 log_layout_ids] Found component ID: search-selected-borehole
+2025-07-23 20:46:01,147 INFO [app_setup.py:93 log_layout_ids] Found component ID: draw-state-store
+2025-07-23 20:46:01,147 INFO [main.py:40 create_and_configure_app] === END LAYOUT IDs ===
+2025-07-23 20:46:01,147 INFO [clientside_callbacks.py:180 register_all_clientside_callbacks] Registering clientside callbacks...
+2025-07-23 20:46:01,150 INFO [clientside_callbacks.py:185 register_all_clientside_callbacks] ✅ All clientside callbacks registered successfully!
+2025-07-23 20:46:01,151 INFO [server_callbacks.py:73 register_all_server_callbacks] Registering server-side callbacks...
+2025-07-23 20:46:01,151 INFO [server_callbacks.py:77 register_all_server_callbacks] ✅ All server-side callbacks registered successfully!
+2025-07-23 20:46:01,151 INFO [main.py:49 create_and_configure_app] Registering split callbacks...
+2025-07-23 20:46:01,153 INFO [__init__.py:107 get_callback_manager] Created global callback manager instance
+2025-07-23 20:46:01,153 INFO [error_handling.py:394 get_error_handler] Created global error handler instance
+2025-07-23 20:46:01,153 INFO [app_state.py:85 __init__] Initialized centralized application state manager
+2025-07-23 20:46:01,153 INFO [app_state.py:325 get_app_state_manager] Created singleton application state manager
+2025-07-23 20:46:01,157 DEBUG [__init__.py:71 add_callback] Added callback: file_upload (file_upload)
+2025-07-23 20:46:01,157 DEBUG [__init__.py:71 add_callback] Added callback: map_interactions (map_interactions)
+2025-07-23 20:46:01,157 DEBUG [__init__.py:71 add_callback] Added callback: plot_generation (plot_generation)
+2025-07-23 20:46:01,157 DEBUG [__init__.py:71 add_callback] Added callback: search_functionality (search)
+2025-07-23 20:46:01,160 DEBUG [__init__.py:71 add_callback] Added callback: marker_handling (marker_interaction)
+2025-07-23 20:46:01,161 INFO [__init__.py:78 register_all] Registered callback: file_upload
+2025-07-23 20:46:01,161 INFO [__init__.py:78 register_all] Registered callback: map_interactions
+2025-07-23 20:46:01,161 INFO [plot_generation.py:47 register] Registered plot generation callbacks
+2025-07-23 20:46:01,161 INFO [__init__.py:78 register_all] Registered callback: plot_generation
+2025-07-23 20:46:01,165 INFO [search_functionality.py:41 register] Registered search functionality callbacks
+2025-07-23 20:46:01,166 INFO [__init__.py:78 register_all] Registered callback: search_functionality
+2025-07-23 20:46:01,167 INFO [marker_handling.py:43 register] Registered marker handling callbacks
+2025-07-23 20:46:01,167 INFO [__init__.py:78 register_all] Registered callback: marker_handling
+2025-07-23 20:46:01,167 INFO [__init__.py:137 register_all_callbacks] Registered 5 callbacks across 5 categories
+2025-07-23 20:46:01,167 INFO [main.py:51 create_and_configure_app] ✅ All callbacks registered successfully!

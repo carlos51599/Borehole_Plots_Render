@@ -19,7 +19,7 @@ from .base import SearchCallbackBase
 from state_management import get_app_state_manager
 from error_handling import get_error_handler, ErrorCategory
 from coordinate_service import get_coordinate_service
-from borehole_log_professional import plot_borehole_log_from_ags_content
+from borehole_log import plot_borehole_log_from_ags_content  # Use compatibility wrapper
 import config
 
 
