@@ -1,8 +1,38 @@
 """
-Memory Management Module
+Memory Management Module for Performance Optimization and Resource Monitoring.
 
 This module provides comprehensive memory monitoring, cleanup routines, and optimization
-utilities for the Geo Borehole Sections Render application.
+utilities for the Geo Borehole Sections Render application. It helps maintain optimal
+performance when processing large AGS datasets and generating complex geological plots.
+
+Key Features:
+- **Real-time Memory Monitoring**: Track RSS, VMS, and system memory usage
+- **Automatic Cleanup Routines**: Scheduled garbage collection and cache clearing
+- **DataFrame Memory Optimization**: Efficient data type optimization for large datasets
+- **Memory Leak Detection**: Identify and report potential memory leaks
+- **Performance Alerts**: Configurable thresholds with automatic notifications
+- **Cache Management**: Intelligent cache cleanup for matplotlib and other components
+
+Primary Use Cases:
+1. **Large AGS File Processing**: Monitor memory during multi-file uploads
+2. **Plot Generation**: Optimize memory usage during complex plot creation
+3. **Long-running Sessions**: Prevent memory accumulation in web sessions
+4. **Performance Monitoring**: Track application resource consumption
+
+Memory Optimization Strategies:
+- Categorical data type conversion for repeated string values
+- Nullable integer types for sparse data
+- Automatic DataFrame memory profiling and optimization
+- Strategic garbage collection timing
+- Cache size management for coordinate transformations
+
+Dependencies:
+- psutil: System and process memory monitoring
+- pandas: DataFrame memory optimization
+- gc: Python garbage collection control
+
+Author: [Project Team]
+Last Modified: July 2025
 """
 
 import gc

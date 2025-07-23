@@ -1,15 +1,45 @@
 """
-Loading Indicator Components
+Loading Indicator Components for Enhanced User Experience.
 
-Provides centralized loading indicators and progress feedback for long-running operations.
-Improves user experience by providing clear feedback during data processing, file uploads,
-and plot generation.
+This module provides centralized loading indicators and progress feedback for long-running
+operations in the Geo Borehole Sections Render application. It significantly improves
+user experience by providing clear, consistent feedback during data processing, file uploads,
+and complex plot generation operations.
 
-Features:
-- Spinner with customizable messages
-- Progress bars for file operations
-- Toast notifications for completion
-- Non-blocking loading states
+Key Features:
+- **Customizable Spinners**: Multiple sizes and styles with configurable messages
+- **Progress Bars**: Visual progress tracking for file operations and data processing
+- **Toast Notifications**: Non-intrusive completion and error notifications
+- **Non-blocking Loading States**: Maintain UI responsiveness during background operations
+- **Operation-Specific Indicators**: Tailored feedback for different application functions
+
+Loading Indicator Types:
+1. **File Upload Loading**: Progress bars with file size and upload speed
+2. **Data Processing Loading**: Spinners for AGS parsing and coordinate transformation
+3. **Plot Generation Loading**: Specialized indicators for matplotlib rendering
+4. **Map Loading**: Feedback for marker generation and geometric processing
+5. **Search Loading**: Quick feedback for borehole search operations
+
+User Experience Benefits:
+- Clear indication that operations are in progress
+- Prevents user confusion during long operations
+- Provides estimated completion times where possible
+- Reduces perceived wait time through visual feedback
+- Professional appearance consistent with application design
+
+Integration Points:
+- File upload callbacks (AGS processing)
+- Map interaction callbacks (selection processing)
+- Plot generation callbacks (section and log creation)
+- Search functionality (borehole filtering)
+- Error handling systems (failure notifications)
+
+Dependencies:
+- dash: Core UI components and HTML generation
+- app_constants: UI configuration and styling constants
+
+Author: [Project Team]
+Last Modified: July 2025
 """
 
 import dash

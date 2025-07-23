@@ -1,3 +1,28 @@
+"""
+Main Dash application entry point for the Geo Borehole Sections Render application.
+
+This module creates and configures a Dash web application for visualizing AGS (Association of
+Geotechnical and Geoenvironmental Specialists) borehole data with interactive mapping and
+section plotting capabilities.
+
+Key Features:
+- Interactive map with multiple layer types (OpenStreetMap, Satellite, Hybrid)
+- AGS file upload and processing
+- Borehole search functionality
+- Drawing tools for borehole selection (polygon, rectangle, polyline)
+- Cross-sectional plot generation
+- Theme switching (light/dark)
+- Responsive design with professional styling
+
+Dependencies:
+- dash: Web application framework
+- dash-leaflet: Interactive mapping components
+- Various custom modules for callbacks, configuration, and app factory
+
+Author: [Project Team]
+Last Modified: July 2025
+"""
+
 import dash
 from dash import html, dcc
 import dash_leaflet as dl
@@ -12,7 +37,8 @@ import config  # Import UI configuration
 from callbacks_split import register_callbacks  # Import callback registration
 from app_factory import create_app_with_duplicate_callbacks  # Import app factory
 
-# Set up enhanced logging format with detailed context
+# ===== LOGGING CONFIGURATION =====
+# Set up enhanced logging format with detailed context for debugging and monitoring
 logfile = "app_debug.log"
 logging.basicConfig(
     level=logging.DEBUG,
@@ -42,16 +68,21 @@ logging.info(f"Dash version: {dash.__version__}")
 logging.info(f"Dash-leaflet version: {dl.__version__}")
 logging.info("✓ Matplotlib logging optimized for performance")
 
+# ===== APP INITIALIZATION =====
 # Create the Dash app using the factory function for proper duplicate callback handling
 app = create_app_with_duplicate_callbacks()
 
 # Log layout creation
 logging.info("Creating app layout...")
 
+# ===== APPLICATION LAYOUT =====
+# Define the main application layout with all UI components
 app.layout = html.Div(
     [
+        # ===== HIDDEN STORES AND STATE MANAGEMENT =====
         # Hidden store to track font cache warming
         dcc.Store(id="font-cache-warmed", data=False),
+        # ===== HEADER SECTION =====
         # Logo container positioned absolutely in top-left corner
         html.Div(
             html.Img(
@@ -78,8 +109,11 @@ app.layout = html.Div(
             ],
             className="theme-toggle-container",
         ),
+        # ===== TITLE AND SUBTITLE =====
         html.H1(config.APP_TITLE, style=config.HEADER_H1_CENTER_STYLE),
         html.P(config.APP_SUBTITLE, style=config.HEADER_H2_CENTER_STYLE),
+        # ===== FILE UPLOAD SECTION =====
+        # AGS file upload component with drag-and-drop functionality
         dcc.Upload(
             id="upload-ags",
             children=html.Div(["Drag and Drop or ", html.A(config.UPLOAD_PROMPT)]),
@@ -89,10 +123,12 @@ app.layout = html.Div(
         ),
         html.Div(id="output-upload"),
         html.Hr(),
+        # ===== MAIN CONTENT SECTION =====
         html.Div(
             [
                 html.H2(config.MAP_SECTION_TITLE, style=config.HEADER_H2_LEFT_STYLE),
-                # Borehole Search Section
+                # ===== BOREHOLE SEARCH SECTION =====
+                # Search functionality for finding specific boreholes by name
                 html.Div(
                     [
                         html.H3(
@@ -162,9 +198,12 @@ app.layout = html.Div(
                         "backgroundColor": "rgba(255, 255, 255, 0.05)",
                     },
                 ),
+                # ===== INTERACTIVE MAP SECTION =====
+                # Main map component with multiple layers and drawing tools
                 dl.Map(
                     [
-                        # Layer control to switch between map types
+                        # ===== MAP LAYER CONTROLS =====
+                        # Layer control to switch between map types (OpenStreetMap, Satellite, Hybrid)
                         dl.LayersControl(
                             [
                                 dl.BaseLayer(
@@ -186,7 +225,7 @@ app.layout = html.Div(
                                     name="Satellite",
                                     checked=False,
                                 ),
-                                # New Hybrid layer combining satellite imagery with labels
+                                # Hybrid layer combining satellite imagery with labels (default)
                                 dl.BaseLayer(
                                     dl.LayerGroup(
                                         [
@@ -215,24 +254,29 @@ app.layout = html.Div(
                             ],
                             position="topright",
                         ),
+                        # ===== MAP FEATURE GROUPS =====
+                        # Feature group for borehole markers (populated dynamically)
                         dl.FeatureGroup(
                             [
                                 # Markers will be added dynamically
                             ],
                             id="borehole-markers",
                         ),
+                        # Feature group for selection shapes (polygons, rectangles, etc.)
                         dl.FeatureGroup(
                             [
-                                # Selection shapes (polygons, rectangles, etc.) will be added here
+                                # Selection shapes will be added here
                             ],
                             id="selection-shapes",
                         ),
+                        # Feature group for PCA (Principal Component Analysis) line visualization
                         dl.FeatureGroup(
                             [
                                 # PCA line will be added dynamically
                             ],
                             id="pca-line-group",
                         ),
+                        # Feature group for drawing controls and user-drawn shapes
                         dl.FeatureGroup(
                             [
                                 EditControl(
@@ -243,7 +287,6 @@ app.layout = html.Div(
                                         "circle": False,
                                         "rectangle": True,
                                         "marker": False,
-                                        # Add debugging info
                                         "circlemarker": False,
                                     },
                                     edit={
@@ -259,12 +302,14 @@ app.layout = html.Div(
                         ),
                     ],
                     id="borehole-map",
-                    center=[51.5, -0.1],
+                    center=[51.5, -0.1],  # Default center on UK
                     zoom=6,
                     style=config.MAP_CENTER_STYLE,
                 ),
             ]
         ),
+        # ===== BUFFER CONTROLS SECTION =====
+        # Controls for adjusting polyline buffer distance (shown when polyline is drawn)
         html.Div(
             [
                 html.H3(
@@ -302,9 +347,13 @@ app.layout = html.Div(
             id="buffer-controls",
             style={"display": "none"},  # Initially hidden, shown when polyline is drawn
         ),
-        html.Div(id="selected-borehole-info"),
-        html.Div(id="section-plot-output"),
-        html.Div(id="log-plot-output"),
+        # ===== OUTPUT SECTIONS =====
+        # Dynamic content areas populated by callbacks
+        html.Div(id="selected-borehole-info"),  # Selected borehole information display
+        html.Div(id="section-plot-output"),  # Cross-sectional plots
+        html.Div(id="log-plot-output"),  # Individual borehole logs
+        # ===== CONTROL BUTTONS AND DOWNLOADS =====
+        # Checkbox and download controls for plots
         html.Div(
             [
                 dcc.Checklist(
@@ -325,6 +374,8 @@ app.layout = html.Div(
                 dcc.Download(id="download-section-plot"),
             ]
         ),
+        # ===== FEEDBACK AND SUBSELECTION =====
+        # UI feedback and borehole subselection components
         html.Div(id="ui-feedback"),
         html.Div(id="subselection-checkbox-grid-container", children=[]),
         dcc.Checklist(
@@ -333,10 +384,11 @@ app.layout = html.Div(
             value=[],
             style={"display": "none"},
         ),
+        # ===== DATA STORES =====
         # Store components for data sharing between callbacks
-        dcc.Store(id="upload-data-store"),
-        dcc.Store(id="borehole-data-store"),
-        dcc.Store(id="search-selected-borehole", data=None),
+        dcc.Store(id="upload-data-store"),  # Uploaded file data
+        dcc.Store(id="borehole-data-store"),  # Processed borehole data
+        dcc.Store(id="search-selected-borehole", data=None),  # Search selection state
     ],
     className="dash-container",  # Add a class for styling the main container
 )
@@ -347,7 +399,22 @@ logging.info("App layout created successfully")
 
 # Add a function to inspect layout IDs
 def log_layout_ids(component, prefix=""):
-    """Recursively log all component IDs in the layout"""
+    """
+    Recursively log all component IDs in the layout for debugging purposes.
+
+    This function traverses the entire Dash layout tree and logs each component's ID
+    to help with debugging callback connections and component identification.
+
+    Args:
+        component: Dash component to inspect (html.Div, dcc.Graph, etc.)
+        prefix (str): Indentation prefix for nested components (default: "")
+
+    Returns:
+        None: Function logs to the configured logger
+
+    Note:
+        Used during app startup to verify all components have proper IDs for callbacks
+    """
     try:
         if hasattr(component, "id") and component.id:
             logging.info(f"Found component ID: {component.id}")
@@ -366,7 +433,10 @@ logging.info("=== LAYOUT COMPONENT IDs ===")
 log_layout_ids(app.layout)
 logging.info("=== END LAYOUT IDs ===")
 
-# Theme switching callback
+# ===== CLIENTSIDE CALLBACKS =====
+# These callbacks run in the browser for better performance
+
+# Theme switching callback - handles light/dark theme toggle
 app.clientside_callback(
     """
     function(light_clicks, dark_clicks) {
@@ -417,7 +487,7 @@ app.clientside_callback(
     prevent_initial_call=True,
 )
 
-# Theme logo swapper (clientside JS)
+# Theme logo swapper callback - changes logo based on selected theme
 app.clientside_callback(
     """
     function(light_clicks, dark_clicks) {
@@ -444,7 +514,8 @@ app.clientside_callback(
     prevent_initial_call=True,
 )
 
-# Import and register the split callbacks
+# ===== CALLBACK REGISTRATION =====
+# Import and register the split callbacks from the callbacks module
 logging.info("Registering split callbacks...")
 register_callbacks(app)
 logging.info("✅ All callbacks registered successfully!")
@@ -457,7 +528,26 @@ logging.info("✅ All callbacks registered successfully!")
     dash.State("upload-ags", "filename"),
 )
 def store_upload_data(contents, filenames):
-    """Store uploaded file data in a dcc.Store component"""
+    """
+    Store uploaded file data in a dcc.Store component for use across callbacks.
+
+    This callback processes uploaded AGS files and stores their contents and filenames
+    in a Dash Store component, making the data available to other callbacks without
+    requiring re-upload or re-processing.
+
+    Args:
+        contents (list/str): Base64 encoded file contents from dcc.Upload
+        filenames (list/str): Original filenames of uploaded files
+
+    Returns:
+        dict/None: Dictionary containing contents and filenames, or None if no upload
+
+    Structure of returned data:
+        {
+            "contents": [base64_string1, base64_string2, ...],
+            "filenames": ["file1.ags", "file2.ags", ...]
+        }
+    """
     if contents is None:
         logging.info("No upload data to store")
         return None
@@ -475,9 +565,11 @@ def store_upload_data(contents, filenames):
         return None
 
 
+# ===== SHAPE HANDLING CALLBACKS =====
+# Clientside callbacks for managing drawn shapes on the map
+
 # Create a dcc.Store to track the draw state
 app.layout.children.append(dcc.Store(id="draw-state-store", data={"lastUpdate": 0}))
-
 
 # Primary callback: When a new shape is drawn, keep only the latest and update the draw-state-store
 app.clientside_callback(
@@ -549,11 +641,13 @@ app.clientside_callback(
 # Removed this callback to avoid duplicate center outputs
 
 
+# ===== APPLICATION EXECUTION =====
+# Main execution block - runs when script is executed directly
 if __name__ == "__main__":
     try:
         logging.info("Opening browser and starting Dash server")
-        webbrowser.open("http://127.0.0.1:8050/")
-        app.run(debug=True, host="0.0.0.0", port=8050)
+        webbrowser.open("http://127.0.0.1:8050/")  # Open web browser to app URL
+        app.run(debug=True, host="0.0.0.0", port=8050)  # Start Dash development server
     except Exception as e:
         logging.error(f"Error starting app: {str(e)}")
         print(f"Error: {str(e)}")

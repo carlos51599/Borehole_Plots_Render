@@ -1,15 +1,43 @@
 """
-Centralized Coordinate Transformation Service
+Centralized Coordinate Transformation Service for geotechnical mapping applications.
 
 This module provides a unified interface for all coordinate transformations
-used throughout the application, eliminating duplication and ensuring consistency.
+used throughout the Geo Borehole Sections Render application, eliminating
+duplication and ensuring consistency across all coordinate operations.
 
-Features:
-- Cached transformers for performance
-- Batch transformation support
-- Comprehensive error handling
-- Automatic UTM zone detection
-- Validation of transformed coordinates
+Key Features:
+- **Cached Transformers**: LRU cache for performance optimization
+- **Batch Transformation**: Efficient processing of large coordinate datasets
+- **Comprehensive Error Handling**: Robust error detection and reporting
+- **Automatic UTM Zone Detection**: Intelligent zone selection for projections
+- **Coordinate Validation**: Range checking and accuracy verification
+- **Multiple CRS Support**: British National Grid, WGS84, Web Mercator, and UTM
+
+Primary Use Cases:
+1. **AGS Data Processing**: Convert BNG coordinates from AGS files to WGS84 for mapping
+2. **Map Display**: Transform coordinates for interactive web mapping
+3. **Geometric Operations**: Support spatial analysis and filtering
+4. **Cross-Section Generation**: Coordinate projection for geological sections
+
+Coordinate Systems Supported:
+- **EPSG:27700** (British National Grid): Standard UK surveying coordinate system
+- **EPSG:4326** (WGS84): Global geographic coordinate system for web mapping
+- **EPSG:3857** (Web Mercator): Web mapping projection used by most online maps
+- **UTM Zones**: Universal Transverse Mercator projections with automatic zone detection
+
+Accuracy and Performance:
+- Sub-millimeter accuracy for engineering applications
+- Efficient batch processing for large datasets (1000+ coordinates)
+- Cached transformers eliminate repeated initialization overhead
+- Comprehensive validation ensures data quality
+
+Dependencies:
+- pyproj: Professional coordinate transformation library
+- numpy: Efficient numerical operations
+- pandas: DataFrame-based coordinate processing
+
+Author: [Project Team]
+Last Modified: July 2025
 """
 
 import logging

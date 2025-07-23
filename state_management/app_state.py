@@ -1,9 +1,51 @@
 """
-Centralized Application State Manager
+Centralized Application State Manager for Consistent Data Management.
 
-This module provides a singleton state manager that maintains all application state
-in a centralized, thread-safe manner. This replaces the chaotic "State Spaghetti"
-pattern identified in the health report.
+This module provides a sophisticated singleton state manager that maintains all
+application state in a centralized, thread-safe manner. It replaces fragmented
+state management patterns with a professional, scalable solution that provides
+reliable data consistency across the entire Geo Borehole Sections Render application.
+
+Key Features:
+- **Centralized State Storage**: Single source of truth for all application data
+- **Thread-Safe Operations**: Proper synchronization for concurrent access
+- **Change Tracking**: Monitor state changes with versioning and listeners
+- **Type-Safe State Models**: Structured data models for each state category
+- **Event-Driven Updates**: Notify components of state changes automatically
+
+State Categories:
+1. **BoreholeData**: Loaded AGS data, coordinates, and geological information
+2. **MapState**: Map center, zoom, layers, and viewport configuration
+3. **SelectionState**: Selected boreholes, drawn shapes, and filter criteria
+4. **PlotState**: Generated plots, styling preferences, and export settings
+5. **UploadState**: File upload progress, validation results, and processing status
+
+Benefits Over Previous Approach:
+- **Eliminates State Spaghetti**: Replaces chaotic state scattered across callbacks
+- **Improves Reliability**: Consistent state access prevents data inconsistencies
+- **Enhances Debugging**: Centralized logging and state inspection capabilities
+- **Enables Features**: State persistence, undo/redo, and session management
+- **Reduces Complexity**: Simplified callback logic with clear state access
+
+State Management Patterns:
+- **Atomic Updates**: All state changes are atomic and consistent
+- **Change Notifications**: Components can subscribe to state change events
+- **State Validation**: Automatic validation of state transitions
+- **Rollback Capability**: Support for reverting to previous state versions
+- **Persistence Support**: Framework for saving/loading application state
+
+Thread Safety:
+- Thread-safe read/write operations using appropriate locking mechanisms
+- Non-blocking read operations for performance
+- Atomic state updates to prevent partial state corruption
+- Deadlock prevention through careful lock ordering
+
+Dependencies:
+- threading: Thread synchronization and safety mechanisms
+- state_models: Structured data models for type-safe state management
+
+Author: [Project Team]
+Last Modified: July 2025
 """
 
 import logging

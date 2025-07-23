@@ -1,9 +1,49 @@
 """
-Enhanced Error Handling System
+Enhanced Error Handling System for Robust Application Reliability.
 
-This module provides a comprehensive, standardized error handling system
-to replace the inconsistent error handling patterns identified in the
-codebase health report.
+This module provides a comprehensive, standardized error handling system designed
+to replace inconsistent error handling patterns and provide professional-grade
+error management throughout the Geo Borehole Sections Render application.
+
+Key Features:
+- **Standardized Error Classification**: Consistent error severity and category system
+- **User-Friendly Error Messages**: Technical errors translated to user-understandable messages
+- **Comprehensive Error Logging**: Detailed technical information for debugging
+- **Error Recovery Strategies**: Automatic fallback mechanisms where possible
+- **Error Context Preservation**: Maintain context information for better debugging
+
+Error Classification System:
+1. **Severity Levels**: INFO, WARNING, ERROR, CRITICAL
+2. **Error Categories**: DATA_PROCESSING, FILE_UPLOAD, COORDINATE_TRANSFORM,
+   PLOT_GENERATION, MAP_INTERACTION, SYSTEM_ERROR
+3. **Error Context**: Module, function, user action, data involved
+
+User Experience Benefits:
+- Clear, actionable error messages for users
+- Consistent error presentation across the application
+- Prevents application crashes with graceful error handling
+- Provides helpful suggestions for error resolution
+
+Technical Benefits:
+- Centralized error handling reduces code duplication
+- Standardized logging format aids in debugging
+- Error categorization helps identify common failure patterns
+- Recovery mechanisms maintain application stability
+
+Integration Points:
+- File upload validation and processing
+- AGS data parsing and validation
+- Coordinate transformation operations
+- Plot generation and rendering
+- Map interaction and selection operations
+
+Dependencies:
+- logging: Professional error logging and reporting
+- dash: UI error message display components
+- dataclasses: Structured error information management
+
+Author: [Project Team]
+Last Modified: July 2025
 """
 
 import logging

@@ -196,8 +196,14 @@ def main():
     print("🎨 Generating modular visualization...")
     html_content = generate_enhanced_html_visualization(graph_data)
 
-    # Save files
-    output_dir = Path("graph_output")
+    # Save files - determine if we're in graph folder and adjust path accordingly
+    current_dir = Path.cwd()
+    if current_dir.name == "graph" or (current_dir / "graph_modules").exists():
+        output_dir = Path("graph_output")  # We're in graph folder, use relative path
+    else:
+        output_dir = (
+            Path("graph") / "graph_output"
+        )  # We're in root, use graph subfolder
     output_dir.mkdir(exist_ok=True)
 
     # Save enhanced graph data

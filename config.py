@@ -1,5 +1,51 @@
-# Configuration for Dash app
-# Copy or adapt settings from ../config.py as needed
+"""
+Configuration settings for the Geo Borehole Sections Render Dash application.
+
+This module contains all configuration constants used throughout the application,
+including:
+
+1. FIGURE/PLOT CONFIGURATION:
+   - Map display dimensions and settings
+   - Individual borehole log figure sizes
+   - Section plot dimensions and scaling
+   - Font sizes for different plot types
+
+2. UI LAYOUT CONFIGURATION:
+   - Application titles and headers
+   - Section headers and labels
+   - Button text and prompts
+
+3. ALIGNMENT CONFIGURATION:
+   - Layout alignment constants
+   - Text alignment options
+   - Element positioning values
+   - Flexbox alignment settings
+
+4. STYLING CONFIGURATION:
+   - Header styles with different alignments
+   - Button styles for various positions
+   - Map and upload area styling
+   - Color schemes and themes
+
+5. COLOR SCHEMES:
+   - Geology color mappings (BGS standards)
+   - UI element colors
+   - Theme-specific color palettes
+
+6. MAP CONFIGURATION:
+   - Default map settings
+   - Coordinate system parameters
+   - Layer configuration options
+
+Usage:
+    Import this module in other parts of the application to access
+    configuration constants:
+
+    from config import APP_TITLE, MAP_HEIGHT, HEADER_H1_CENTER_STYLE
+
+Author: [Project Team]
+Last Modified: July 2025
+"""
 
 # ===== FIGURE/PLOT CONFIGURATION =====
 # Map display size

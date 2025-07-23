@@ -3,8 +3,6 @@ applyTo: '**'
 ---
 Provide project context and coding guidelines that AI should follow when generating code, answering questions, or reviewing changes.
 
-**Timestamp Guideline:**
-Include a timestamp in every chat message for traceability and context. The timestamp must include both the current date and the time (in 24-hour format).
 
 **Multi-Stage Action Plan Guideline:**
 For any task assigned, first create a detailed action plan before coding. Follow this multi-stage approach:

@@ -1,12 +1,56 @@
 """
-Professional borehole log plotting module matching Openground style standards.
+Professional Borehole Log Plotting Module with Industry-Standard Formatting.
 
-This module creates professional borehole logs with separate columns for
-lithology, depth, and layer description using color and hatch patterns
-from CSV geology code mapping with Openground-style formatting and layout.
+This module creates publication-quality individual borehole logs that match
+professional geotechnical reporting standards, specifically following Openground
+style guidelines. It generates detailed logs with separate columns for lithology,
+depth measurements, and geological descriptions using standardized BGS colors
+and hatch patterns.
 
-Updated to include multi-page support, professional headers, and proper A4 formatting
-based on the dummy3 implementation.
+Key Features:
+- **Professional Layout**: Multi-column format with standardized spacing and alignment
+- **Industry Standards**: BGS-compliant geological colors and symbols
+- **Multi-Page Support**: Automatic page breaks for long boreholes with proper headers
+- **Openground Compatibility**: Styling and layout matching Openground software standards
+- **High-Quality Output**: Publication-ready graphics suitable for technical reports
+
+Log Components:
+1. **Header Section**: Borehole identification, location, and project information
+2. **Depth Column**: Precise depth measurements with appropriate scaling
+3. **Lithology Column**: Visual representation with colors and hatch patterns
+4. **Sample Information**: Sample numbers, types, and recovery data
+5. **Description Column**: Detailed geological descriptions and observations
+6. **Legend**: Comprehensive legend with geological units and symbols
+
+Professional Standards:
+- **A4 Format Optimization**: Designed for standard A4 portrait printing
+- **Technical Typography**: Professional font hierarchy and text sizing
+- **Geological Symbology**: Standard BGS geological patterns and colors
+- **Measurement Precision**: Accurate depth scales and interval representations
+- **Report Integration**: Compatible with standard geotechnical report formats
+
+Multi-Page Features:
+- Automatic page breaks for long boreholes
+- Consistent headers across all pages
+- Continuous depth scaling across pages
+- Professional page numbering and referencing
+- Seamless geological continuity between pages
+
+Quality Assurance:
+- Consistent geological color application
+- Accurate depth interval representation
+- Professional text formatting and alignment
+- Error handling for incomplete data
+- Performance optimization for complex logs
+
+Dependencies:
+- matplotlib: Professional plotting and page layout
+- pandas: Geological data processing and validation
+- geology_code_utils: BGS geological code management
+- numpy: Numerical calculations and array operations
+
+Author: [Project Team]
+Last Modified: July 2025
 """
 
 # Import shared geology code mapping utility (move to top for lint compliance)

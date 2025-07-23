@@ -1,3 +1,58 @@
+"""
+Professional Geological Cross-Section Plot Generator.
+
+This module provides publication-quality geological cross-section generation capabilities
+specifically designed for geotechnical engineering and geological consulting applications.
+It creates professional cross-sections that meet industry standards for technical reports,
+presentations, and regulatory submissions.
+
+Key Features:
+- **Publication-Quality Output**: High-resolution plots suitable for professional reports
+- **BGS-Compliant Geology**: Standard British Geological Survey colors and patterns
+- **A4 Landscape Optimization**: Optimized dimensions for standard report formats
+- **Professional Styling**: Industry-standard fonts, line weights, and layout
+- **Multi-Borehole Support**: Comprehensive cross-sections with multiple boreholes
+- **Intelligent Scaling**: Automatic vertical exaggeration and horizontal spacing
+
+Professional Standards:
+1. **Geological Symbology**: BGS-standard colors and hatch patterns for rock types
+2. **Technical Accuracy**: Precise elevation and distance calculations
+3. **Label Formatting**: Professional annotation with clear, readable text
+4. **Legend Generation**: Comprehensive legends with geological descriptions
+5. **Grid and Axes**: Technical grid systems with appropriate scale markings
+
+Plot Generation Process:
+1. **Data Validation**: Comprehensive validation of borehole and geological data
+2. **Coordinate Processing**: Accurate projection and distance calculations
+3. **Geology Parsing**: Intelligent parsing of AGS geological descriptions
+4. **Layout Optimization**: Professional layout with optimal spacing and scaling
+5. **Rendering**: High-quality matplotlib rendering with publication settings
+
+Output Specifications:
+- **Resolution**: 300 DPI for crisp printing and digital display
+- **Format**: A4 landscape (11.69" x 8.27") for standard reports
+- **Color Profile**: Professional color palette with transparency support
+- **Typography**: Arial font family with hierarchical text sizing
+- **Export Formats**: PNG, PDF, and SVG support for various applications
+
+Quality Assurance:
+- Consistent geological color application across all plots
+- Accurate vertical and horizontal scaling
+- Professional annotation and labeling
+- Error handling for malformed or incomplete data
+- Performance optimization for large datasets
+
+Dependencies:
+- matplotlib: Professional plotting and rendering engine
+- pandas: Geological data processing and manipulation
+- numpy: Numerical calculations and array operations
+- pyproj: Coordinate transformations and projections
+- geology_code_utils: BGS geological code management
+
+Author: [Project Team]
+Last Modified: July 2025
+"""
+
 from geology_code_utils import (
     get_geology_color,
     get_geology_pattern,

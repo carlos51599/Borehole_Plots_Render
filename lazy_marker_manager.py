@@ -1,8 +1,44 @@
 """
-Lazy Marker Management Module
+Lazy Marker Management Module for High-Performance Map Rendering.
 
-This module implements viewport-based lazy loading for map markers to improve performance
-with large datasets by only rendering markers that are visible or relevant to the user.
+This module implements sophisticated viewport-based lazy loading for map markers to
+dramatically improve performance when displaying large numbers of boreholes. It uses
+intelligent clustering, progressive loading, and viewport culling to maintain smooth
+map interactions even with thousands of borehole locations.
+
+Key Features:
+- **Viewport-Based Rendering**: Only render markers visible in current map view
+- **Intelligent Clustering**: Group nearby markers at low zoom levels for performance
+- **Progressive Loading**: Load markers progressively based on zoom and pan operations
+- **Memory Optimization**: Efficient marker lifecycle management and cleanup
+- **Responsive Interaction**: Maintain smooth map performance during user interactions
+
+Performance Optimizations:
+1. **Spatial Indexing**: Quick spatial queries for viewport-based filtering
+2. **Marker Pooling**: Reuse marker objects to reduce creation/destruction overhead
+3. **Cluster Optimization**: Dynamic clustering based on marker density and zoom level
+4. **Debounced Updates**: Prevent excessive re-rendering during rapid map movements
+5. **Level-of-Detail**: Show simplified representations at low zoom levels
+
+Use Cases:
+- **Large AGS Datasets**: Handle 1000+ borehole locations efficiently
+- **Multi-Project Views**: Display boreholes from multiple projects simultaneously
+- **Interactive Exploration**: Smooth panning and zooming with immediate feedback
+- **Mobile Performance**: Optimized rendering for mobile and tablet devices
+
+Technical Implementation:
+- Spatial partitioning for efficient viewport queries
+- Dynamic marker creation and destruction based on visibility
+- Cluster merging and splitting based on zoom level changes
+- Event debouncing for smooth interaction feedback
+
+Dependencies:
+- dash_leaflet: Map component integration
+- pandas: Spatial data management and filtering
+- dataclasses: Efficient data structure definitions
+
+Author: [Project Team]
+Last Modified: July 2025
 """
 
 import logging

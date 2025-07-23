@@ -1,9 +1,44 @@
 """
-Enhanced Dependency Analyzer
-============================
+Enhanced Dependency Analyzer for Comprehensive Code Architecture Analysis.
 
-Core dependency analysis functionality for Python projects.
-Analyzes import relationships, calculates importance scores, and builds graph data.
+This module provides sophisticated dependency analysis functionality for Python projects,
+offering deep insights into module relationships, import patterns, and architectural
+structure. It's specifically designed to analyze complex applications like the Geo
+Borehole Sections Render project and generate comprehensive dependency visualizations.
+
+Key Features:
+- **Complete Project Scanning**: Analyzes all Python files including test directories
+- **Import Relationship Mapping**: Tracks both internal and external dependencies
+- **Importance Scoring**: PageRank-style algorithm to identify critical modules
+- **Circular Dependency Detection**: Identifies and reports dependency cycles
+- **Graph Data Generation**: Creates structured data for visualization tools
+
+Analysis Capabilities:
+1. **Module Dependency Mapping**: Tracks which modules import which other modules
+2. **Internal vs External Dependencies**: Distinguishes project modules from external libraries
+3. **Import Frequency Analysis**: Identifies most commonly imported modules
+4. **Dependency Depth Analysis**: Calculates how deep dependency chains go
+5. **Critical Path Identification**: Finds modules that many others depend on
+
+Enhanced Features:
+- **AST-Based Parsing**: Uses Abstract Syntax Trees for accurate import detection
+- **Directory Inclusion**: Includes all directories including tests and utilities
+- **Importance Calculation**: Weighted scoring based on dependency relationships
+- **Graph Data Structure**: Optimized data format for interactive visualizations
+- **Extensible Architecture**: Easy to add new analysis metrics and capabilities
+
+Data Output:
+- Nodes: Module information with importance scores and metadata
+- Edges: Dependency relationships with strength indicators
+- Statistics: Overall project metrics and dependency patterns
+- Clusters: Groups of related modules for better visualization
+
+Dependencies:
+- ast: Python Abstract Syntax Tree parsing for accurate import analysis
+- pathlib: Modern path handling for cross-platform compatibility
+
+Author: [Project Team]
+Last Modified: July 2025
 """
 
 import ast
@@ -16,14 +51,27 @@ class EnhancedDependencyAnalyzer:
     """Enhanced dependency analyzer with complete directory inclusion."""
 
     def __init__(self, exclude_folders: List[str] = None):
-        # Remove test exclusion - include all directories
-        self.exclude_folders = exclude_folders or ["__pycache__"]
+        # Remove test exclusion - include all directories, but exclude graph folder
+        self.exclude_folders = exclude_folders or ["__pycache__", "graph"]
         self.dependencies = {}
         self.node_importance = {}
+        self.root_path = None  # Will be set in analyze_project
 
     def analyze_project(self, root_path: str = ".") -> Dict[str, Any]:
         """Analyze entire project including previously excluded directories."""
-        print("🔍 Enhanced dependency analysis - including ALL directories...")
+        # Auto-detect if we're running from within a graph folder
+        current_dir = Path.cwd()
+        if current_dir.name == "graph" or (current_dir / "graph_modules").exists():
+            # We're in the graph folder, so analyze the parent directory
+            root_path = ".."
+            print(
+                "🔍 Detected execution from graph folder - analyzing parent directory..."
+            )
+        else:
+            print("🔍 Enhanced dependency analysis - including ALL directories...")
+
+        # Store root_path for use in other methods
+        self.root_path = Path(root_path).resolve()
 
         # Scan for all Python files
         python_files = self._find_python_files(root_path)
@@ -67,14 +115,21 @@ class EnhancedDependencyAnalyzer:
                 with open(file_path, "r", encoding="utf-8") as f:
                     content = f.read()
 
+                # Resolve path relative to root for consistent folder detection
+                resolved_relative_path = file_path.resolve().relative_to(self.root_path)
+
                 # Create unique identifier
                 unique_id = self._create_unique_id(file_path)
 
                 self.dependencies[unique_id] = {
-                    "file_path": str(file_path),
-                    "folder": self._get_folder_name(file_path),
+                    "file_path": str(resolved_relative_path),
+                    "folder": self._get_folder_name_from_relative_path(
+                        resolved_relative_path
+                    ),
                     "stem": file_path.stem,
-                    "display_name": self._create_display_name(file_path),
+                    "display_name": self._create_display_name_from_relative_path(
+                        resolved_relative_path
+                    ),
                     "imports": [],  # Will be filled in second pass
                     "all_imports": [],  # Will be filled in second pass
                     "imports_count": 0,  # Will be filled in second pass
@@ -224,7 +279,9 @@ class EnhancedDependencyAnalyzer:
     def _create_unique_id(self, file_path: Path) -> str:
         """Create a unique identifier for a file."""
         try:
-            relative_path = file_path.relative_to(Path("."))
+            # Use the stored root_path if available, otherwise fall back to current directory
+            root = self.root_path if self.root_path else Path(".")
+            relative_path = file_path.relative_to(root)
             return str(relative_path).replace("\\", "/")
         except ValueError:
             return str(file_path).replace("\\", "/")
@@ -232,7 +289,9 @@ class EnhancedDependencyAnalyzer:
     def _get_folder_name(self, file_path: Path) -> str:
         """Enhanced folder name detection."""
         try:
-            relative_path = file_path.relative_to(Path("."))
+            # Use the stored root_path if available, otherwise fall back to current directory
+            root = self.root_path if self.root_path else Path(".")
+            relative_path = file_path.relative_to(root)
             if len(relative_path.parts) > 1:
                 return relative_path.parts[0]
             else:
@@ -244,6 +303,23 @@ class EnhancedDependencyAnalyzer:
         """Create a human-readable display name."""
         stem = file_path.stem
         folder = self._get_folder_name(file_path)
+
+        if folder == "root":
+            return stem
+        else:
+            return f"{folder}/{stem}"
+
+    def _get_folder_name_from_relative_path(self, relative_path: Path) -> str:
+        """Get folder name from already resolved relative path."""
+        if len(relative_path.parts) > 1:
+            return relative_path.parts[0]
+        else:
+            return "root"
+
+    def _create_display_name_from_relative_path(self, relative_path: Path) -> str:
+        """Create display name from already resolved relative path."""
+        stem = relative_path.stem
+        folder = self._get_folder_name_from_relative_path(relative_path)
 
         if folder == "root":
             return stem

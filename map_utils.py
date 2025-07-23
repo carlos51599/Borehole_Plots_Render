@@ -1,3 +1,43 @@
+"""
+Map utilities for geometric operations and coordinate transformations.
+
+This module provides utility functions for map-based operations in the Geo Borehole
+Sections Render application, including:
+
+1. Geometric Filtering:
+   - Filter boreholes by drawn shapes (polygons, rectangles, lines)
+   - Point-in-polygon calculations
+   - Distance-based filtering for polylines
+
+2. Coordinate Transformations:
+   - British National Grid (EPSG:27700) to WGS84 (EPSG:4326)
+   - Proper handling of coordinate system conversions
+   - Integration with pyproj for accurate transformations
+
+3. Shape Processing:
+   - GeoJSON to Shapely geometry conversion
+   - Buffer calculations for polyline selections
+   - Geometric validation and error handling
+
+Key Functions:
+- filter_selection_by_shape(): Main filtering function for borehole selection
+- transform_coordinates(): Convert between coordinate systems
+- create_buffer_zone(): Generate buffer areas around polylines
+- validate_geometry(): Check geometric validity
+
+Dependencies:
+- shapely: Geometric operations and spatial calculations
+- pyproj: Coordinate system transformations
+- pandas: Data manipulation for borehole datasets
+
+Coordinate Systems:
+- Input: British National Grid (EPSG:27700) from AGS files
+- Output: WGS84 (EPSG:4326) for web mapping compatibility
+
+Author: [Project Team]
+Last Modified: July 2025
+"""
+
 import pandas as pd
 import logging
 from shapely.geometry import Point, Polygon, LineString
@@ -6,7 +46,61 @@ import pyproj
 
 
 def filter_selection_by_shape(loca_df, drawn_geojson):
-    """Filter borehole data by drawn shape with extensive logging"""
+    """
+    Filter borehole data by drawn shape with comprehensive validation and logging.
+
+    This function takes a DataFrame of borehole locations and a GeoJSON shape
+    (polygon, rectangle, or polyline) and returns the IDs of boreholes that
+    fall within or near the drawn shape.
+
+    Args:
+        loca_df (pandas.DataFrame): DataFrame containing borehole location data
+                                   Must have columns: 'lat', 'lon', 'LOCA_ID'
+        drawn_geojson (dict): GeoJSON object representing the drawn shape
+                             Supports Polygon, Rectangle, and LineString geometries
+
+    Returns:
+        list: List of LOCA_ID strings for boreholes within the selection
+
+    Processing Steps:
+        1. Validate input data and required columns
+        2. Convert GeoJSON to Shapely geometry objects
+        3. Create Point objects from borehole coordinates
+        4. Apply geometric filtering based on shape type:
+           - Polygon/Rectangle: Point-in-polygon test
+           - LineString: Distance-based filtering with buffer
+        5. Return matching borehole IDs
+
+    Coordinate System:
+        - Input coordinates expected in WGS84 (lat/lon)
+        - All geometric operations performed in WGS84
+        - Automatic coordinate validation and range checking
+
+    Error Handling:
+        - Comprehensive input validation
+        - Detailed logging for debugging
+        - Graceful fallback for invalid geometries
+
+    Example:
+        >>> loca_df = pd.DataFrame({
+        ...     'LOCA_ID': ['BH001', 'BH002'],
+        ...     'lat': [51.5, 51.6],
+        ...     'lon': [-0.1, -0.2]
+        ... })
+        >>> geojson = {
+        ...     'type': 'FeatureCollection',
+        ...     'features': [{
+        ...         'geometry': {
+        ...             'type': 'Polygon',
+        ...             'coordinates': [[[-0.15, 51.45], [-0.05, 51.45],
+        ...                            [-0.05, 51.55], [-0.15, 51.55], [-0.15, 51.45]]]
+        ...         }
+        ...     }]
+        ... }
+        >>> selected_ids = filter_selection_by_shape(loca_df, geojson)
+        >>> print(selected_ids)
+        ['BH001']
+    """
     logging.info("====== FILTER_SELECTION_BY_SHAPE CALLED ======")
     logging.info(f"loca_df type: {type(loca_df)}")
     logging.info(f"drawn_geojson type: {type(drawn_geojson)}")
@@ -32,7 +126,7 @@ def filter_selection_by_shape(loca_df, drawn_geojson):
             logging.error(f"Missing required columns: {missing_cols}")
             return []
 
-        # Log sample data
+        # Log sample data and validate coordinate ranges
         if len(loca_df) > 0:
             logging.info(
                 f"Sample coordinates: lat={loca_df['lat'].iloc[0]}, lon={loca_df['lon'].iloc[0]}"
@@ -44,7 +138,7 @@ def filter_selection_by_shape(loca_df, drawn_geojson):
                 f"Coordinate ranges: lon [{loca_df['lon'].min():.6f}, {loca_df['lon'].max():.6f}]"
             )
 
-    # Log GeoJSON structure
+    # Log GeoJSON structure for debugging
     logging.info(
         f"drawn_geojson keys: {drawn_geojson.keys() if isinstance(drawn_geojson, dict) else 'not a dict'}"
     )

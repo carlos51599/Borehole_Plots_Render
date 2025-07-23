@@ -1,3 +1,56 @@
+"""
+Split callbacks module for the Geo Borehole Sections Render application.
+
+This module contains all Dash callbacks organized in a clean, modular structure
+to handle the interactive functionality of the geotechnical borehole visualization
+application. It coordinates data upload, processing, map interactions, and plot generation.
+
+Main Callback Functions:
+1. File Upload Callbacks:
+   - handle_file_upload(): Process AGS file uploads and validation
+   - display_upload_feedback(): Show upload status and file information
+
+2. Map Interaction Callbacks:
+   - update_borehole_markers(): Place borehole markers on map
+   - handle_map_interactions(): Process map clicks and selections
+   - update_map_center(): Auto-center map on uploaded boreholes
+
+3. Drawing Tool Callbacks:
+   - handle_shape_drawing(): Process polygon/rectangle/polyline selections
+   - update_buffer_controls(): Show/hide buffer controls for polylines
+   - apply_buffer_filtering(): Filter boreholes by buffered polylines
+
+4. Search Functionality:
+   - update_borehole_search(): Populate search dropdown with borehole names
+   - handle_search_selection(): Navigate to selected borehole on map
+
+5. Plot Generation Callbacks:
+   - generate_section_plots(): Create cross-sectional geological plots
+   - generate_borehole_logs(): Create individual borehole log plots
+   - handle_plot_downloads(): Enable plot downloads as images
+
+6. Data Management:
+   - optimize_data_handling(): Memory-efficient data processing
+   - error_handling(): Comprehensive error management with user feedback
+
+Key Features:
+- Memory optimization for large datasets
+- Comprehensive error handling and user feedback
+- Progress indicators for long-running operations
+- Professional plot styling and customization
+- Multi-file AGS support with conflict resolution
+
+Dependencies:
+- dash: Core web application framework
+- pandas: Data manipulation and analysis
+- matplotlib: Professional geological plot generation
+- sklearn: PCA analysis for optimal section orientation
+- pyproj: Coordinate system transformations (via coordinate_service)
+
+Author: [Project Team]
+Last Modified: July 2025
+"""
+
 # ====================================================================
 # SPLIT CALLBACKS - Clean, Focused, Easy to Edit
 # ====================================================================
@@ -57,7 +110,25 @@ MAX_FILES_COUNT = 10  # Maximum number of files that can be uploaded at once
 
 
 class CallbackError(Exception):
-    """Custom exception for callback errors with user-friendly messages."""
+    """
+    Custom exception for callback errors with user-friendly messages.
+
+    This exception class enables better error handling by separating technical
+    error details (for logging) from user-friendly messages (for display).
+    It also supports different error types for appropriate styling.
+
+    Attributes:
+        user_message (str): User-friendly error message for display
+        technical_message (str): Technical error details for logging
+        error_type (str): Type of error - 'error', 'warning', or 'info'
+
+    Example:
+        >>> raise CallbackError(
+        ...     user_message="Unable to process AGS file. Please check file format.",
+        ...     technical_message="AGS parser failed: missing LOCA group header",
+        ...     error_type="error"
+        ... )
+    """
 
     def __init__(self, user_message, technical_message=None, error_type="error"):
         self.user_message = user_message
@@ -68,14 +139,30 @@ class CallbackError(Exception):
 
 def create_error_message(error, context="Operation"):
     """
-    Create a standardized error message for display to users.
+    Create a standardized error message component for display to users.
+
+    This function takes any error (Exception or CallbackError) and creates
+    a styled HTML component for consistent error presentation throughout
+    the application.
 
     Args:
-        error: Exception or error message
-        context: Context where the error occurred
+        error (Exception or CallbackError): The error to display
+        context (str): Context description where the error occurred
+                      (default: "Operation")
 
     Returns:
-        html.Div: Styled error message component
+        html.Div: Styled Dash HTML component containing the error message
+
+    Error Types and Styling:
+        - error: Red border, light red background (for critical errors)
+        - warning: Orange border, light orange background (for warnings)
+        - info: Blue border, light blue background (for informational messages)
+
+    Example:
+        >>> try:
+        ...     risky_operation()
+        ... except Exception as e:
+        ...     return create_error_message(e, "File upload")
     """
     if isinstance(error, CallbackError):
         user_msg = error.user_message

@@ -1,5 +1,46 @@
 """
-Functions for creating buffer zones around polylines
+Polyline Utilities for Advanced Geometric Operations and Cross-Section Analysis.
+
+This module provides sophisticated utilities for working with polylines in the context
+of geological cross-section generation and borehole selection. It handles buffer zone
+creation, distance calculations, and coordinate projections essential for creating
+accurate geological cross-sections from borehole data.
+
+Key Features:
+- **Buffer Zone Creation**: Generate accurate buffer polygons around polylines with metric precision
+- **Distance Calculations**: Calculate distances along polylines and from points to lines
+- **Coordinate Projections**: Project boreholes onto section lines for proper positioning
+- **Cross-Section Generation**: Create optimized polyline sections for geological visualization
+- **UTM Coordinate Handling**: Automatic UTM zone detection and accurate metric calculations
+
+Core Functions:
+1. **create_buffer_polygon()**: Generate buffer zones around polylines for borehole selection
+2. **project_boreholes_to_polyline()**: Project borehole locations onto section lines
+3. **calculate_distance_along_polyline()**: Measure distances along complex polylines
+4. **point_to_line_distance()**: Calculate perpendicular distances from points to lines
+5. **create_polyline_section()**: Generate optimized sections for geological cross-sections
+
+Geometric Operations:
+- Accurate metric calculations using UTM projections
+- Automatic UTM zone detection based on geographic location
+- Buffer polygon generation for borehole selection
+- Point-to-line projection for section positioning
+- Distance measurements for section scaling
+
+Use Cases:
+- **Cross-Section Creation**: Generate geological sections along user-drawn lines
+- **Borehole Selection**: Select boreholes within buffer zones of drawn polylines
+- **Distance Analysis**: Calculate distances between boreholes and section lines
+- **Section Optimization**: Optimize section orientation and borehole positioning
+
+Dependencies:
+- shapely: Geometric operations and spatial calculations
+- pyproj: Coordinate system transformations and UTM projections
+- numpy: Numerical calculations and array operations
+- coordinate_service: Centralized coordinate transformation services
+
+Author: [Project Team]
+Last Modified: July 2025
 """
 
 import logging

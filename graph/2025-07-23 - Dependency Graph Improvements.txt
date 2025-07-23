@@ -1,0 +1,34 @@
+────────────────────────────────────────────────────────────────────────────────────────────
+Dependency Graph Improvements - 23/07/2025
+────────────────────────────────────────────────────────────────────────────────────────────
+📝  NOTES
+--------------------------------------------------------------------------------------------
+Directory name
+Change directory from "graph" to "dependency graph" and adjust all modules to new name
+
+Module Importance
+In force directed diagram marked by node circle size
+
+Light/Dark theme
+Implement with toggle, change for colors to white for dark theme accordingly
+
+Change Frequency/Churn
+ how often a file changes (from git history).
+Highlight hotspots of frequent change.
+
+Code Complexity Metrics
+Calculate cyclomatic complexity, function length, and nesting depth for each module.
+Highlight modules with high complexity for refactoring.
+
+Dead Code Detection
+Identify unused functions, classes, or modules.
+Flag orphaned code for cleanup.
+
+Change History & Churn Analysis
+Parse git history to show which files change most often.
+Highlight unstable or frequently modified modules.
+
+Performance Hotspot Detection
+Integrate with profiling tools to highlight slow or resource-heavy modules.
+
+

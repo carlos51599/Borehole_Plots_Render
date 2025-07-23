@@ -1,8 +1,46 @@
 """
-Enhanced error handling utilities for the geotechnical borehole application.
+Enhanced Error Handling Utilities with Retry Logic and Graceful Degradation.
 
-This module provides robust error handling mechanisms including retry logic,
-graceful degradation, and improved user feedback for various error scenarios.
+This module provides robust error handling mechanisms specifically designed for
+the complex operations in geotechnical data processing. It includes intelligent
+retry logic, graceful degradation strategies, and enhanced user feedback systems
+to maintain application stability and provide excellent user experience.
+
+Key Features:
+- **Intelligent Retry Logic**: Automatic retry with exponential backoff for transient failures
+- **Graceful Degradation**: Fallback mechanisms to maintain partial functionality
+- **Enhanced User Feedback**: Clear, contextual error messages with suggested actions
+- **Error Recovery Strategies**: Automatic recovery from common error scenarios
+- **Performance Monitoring**: Track error patterns and system reliability
+
+Advanced Error Handling Patterns:
+1. **Retry Decorators**: Automatic retry for network operations and file I/O
+2. **Circuit Breaker**: Prevent cascading failures in external service calls
+3. **Fallback Mechanisms**: Alternative processing paths when primary methods fail
+4. **Error Context Preservation**: Maintain detailed context for debugging
+5. **User Action Guidance**: Provide specific steps for error resolution
+
+Specialized Handlers:
+- **AGS File Processing**: Handle malformed files with intelligent parsing fallbacks
+- **Coordinate Transformation**: Manage projection errors with alternative methods
+- **Plot Generation**: Graceful handling of matplotlib rendering issues
+- **Memory Management**: Automatic cleanup and optimization on memory errors
+- **Network Operations**: Retry logic for coordinate service and map tile failures
+
+Error Recovery Strategies:
+- Automatic file format detection and conversion
+- Alternative coordinate systems when primary projections fail
+- Simplified plotting when complex rendering fails
+- Data validation with automatic cleanup
+- Progressive feature degradation to maintain core functionality
+
+Dependencies:
+- functools: Decorator patterns for retry logic
+- dataclasses: Structured error context management
+- logging: Comprehensive error reporting and tracking
+
+Author: [Project Team]
+Last Modified: July 2025
 """
 
 import logging

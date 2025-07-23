@@ -1,12 +1,44 @@
 """
-Application Constants Configuration
+Application Constants Configuration for Centralized Settings Management.
 
 This module centralizes all hardcoded values, magic numbers, and configuration
-constants used throughout the application, improving maintainability and
-making configuration changes easier.
+constants used throughout the Geo Borehole Sections Render application. By
+consolidating these values in a single location, it improves maintainability,
+reduces the risk of inconsistent configurations, and makes system-wide
+configuration changes easier to implement and track.
 
-Usage:
+Key Benefits:
+- **Centralized Configuration**: All constants in one location for easy maintenance
+- **Type Safety**: Class-based organization prevents configuration conflicts
+- **Documentation**: Clear descriptions of each configuration value and its purpose
+- **Environment-Specific Settings**: Support for different deployment configurations
+- **Performance Optimization**: Pre-defined limits and thresholds for optimal performance
+
+Configuration Categories:
+1. **File Processing Limits**: Upload sizes, file types, and processing constraints
+2. **Map Configuration**: Default views, bounds, tile layers, and marker styles
+3. **Plot Configuration**: Figure dimensions, styling, and quality settings
+4. **UI Configuration**: Layout parameters, colors, and responsive design settings
+5. **Performance Limits**: Memory thresholds, processing timeouts, and optimization triggers
+
+Usage Patterns:
     from app_constants import MAP_CONFIG, PLOT_CONFIG, FILE_LIMITS
+
+    # Use in map initialization
+    map_center = [MAP_CONFIG.DEFAULT_CENTER_LAT, MAP_CONFIG.DEFAULT_CENTER_LON]
+
+    # Use in file validation
+    if file_size > FILE_LIMITS.MAX_FILE_SIZE_MB * 1024 * 1024:
+        raise ValueError("File too large")
+
+Environment Considerations:
+- Development vs. production settings
+- Memory-constrained vs. high-memory environments
+- Mobile vs. desktop optimization parameters
+- Network bandwidth considerations
+
+Author: [Project Team]
+Last Modified: July 2025
 """
 
 # ====================================================================
