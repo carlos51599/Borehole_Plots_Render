@@ -86,7 +86,7 @@ from loading_indicators import (
 from memory_manager import monitor_memory_usage
 
 # from section_plot import plot_section_from_ags_content
-from section_plot_professional import plot_section_from_ags_content
+from section import plot_section_from_ags_content
 
 # from borehole_log import plot_borehole_log_from_ags_content
 from borehole_log_professional import plot_borehole_log_from_ags_content

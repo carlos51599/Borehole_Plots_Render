@@ -986,7 +986,7 @@ def plot_borehole_log_from_ags_content(
     """
     try:
         # Import parser from section_plot_professional (shared logic)
-        from section_plot_professional import parse_ags_geol_section_from_string
+        from section import parse_ags_geol_section_from_string
     except ImportError as e:
         logger.error(f"Failed to import section_plot_professional: {e}")
         return None

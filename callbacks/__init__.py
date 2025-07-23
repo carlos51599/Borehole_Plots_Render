@@ -14,6 +14,30 @@ The package provides:
 import logging
 from typing import Any, Dict, List, Optional
 
+# Import utilities
+from .error_handling import (
+    CallbackError,
+    create_error_message,
+    create_success_message,
+    handle_callback_error,
+    create_callback_error_response,
+)
+from .file_validation import (
+    validate_file_size,
+    validate_total_upload_size,
+    validate_file_content,
+    safe_filename,
+)
+from .coordinate_utils import (
+    transform_coordinates,
+    calculate_map_bounds,
+    calculate_map_center_and_zoom,
+    create_selection_shape_visual,
+    validate_borehole_near_polyline,
+    BLUE_MARKER,
+    GREEN_MARKER,
+)
+
 # Import base classes from separate module to avoid circular imports
 from .base import (
     CallbackBase,

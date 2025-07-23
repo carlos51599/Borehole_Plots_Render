@@ -26,7 +26,7 @@ from error_handling import get_error_handler, ErrorCategory
 from coordinate_service import get_coordinate_service
 import config
 from app_constants import PLOT_CONFIG
-from section_plot_professional import plot_section_from_ags_content
+from section import plot_section_from_ags_content
 
 
 class PlotGenerationCallback(PlotGenerationCallbackBase):
