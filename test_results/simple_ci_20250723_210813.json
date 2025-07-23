@@ -1,0 +1,8 @@
+{
+  "timestamp": "2025-07-23T21:08:13.577328",
+  "environment": "simple_ci",
+  "health_check": true,
+  "essential_tests": false,
+  "duration": 8.53514313697815,
+  "overall_success": false
+}

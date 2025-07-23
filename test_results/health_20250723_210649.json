@@ -1,0 +1,22 @@
+{
+  "timestamp": "2025-07-23T21:06:49.488042",
+  "overall_health": true,
+  "tests": {
+    "Import Core Modules": {
+      "success": true,
+      "duration": 7.686209201812744
+    },
+    "App Creation": {
+      "success": true,
+      "duration": 0.13387155532836914
+    },
+    "Config Access": {
+      "success": true,
+      "duration": 0.0
+    },
+    "Basic Syntax": {
+      "success": true,
+      "duration": 0.0008342266082763672
+    }
+  }
+}

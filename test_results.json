@@ -1,0 +1,73 @@
+{
+  "timestamp": "2025-07-23T21:03:31.600572",
+  "duration": 8.485223770141602,
+  "quick_mode": true,
+  "verbose": false,
+  "results": {
+    "import_syntax": {
+      "name": "Import and Syntax Validation",
+      "success": true,
+      "duration": 8.304416179656982,
+      "timestamp": "2025-07-23T21:03:31.418196"
+    },
+    "api_consistency": {
+      "name": "API and Attribute Consistency",
+      "success": true,
+      "duration": 0.004237651824951172,
+      "timestamp": "2025-07-23T21:03:31.422519"
+    },
+    "functional": {
+      "name": "Functional and Integration Testing",
+      "success": true,
+      "duration": 0.1353309154510498,
+      "timestamp": "2025-07-23T21:03:31.558827"
+    },
+    "error_handling": {
+      "name": "Error Handling and Logging",
+      "success": false,
+      "duration": 0.008307218551635742,
+      "timestamp": "2025-07-23T21:03:31.569145"
+    },
+    "performance": {
+      "name": "Performance and Resource Management",
+      "success": true,
+      "duration": 0.0012438297271728516,
+      "timestamp": "2025-07-23T21:03:31.573379"
+    },
+    "ui_visualization": {
+      "name": "UI and Visualization Consistency",
+      "success": true,
+      "duration": 0.0010921955108642578,
+      "timestamp": "2025-07-23T21:03:31.576270"
+    },
+    "documentation": {
+      "name": "Documentation and Help",
+      "success": true,
+      "duration": 0.0010230541229248047,
+      "timestamp": "2025-07-23T21:03:31.578323"
+    },
+    "test_coverage": {
+      "name": "Test Coverage and Automation",
+      "success": true,
+      "duration": 0.0026869773864746094,
+      "timestamp": "2025-07-23T21:03:31.583407"
+    },
+    "deployment": {
+      "name": "Deployment and Packaging",
+      "success": true,
+      "duration": 0.002851724624633789,
+      "timestamp": "2025-07-23T21:03:31.588204"
+    },
+    "creative": {
+      "name": "Creative/Unusual Scenarios",
+      "success": true,
+      "duration": 0.0007798671722412109,
+      "timestamp": "2025-07-23T21:03:31.590133"
+    }
+  },
+  "summary": {
+    "total_categories": 10,
+    "passed_categories": 9,
+    "overall_success": false
+  }
+}

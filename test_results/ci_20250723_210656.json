@@ -1,0 +1,27 @@
+{
+  "timestamp": "2025-07-23T21:06:55.389188",
+  "environment": "CI/CD",
+  "tests": {
+    "import_syntax": {
+      "success": false,
+      "returncode": 1,
+      "stdout_lines": 0,
+      "stderr_lines": 23,
+      "has_output": false
+    },
+    "comprehensive_quick": {
+      "success": false,
+      "returncode": 1,
+      "stdout_lines": 0,
+      "stderr_lines": 23,
+      "has_output": false
+    }
+  },
+  "duration": 0.6140651702880859,
+  "summary": {
+    "total_tests": 2,
+    "passed_tests": 0,
+    "success_rate": 0.0,
+    "overall_success": false
+  }
+}
