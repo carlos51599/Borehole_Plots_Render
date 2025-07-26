@@ -2,11 +2,13 @@
 # Core packages
 dash>=3.0.0,<4.0.0
 pandas>=1.3.0
-plotly>=5.0.0
 dash-leaflet>=1.0.0,<2.0.0  # Latest stable version with full EditControl support
 matplotlib>=3.0.0
 numpy>=1.20.0
 pyproj>=3.0.0  # For coordinate system transformations (BNG to WGS84)
+sentry_sdk>=1.0.0
+shapely>=1.8.0
+psutil>=5.8.0
 
 # Optional but recommended for better performance
-dash-bootstrap-components>=1.0.0  # For better styling (optional)
+dash-bootstrap-components>=1.0.0  # For better styling (recommended)
