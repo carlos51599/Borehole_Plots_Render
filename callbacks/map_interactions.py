@@ -38,6 +38,8 @@ class MapInteractionCallback(MapInteractionCallbackBase):
 
     def __init__(self):
         super().__init__("map_interactions")
+        self.error_handler = get_error_handler()
+        self.state_manager = get_app_state_manager()
 
     def register(self, app: dash.Dash) -> None:
         """Register the map interaction callback."""
@@ -482,7 +484,12 @@ class MapInteractionCallback(MapInteractionCallbackBase):
     ) -> html.Div:
         """Create checkbox grid for borehole selection."""
 
-        import config
+        from config_modules import (
+            CHECKBOX_INSTRUCTIONS,
+            DESCRIPTION_TEXT_STYLE,
+            CHECKBOX_LABEL_STYLE,
+            CHECKBOX_LEFT_STYLE,
+        )
         from dash import dcc
 
         # Ensure checked IDs are valid
@@ -490,17 +497,15 @@ class MapInteractionCallback(MapInteractionCallbackBase):
 
         return html.Div(
             [
-                html.P(
-                    config.CHECKBOX_INSTRUCTIONS, style=config.DESCRIPTION_TEXT_STYLE
-                ),
+                html.P(CHECKBOX_INSTRUCTIONS, style=DESCRIPTION_TEXT_STYLE),
                 dcc.Checklist(
                     id="subselection-checkbox-grid",
                     options=[
                         {"label": f" {bh_id}", "value": bh_id} for bh_id in borehole_ids
                     ],
                     value=valid_checked,
-                    labelStyle=config.CHECKBOX_LABEL_STYLE,
-                    style=config.CHECKBOX_LEFT_STYLE,
+                    labelStyle=CHECKBOX_LABEL_STYLE,
+                    style=CHECKBOX_LEFT_STYLE,
                 ),
             ]
         )
@@ -662,6 +667,36 @@ class MapInteractionCallback(MapInteractionCallbackBase):
             {"display": "none"},
             [],
         )
+
+    def log_callback_start(self, context: dict) -> None:
+        """Log the start of a callback execution."""
+        self.logger.debug(f"Starting callback {self.name} with context: {context}")
+
+    def log_callback_end(self, context: dict) -> None:
+        """Log the end of a callback execution."""
+        self.logger.debug(f"Ending callback {self.name} with context: {context}")
+
+    def handle_error(
+        self, exception: Exception, output_count: int = 8
+    ) -> Tuple[Any, ...]:
+        """Handle callback errors using the error handler."""
+        error = self.error_handler.handle_callback_error(
+            exception=exception,
+            callback_name=self.name,
+        )
+
+        # Get the appropriate dash response for this error
+        response = self.error_handler.get_dash_error_response(error, output_count)
+
+        # If response is a list, return it as tuple
+        if isinstance(response, list):
+            return tuple(response)
+
+        # For single responses, create appropriate tuple
+        if output_count == 8:
+            return ([], None, None, response, [], {}, {"display": "none"}, [])
+
+        return tuple([response] + [dash.no_update] * (output_count - 1))
 
 
 def register_map_interaction_callbacks(callback_manager):

@@ -25,7 +25,8 @@ from data_loader import load_all_loca_data
 from coordinate_service import get_coordinate_service
 from dataframe_optimizer import optimize_borehole_dataframe
 from memory_manager import monitor_memory_usage
-import config
+from config_modules import SUCCESS_MESSAGE_STYLE
+from map_update_workaround import force_map_refresh_with_new_position
 
 logger = logging.getLogger(__name__)
 
@@ -42,10 +43,11 @@ class EnhancedFileUploadCallback(FileUploadCallbackBase):
         @app.callback(
             [
                 Output("output-upload", "children"),
-                Output("borehole-markers", "children"),
+                Output("borehole-markers", "children", allow_duplicate=True),
                 Output("borehole-map", "center", allow_duplicate=True),
                 Output("borehole-map", "zoom", allow_duplicate=True),
-                Output("borehole-data-store", "data"),
+                Output("borehole-map", "invalidateSize", allow_duplicate=True),
+                Output("borehole-data-store", "data", allow_duplicate=True),
                 Output("draw-control", "clear_all", allow_duplicate=True),
             ],
             [Input("upload-data-store", "data")],
@@ -62,7 +64,7 @@ class EnhancedFileUploadCallback(FileUploadCallbackBase):
 
             if not stored_data or "contents" not in stored_data:
                 logging.info("No file uploaded yet")
-                return None, [], map_center, map_zoom, None, None
+                return None, [], map_center, map_zoom, None, None, None
 
             try:
                 # Process uploaded files
@@ -88,7 +90,7 @@ class EnhancedFileUploadCallback(FileUploadCallbackBase):
                         ),
                         "File Upload",
                     )
-                    return [error_msg], [], map_center, map_zoom, None, None
+                    return [error_msg], [], map_center, map_zoom, None, None, None
 
                 ags_files = []
                 file_status = []
@@ -160,7 +162,7 @@ class EnhancedFileUploadCallback(FileUploadCallbackBase):
                         ),
                         "File Processing",
                     )
-                    return [error_msg], [], map_center, map_zoom, None, None
+                    return [error_msg], [], map_center, map_zoom, None, None, None
 
                 # Add upload summary
                 file_status.insert(
@@ -268,11 +270,17 @@ class EnhancedFileUploadCallback(FileUploadCallbackBase):
                 # Clear any existing shapes on file upload
                 clear_shapes = datetime.now().timestamp()
 
+                # Use workaround to force map update
+                invalidate_value, final_center, final_zoom, _ = (
+                    force_map_refresh_with_new_position(map_center, map_zoom, markers)
+                )
+
                 return (
                     file_status,
                     markers,
-                    map_center,
-                    map_zoom,
+                    final_center,
+                    final_zoom,
+                    invalidate_value,
                     borehole_data,
                     clear_shapes,
                 )
@@ -288,7 +296,7 @@ class EnhancedFileUploadCallback(FileUploadCallbackBase):
                     "File Upload",
                 )
                 clear_shapes = datetime.now().timestamp()
-                return [error_msg], [], map_center, map_zoom, None, clear_shapes
+                return [error_msg], [], map_center, map_zoom, None, None, clear_shapes
 
     def _create_borehole_marker(
         self, row, index: int, lat: float, lon: float
@@ -353,7 +361,7 @@ class EnhancedFileUploadCallback(FileUploadCallbackBase):
             displays.append(
                 html.Div(
                     [
-                        html.H4("File Summary:", style=config.SUCCESS_MESSAGE_STYLE),
+                        html.H4("File Summary:", style=SUCCESS_MESSAGE_STYLE),
                         html.Ul(file_breakdown),
                     ]
                 )
@@ -369,7 +377,7 @@ class EnhancedFileUploadCallback(FileUploadCallbackBase):
                 [
                     html.H4(
                         "📍 Map Status:",
-                        style={"color": "#28a745", "margin-top": "10px"},
+                        style={"color": "#28a745", "marginTop": "10px"},
                     ),
                     html.P(f"• Loaded {marker_count} borehole markers"),
                     html.P(
@@ -379,10 +387,10 @@ class EnhancedFileUploadCallback(FileUploadCallbackBase):
                     html.P(f"• Auto-zoom level: {map_zoom}"),
                 ],
                 style={
-                    "background-color": "#f8f9fa",
+                    "backgroundColor": "#f8f9fa",
                     "padding": "10px",
-                    "border-radius": "5px",
-                    "margin-top": "10px",
+                    "borderRadius": "5px",
+                    "marginTop": "10px",
                 },
             )
             displays.append(status_info)

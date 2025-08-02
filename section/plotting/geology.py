@@ -6,6 +6,11 @@ including geology color/pattern mappings, interval plotting,
 and legend creation.
 """
 
+# Configure matplotlib backend BEFORE any pyplot imports
+import matplotlib
+
+matplotlib.use("Agg")  # Use non-interactive backend for server environments
+
 import pandas as pd
 import matplotlib.pyplot as plt
 import matplotlib.patches as patches
@@ -41,16 +46,38 @@ def create_geology_mappings(
     merged: pd.DataFrame, abbr_df: Optional[pd.DataFrame]
 ) -> Tuple[Dict[str, str], Dict[str, str], Dict[str, str]]:
     """Create color, hatch, and label mappings for geological codes."""
-    unique_leg = merged["GEOL_LEG"].unique()
-    logger.debug(f"Found {len(unique_leg)} unique GEOL_LEG codes: {unique_leg}")
+
+    # Check if GEOL_LEG column exists, if not use GEOL_DESC
+    if "GEOL_LEG" in merged.columns:
+        unique_leg = merged["GEOL_LEG"].unique()
+        logger.debug(f"Found {len(unique_leg)} unique GEOL_LEG codes: {unique_leg}")
+        leg_column = "GEOL_LEG"
+    elif "GEOL_DESC" in merged.columns:
+        # Extract geological codes from descriptions or use descriptions as fallback
+        unique_leg = merged["GEOL_DESC"].unique()
+        logger.debug(
+            f"Using GEOL_DESC as geology identifier: {len(unique_leg)} unique descriptions"
+        )
+        leg_column = "GEOL_DESC"
+    else:
+        logger.warning("No geology legend or description column found")
+        return {}, {}, {}
 
     color_map = {}
     hatch_map = {}
     leg_label_map = {}
 
     for leg in unique_leg:
-        color_map[leg] = get_geology_color(leg)
-        hatch_map[leg] = get_geology_pattern(leg)
+        # Try to extract geology code from description if using GEOL_DESC
+        if leg_column == "GEOL_DESC":
+            # Try to extract geology code from description (e.g., "CLAY:" -> "CLAY")
+            match = re.search(r"([A-Z]{2,})", str(leg))
+            geology_code = match.group(1) if match else str(leg)[:4].upper()
+        else:
+            geology_code = leg
+
+        color_map[leg] = get_geology_color(geology_code)
+        hatch_map[leg] = get_geology_pattern(geology_code)
 
         # Build label using ABBR group if available
         label = leg  # fallback
@@ -59,13 +86,13 @@ def create_geology_mappings(
             and "ABBR_CODE" in abbr_df.columns
             and "ABBR_DESC" in abbr_df.columns
         ):
-            abbr_match = abbr_df[abbr_df["ABBR_CODE"] == str(leg)]
+            abbr_match = abbr_df[abbr_df["ABBR_CODE"] == str(geology_code)]
             if not abbr_match.empty:
                 label = abbr_match["ABBR_DESC"].iloc[0]
         else:
             # Fallback: first fully capitalized word(s) in GEOL_DESC
             if "GEOL_DESC" in merged.columns:
-                descs = merged.loc[merged["GEOL_LEG"] == leg, "GEOL_DESC"]
+                descs = merged.loc[merged[leg_column] == leg, "GEOL_DESC"]
                 for desc in descs:
                     match = re.search(r"([A-Z]{2,}(?: [A-Z]{2,})*)", str(desc))
                     if match:
@@ -291,7 +318,7 @@ def calculate_borehole_width(
     borehole_x_map: Dict[str, float], n_boreholes: int
 ) -> float:
     """
-    Calculate appropriate borehole width for plotting.
+    Calculate appropriate borehole width for plotting using archived logic.
 
     Args:
         borehole_x_map: Mapping of borehole IDs to x-positions
@@ -300,24 +327,27 @@ def calculate_borehole_width(
     Returns:
         Calculated borehole width
     """
-    if n_boreholes <= 1:
+    if n_boreholes <= 0:
+        return 5.0  # Default width
+
+    if n_boreholes == 1:
         return 50.0  # Default width for single borehole
 
-    # Calculate spacing between boreholes
-    x_positions = sorted(borehole_x_map.values())
-    spacings = [
-        x_positions[i + 1] - x_positions[i] for i in range(len(x_positions) - 1)
-    ]
+    # Calculate total section width
+    x_positions = list(borehole_x_map.values())
+    total_section_width = (
+        max(x_positions) - min(x_positions) if len(x_positions) > 1 else 50.0
+    )
 
-    if not spacings:
-        return 50.0
-
-    # Use 80% of minimum spacing, with reasonable bounds
-    min_spacing = min(spacings)
-    width = min_spacing * 0.8
-    width = max(10.0, min(width, 100.0))  # Clamp between 10 and 100
+    # Optimal width: use available space efficiently
+    # Based on archived version logic
+    width = min(
+        total_section_width / n_boreholes * 0.8, 25.0
+    )  # Max 25m width per borehole
+    width = max(width, 2.0)  # Minimum 2m width for readability
 
     logger.debug(
-        f"Calculated borehole width: {width:.1f} (from {n_boreholes} boreholes)"
+        f"Calculated borehole width: {width:.1f}m for {n_boreholes} boreholes "
+        f"(total width: {total_section_width:.1f}m)"
     )
     return width

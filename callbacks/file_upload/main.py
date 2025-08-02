@@ -56,10 +56,10 @@ class FileUploadCallback(FileUploadCallbackBase):
         @app.callback(
             [
                 Output("output-upload", "children"),
-                Output("borehole-markers", "children"),
+                Output("borehole-markers", "children", allow_duplicate=True),
                 Output("borehole-map", "center", allow_duplicate=True),
                 Output("borehole-map", "zoom", allow_duplicate=True),
-                Output("borehole-data-store", "data"),
+                Output("borehole-data-store", "data", allow_duplicate=True),
                 Output("draw-control", "clear_all", allow_duplicate=True),
             ],
             [Input("upload-data-store", "data")],

@@ -17,14 +17,15 @@ import base64
 from datetime import datetime
 import dash
 from dash import Output, Input, State, dcc, html
-import pandas as pd
 import matplotlib.pyplot as plt
 
 from .base import PlotGenerationCallbackBase
 from state_management import get_app_state_manager
-from error_handling import get_error_handler, ErrorCategory
+from error_handling import get_error_handler
 from coordinate_service import get_coordinate_service
-import config
+from config_modules import (
+    MAP_CENTER_STYLE,
+)  # Use MAP_CENTER_STYLE instead of SECTION_PLOT_CENTER_STYLE
 from app_constants import PLOT_CONFIG
 from section import plot_section_from_ags_content
 
@@ -82,50 +83,82 @@ class PlotGenerationCallback(PlotGenerationCallbackBase):
             except Exception as e:
                 error_msg = f"Error in plot generation callback: {str(e)}"
                 self.logger.error(error_msg)
-                self.error_handler.handle_error(
-                    e, ErrorCategory.PLOT_GENERATION, "handle_plot_generation"
-                )
+                self.error_handler.handle_callback_error(e, "handle_plot_generation")
                 return None, None, None
 
     def _handle_plot_generation_logic(
         self, checked_ids, show_labels_value, download_clicks, stored_borehole_data
     ):
         """Core logic for plot generation."""
+        import time
+
+        start_time = time.time()
+
         ctx = dash.callback_context
         triggered = ctx.triggered[0]["prop_id"] if ctx.triggered else None
 
+        self.logger.info(
+            f"Plot generation started. Checked IDs: {len(checked_ids) if checked_ids else 0}"
+        )
+
         if not stored_borehole_data or not checked_ids:
+            self.logger.info("No data or checked IDs - returning None")
             return None, None, None
 
         show_labels = "show_labels" in (show_labels_value or [])
 
         try:
-            # Get AGS content
+            # Get AGS content with timeout protection
             filename_map = stored_borehole_data["filename_map"]
             combined_content = ""
             for filename, content in filename_map.items():
                 combined_content += content + "\n"
 
+            content_prep_time = time.time()
+            self.logger.info(
+                f"Content preparation took: {content_prep_time - start_time:.2f}s"
+            )
+
             # Generate section plot with polyline data if available
             section_line = self._process_polyline_data(stored_borehole_data)
 
+            polyline_time = time.time()
+            self.logger.info(
+                f"Polyline processing took: {polyline_time - content_prep_time:.2f}s"
+            )
+
+            # Add timeout protection around the main plotting function
+            self.logger.info("Starting section plot generation...")
             fig = plot_section_from_ags_content(
                 combined_content,
-                checked_ids,
+                filter_loca_ids=checked_ids,
                 section_line=section_line,
                 show_labels=show_labels,
+                return_base64=False,  # Return matplotlib Figure object for processing
+            )
+
+            plot_generation_time = time.time()
+            self.logger.info(
+                f"Plot generation took: {plot_generation_time - polyline_time:.2f}s"
             )
 
             if fig:
-                return self._process_plot_figure(fig, triggered, download_clicks)
+                result = self._process_plot_figure(fig, triggered, download_clicks)
+                total_time = time.time()
+                self.logger.info(
+                    f"Total plot generation time: {total_time - start_time:.2f}s"
+                )
+                return result
             else:
+                self.logger.warning("Plot generation returned None")
                 return None, None, None
 
         except Exception as e:
-            self.logger.error(f"Error generating plot: {e}")
-            self.error_handler.handle_error(
-                e, ErrorCategory.PLOT_GENERATION, "plot_generation_logic"
+            total_time = time.time()
+            self.logger.error(
+                f"Error generating plot after {total_time - start_time:.2f}s: {e}"
             )
+            self.error_handler.handle_callback_error(e, "plot_generation_logic")
             return None, None, None
 
     def _process_polyline_data(self, stored_borehole_data):
@@ -139,12 +172,6 @@ class PlotGenerationCallback(PlotGenerationCallbackBase):
             # Convert polyline from geographic coordinates (lat/lon) to projected coordinates (easting/northing)
             # to match the coordinate system used by LOCA_NATE/LOCA_NATN in the borehole data
             try:
-                from shapely.geometry import LineString
-
-                # Create a line from the polyline coordinates
-                line_points = [(lon, lat) for lat, lon in polyline_coords]
-                line = LineString(line_points)
-
                 # Extract lat/lon coordinates for transformation
                 lats, lons = zip(*[(lat, lon) for lat, lon in polyline_coords])
 
@@ -178,28 +205,23 @@ class PlotGenerationCallback(PlotGenerationCallbackBase):
         """Process the matplotlib figure into display and download formats."""
         try:
             # Convert to image with higher DPI for sharper text
+            # CRITICAL FIX: Use bbox_inches=None to preserve exact A4 landscape proportions
+            # This matches the working borehole log implementation pattern
             buf = io.BytesIO()
             fig.savefig(
                 buf,
                 format="png",
-                bbox_inches="tight",
+                bbox_inches=None,  # FIXED: Was "tight" - now preserves exact figure dimensions
                 dpi=PLOT_CONFIG.PREVIEW_DPI,
             )
             buf.seek(0)
             img_bytes = buf.read()
             img_b64 = base64.b64encode(img_bytes).decode("utf-8")
 
-            # Create a custom style that preserves aspect ratio
-            preserved_aspect_style = {
-                **config.SECTION_PLOT_CENTER_STYLE,  # Copy base styles
-                "height": "auto",  # Let height be determined by width and aspect ratio
-                "maxHeight": "80vh",  # Maximum height (80% of viewport height)
-                "objectFit": "contain",  # Ensure the whole image is visible
-            }
-
+            # Create a custom style that preserves aspect ratio and allows full width
             section_plot = html.Img(
                 src=f"data:image/png;base64,{img_b64}",
-                style=preserved_aspect_style,
+                style=MAP_CENTER_STYLE,  # Use updated config style
             )
 
             # Handle download

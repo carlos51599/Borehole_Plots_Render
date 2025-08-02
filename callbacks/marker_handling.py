@@ -19,7 +19,7 @@ import dash_leaflet as dl
 
 from .base import MarkerHandlingCallbackBase
 from state_management import get_app_state_manager
-from error_handling import get_error_handler, ErrorCategory
+from error_handling import get_error_handler
 from app_constants import MAP_CONFIG
 from borehole_log import plot_borehole_log_from_ags_content  # Use compatibility wrapper
 
@@ -47,7 +47,7 @@ class MarkerHandlingCallback(MarkerHandlingCallbackBase):
 
         @app.callback(
             [
-                Output("section-plot-output", "children"),
+                Output("log-plot-output", "children", allow_duplicate=True),
                 Output("borehole-markers", "children", allow_duplicate=True),
             ],
             [
@@ -77,9 +77,7 @@ class MarkerHandlingCallback(MarkerHandlingCallbackBase):
             except Exception as e:
                 error_msg = f"Error in marker click handler: {str(e)}"
                 self.logger.error(error_msg)
-                self.error_handler.handle_error(
-                    e, ErrorCategory.MARKER_INTERACTION, "marker_click_handler"
-                )
+                self.error_handler.handle_callback_error(e, "marker_click_handler")
                 return html.Div(f"Error generating borehole log: {e}"), no_update
 
     def _handle_marker_click_logic(
@@ -209,9 +207,18 @@ class MarkerHandlingCallback(MarkerHandlingCallbackBase):
                     )
                 )
 
+            # CRITICAL FIX: Handle data URL prefix correctly
+            # The borehole log function already returns data URL format
+            if img_b64.startswith("data:image/png;base64,"):
+                # Already has prefix, use as-is
+                src_url = img_b64
+            else:
+                # Add prefix if missing
+                src_url = f"data:image/png;base64,{img_b64}"
+
             image_elements.append(
                 html.Img(
-                    src=f"data:image/png;base64,{img_b64}",
+                    src=src_url,
                     style=preserved_aspect_style,
                 )
             )
@@ -252,6 +259,9 @@ class MarkerHandlingCallback(MarkerHandlingCallbackBase):
                     new_marker = marker.copy()
                     new_props = marker["props"].copy()
 
+                    # CRITICAL FIX: Preserve n_clicks state before updating
+                    old_n_clicks = marker["props"].get("n_clicks", 0)
+
                     # Update icon color based on whether this marker was clicked
                     if i == clicked_index:
                         # Make clicked marker green
@@ -266,6 +276,8 @@ class MarkerHandlingCallback(MarkerHandlingCallbackBase):
                             new_icon["iconUrl"] = self.BLUE_MARKER
                             new_props["icon"] = new_icon
 
+                    # CRITICAL FIX: Restore n_clicks state after property updates
+                    new_props["n_clicks"] = old_n_clicks
                     new_marker["props"] = new_props
                     updated_markers.append(new_marker)
                 else:

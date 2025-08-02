@@ -5,6 +5,11 @@ This module handles the figure layout, professional formatting,
 axis setup, and visual styling for section plots.
 """
 
+# Configure matplotlib backend BEFORE any pyplot imports
+import matplotlib
+
+matplotlib.use("Agg")  # Use non-interactive backend for server environments
+
 import matplotlib.pyplot as plt
 import matplotlib.ticker as ticker
 import numpy as np

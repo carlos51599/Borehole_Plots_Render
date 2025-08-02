@@ -1,66 +1,349 @@
-2025-07-23 21:08:13,031 INFO [app_setup.py:52 setup_logging] App starting at 2025-07-23 21:08:13.031906
-2025-07-23 21:08:13,035 INFO [app_setup.py:53 setup_logging] Dash version: 3.1.1
-2025-07-23 21:08:13,035 INFO [app_setup.py:54 setup_logging] Dash-leaflet version: 1.1.3
-2025-07-23 21:08:13,035 INFO [app_setup.py:55 setup_logging] ✓ Matplotlib logging optimized for performance
-2025-07-23 21:08:13,131 INFO [app_setup.py:70 create_application] Dash application created successfully
-2025-07-23 21:08:13,131 INFO [main.py:38 create_and_configure_app] Creating app layout...
-2025-07-23 21:08:13,147 INFO [main.py:40 create_and_configure_app] App layout created successfully
-2025-07-23 21:08:13,147 INFO [main.py:43 create_and_configure_app] === LAYOUT COMPONENT IDs ===
-2025-07-23 21:08:13,147 INFO [app_setup.py:93 log_layout_ids] Found component ID: font-cache-warmed
-2025-07-23 21:08:13,153 INFO [app_setup.py:93 log_layout_ids] Found component ID: logo-container
-2025-07-23 21:08:13,153 INFO [app_setup.py:93 log_layout_ids] Found component ID: logo-img
-2025-07-23 21:08:13,153 INFO [app_setup.py:93 log_layout_ids] Found component ID: light-theme-btn
-2025-07-23 21:08:13,153 INFO [app_setup.py:93 log_layout_ids] Found component ID: dark-theme-btn
-2025-07-23 21:08:13,153 INFO [app_setup.py:93 log_layout_ids] Found component ID: upload-ags
-2025-07-23 21:08:13,153 INFO [app_setup.py:93 log_layout_ids] Found component ID: output-upload
-2025-07-23 21:08:13,153 INFO [app_setup.py:93 log_layout_ids] Found component ID: borehole-search-section
-2025-07-23 21:08:13,153 INFO [app_setup.py:93 log_layout_ids] Found component ID: borehole-search-dropdown
-2025-07-23 21:08:13,157 INFO [app_setup.py:93 log_layout_ids] Found component ID: search-go-btn
-2025-07-23 21:08:13,158 INFO [app_setup.py:93 log_layout_ids] Found component ID: search-feedback
-2025-07-23 21:08:13,159 INFO [app_setup.py:93 log_layout_ids] Found component ID: borehole-map
-2025-07-23 21:08:13,159 INFO [app_setup.py:93 log_layout_ids] Found component ID: borehole-markers
-2025-07-23 21:08:13,159 INFO [app_setup.py:93 log_layout_ids] Found component ID: selection-shapes
-2025-07-23 21:08:13,159 INFO [app_setup.py:93 log_layout_ids] Found component ID: pca-line-group
-2025-07-23 21:08:13,159 INFO [app_setup.py:93 log_layout_ids] Found component ID: draw-feature-group
-2025-07-23 21:08:13,159 INFO [app_setup.py:93 log_layout_ids] Found component ID: draw-control
-2025-07-23 21:08:13,159 INFO [app_setup.py:93 log_layout_ids] Found component ID: buffer-controls
-2025-07-23 21:08:13,159 INFO [app_setup.py:93 log_layout_ids] Found component ID: buffer-input
-2025-07-23 21:08:13,159 INFO [app_setup.py:93 log_layout_ids] Found component ID: update-buffer-btn
-2025-07-23 21:08:13,163 INFO [app_setup.py:93 log_layout_ids] Found component ID: selected-borehole-info
-2025-07-23 21:08:13,163 INFO [app_setup.py:93 log_layout_ids] Found component ID: section-plot-output
-2025-07-23 21:08:13,163 INFO [app_setup.py:93 log_layout_ids] Found component ID: log-plot-output
-2025-07-23 21:08:13,163 INFO [app_setup.py:93 log_layout_ids] Found component ID: show-labels-checkbox
-2025-07-23 21:08:13,163 INFO [app_setup.py:93 log_layout_ids] Found component ID: download-section-btn
-2025-07-23 21:08:13,163 INFO [app_setup.py:93 log_layout_ids] Found component ID: download-section-plot
-2025-07-23 21:08:13,163 INFO [app_setup.py:93 log_layout_ids] Found component ID: ui-feedback
-2025-07-23 21:08:13,163 INFO [app_setup.py:93 log_layout_ids] Found component ID: subselection-checkbox-grid-container
-2025-07-23 21:08:13,167 INFO [app_setup.py:93 log_layout_ids] Found component ID: subselection-checkbox-grid
-2025-07-23 21:08:13,167 INFO [app_setup.py:93 log_layout_ids] Found component ID: upload-data-store
-2025-07-23 21:08:13,168 INFO [app_setup.py:93 log_layout_ids] Found component ID: borehole-data-store
-2025-07-23 21:08:13,169 INFO [app_setup.py:93 log_layout_ids] Found component ID: search-selected-borehole
-2025-07-23 21:08:13,169 INFO [app_setup.py:93 log_layout_ids] Found component ID: draw-state-store
-2025-07-23 21:08:13,170 INFO [main.py:45 create_and_configure_app] === END LAYOUT IDs ===
-2025-07-23 21:08:13,170 INFO [clientside_callbacks.py:183 register_all_clientside_callbacks] Registering clientside callbacks...
-2025-07-23 21:08:13,170 INFO [clientside_callbacks.py:188 register_all_clientside_callbacks] ✅ All clientside callbacks registered successfully!
-2025-07-23 21:08:13,173 INFO [server_callbacks.py:74 register_all_server_callbacks] Registering server-side callbacks...
-2025-07-23 21:08:13,173 INFO [server_callbacks.py:78 register_all_server_callbacks] ✅ All server-side callbacks registered successfully!
-2025-07-23 21:08:13,173 INFO [main.py:54 create_and_configure_app] Registering split callbacks...
-2025-07-23 21:08:13,173 INFO [__init__.py:107 get_callback_manager] Created global callback manager instance
-2025-07-23 21:08:13,173 INFO [error_handling.py:394 get_error_handler] Created global error handler instance
-2025-07-23 21:08:13,173 INFO [app_state.py:85 __init__] Initialized centralized application state manager
-2025-07-23 21:08:13,173 INFO [app_state.py:325 get_app_state_manager] Created singleton application state manager
-2025-07-23 21:08:13,173 DEBUG [__init__.py:71 add_callback] Added callback: file_upload (file_upload)
-2025-07-23 21:08:13,173 DEBUG [__init__.py:71 add_callback] Added callback: map_interactions (map_interactions)
-2025-07-23 21:08:13,173 DEBUG [__init__.py:71 add_callback] Added callback: plot_generation (plot_generation)
-2025-07-23 21:08:13,178 DEBUG [__init__.py:71 add_callback] Added callback: search_functionality (search)
-2025-07-23 21:08:13,179 DEBUG [__init__.py:71 add_callback] Added callback: marker_handling (marker_interaction)
-2025-07-23 21:08:13,179 INFO [__init__.py:78 register_all] Registered callback: file_upload
-2025-07-23 21:08:13,179 INFO [__init__.py:78 register_all] Registered callback: map_interactions
-2025-07-23 21:08:13,181 INFO [plot_generation.py:47 register] Registered plot generation callbacks
-2025-07-23 21:08:13,181 INFO [__init__.py:78 register_all] Registered callback: plot_generation
-2025-07-23 21:08:13,181 INFO [search_functionality.py:41 register] Registered search functionality callbacks
-2025-07-23 21:08:13,183 INFO [__init__.py:78 register_all] Registered callback: search_functionality
-2025-07-23 21:08:13,184 INFO [marker_handling.py:43 register] Registered marker handling callbacks
-2025-07-23 21:08:13,185 INFO [__init__.py:78 register_all] Registered callback: marker_handling
-2025-07-23 21:08:13,186 INFO [__init__.py:137 register_all_callbacks] Registered 5 callbacks across 5 categories
-2025-07-23 21:08:13,187 INFO [main.py:56 create_and_configure_app] ✅ All callbacks registered successfully!
+2025-08-02 14:26:21,258 INFO [app_setup.py:52 setup_logging] App starting at 2025-08-02 14:26:21.258852
+2025-08-02 14:26:21,260 INFO [app_setup.py:53 setup_logging] Dash version: 3.1.1
+2025-08-02 14:26:21,261 INFO [app_setup.py:54 setup_logging] Dash-leaflet version: 1.1.3
+2025-08-02 14:26:21,262 INFO [app_setup.py:55 setup_logging] ✓ Matplotlib logging optimized for performance
+2025-08-02 14:26:21,321 INFO [app_setup.py:70 create_application] Dash application created successfully
+2025-08-02 14:26:21,321 INFO [main.py:43 create_and_configure_app] Creating app layout...
+2025-08-02 14:26:21,325 INFO [main.py:45 create_and_configure_app] App layout created successfully
+2025-08-02 14:26:21,326 INFO [main.py:48 create_and_configure_app] === LAYOUT COMPONENT IDs ===
+2025-08-02 14:26:21,326 INFO [app_setup.py:93 log_layout_ids] Found component ID: font-cache-warmed
+2025-08-02 14:26:21,327 INFO [app_setup.py:93 log_layout_ids] Found component ID: logo-container
+2025-08-02 14:26:21,327 INFO [app_setup.py:93 log_layout_ids] Found component ID: logo-img
+2025-08-02 14:26:21,328 INFO [app_setup.py:93 log_layout_ids] Found component ID: light-theme-btn
+2025-08-02 14:26:21,329 INFO [app_setup.py:93 log_layout_ids] Found component ID: dark-theme-btn
+2025-08-02 14:26:21,329 INFO [app_setup.py:93 log_layout_ids] Found component ID: upload-ags
+2025-08-02 14:26:21,330 INFO [app_setup.py:93 log_layout_ids] Found component ID: output-upload
+2025-08-02 14:26:21,331 INFO [app_setup.py:93 log_layout_ids] Found component ID: borehole-search-section
+2025-08-02 14:26:21,332 INFO [app_setup.py:93 log_layout_ids] Found component ID: borehole-search-dropdown
+2025-08-02 14:26:21,332 INFO [app_setup.py:93 log_layout_ids] Found component ID: search-go-btn
+2025-08-02 14:26:21,333 INFO [app_setup.py:93 log_layout_ids] Found component ID: search-feedback
+2025-08-02 14:26:21,333 INFO [app_setup.py:93 log_layout_ids] Found component ID: borehole-map
+2025-08-02 14:26:21,334 INFO [app_setup.py:93 log_layout_ids] Found component ID: borehole-markers
+2025-08-02 14:26:21,335 INFO [app_setup.py:93 log_layout_ids] Found component ID: selection-shapes
+2025-08-02 14:26:21,336 INFO [app_setup.py:93 log_layout_ids] Found component ID: pca-line-group
+2025-08-02 14:26:21,336 INFO [app_setup.py:93 log_layout_ids] Found component ID: draw-feature-group
+2025-08-02 14:26:21,337 INFO [app_setup.py:93 log_layout_ids] Found component ID: draw-control
+2025-08-02 14:26:21,337 INFO [app_setup.py:93 log_layout_ids] Found component ID: buffer-controls
+2025-08-02 14:26:21,338 INFO [app_setup.py:93 log_layout_ids] Found component ID: buffer-input
+2025-08-02 14:26:21,339 INFO [app_setup.py:93 log_layout_ids] Found component ID: update-buffer-btn
+2025-08-02 14:26:21,339 INFO [app_setup.py:93 log_layout_ids] Found component ID: selected-borehole-info
+2025-08-02 14:26:21,340 INFO [app_setup.py:93 log_layout_ids] Found component ID: section-plot-output
+2025-08-02 14:26:21,340 INFO [app_setup.py:93 log_layout_ids] Found component ID: log-plot-output
+2025-08-02 14:26:21,341 INFO [app_setup.py:93 log_layout_ids] Found component ID: show-labels-checkbox
+2025-08-02 14:26:21,342 INFO [app_setup.py:93 log_layout_ids] Found component ID: download-section-btn
+2025-08-02 14:26:21,342 INFO [app_setup.py:93 log_layout_ids] Found component ID: download-section-plot
+2025-08-02 14:26:21,343 INFO [app_setup.py:93 log_layout_ids] Found component ID: ui-feedback
+2025-08-02 14:26:21,344 INFO [app_setup.py:93 log_layout_ids] Found component ID: subselection-checkbox-grid-container
+2025-08-02 14:26:21,344 INFO [app_setup.py:93 log_layout_ids] Found component ID: subselection-checkbox-grid
+2025-08-02 14:26:21,345 INFO [app_setup.py:93 log_layout_ids] Found component ID: upload-data-store
+2025-08-02 14:26:21,345 INFO [app_setup.py:93 log_layout_ids] Found component ID: borehole-data-store
+2025-08-02 14:26:21,346 INFO [app_setup.py:93 log_layout_ids] Found component ID: search-selected-borehole
+2025-08-02 14:26:21,347 INFO [app_setup.py:93 log_layout_ids] Found component ID: draw-state-store
+2025-08-02 14:26:21,347 INFO [main.py:50 create_and_configure_app] === END LAYOUT IDs ===
+2025-08-02 14:26:21,348 INFO [clientside_callbacks.py:183 register_all_clientside_callbacks] Registering clientside callbacks...
+2025-08-02 14:26:21,349 INFO [clientside_callbacks.py:188 register_all_clientside_callbacks] ✅ All clientside callbacks registered successfully!
+2025-08-02 14:26:21,350 INFO [server_callbacks.py:74 register_all_server_callbacks] Registering server-side callbacks...
+2025-08-02 14:26:21,350 INFO [server_callbacks.py:78 register_all_server_callbacks] ✅ All server-side callbacks registered successfully!
+2025-08-02 14:26:21,351 INFO [main.py:59 create_and_configure_app] Registering split callbacks...
+2025-08-02 14:26:21,351 INFO [__init__.py:107 get_callback_manager] Created global callback manager instance
+2025-08-02 14:26:21,352 INFO [error_handling.py:393 get_error_handler] Created global error handler instance
+2025-08-02 14:26:21,352 INFO [app_state.py:85 __init__] Initialized centralized application state manager
+2025-08-02 14:26:21,353 INFO [app_state.py:325 get_app_state_manager] Created singleton application state manager
+2025-08-02 14:26:21,353 DEBUG [__init__.py:71 add_callback] Added callback: file_upload (file_upload)
+2025-08-02 14:26:21,354 DEBUG [__init__.py:71 add_callback] Added callback: map_interactions (map_interactions)
+2025-08-02 14:26:21,354 DEBUG [__init__.py:71 add_callback] Added callback: plot_generation (plot_generation)
+2025-08-02 14:26:21,354 DEBUG [__init__.py:71 add_callback] Added callback: search_functionality (search)
+2025-08-02 14:26:21,355 DEBUG [__init__.py:71 add_callback] Added callback: marker_handling (marker_interaction)
+2025-08-02 14:26:21,355 INFO [__init__.py:78 register_all] Registered callback: file_upload
+2025-08-02 14:26:21,356 INFO [__init__.py:78 register_all] Registered callback: map_interactions
+2025-08-02 14:26:21,356 INFO [plot_generation.py:48 register] Registered plot generation callbacks
+2025-08-02 14:26:21,356 INFO [__init__.py:78 register_all] Registered callback: plot_generation
+2025-08-02 14:26:21,357 INFO [search_functionality.py:42 register] Registered search functionality callbacks
+2025-08-02 14:26:21,358 INFO [__init__.py:78 register_all] Registered callback: search_functionality
+2025-08-02 14:26:21,359 INFO [marker_handling.py:43 register] Registered marker handling callbacks
+2025-08-02 14:26:21,360 INFO [__init__.py:78 register_all] Registered callback: marker_handling
+2025-08-02 14:26:21,360 INFO [__init__.py:137 register_all_callbacks] Registered 5 callbacks across 5 categories
+2025-08-02 14:26:21,360 INFO [main.py:61 create_and_configure_app] ✅ All callbacks registered successfully!
+2025-08-02 14:26:21,361 INFO [app_setup.py:117 start_application] Opening browser and starting Dash server on 0.0.0.0:8050
+2025-08-02 14:26:21,766 DEBUG [connectionpool.py:1049 _new_conn] Starting new HTTPS connection (1): o4509734367395840.ingest.de.sentry.io:443
+2025-08-02 14:26:22,155 INFO [server_callbacks.py:34 store_upload_data] No upload data to store
+2025-08-02 14:26:22,220 INFO [main.py:71 handle_file_upload] === FILE UPLOAD CALLBACK ===
+2025-08-02 14:26:22,221 INFO [main.py:80 handle_file_upload] No file uploaded yet
+2025-08-02 14:26:22,228 DEBUG [map_interactions.py:673 log_callback_start] Starting callback map_interactions with context: {'trigger': 'draw-control.geojson', 'has_geojson': True, 'checked_count': 0}
+2025-08-02 14:26:22,229 WARNING [map_interactions.py:90 handle_map_interactions] No stored borehole data available
+2025-08-02 14:26:22,265 INFO [search_functionality.py:55 update_search_dropdown] === UPDATING SEARCH DROPDOWN ===
+2025-08-02 14:26:22,265 INFO [search_functionality.py:70 _update_search_dropdown_logic] No borehole data available for search
+2025-08-02 14:26:22,277 INFO [search_functionality.py:55 update_search_dropdown] === UPDATING SEARCH DROPDOWN ===
+2025-08-02 14:26:22,278 INFO [search_functionality.py:70 _update_search_dropdown_logic] No borehole data available for search
+2025-08-02 14:26:22,401 INFO [server_callbacks.py:34 store_upload_data] No upload data to store
+2025-08-02 14:26:22,548 INFO [main.py:71 handle_file_upload] === FILE UPLOAD CALLBACK ===
+2025-08-02 14:26:22,548 INFO [main.py:80 handle_file_upload] No file uploaded yet
+2025-08-02 14:26:22,622 INFO [search_functionality.py:55 update_search_dropdown] === UPDATING SEARCH DROPDOWN ===
+2025-08-02 14:26:22,623 INFO [search_functionality.py:70 _update_search_dropdown_logic] No borehole data available for search
+2025-08-02 14:26:23,323 DEBUG [map_interactions.py:673 log_callback_start] Starting callback map_interactions with context: {'trigger': 'draw-control.geojson', 'has_geojson': True, 'checked_count': 0}
+2025-08-02 14:26:23,324 WARNING [map_interactions.py:90 handle_map_interactions] No stored borehole data available
+2025-08-02 14:26:23,368 INFO [search_functionality.py:55 update_search_dropdown] === UPDATING SEARCH DROPDOWN ===
+2025-08-02 14:26:23,369 INFO [search_functionality.py:70 _update_search_dropdown_logic] No borehole data available for search
+2025-08-02 14:26:23,454 DEBUG [connectionpool.py:544 _make_request] https://o4509734367395840.ingest.de.sentry.io:443 "POST /api/4509734463144016/envelope/ HTTP/1.1" 200 0
+2025-08-02 14:26:23,931 DEBUG [connectionpool.py:544 _make_request] https://o4509734367395840.ingest.de.sentry.io:443 "POST /api/4509734463144016/envelope/ HTTP/1.1" 200 0
+2025-08-02 14:26:24,429 DEBUG [connectionpool.py:544 _make_request] https://o4509734367395840.ingest.de.sentry.io:443 "POST /api/4509734463144016/envelope/ HTTP/1.1" 200 0
+2025-08-02 14:26:24,941 DEBUG [connectionpool.py:544 _make_request] https://o4509734367395840.ingest.de.sentry.io:443 "POST /api/4509734463144016/envelope/ HTTP/1.1" 200 0
+2025-08-02 14:26:25,462 DEBUG [connectionpool.py:544 _make_request] https://o4509734367395840.ingest.de.sentry.io:443 "POST /api/4509734463144016/envelope/ HTTP/1.1" 200 0
+2025-08-02 14:26:26,023 DEBUG [connectionpool.py:544 _make_request] https://o4509734367395840.ingest.de.sentry.io:443 "POST /api/4509734463144016/envelope/ HTTP/1.1" 200 0
+2025-08-02 14:26:26,594 DEBUG [connectionpool.py:544 _make_request] https://o4509734367395840.ingest.de.sentry.io:443 "POST /api/4509734463144016/envelope/ HTTP/1.1" 200 0
+2025-08-02 14:26:27,200 DEBUG [connectionpool.py:544 _make_request] https://o4509734367395840.ingest.de.sentry.io:443 "POST /api/4509734463144016/envelope/ HTTP/1.1" 200 0
+2025-08-02 14:26:27,859 DEBUG [connectionpool.py:544 _make_request] https://o4509734367395840.ingest.de.sentry.io:443 "POST /api/4509734463144016/envelope/ HTTP/1.1" 200 0
+2025-08-02 14:26:28,032 INFO [server_callbacks.py:38 store_upload_data] === STORING UPLOAD DATA ===
+2025-08-02 14:26:28,035 INFO [server_callbacks.py:40 store_upload_data] Storing 1 files
+2025-08-02 14:26:28,068 INFO [main.py:71 handle_file_upload] === FILE UPLOAD CALLBACK ===
+2025-08-02 14:26:28,068 INFO [main.py:86 handle_file_upload] Processing 1 uploaded files
+2025-08-02 14:26:28,080 INFO [processing.py:57 process_uploaded_files] Successfully processed file: FLRG - 2025-05-20 1711 - Preliminary data - 4.ags (0.7MB)
+2025-08-02 14:26:28,101 INFO [processing.py:81 load_and_optimize_borehole_data] Loaded 136 boreholes
+2025-08-02 14:26:28,102 INFO [memory_manager.py:98 __init__] MemoryManager initialized: threshold=500.0MB, cleanup_interval=30min, auto_cleanup=True
+2025-08-02 14:26:28,103 DEBUG [memory_manager.py:444 monitor_memory_usage] Memory usage: 322.42MB RSS, 1.0% of system, 13441.55MB available
+2025-08-02 14:26:28,103 INFO [dataframe_optimizer.py:289 optimize_borehole_dataframe] Applying borehole-specific DataFrame optimizations
+2025-08-02 14:26:28,106 INFO [dataframe_optimizer.py:311 optimize_borehole_dataframe] Optimized borehole column ags_file: saved 12,986 bytes
+2025-08-02 14:26:28,107 INFO [dataframe_optimizer.py:311 optimize_borehole_dataframe] Optimized borehole column LOCA_TYPE: saved 6,155 bytes
+2025-08-02 14:26:28,108 INFO [dataframe_optimizer.py:311 optimize_borehole_dataframe] Optimized borehole column LOCA_STAT: saved 7,040 bytes
+2025-08-02 14:26:28,109 INFO [dataframe_optimizer.py:62 optimize_dataframe_memory] Starting DataFrame optimization for 136 rows, 47 columns
+2025-08-02 14:26:28,116 DEBUG [dataframe_optimizer.py:100 optimize_dataframe_memory] Converted LOCA_GREF to categorical: 1 unique values (0.7%), saved 6,371 bytes
+2025-08-02 14:26:28,118 DEBUG [dataframe_optimizer.py:100 optimize_dataframe_memory] Converted LOCA_GL to categorical: 96 unique values (70.6%), saved -40 bytes
+2025-08-02 14:26:28,119 DEBUG [dataframe_optimizer.py:100 optimize_dataframe_memory] Converted LOCA_REM to categorical: 62 unique values (45.6%), saved 21,755 bytes
+2025-08-02 14:26:28,120 DEBUG [dataframe_optimizer.py:100 optimize_dataframe_memory] Converted LOCA_FDEP to categorical: 51 unique values (37.5%), saved 2,265 bytes
+2025-08-02 14:26:28,121 DEBUG [dataframe_optimizer.py:100 optimize_dataframe_memory] Converted LOCA_STAR to categorical: 53 unique values (39.0%), saved 2,657 bytes
+2025-08-02 14:26:28,122 DEBUG [dataframe_optimizer.py:100 optimize_dataframe_memory] Converted LOCA_PURP to categorical: 1 unique values (0.7%), saved 6,371 bytes
+2025-08-02 14:26:28,124 DEBUG [dataframe_optimizer.py:100 optimize_dataframe_memory] Converted LOCA_TERM to categorical: 4 unique values (2.9%), saved 7,359 bytes
+2025-08-02 14:26:28,125 DEBUG [dataframe_optimizer.py:100 optimize_dataframe_memory] Converted LOCA_ENDD to categorical: 52 unique values (38.2%), saved 2,716 bytes
+2025-08-02 14:26:28,126 DEBUG [dataframe_optimizer.py:100 optimize_dataframe_memory] Converted LOCA_LETT to categorical: 1 unique values (0.7%), saved 6,371 bytes
+2025-08-02 14:26:28,127 DEBUG [dataframe_optimizer.py:100 optimize_dataframe_memory] Converted LOCA_LOCX to categorical: 1 unique values (0.7%), saved 6,371 bytes
+2025-08-02 14:26:28,128 DEBUG [dataframe_optimizer.py:100 optimize_dataframe_memory] Converted LOCA_LOCY to categorical: 1 unique values (0.7%), saved 6,371 bytes
+2025-08-02 14:26:28,129 DEBUG [dataframe_optimizer.py:100 optimize_dataframe_memory] Converted LOCA_LOCZ to categorical: 1 unique values (0.7%), saved 6,371 bytes
+2025-08-02 14:26:28,129 DEBUG [dataframe_optimizer.py:100 optimize_dataframe_memory] Converted LOCA_LREF to categorical: 1 unique values (0.7%), saved 6,371 bytes
+2025-08-02 14:26:28,131 DEBUG [dataframe_optimizer.py:100 optimize_dataframe_memory] Converted LOCA_DATM to categorical: 1 unique values (0.7%), saved 6,371 bytes
+2025-08-02 14:26:28,132 DEBUG [dataframe_optimizer.py:100 optimize_dataframe_memory] Converted LOCA_ETRV to categorical: 1 unique values (0.7%), saved 6,371 bytes
+2025-08-02 14:26:28,133 DEBUG [dataframe_optimizer.py:100 optimize_dataframe_memory] Converted LOCA_NTRV to categorical: 1 unique values (0.7%), saved 6,371 bytes
+2025-08-02 14:26:28,134 DEBUG [dataframe_optimizer.py:100 optimize_dataframe_memory] Converted LOCA_LTRV to categorical: 1 unique values (0.7%), saved 6,371 bytes
+2025-08-02 14:26:28,135 DEBUG [dataframe_optimizer.py:100 optimize_dataframe_memory] Converted LOCA_XTRL to categorical: 1 unique values (0.7%), saved 6,371 bytes
+2025-08-02 14:26:28,136 DEBUG [dataframe_optimizer.py:100 optimize_dataframe_memory] Converted LOCA_YTRL to categorical: 1 unique values (0.7%), saved 6,371 bytes
+2025-08-02 14:26:28,138 DEBUG [dataframe_optimizer.py:100 optimize_dataframe_memory] Converted LOCA_ZTRL to categorical: 1 unique values (0.7%), saved 6,371 bytes
+2025-08-02 14:26:28,139 DEBUG [dataframe_optimizer.py:100 optimize_dataframe_memory] Converted LOCA_LAT to categorical: 1 unique values (0.7%), saved 6,371 bytes
+2025-08-02 14:26:28,140 DEBUG [dataframe_optimizer.py:100 optimize_dataframe_memory] Converted LOCA_LON to categorical: 1 unique values (0.7%), saved 6,371 bytes
+2025-08-02 14:26:28,141 DEBUG [dataframe_optimizer.py:100 optimize_dataframe_memory] Converted LOCA_ELAT to categorical: 1 unique values (0.7%), saved 6,371 bytes
+2025-08-02 14:26:28,142 DEBUG [dataframe_optimizer.py:100 optimize_dataframe_memory] Converted LOCA_ELON to categorical: 1 unique values (0.7%), saved 6,371 bytes
+2025-08-02 14:26:28,145 DEBUG [dataframe_optimizer.py:100 optimize_dataframe_memory] Converted LOCA_LLZ to categorical: 1 unique values (0.7%), saved 6,371 bytes
+2025-08-02 14:26:28,146 DEBUG [dataframe_optimizer.py:100 optimize_dataframe_memory] Converted LOCA_LOCM to categorical: 2 unique values (1.5%), saved 7,552 bytes
+2025-08-02 14:26:28,147 DEBUG [dataframe_optimizer.py:100 optimize_dataframe_memory] Converted LOCA_LOCA to categorical: 1 unique values (0.7%), saved 6,371 bytes
+2025-08-02 14:26:28,148 DEBUG [dataframe_optimizer.py:100 optimize_dataframe_memory] Converted LOCA_CLST to categorical: 1 unique values (0.7%), saved 6,371 bytes
+2025-08-02 14:26:28,149 DEBUG [dataframe_optimizer.py:100 optimize_dataframe_memory] Converted LOCA_ALID to categorical: 1 unique values (0.7%), saved 6,371 bytes
+2025-08-02 14:26:28,151 DEBUG [dataframe_optimizer.py:100 optimize_dataframe_memory] Converted LOCA_OFFS to categorical: 1 unique values (0.7%), saved 6,371 bytes
+2025-08-02 14:26:28,152 DEBUG [dataframe_optimizer.py:100 optimize_dataframe_memory] Converted LOCA_CNGE to categorical: 1 unique values (0.7%), saved 6,371 bytes
+2025-08-02 14:26:28,152 DEBUG [dataframe_optimizer.py:100 optimize_dataframe_memory] Converted LOCA_TRAN to categorical: 1 unique values (0.7%), saved 6,371 bytes
+2025-08-02 14:26:28,153 DEBUG [dataframe_optimizer.py:100 optimize_dataframe_memory] Converted FILE_FSET to categorical: 1 unique values (0.7%), saved 6,371 bytes
+2025-08-02 14:26:28,154 DEBUG [dataframe_optimizer.py:100 optimize_dataframe_memory] Converted LOCA_NATD to categorical: 1 unique values (0.7%), saved 6,371 bytes
+2025-08-02 14:26:28,156 DEBUG [dataframe_optimizer.py:100 optimize_dataframe_memory] Converted LOCA_ORID to categorical: 1 unique values (0.7%), saved 6,371 bytes
+2025-08-02 14:26:28,158 DEBUG [dataframe_optimizer.py:100 optimize_dataframe_memory] Converted LOCA_ORJO to categorical: 1 unique values (0.7%), saved 6,371 bytes
+2025-08-02 14:26:28,159 DEBUG [dataframe_optimizer.py:100 optimize_dataframe_memory] Converted LOCA_ORCO to categorical: 1 unique values (0.7%), saved 6,371 bytes
+2025-08-02 14:26:28,160 DEBUG [dataframe_optimizer.py:100 optimize_dataframe_memory] Converted LOCA_CHKG to categorical: 7 unique values (5.1%), saved 6,326 bytes
+2025-08-02 14:26:28,162 DEBUG [dataframe_optimizer.py:100 optimize_dataframe_memory] Converted LOCA_APPG to categorical: 1 unique values (0.7%), saved 6,371 bytes
+2025-08-02 14:26:28,163 DEBUG [dataframe_optimizer.py:100 optimize_dataframe_memory] Converted LOCA_WELL to categorical: 1 unique values (0.7%), saved 6,371 bytes
+2025-08-02 14:26:28,164 DEBUG [dataframe_optimizer.py:144 optimize_dataframe_memory] Optimized LOCA_NATE: float64 -> float32, saved 544 bytes
+2025-08-02 14:26:28,165 DEBUG [dataframe_optimizer.py:144 optimize_dataframe_memory] Optimized LOCA_NATN: float64 -> float32, saved 544 bytes
+2025-08-02 14:26:28,170 INFO [dataframe_optimizer.py:154 optimize_dataframe_memory] DataFrame optimization complete:
+2025-08-02 14:26:28,171 INFO [dataframe_optimizer.py:155 optimize_dataframe_memory]   Initial memory: 333,256 bytes (0.32 MB)
+2025-08-02 14:26:28,171 INFO [dataframe_optimizer.py:158 optimize_dataframe_memory]   Final memory: 77,706 bytes (0.07 MB)
+2025-08-02 14:26:28,172 INFO [dataframe_optimizer.py:161 optimize_dataframe_memory]   Total savings: 255,550 bytes (76.7%)
+2025-08-02 14:26:28,172 INFO [dataframe_optimizer.py:164 optimize_dataframe_memory]   Categorical conversions: 40
+2025-08-02 14:26:28,172 INFO [dataframe_optimizer.py:165 optimize_dataframe_memory]   Numeric conversions: 2
+2025-08-02 14:26:28,173 INFO [processing.py:86 load_and_optimize_borehole_data] ✓ DataFrame optimized for memory efficiency: 136 rows
+2025-08-02 14:26:28,299 DEBUG [coordinate_service.py:83 get_transformer] Created transformer: EPSG:27700 -> EPSG:4326
+2025-08-02 14:26:28,300 DEBUG [coordinate_service.py:196 transform_bng_to_wgs84] Transformed BNG to WGS84: 1 points
+2025-08-02 14:26:28,303 DEBUG [coordinate_service.py:196 transform_bng_to_wgs84] Transformed BNG to WGS84: 1 points
+2025-08-02 14:26:28,304 DEBUG [coordinate_service.py:196 transform_bng_to_wgs84] Transformed BNG to WGS84: 1 points
+2025-08-02 14:26:28,305 DEBUG [coordinate_service.py:196 transform_bng_to_wgs84] Transformed BNG to WGS84: 1 points
+2025-08-02 14:26:28,306 DEBUG [coordinate_service.py:196 transform_bng_to_wgs84] Transformed BNG to WGS84: 1 points
+2025-08-02 14:26:28,306 DEBUG [coordinate_service.py:196 transform_bng_to_wgs84] Transformed BNG to WGS84: 1 points
+2025-08-02 14:26:28,307 DEBUG [coordinate_service.py:196 transform_bng_to_wgs84] Transformed BNG to WGS84: 1 points
+2025-08-02 14:26:28,308 DEBUG [coordinate_service.py:196 transform_bng_to_wgs84] Transformed BNG to WGS84: 1 points
+2025-08-02 14:26:28,309 DEBUG [coordinate_service.py:196 transform_bng_to_wgs84] Transformed BNG to WGS84: 1 points
+2025-08-02 14:26:28,311 DEBUG [coordinate_service.py:196 transform_bng_to_wgs84] Transformed BNG to WGS84: 1 points
+2025-08-02 14:26:28,312 DEBUG [coordinate_service.py:196 transform_bng_to_wgs84] Transformed BNG to WGS84: 1 points
+2025-08-02 14:26:28,314 DEBUG [coordinate_service.py:196 transform_bng_to_wgs84] Transformed BNG to WGS84: 1 points
+2025-08-02 14:26:28,315 DEBUG [coordinate_service.py:196 transform_bng_to_wgs84] Transformed BNG to WGS84: 1 points
+2025-08-02 14:26:28,316 DEBUG [coordinate_service.py:196 transform_bng_to_wgs84] Transformed BNG to WGS84: 1 points
+2025-08-02 14:26:28,317 DEBUG [coordinate_service.py:196 transform_bng_to_wgs84] Transformed BNG to WGS84: 1 points
+2025-08-02 14:26:28,319 DEBUG [coordinate_service.py:196 transform_bng_to_wgs84] Transformed BNG to WGS84: 1 points
+2025-08-02 14:26:28,320 DEBUG [coordinate_service.py:196 transform_bng_to_wgs84] Transformed BNG to WGS84: 1 points
+2025-08-02 14:26:28,320 DEBUG [coordinate_service.py:196 transform_bng_to_wgs84] Transformed BNG to WGS84: 1 points
+2025-08-02 14:26:28,322 DEBUG [coordinate_service.py:196 transform_bng_to_wgs84] Transformed BNG to WGS84: 1 points
+2025-08-02 14:26:28,323 DEBUG [coordinate_service.py:196 transform_bng_to_wgs84] Transformed BNG to WGS84: 1 points
+2025-08-02 14:26:28,325 DEBUG [coordinate_service.py:196 transform_bng_to_wgs84] Transformed BNG to WGS84: 1 points
+2025-08-02 14:26:28,326 DEBUG [coordinate_service.py:196 transform_bng_to_wgs84] Transformed BNG to WGS84: 1 points
+2025-08-02 14:26:28,327 DEBUG [coordinate_service.py:196 transform_bng_to_wgs84] Transformed BNG to WGS84: 1 points
+2025-08-02 14:26:28,328 DEBUG [coordinate_service.py:196 transform_bng_to_wgs84] Transformed BNG to WGS84: 1 points
+2025-08-02 14:26:28,330 DEBUG [coordinate_service.py:196 transform_bng_to_wgs84] Transformed BNG to WGS84: 1 points
+2025-08-02 14:26:28,331 DEBUG [coordinate_service.py:196 transform_bng_to_wgs84] Transformed BNG to WGS84: 1 points
+2025-08-02 14:26:28,332 DEBUG [coordinate_service.py:196 transform_bng_to_wgs84] Transformed BNG to WGS84: 1 points
+2025-08-02 14:26:28,333 DEBUG [coordinate_service.py:196 transform_bng_to_wgs84] Transformed BNG to WGS84: 1 points
+2025-08-02 14:26:28,334 DEBUG [coordinate_service.py:196 transform_bng_to_wgs84] Transformed BNG to WGS84: 1 points
+2025-08-02 14:26:28,335 DEBUG [coordinate_service.py:196 transform_bng_to_wgs84] Transformed BNG to WGS84: 1 points
+2025-08-02 14:26:28,336 DEBUG [coordinate_service.py:196 transform_bng_to_wgs84] Transformed BNG to WGS84: 1 points
+2025-08-02 14:26:28,337 DEBUG [coordinate_service.py:196 transform_bng_to_wgs84] Transformed BNG to WGS84: 1 points
+2025-08-02 14:26:28,338 DEBUG [coordinate_service.py:196 transform_bng_to_wgs84] Transformed BNG to WGS84: 1 points
+2025-08-02 14:26:28,339 DEBUG [coordinate_service.py:196 transform_bng_to_wgs84] Transformed BNG to WGS84: 1 points
+2025-08-02 14:26:28,341 DEBUG [coordinate_service.py:196 transform_bng_to_wgs84] Transformed BNG to WGS84: 1 points
+2025-08-02 14:26:28,343 DEBUG [coordinate_service.py:196 transform_bng_to_wgs84] Transformed BNG to WGS84: 1 points
+2025-08-02 14:26:28,345 DEBUG [coordinate_service.py:196 transform_bng_to_wgs84] Transformed BNG to WGS84: 1 points
+2025-08-02 14:26:28,346 DEBUG [coordinate_service.py:196 transform_bng_to_wgs84] Transformed BNG to WGS84: 1 points
+2025-08-02 14:26:28,347 DEBUG [coordinate_service.py:196 transform_bng_to_wgs84] Transformed BNG to WGS84: 1 points
+2025-08-02 14:26:28,348 DEBUG [coordinate_service.py:196 transform_bng_to_wgs84] Transformed BNG to WGS84: 1 points
+2025-08-02 14:26:28,349 DEBUG [coordinate_service.py:196 transform_bng_to_wgs84] Transformed BNG to WGS84: 1 points
+2025-08-02 14:26:28,350 DEBUG [coordinate_service.py:196 transform_bng_to_wgs84] Transformed BNG to WGS84: 1 points
+2025-08-02 14:26:28,351 DEBUG [coordinate_service.py:196 transform_bng_to_wgs84] Transformed BNG to WGS84: 1 points
+2025-08-02 14:26:28,352 DEBUG [coordinate_service.py:196 transform_bng_to_wgs84] Transformed BNG to WGS84: 1 points
+2025-08-02 14:26:28,353 DEBUG [coordinate_service.py:196 transform_bng_to_wgs84] Transformed BNG to WGS84: 1 points
+2025-08-02 14:26:28,354 DEBUG [coordinate_service.py:196 transform_bng_to_wgs84] Transformed BNG to WGS84: 1 points
+2025-08-02 14:26:28,355 DEBUG [coordinate_service.py:196 transform_bng_to_wgs84] Transformed BNG to WGS84: 1 points
+2025-08-02 14:26:28,355 DEBUG [coordinate_service.py:196 transform_bng_to_wgs84] Transformed BNG to WGS84: 1 points
+2025-08-02 14:26:28,357 DEBUG [coordinate_service.py:196 transform_bng_to_wgs84] Transformed BNG to WGS84: 1 points
+2025-08-02 14:26:28,358 DEBUG [coordinate_service.py:196 transform_bng_to_wgs84] Transformed BNG to WGS84: 1 points
+2025-08-02 14:26:28,359 DEBUG [coordinate_service.py:196 transform_bng_to_wgs84] Transformed BNG to WGS84: 1 points
+2025-08-02 14:26:28,360 DEBUG [coordinate_service.py:196 transform_bng_to_wgs84] Transformed BNG to WGS84: 1 points
+2025-08-02 14:26:28,361 DEBUG [coordinate_service.py:196 transform_bng_to_wgs84] Transformed BNG to WGS84: 1 points
+2025-08-02 14:26:28,362 DEBUG [coordinate_service.py:196 transform_bng_to_wgs84] Transformed BNG to WGS84: 1 points
+2025-08-02 14:26:28,363 DEBUG [coordinate_service.py:196 transform_bng_to_wgs84] Transformed BNG to WGS84: 1 points
+2025-08-02 14:26:28,364 DEBUG [coordinate_service.py:196 transform_bng_to_wgs84] Transformed BNG to WGS84: 1 points
+2025-08-02 14:26:28,365 DEBUG [coordinate_service.py:196 transform_bng_to_wgs84] Transformed BNG to WGS84: 1 points
+2025-08-02 14:26:28,366 DEBUG [coordinate_service.py:196 transform_bng_to_wgs84] Transformed BNG to WGS84: 1 points
+2025-08-02 14:26:28,367 DEBUG [coordinate_service.py:196 transform_bng_to_wgs84] Transformed BNG to WGS84: 1 points
+2025-08-02 14:26:28,368 DEBUG [coordinate_service.py:196 transform_bng_to_wgs84] Transformed BNG to WGS84: 1 points
+2025-08-02 14:26:28,369 DEBUG [coordinate_service.py:196 transform_bng_to_wgs84] Transformed BNG to WGS84: 1 points
+2025-08-02 14:26:28,370 DEBUG [coordinate_service.py:196 transform_bng_to_wgs84] Transformed BNG to WGS84: 1 points
+2025-08-02 14:26:28,370 DEBUG [coordinate_service.py:196 transform_bng_to_wgs84] Transformed BNG to WGS84: 1 points
+2025-08-02 14:26:28,371 DEBUG [coordinate_service.py:196 transform_bng_to_wgs84] Transformed BNG to WGS84: 1 points
+2025-08-02 14:26:28,371 DEBUG [coordinate_service.py:196 transform_bng_to_wgs84] Transformed BNG to WGS84: 1 points
+2025-08-02 14:26:28,372 DEBUG [coordinate_service.py:196 transform_bng_to_wgs84] Transformed BNG to WGS84: 1 points
+2025-08-02 14:26:28,373 DEBUG [coordinate_service.py:196 transform_bng_to_wgs84] Transformed BNG to WGS84: 1 points
+2025-08-02 14:26:28,374 DEBUG [coordinate_service.py:196 transform_bng_to_wgs84] Transformed BNG to WGS84: 1 points
+2025-08-02 14:26:28,375 DEBUG [coordinate_service.py:196 transform_bng_to_wgs84] Transformed BNG to WGS84: 1 points
+2025-08-02 14:26:28,376 DEBUG [coordinate_service.py:196 transform_bng_to_wgs84] Transformed BNG to WGS84: 1 points
+2025-08-02 14:26:28,377 DEBUG [coordinate_service.py:196 transform_bng_to_wgs84] Transformed BNG to WGS84: 1 points
+2025-08-02 14:26:28,379 DEBUG [coordinate_service.py:196 transform_bng_to_wgs84] Transformed BNG to WGS84: 1 points
+2025-08-02 14:26:28,381 DEBUG [coordinate_service.py:196 transform_bng_to_wgs84] Transformed BNG to WGS84: 1 points
+2025-08-02 14:26:28,382 DEBUG [coordinate_service.py:196 transform_bng_to_wgs84] Transformed BNG to WGS84: 1 points
+2025-08-02 14:26:28,383 DEBUG [coordinate_service.py:196 transform_bng_to_wgs84] Transformed BNG to WGS84: 1 points
+2025-08-02 14:26:28,384 DEBUG [coordinate_service.py:196 transform_bng_to_wgs84] Transformed BNG to WGS84: 1 points
+2025-08-02 14:26:28,385 DEBUG [coordinate_service.py:196 transform_bng_to_wgs84] Transformed BNG to WGS84: 1 points
+2025-08-02 14:26:28,386 DEBUG [coordinate_service.py:196 transform_bng_to_wgs84] Transformed BNG to WGS84: 1 points
+2025-08-02 14:26:28,388 DEBUG [coordinate_service.py:196 transform_bng_to_wgs84] Transformed BNG to WGS84: 1 points
+2025-08-02 14:26:28,390 DEBUG [coordinate_service.py:196 transform_bng_to_wgs84] Transformed BNG to WGS84: 1 points
+2025-08-02 14:26:28,391 DEBUG [coordinate_service.py:196 transform_bng_to_wgs84] Transformed BNG to WGS84: 1 points
+2025-08-02 14:26:28,393 DEBUG [coordinate_service.py:196 transform_bng_to_wgs84] Transformed BNG to WGS84: 1 points
+2025-08-02 14:26:28,394 DEBUG [coordinate_service.py:196 transform_bng_to_wgs84] Transformed BNG to WGS84: 1 points
+2025-08-02 14:26:28,395 DEBUG [coordinate_service.py:196 transform_bng_to_wgs84] Transformed BNG to WGS84: 1 points
+2025-08-02 14:26:28,396 DEBUG [coordinate_service.py:196 transform_bng_to_wgs84] Transformed BNG to WGS84: 1 points
+2025-08-02 14:26:28,397 DEBUG [coordinate_service.py:196 transform_bng_to_wgs84] Transformed BNG to WGS84: 1 points
+2025-08-02 14:26:28,398 DEBUG [coordinate_service.py:196 transform_bng_to_wgs84] Transformed BNG to WGS84: 1 points
+2025-08-02 14:26:28,398 DEBUG [coordinate_service.py:196 transform_bng_to_wgs84] Transformed BNG to WGS84: 1 points
+2025-08-02 14:26:28,399 DEBUG [coordinate_service.py:196 transform_bng_to_wgs84] Transformed BNG to WGS84: 1 points
+2025-08-02 14:26:28,400 DEBUG [coordinate_service.py:196 transform_bng_to_wgs84] Transformed BNG to WGS84: 1 points
+2025-08-02 14:26:28,401 DEBUG [coordinate_service.py:196 transform_bng_to_wgs84] Transformed BNG to WGS84: 1 points
+2025-08-02 14:26:28,402 DEBUG [coordinate_service.py:196 transform_bng_to_wgs84] Transformed BNG to WGS84: 1 points
+2025-08-02 14:26:28,403 DEBUG [coordinate_service.py:196 transform_bng_to_wgs84] Transformed BNG to WGS84: 1 points
+2025-08-02 14:26:28,404 DEBUG [coordinate_service.py:196 transform_bng_to_wgs84] Transformed BNG to WGS84: 1 points
+2025-08-02 14:26:28,405 DEBUG [coordinate_service.py:196 transform_bng_to_wgs84] Transformed BNG to WGS84: 1 points
+2025-08-02 14:26:28,406 DEBUG [coordinate_service.py:196 transform_bng_to_wgs84] Transformed BNG to WGS84: 1 points
+2025-08-02 14:26:28,408 DEBUG [coordinate_service.py:196 transform_bng_to_wgs84] Transformed BNG to WGS84: 1 points
+2025-08-02 14:26:28,409 DEBUG [coordinate_service.py:196 transform_bng_to_wgs84] Transformed BNG to WGS84: 1 points
+2025-08-02 14:26:28,410 DEBUG [coordinate_service.py:196 transform_bng_to_wgs84] Transformed BNG to WGS84: 1 points
+2025-08-02 14:26:28,411 DEBUG [coordinate_service.py:196 transform_bng_to_wgs84] Transformed BNG to WGS84: 1 points
+2025-08-02 14:26:28,413 DEBUG [coordinate_service.py:196 transform_bng_to_wgs84] Transformed BNG to WGS84: 1 points
+2025-08-02 14:26:28,413 DEBUG [coordinate_service.py:196 transform_bng_to_wgs84] Transformed BNG to WGS84: 1 points
+2025-08-02 14:26:28,414 DEBUG [coordinate_service.py:196 transform_bng_to_wgs84] Transformed BNG to WGS84: 1 points
+2025-08-02 14:26:28,415 DEBUG [coordinate_service.py:196 transform_bng_to_wgs84] Transformed BNG to WGS84: 1 points
+2025-08-02 14:26:28,416 DEBUG [coordinate_service.py:196 transform_bng_to_wgs84] Transformed BNG to WGS84: 1 points
+2025-08-02 14:26:28,417 DEBUG [coordinate_service.py:196 transform_bng_to_wgs84] Transformed BNG to WGS84: 1 points
+2025-08-02 14:26:28,418 DEBUG [coordinate_service.py:196 transform_bng_to_wgs84] Transformed BNG to WGS84: 1 points
+2025-08-02 14:26:28,419 DEBUG [coordinate_service.py:196 transform_bng_to_wgs84] Transformed BNG to WGS84: 1 points
+2025-08-02 14:26:28,420 DEBUG [coordinate_service.py:196 transform_bng_to_wgs84] Transformed BNG to WGS84: 1 points
+2025-08-02 14:26:28,421 DEBUG [coordinate_service.py:196 transform_bng_to_wgs84] Transformed BNG to WGS84: 1 points
+2025-08-02 14:26:28,422 DEBUG [coordinate_service.py:196 transform_bng_to_wgs84] Transformed BNG to WGS84: 1 points
+2025-08-02 14:26:28,423 DEBUG [coordinate_service.py:196 transform_bng_to_wgs84] Transformed BNG to WGS84: 1 points
+2025-08-02 14:26:28,424 DEBUG [coordinate_service.py:196 transform_bng_to_wgs84] Transformed BNG to WGS84: 1 points
+2025-08-02 14:26:28,425 DEBUG [coordinate_service.py:196 transform_bng_to_wgs84] Transformed BNG to WGS84: 1 points
+2025-08-02 14:26:28,426 DEBUG [coordinate_service.py:196 transform_bng_to_wgs84] Transformed BNG to WGS84: 1 points
+2025-08-02 14:26:28,427 DEBUG [coordinate_service.py:196 transform_bng_to_wgs84] Transformed BNG to WGS84: 1 points
+2025-08-02 14:26:28,428 DEBUG [coordinate_service.py:196 transform_bng_to_wgs84] Transformed BNG to WGS84: 1 points
+2025-08-02 14:26:28,429 DEBUG [coordinate_service.py:196 transform_bng_to_wgs84] Transformed BNG to WGS84: 1 points
+2025-08-02 14:26:28,430 DEBUG [coordinate_service.py:196 transform_bng_to_wgs84] Transformed BNG to WGS84: 1 points
+2025-08-02 14:26:28,430 DEBUG [coordinate_service.py:196 transform_bng_to_wgs84] Transformed BNG to WGS84: 1 points
+2025-08-02 14:26:28,431 DEBUG [coordinate_service.py:196 transform_bng_to_wgs84] Transformed BNG to WGS84: 1 points
+2025-08-02 14:26:28,432 DEBUG [coordinate_service.py:196 transform_bng_to_wgs84] Transformed BNG to WGS84: 1 points
+2025-08-02 14:26:28,432 DEBUG [coordinate_service.py:196 transform_bng_to_wgs84] Transformed BNG to WGS84: 1 points
+2025-08-02 14:26:28,433 DEBUG [coordinate_service.py:196 transform_bng_to_wgs84] Transformed BNG to WGS84: 1 points
+2025-08-02 14:26:28,434 DEBUG [coordinate_service.py:196 transform_bng_to_wgs84] Transformed BNG to WGS84: 1 points
+2025-08-02 14:26:28,435 DEBUG [coordinate_service.py:196 transform_bng_to_wgs84] Transformed BNG to WGS84: 1 points
+2025-08-02 14:26:28,436 DEBUG [coordinate_service.py:196 transform_bng_to_wgs84] Transformed BNG to WGS84: 1 points
+2025-08-02 14:26:28,437 DEBUG [coordinate_service.py:196 transform_bng_to_wgs84] Transformed BNG to WGS84: 1 points
+2025-08-02 14:26:28,439 DEBUG [coordinate_service.py:196 transform_bng_to_wgs84] Transformed BNG to WGS84: 1 points
+2025-08-02 14:26:28,440 DEBUG [coordinate_service.py:196 transform_bng_to_wgs84] Transformed BNG to WGS84: 1 points
+2025-08-02 14:26:28,441 DEBUG [coordinate_service.py:196 transform_bng_to_wgs84] Transformed BNG to WGS84: 1 points
+2025-08-02 14:26:28,442 DEBUG [coordinate_service.py:196 transform_bng_to_wgs84] Transformed BNG to WGS84: 1 points
+2025-08-02 14:26:28,443 DEBUG [coordinate_service.py:196 transform_bng_to_wgs84] Transformed BNG to WGS84: 1 points
+2025-08-02 14:26:28,444 DEBUG [coordinate_service.py:196 transform_bng_to_wgs84] Transformed BNG to WGS84: 1 points
+2025-08-02 14:26:28,445 DEBUG [coordinate_service.py:196 transform_bng_to_wgs84] Transformed BNG to WGS84: 1 points
+2025-08-02 14:26:28,446 DEBUG [coordinate_service.py:196 transform_bng_to_wgs84] Transformed BNG to WGS84: 1 points
+2025-08-02 14:26:28,446 INFO [processing.py:138 transform_coordinates_and_create_markers] Created 136 map markers from 136 valid coordinates
+2025-08-02 14:26:28,447 INFO [processing.py:250 calculate_optimal_map_view] 🎯 Setting map center: [53.872774, -2.182809] with zoom 10
+2025-08-02 14:26:28,560 DEBUG [connectionpool.py:544 _make_request] https://o4509734367395840.ingest.de.sentry.io:443 "POST /api/4509734463144016/envelope/ HTTP/1.1" 200 0
+2025-08-02 14:26:28,584 INFO [marker_handling.py:87 _handle_marker_click_logic] === MARKER CLICK CALLBACK ===
+2025-08-02 14:26:28,585 INFO [marker_handling.py:88 _handle_marker_click_logic] Triggered by: [{'prop_id': '{"index":0,"type":"borehole-marker"}.n_clicks', 'value': 0}, {'prop_id': '{"index":1,"type":"borehole-marker"}.n_clicks', 'value': 0}, {'prop_id': '{"index":2,"type":"borehole-marker"}.n_clicks', 'value': 0}, {'prop_id': '{"index":3,"type":"borehole-marker"}.n_clicks', 'value': 0}, {'prop_id': '{"index":4,"type":"borehole-marker"}.n_clicks', 'value': 0}, {'prop_id': '{"index":5,"type":"borehole-marker"}.n_clicks', 'value': 0}, {'prop_id': '{"index":6,"type":"borehole-marker"}.n_clicks', 'value': 0}, {'prop_id': '{"index":7,"type":"borehole-marker"}.n_clicks', 'value': 0}, {'prop_id': '{"index":8,"type":"borehole-marker"}.n_clicks', 'value': 0}, {'prop_id': '{"index":9,"type":"borehole-marker"}.n_clicks', 'value': 0}, {'prop_id': '{"index":10,"type":"borehole-marker"}.n_clicks', 'value': 0}, {'prop_id': '{"index":11,"type":"borehole-marker"}.n_clicks', 'value': 0}, {'prop_id': '{"index":12,"type":"borehole-marker"}.n_clicks', 'value': 0}, {'prop_id': '{"index":13,"type":"borehole-marker"}.n_clicks', 'value': 0}, {'prop_id': '{"index":14,"type":"borehole-marker"}.n_clicks', 'value': 0}, {'prop_id': '{"index":15,"type":"borehole-marker"}.n_clicks', 'value': 0}, {'prop_id': '{"index":16,"type":"borehole-marker"}.n_clicks', 'value': 0}, {'prop_id': '{"index":17,"type":"borehole-marker"}.n_clicks', 'value': 0}, {'prop_id': '{"index":18,"type":"borehole-marker"}.n_clicks', 'value': 0}, {'prop_id': '{"index":19,"type":"borehole-marker"}.n_clicks', 'value': 0}, {'prop_id': '{"index":20,"type":"borehole-marker"}.n_clicks', 'value': 0}, {'prop_id': '{"index":21,"type":"borehole-marker"}.n_clicks', 'value': 0}, {'prop_id': '{"index":22,"type":"borehole-marker"}.n_clicks', 'value': 0}, {'prop_id': '{"index":23,"type":"borehole-marker"}.n_clicks', 'value': 0}, {'prop_id': '{"index":24,"type":"borehole-marker"}.n_clicks', 'value': 0}, {'prop_id': '{"index":25,"type":"borehole-marker"}.n_clicks', 'value': 0}, {'prop_id': '{"index":26,"type":"borehole-marker"}.n_clicks', 'value': 0}, {'prop_id': '{"index":27,"type":"borehole-marker"}.n_clicks', 'value': 0}, {'prop_id': '{"index":28,"type":"borehole-marker"}.n_clicks', 'value': 0}, {'prop_id': '{"index":29,"type":"borehole-marker"}.n_clicks', 'value': 0}, {'prop_id': '{"index":30,"type":"borehole-marker"}.n_clicks', 'value': 0}, {'prop_id': '{"index":31,"type":"borehole-marker"}.n_clicks', 'value': 0}, {'prop_id': '{"index":32,"type":"borehole-marker"}.n_clicks', 'value': 0}, {'prop_id': '{"index":33,"type":"borehole-marker"}.n_clicks', 'value': 0}, {'prop_id': '{"index":34,"type":"borehole-marker"}.n_clicks', 'value': 0}, {'prop_id': '{"index":35,"type":"borehole-marker"}.n_clicks', 'value': 0}, {'prop_id': '{"index":36,"type":"borehole-marker"}.n_clicks', 'value': 0}, {'prop_id': '{"index":37,"type":"borehole-marker"}.n_clicks', 'value': 0}, {'prop_id': '{"index":38,"type":"borehole-marker"}.n_clicks', 'value': 0}, {'prop_id': '{"index":39,"type":"borehole-marker"}.n_clicks', 'value': 0}, {'prop_id': '{"index":40,"type":"borehole-marker"}.n_clicks', 'value': 0}, {'prop_id': '{"index":41,"type":"borehole-marker"}.n_clicks', 'value': 0}, {'prop_id': '{"index":42,"type":"borehole-marker"}.n_clicks', 'value': 0}, {'prop_id': '{"index":43,"type":"borehole-marker"}.n_clicks', 'value': 0}, {'prop_id': '{"index":44,"type":"borehole-marker"}.n_clicks', 'value': 0}, {'prop_id': '{"index":45,"type":"borehole-marker"}.n_clicks', 'value': 0}, {'prop_id': '{"index":46,"type":"borehole-marker"}.n_clicks', 'value': 0}, {'prop_id': '{"index":47,"type":"borehole-marker"}.n_clicks', 'value': 0}, {'prop_id': '{"index":48,"type":"borehole-marker"}.n_clicks', 'value': 0}, {'prop_id': '{"index":49,"type":"borehole-marker"}.n_clicks', 'value': 0}, {'prop_id': '{"index":50,"type":"borehole-marker"}.n_clicks', 'value': 0}, {'prop_id': '{"index":51,"type":"borehole-marker"}.n_clicks', 'value': 0}, {'prop_id': '{"index":52,"type":"borehole-marker"}.n_clicks', 'value': 0}, {'prop_id': '{"index":53,"type":"borehole-marker"}.n_clicks', 'value': 0}, {'prop_id': '{"index":54,"type":"borehole-marker"}.n_clicks', 'value': 0}, {'prop_id': '{"index":55,"type":"borehole-marker"}.n_clicks', 'value': 0}, {'prop_id': '{"index":56,"type":"borehole-marker"}.n_clicks', 'value': 0}, {'prop_id': '{"index":57,"type":"borehole-marker"}.n_clicks', 'value': 0}, {'prop_id': '{"index":58,"type":"borehole-marker"}.n_clicks', 'value': 0}, {'prop_id': '{"index":59,"type":"borehole-marker"}.n_clicks', 'value': 0}, {'prop_id': '{"index":60,"type":"borehole-marker"}.n_clicks', 'value': 0}, {'prop_id': '{"index":61,"type":"borehole-marker"}.n_clicks', 'value': 0}, {'prop_id': '{"index":62,"type":"borehole-marker"}.n_clicks', 'value': 0}, {'prop_id': '{"index":63,"type":"borehole-marker"}.n_clicks', 'value': 0}, {'prop_id': '{"index":64,"type":"borehole-marker"}.n_clicks', 'value': 0}, {'prop_id': '{"index":65,"type":"borehole-marker"}.n_clicks', 'value': 0}, {'prop_id': '{"index":66,"type":"borehole-marker"}.n_clicks', 'value': 0}, {'prop_id': '{"index":67,"type":"borehole-marker"}.n_clicks', 'value': 0}, {'prop_id': '{"index":68,"type":"borehole-marker"}.n_clicks', 'value': 0}, {'prop_id': '{"index":69,"type":"borehole-marker"}.n_clicks', 'value': 0}, {'prop_id': '{"index":70,"type":"borehole-marker"}.n_clicks', 'value': 0}, {'prop_id': '{"index":71,"type":"borehole-marker"}.n_clicks', 'value': 0}, {'prop_id': '{"index":72,"type":"borehole-marker"}.n_clicks', 'value': 0}, {'prop_id': '{"index":73,"type":"borehole-marker"}.n_clicks', 'value': 0}, {'prop_id': '{"index":74,"type":"borehole-marker"}.n_clicks', 'value': 0}, {'prop_id': '{"index":75,"type":"borehole-marker"}.n_clicks', 'value': 0}, {'prop_id': '{"index":76,"type":"borehole-marker"}.n_clicks', 'value': 0}, {'prop_id': '{"index":77,"type":"borehole-marker"}.n_clicks', 'value': 0}, {'prop_id': '{"index":78,"type":"borehole-marker"}.n_clicks', 'value': 0}, {'prop_id': '{"index":79,"type":"borehole-marker"}.n_clicks', 'value': 0}, {'prop_id': '{"index":80,"type":"borehole-marker"}.n_clicks', 'value': 0}, {'prop_id': '{"index":81,"type":"borehole-marker"}.n_clicks', 'value': 0}, {'prop_id': '{"index":82,"type":"borehole-marker"}.n_clicks', 'value': 0}, {'prop_id': '{"index":83,"type":"borehole-marker"}.n_clicks', 'value': 0}, {'prop_id': '{"index":84,"type":"borehole-marker"}.n_clicks', 'value': 0}, {'prop_id': '{"index":85,"type":"borehole-marker"}.n_clicks', 'value': 0}, {'prop_id': '{"index":86,"type":"borehole-marker"}.n_clicks', 'value': 0}, {'prop_id': '{"index":87,"type":"borehole-marker"}.n_clicks', 'value': 0}, {'prop_id': '{"index":88,"type":"borehole-marker"}.n_clicks', 'value': 0}, {'prop_id': '{"index":89,"type":"borehole-marker"}.n_clicks', 'value': 0}, {'prop_id': '{"index":90,"type":"borehole-marker"}.n_clicks', 'value': 0}, {'prop_id': '{"index":91,"type":"borehole-marker"}.n_clicks', 'value': 0}, {'prop_id': '{"index":92,"type":"borehole-marker"}.n_clicks', 'value': 0}, {'prop_id': '{"index":93,"type":"borehole-marker"}.n_clicks', 'value': 0}, {'prop_id': '{"index":94,"type":"borehole-marker"}.n_clicks', 'value': 0}, {'prop_id': '{"index":95,"type":"borehole-marker"}.n_clicks', 'value': 0}, {'prop_id': '{"index":96,"type":"borehole-marker"}.n_clicks', 'value': 0}, {'prop_id': '{"index":97,"type":"borehole-marker"}.n_clicks', 'value': 0}, {'prop_id': '{"index":98,"type":"borehole-marker"}.n_clicks', 'value': 0}, {'prop_id': '{"index":99,"type":"borehole-marker"}.n_clicks', 'value': 0}, {'prop_id': '{"index":100,"type":"borehole-marker"}.n_clicks', 'value': 0}, {'prop_id': '{"index":101,"type":"borehole-marker"}.n_clicks', 'value': 0}, {'prop_id': '{"index":102,"type":"borehole-marker"}.n_clicks', 'value': 0}, {'prop_id': '{"index":103,"type":"borehole-marker"}.n_clicks', 'value': 0}, {'prop_id': '{"index":104,"type":"borehole-marker"}.n_clicks', 'value': 0}, {'prop_id': '{"index":105,"type":"borehole-marker"}.n_clicks', 'value': 0}, {'prop_id': '{"index":106,"type":"borehole-marker"}.n_clicks', 'value': 0}, {'prop_id': '{"index":107,"type":"borehole-marker"}.n_clicks', 'value': 0}, {'prop_id': '{"index":108,"type":"borehole-marker"}.n_clicks', 'value': 0}, {'prop_id': '{"index":109,"type":"borehole-marker"}.n_clicks', 'value': 0}, {'prop_id': '{"index":110,"type":"borehole-marker"}.n_clicks', 'value': 0}, {'prop_id': '{"index":111,"type":"borehole-marker"}.n_clicks', 'value': 0}, {'prop_id': '{"index":112,"type":"borehole-marker"}.n_clicks', 'value': 0}, {'prop_id': '{"index":113,"type":"borehole-marker"}.n_clicks', 'value': 0}, {'prop_id': '{"index":114,"type":"borehole-marker"}.n_clicks', 'value': 0}, {'prop_id': '{"index":115,"type":"borehole-marker"}.n_clicks', 'value': 0}, {'prop_id': '{"index":116,"type":"borehole-marker"}.n_clicks', 'value': 0}, {'prop_id': '{"index":117,"type":"borehole-marker"}.n_clicks', 'value': 0}, {'prop_id': '{"index":118,"type":"borehole-marker"}.n_clicks', 'value': 0}, {'prop_id': '{"index":119,"type":"borehole-marker"}.n_clicks', 'value': 0}, {'prop_id': '{"index":120,"type":"borehole-marker"}.n_clicks', 'value': 0}, {'prop_id': '{"index":121,"type":"borehole-marker"}.n_clicks', 'value': 0}, {'prop_id': '{"index":122,"type":"borehole-marker"}.n_clicks', 'value': 0}, {'prop_id': '{"index":123,"type":"borehole-marker"}.n_clicks', 'value': 0}, {'prop_id': '{"index":124,"type":"borehole-marker"}.n_clicks', 'value': 0}, {'prop_id': '{"index":125,"type":"borehole-marker"}.n_clicks', 'value': 0}, {'prop_id': '{"index":126,"type":"borehole-marker"}.n_clicks', 'value': 0}, {'prop_id': '{"index":127,"type":"borehole-marker"}.n_clicks', 'value': 0}, {'prop_id': '{"index":128,"type":"borehole-marker"}.n_clicks', 'value': 0}, {'prop_id': '{"index":129,"type":"borehole-marker"}.n_clicks', 'value': 0}, {'prop_id': '{"index":130,"type":"borehole-marker"}.n_clicks', 'value': 0}, {'prop_id': '{"index":131,"type":"borehole-marker"}.n_clicks', 'value': 0}, {'prop_id': '{"index":132,"type":"borehole-marker"}.n_clicks', 'value': 0}, {'prop_id': '{"index":133,"type":"borehole-marker"}.n_clicks', 'value': 0}, {'prop_id': '{"index":134,"type":"borehole-marker"}.n_clicks', 'value': 0}, {'prop_id': '{"index":135,"type":"borehole-marker"}.n_clicks', 'value': 0}]
+2025-08-02 14:26:28,588 INFO [marker_handling.py:89 _handle_marker_click_logic] Show labels checkbox value: ['show_labels']
+2025-08-02 14:26:28,591 INFO [marker_handling.py:95 _handle_marker_click_logic] No marker clicks detected
+2025-08-02 14:26:28,603 INFO [search_functionality.py:55 update_search_dropdown] === UPDATING SEARCH DROPDOWN ===
+2025-08-02 14:26:28,614 INFO [search_functionality.py:123 _update_search_dropdown_logic] Created 136 search options
+2025-08-02 14:26:29,271 DEBUG [connectionpool.py:544 _make_request] https://o4509734367395840.ingest.de.sentry.io:443 "POST /api/4509734463144016/envelope/ HTTP/1.1" 200 0
+2025-08-02 14:26:29,686 DEBUG [connectionpool.py:544 _make_request] https://o4509734367395840.ingest.de.sentry.io:443 "POST /api/4509734463144016/envelope/ HTTP/1.1" 200 0
+2025-08-02 14:26:30,194 DEBUG [connectionpool.py:544 _make_request] https://o4509734367395840.ingest.de.sentry.io:443 "POST /api/4509734463144016/envelope/ HTTP/1.1" 200 0
+2025-08-02 14:26:30,757 DEBUG [connectionpool.py:544 _make_request] https://o4509734367395840.ingest.de.sentry.io:443 "POST /api/4509734463144016/envelope/ HTTP/1.1" 200 0
+2025-08-02 14:26:31,358 DEBUG [connectionpool.py:544 _make_request] https://o4509734367395840.ingest.de.sentry.io:443 "POST /api/4509734463144016/envelope/ HTTP/1.1" 200 0
+2025-08-02 14:26:31,823 DEBUG [connectionpool.py:544 _make_request] https://o4509734367395840.ingest.de.sentry.io:443 "POST /api/4509734463144016/envelope/ HTTP/1.1" 200 0
+2025-08-02 14:26:32,291 DEBUG [connectionpool.py:544 _make_request] https://o4509734367395840.ingest.de.sentry.io:443 "POST /api/4509734463144016/envelope/ HTTP/1.1" 200 0
+2025-08-02 14:26:32,766 DEBUG [connectionpool.py:544 _make_request] https://o4509734367395840.ingest.de.sentry.io:443 "POST /api/4509734463144016/envelope/ HTTP/1.1" 200 0
+2025-08-02 14:26:32,958 DEBUG [connectionpool.py:544 _make_request] https://o4509734367395840.ingest.de.sentry.io:443 "POST /api/4509734463144016/envelope/ HTTP/1.1" 200 0
+2025-08-02 14:26:33,089 DEBUG [connectionpool.py:544 _make_request] https://o4509734367395840.ingest.de.sentry.io:443 "POST /api/4509734463144016/envelope/ HTTP/1.1" 200 0
+2025-08-02 14:26:33,217 DEBUG [connectionpool.py:544 _make_request] https://o4509734367395840.ingest.de.sentry.io:443 "POST /api/4509734463144016/envelope/ HTTP/1.1" 200 0
+2025-08-02 14:26:33,345 DEBUG [connectionpool.py:544 _make_request] https://o4509734367395840.ingest.de.sentry.io:443 "POST /api/4509734463144016/envelope/ HTTP/1.1" 200 0
+2025-08-02 14:26:33,528 DEBUG [connectionpool.py:544 _make_request] https://o4509734367395840.ingest.de.sentry.io:443 "POST /api/4509734463144016/envelope/ HTTP/1.1" 200 0
+2025-08-02 14:26:33,740 DEBUG [connectionpool.py:544 _make_request] https://o4509734367395840.ingest.de.sentry.io:443 "POST /api/4509734463144016/envelope/ HTTP/1.1" 200 0
+2025-08-02 14:26:33,988 DEBUG [connectionpool.py:544 _make_request] https://o4509734367395840.ingest.de.sentry.io:443 "POST /api/4509734463144016/envelope/ HTTP/1.1" 200 0
+2025-08-02 14:26:34,265 DEBUG [connectionpool.py:544 _make_request] https://o4509734367395840.ingest.de.sentry.io:443 "POST /api/4509734463144016/envelope/ HTTP/1.1" 200 0
+2025-08-02 14:26:34,564 DEBUG [connectionpool.py:544 _make_request] https://o4509734367395840.ingest.de.sentry.io:443 "POST /api/4509734463144016/envelope/ HTTP/1.1" 200 0
+2025-08-02 14:26:34,883 DEBUG [connectionpool.py:544 _make_request] https://o4509734367395840.ingest.de.sentry.io:443 "POST /api/4509734463144016/envelope/ HTTP/1.1" 200 0
+2025-08-02 14:26:35,223 DEBUG [connectionpool.py:544 _make_request] https://o4509734367395840.ingest.de.sentry.io:443 "POST /api/4509734463144016/envelope/ HTTP/1.1" 200 0
+2025-08-02 14:26:35,591 DEBUG [connectionpool.py:544 _make_request] https://o4509734367395840.ingest.de.sentry.io:443 "POST /api/4509734463144016/envelope/ HTTP/1.1" 200 0
+2025-08-02 14:26:35,984 DEBUG [connectionpool.py:544 _make_request] https://o4509734367395840.ingest.de.sentry.io:443 "POST /api/4509734463144016/envelope/ HTTP/1.1" 200 0
+2025-08-02 14:26:36,385 DEBUG [connectionpool.py:544 _make_request] https://o4509734367395840.ingest.de.sentry.io:443 "POST /api/4509734463144016/envelope/ HTTP/1.1" 200 0
+2025-08-02 14:26:36,828 DEBUG [connectionpool.py:544 _make_request] https://o4509734367395840.ingest.de.sentry.io:443 "POST /api/4509734463144016/envelope/ HTTP/1.1" 200 0
+2025-08-02 14:26:37,192 DEBUG [connectionpool.py:544 _make_request] https://o4509734367395840.ingest.de.sentry.io:443 "POST /api/4509734463144016/envelope/ HTTP/1.1" 200 0
+2025-08-02 14:26:37,751 DEBUG [connectionpool.py:544 _make_request] https://o4509734367395840.ingest.de.sentry.io:443 "POST /api/4509734463144016/envelope/ HTTP/1.1" 200 0
+2025-08-02 14:26:38,340 DEBUG [connectionpool.py:544 _make_request] https://o4509734367395840.ingest.de.sentry.io:443 "POST /api/4509734463144016/envelope/ HTTP/1.1" 200 0
+2025-08-02 14:26:38,952 DEBUG [connectionpool.py:544 _make_request] https://o4509734367395840.ingest.de.sentry.io:443 "POST /api/4509734463144016/envelope/ HTTP/1.1" 200 0
+2025-08-02 14:26:39,595 DEBUG [connectionpool.py:544 _make_request] https://o4509734367395840.ingest.de.sentry.io:443 "POST /api/4509734463144016/envelope/ HTTP/1.1" 200 0
+2025-08-02 14:26:40,263 DEBUG [connectionpool.py:544 _make_request] https://o4509734367395840.ingest.de.sentry.io:443 "POST /api/4509734463144016/envelope/ HTTP/1.1" 200 0
+2025-08-02 14:26:40,961 DEBUG [connectionpool.py:544 _make_request] https://o4509734367395840.ingest.de.sentry.io:443 "POST /api/4509734463144016/envelope/ HTTP/1.1" 200 0
+2025-08-02 14:26:41,668 DEBUG [connectionpool.py:544 _make_request] https://o4509734367395840.ingest.de.sentry.io:443 "POST /api/4509734463144016/envelope/ HTTP/1.1" 200 0
+2025-08-02 14:26:42,286 DEBUG [connectionpool.py:544 _make_request] https://o4509734367395840.ingest.de.sentry.io:443 "POST /api/4509734463144016/envelope/ HTTP/1.1" 200 0
+2025-08-02 14:26:42,541 DEBUG [connectionpool.py:544 _make_request] https://o4509734367395840.ingest.de.sentry.io:443 "POST /api/4509734463144016/envelope/ HTTP/1.1" 200 0
+2025-08-02 14:26:43,076 DEBUG [connectionpool.py:544 _make_request] https://o4509734367395840.ingest.de.sentry.io:443 "POST /api/4509734463144016/envelope/ HTTP/1.1" 200 0
+2025-08-02 14:26:43,640 DEBUG [connectionpool.py:544 _make_request] https://o4509734367395840.ingest.de.sentry.io:443 "POST /api/4509734463144016/envelope/ HTTP/1.1" 200 0
+2025-08-02 14:26:44,230 DEBUG [connectionpool.py:544 _make_request] https://o4509734367395840.ingest.de.sentry.io:443 "POST /api/4509734463144016/envelope/ HTTP/1.1" 200 0
+2025-08-02 14:26:44,848 DEBUG [connectionpool.py:544 _make_request] https://o4509734367395840.ingest.de.sentry.io:443 "POST /api/4509734463144016/envelope/ HTTP/1.1" 200 0
+2025-08-02 14:26:45,491 DEBUG [connectionpool.py:544 _make_request] https://o4509734367395840.ingest.de.sentry.io:443 "POST /api/4509734463144016/envelope/ HTTP/1.1" 200 0
+2025-08-02 14:26:46,156 DEBUG [connectionpool.py:544 _make_request] https://o4509734367395840.ingest.de.sentry.io:443 "POST /api/4509734463144016/envelope/ HTTP/1.1" 200 0
+2025-08-02 14:26:46,840 DEBUG [connectionpool.py:544 _make_request] https://o4509734367395840.ingest.de.sentry.io:443 "POST /api/4509734463144016/envelope/ HTTP/1.1" 200 0
+2025-08-02 14:26:47,540 DEBUG [connectionpool.py:544 _make_request] https://o4509734367395840.ingest.de.sentry.io:443 "POST /api/4509734463144016/envelope/ HTTP/1.1" 200 0
+2025-08-02 14:26:48,241 DEBUG [connectionpool.py:544 _make_request] https://o4509734367395840.ingest.de.sentry.io:443 "POST /api/4509734463144016/envelope/ HTTP/1.1" 200 0
+2025-08-02 14:26:48,947 DEBUG [connectionpool.py:544 _make_request] https://o4509734367395840.ingest.de.sentry.io:443 "POST /api/4509734463144016/envelope/ HTTP/1.1" 200 0
+2025-08-02 14:26:49,606 DEBUG [connectionpool.py:544 _make_request] https://o4509734367395840.ingest.de.sentry.io:443 "POST /api/4509734463144016/envelope/ HTTP/1.1" 200 0
+2025-08-02 14:26:50,321 DEBUG [connectionpool.py:544 _make_request] https://o4509734367395840.ingest.de.sentry.io:443 "POST /api/4509734463144016/envelope/ HTTP/1.1" 200 0
+2025-08-02 14:27:22,314 DEBUG [connectionpool.py:544 _make_request] https://o4509734367395840.ingest.de.sentry.io:443 "POST /api/4509734463144016/envelope/ HTTP/1.1" 200 0

@@ -1,0 +1,21 @@
+{
+  "imports": {
+    "app": "success",
+    "app_constants": "success",
+    "error_handling": "success",
+    "data_loader": "success",
+    "coordinate_service": "success",
+    "borehole_log_professional": "success",
+    "section.plotting.main": "success",
+    "section.plotting.geology": "success",
+    "section.plotting.coordinates": "success",
+    "section.plotting.layout": "success",
+    "section.parsing": "success"
+  },
+  "section_plotting": "success",
+  "borehole_log": "plot_borehole_log_from_ags_content() got an unexpected keyword argument 'return_base64'",
+  "error_handling": "success",
+  "data_processing": "cannot import name 'parse_ags_content' from 'data_loader' (C:\\Users\\dea29431\\OneDrive - Rsk Group Limited\\Documents\\Geotech\\AGS Section\\Geo_Borehole_Sections_Render\\data_loader.py)",
+  "configuration": "success",
+  "file_system": "success"
+}

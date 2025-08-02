@@ -83,7 +83,7 @@ class LoadingIndicator:
             **spinner_sizes.get(size, spinner_sizes["default"]),
             "border": f"3px solid #f3f3f3",
             "border-top": f"3px solid {UI_CONFIG.PRIMARY_COLOR}",
-            "border-radius": "50%",
+            "borderRadius": "50%",
             "animation": "spin 1s linear infinite",
             "margin": "0 auto 10px auto",
         }
@@ -145,17 +145,17 @@ class LoadingIndicator:
                             style={
                                 "width": f"{percentage}%",
                                 "height": "100%",
-                                "background-color": UI_CONFIG.SUCCESS_COLOR,
+                                "backgroundColor": UI_CONFIG.SUCCESS_COLOR,
                                 "transition": "width 0.3s ease-in-out",
-                                "border-radius": "3px",
+                                "borderRadius": "3px",
                             }
                         )
                     ],
                     style={
                         "width": "100%",
                         "height": "20px",
-                        "background-color": "#e0e0e0",
-                        "border-radius": "3px",
+                        "backgroundColor": "#e0e0e0",
+                        "borderRadius": "3px",
                         "overflow": "hidden",
                         "margin-bottom": "5px",
                     },
@@ -333,10 +333,10 @@ class LoadingIndicator:
                     style={
                         "display": "flex",
                         "align-items": "center",
-                        "background-color": color,
+                        "backgroundColor": color,
                         "color": "white",
                         "padding": "12px 16px",
-                        "border-radius": "4px",
+                        "borderRadius": "4px",
                         "box-shadow": "0 2px 8px rgba(0,0,0,0.15)",
                         "margin": "10px 0",
                         "min-width": "300px",

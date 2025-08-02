@@ -5,6 +5,11 @@ This module provides the main interface that coordinates all the modular compone
 for the Dash application, maintaining backward compatibility.
 """
 
+# Configure matplotlib backend BEFORE any other imports that might use matplotlib
+import matplotlib
+
+matplotlib.use("Agg")  # Use non-interactive backend for server environments
+
 import logging
 from callbacks import register_callbacks
 from .app_setup import (
@@ -63,7 +68,7 @@ def main():
     """
     Main execution function for running the application.
     """
-    app = create_and_configure_app()
+    app = get_app()  # Use singleton pattern to prevent duplicate registrations
     start_application(app)
 
 

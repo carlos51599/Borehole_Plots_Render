@@ -20,8 +20,7 @@ from .sizing import (
     BUTTON_PADDING,
     BUTTON_BORDER_RADIUS,
     BUTTON_FONT_SIZE,
-    MAP_HEIGHT,
-    MAP_WIDTH,
+    # MAP_HEIGHT and MAP_WIDTH removed - using responsive styling instead
     UPLOAD_AREA_HEIGHT,
     UPLOAD_AREA_LINE_HEIGHT,
     UPLOAD_AREA_BORDER_RADIUS,
@@ -145,9 +144,19 @@ UPLOAD_AREA_CENTER_STYLE = {
 }
 
 # ===== MAP STYLES =====
+# CRITICAL FIX: Responsive style that preserves aspect ratio for section plots
+# This style is for IMAGE displays (plots/sections) not for interactive maps
 MAP_CENTER_STYLE = {
-    "width": MAP_WIDTH,
-    "height": MAP_HEIGHT,
+    "maxWidth": "100%",  # Responsive width up to container
+    "height": "auto",  # Preserves aspect ratio
+    "margin": "0 auto",  # Centers horizontally
+    "display": "block",  # Block element for proper centering
+}
+
+# Map container style - requires fixed height for tile display
+MAP_CONTAINER_STYLE = {
+    "width": "100%",
+    "height": "500px",  # Fixed height required for map tiles
     "margin": "0 auto",
     "display": "block",
 }
@@ -195,4 +204,27 @@ CHECKBOX_CONTROL_STYLE = {
     "marginTop": STANDARD_MARGIN_TOP,
     "marginBottom": STANDARD_MARGIN_BOTTOM,
     "textAlign": TEXT_ALIGN_LEFT,
+}
+
+DESCRIPTION_TEXT_STYLE = {
+    "fontSize": PRIMARY_FONT_SIZE,
+    "color": "#666",
+    "marginBottom": STANDARD_MARGIN_BOTTOM,
+}
+
+CHECKBOX_LABEL_STYLE = {
+    "display": "inline-block",
+    "marginRight": STANDARD_MARGIN_TOP,
+    "marginBottom": SMALL_MARGIN,
+    "fontSize": PRIMARY_FONT_SIZE,
+}
+
+CHECKBOX_LEFT_STYLE = {
+    "padding": "10px",
+    "borderRadius": "5px",
+    "backgroundColor": CHECKBOX_BG_COLOR,
+    "border": f"1px solid {CHECKBOX_BORDER_COLOR}",
+    "textAlign": TEXT_ALIGN_LEFT,
+    "marginTop": STANDARD_MARGIN_BOTTOM,
+    "marginBottom": STANDARD_MARGIN_TOP,
 }

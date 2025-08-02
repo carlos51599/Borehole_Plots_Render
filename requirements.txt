@@ -10,3 +10,6 @@ pyproj>=3.0.0  # For coordinate system transformations (BNG to WGS84)
 
 # Optional but recommended for better performance
 dash-bootstrap-components>=1.0.0  # For better styling (optional)
+
+# Error monitoring and performance tracking
+sentry-sdk[flask]>=1.0.0  # Sentry for error monitoring and performance tracking

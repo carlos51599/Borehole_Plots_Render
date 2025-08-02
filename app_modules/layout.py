@@ -23,7 +23,7 @@ from config_modules import (
     HEADER_H2_LEFT_STYLE,
     HEADER_H4_LEFT_STYLE,
     UPLOAD_AREA_CENTER_STYLE,
-    MAP_CENTER_STYLE,
+    MAP_CONTAINER_STYLE,
     CHECKBOX_CONTROL_STYLE,
     BUTTON_RIGHT_STYLE,
 )
@@ -307,7 +307,7 @@ def create_interactive_map():
         id="borehole-map",
         center=[51.5, -0.1],  # Default center on UK
         zoom=6,
-        style=MAP_CENTER_STYLE,
+        style=MAP_CONTAINER_STYLE,
     )
 
 
@@ -322,12 +322,12 @@ def create_buffer_controls():
         [
             html.H3(
                 "Buffer Settings",
-                style={"margin-top": "20px", "margin-bottom": "10px"},
+                style={"marginTop": "20px", "marginBottom": "10px"},
             ),
             html.Div(
                 [
                     html.Label(
-                        "Polyline Buffer (meters):", style={"margin-right": "10px"}
+                        "Polyline Buffer (meters):", style={"marginRight": "10px"}
                     ),
                     dcc.Input(
                         id="buffer-input",
@@ -336,19 +336,19 @@ def create_buffer_controls():
                         min=1,
                         max=500,
                         step=1,
-                        style={"width": "100px", "margin-right": "10px"},
+                        style={"width": "100px", "marginRight": "10px"},
                     ),
                     html.Button(
                         "Update Buffer",
                         id="update-buffer-btn",
                         n_clicks=0,
-                        style={"margin-left": "10px"},
+                        style={"marginLeft": "10px"},
                     ),
                 ],
                 style={
                     "display": "flex",
                     "alignItems": "center",
-                    "margin-bottom": "10px",
+                    "marginBottom": "10px",
                 },
             ),
         ],

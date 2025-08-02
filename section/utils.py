@@ -44,16 +44,8 @@ def convert_figure_to_base64(
         # Create a bytes buffer
         buffer = io.BytesIO()
 
-        # Save figure to buffer
-        fig.savefig(
-            buffer,
-            format=format,
-            dpi=dpi,
-            bbox_inches="tight",
-            facecolor="white",
-            edgecolor="none",
-            transparent=False,
-        )
+        # Save figure to buffer - use exact archive implementation
+        fig.savefig(buffer, format=format, dpi=dpi, bbox_inches=None)
 
         # Get buffer contents and encode
         buffer.seek(0)

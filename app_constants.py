@@ -67,6 +67,7 @@ class MapConfig:
     DEFAULT_CENTER_LAT = 54.5
     DEFAULT_CENTER_LON = -2.0
     DEFAULT_ZOOM = 6
+    SEARCH_ZOOM_LEVEL = 14  # Zoom level for borehole search navigation
 
     # Map bounds (UK coverage)
     UK_BOUNDS = {"north": 61.0, "south": 49.0, "east": 2.0, "west": -11.0}
@@ -176,7 +177,7 @@ class UIConfig:
     # Component styling
     CARD_STYLE = {
         "border": "1px solid #ddd",
-        "border-radius": "5px",
+        "borderRadius": "5px",
         "padding": "15px",
         "margin": "10px 0",
         "box-shadow": "0 2px 4px rgba(0,0,0,0.1)",
@@ -185,7 +186,7 @@ class UIConfig:
     BUTTON_STYLE = {
         "margin": "5px",
         "padding": "8px 16px",
-        "border-radius": "4px",
+        "borderRadius": "4px",
         "border": "none",
         "cursor": "pointer",
     }

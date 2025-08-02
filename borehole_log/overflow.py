@@ -1,435 +1,304 @@
 """
-Borehole Log Overflow and Multi-Page Module
+Professional Borehole Log Overflow Management Module
 
-This module handles overflow detection and multi-page layout for borehole logs
-when content exceeds single page capacity.
+This module provides overflow detection and handling functions extracted from the
+monolithic borehole_log_professional.py implementation. These functions handle
+text box overflow detection, classification, and dedicated overflow page creation
+while maintaining 100% compatibility with the original implementation.
 
 Key Functions:
-- check_depth_overflow: Detect when depth range exceeds page capacity
-- calculate_page_breaks: Determine optimal page break points
-- handle_multi_page_layout: Coordinate multi-page rendering
-- get_page_depth_range: Calculate depth range for each page
+- classify_text_box_overflow: Detect and classify text box overflow
+- create_overflow_page: Generate dedicated overflow pages
+- handle_page_boundaries: Manage text positioning across page breaks
+
+Dependencies:
+- borehole_log.utils: Core utilities and matplotlib_figure
+- borehole_log.header_footer: Header generation for overflow pages
+- borehole_log.plotting: Text box drawing functions
 """
 
+import matplotlib.pyplot as plt
+from matplotlib.patches import Rectangle
+import io
+import base64
 import logging
-from typing import List, Tuple, Dict, Optional
-import numpy as np
+
+# Import from other modules
+from .utils import matplotlib_figure, log_col_widths_in
+from .header_footer import draw_header
+from .plotting import draw_text_box
 
 logger = logging.getLogger(__name__)
 
 
-def check_depth_overflow(
-    total_depth: float,
-    page_height_available: float,
-    depth_scale: float = 50.0,  # pixels per meter
-    min_page_depth: float = 5.0,  # minimum depth per page
-) -> Tuple[bool, int, List[Tuple[float, float]]]:
+def classify_text_box_overflow(
+    text_positions,
+    page_top,
+    page_bot,
+    toe_y,
+    log_area_in,
+    intervals,
+    borehole_data,
+):
     """
-    Check if borehole depth requires multiple pages and calculate page breaks.
+    Classify text boxes based on overflow behavior and page boundaries.
+
+    Exact copy from monolithic borehole_log_professional.py implementation.
 
     Args:
-        total_depth: Total borehole depth in meters
-        page_height_available: Available height for plotting in pixels
-        depth_scale: Scale factor (pixels per meter)
-        min_page_depth: Minimum depth range per page
+        text_positions: List of text position dictionaries
+        page_top: Top depth of current page
+        page_bot: Bottom depth of current page
+        toe_y: Y position of toe line (page boundary)
+        log_area_in: Log area height in inches
+        intervals: Current page intervals
+        borehole_data: Original borehole data
 
     Returns:
-        tuple: (needs_overflow, total_pages, page_depth_ranges)
+        dict: Classification results with overflow strategies
     """
-    try:
-        # Calculate maximum depth that fits on one page
-        max_depth_per_page = page_height_available / depth_scale
 
-        # Check if overflow is needed
-        needs_overflow = total_depth > max_depth_per_page
-
-        if not needs_overflow:
-            return False, 1, [(0.0, total_depth)]
-
-        # Calculate optimal page breaks
-        page_depth_ranges = _calculate_optimal_page_breaks(
-            total_depth, max_depth_per_page, min_page_depth
-        )
-
-        total_pages = len(page_depth_ranges)
-
-        logger.info(
-            f"Multi-page layout required: {total_pages} pages for {total_depth}m depth"
-        )
-        return True, total_pages, page_depth_ranges
-
-    except Exception as e:
-        logger.error(f"Error checking depth overflow: {e}")
-        return False, 1, [(0.0, total_depth)]
-
-
-def _calculate_optimal_page_breaks(
-    total_depth: float, max_depth_per_page: float, min_page_depth: float
-) -> List[Tuple[float, float]]:
-    """Calculate optimal page break points for multi-page layout."""
-
-    page_ranges = []
-    current_depth = 0.0
-
-    while current_depth < total_depth:
-        # Calculate remaining depth
-        remaining_depth = total_depth - current_depth
-
-        if remaining_depth <= max_depth_per_page:
-            # Last page - use all remaining depth
-            page_ranges.append((current_depth, total_depth))
-            break
-        else:
-            # Check if splitting would leave too little for next page
-            if remaining_depth - max_depth_per_page < min_page_depth:
-                # Adjust current page to leave minimum for next page
-                page_end = total_depth - min_page_depth
-                page_ranges.append((current_depth, page_end))
-                current_depth = page_end
-            else:
-                # Standard page break
-                page_end = current_depth + max_depth_per_page
-                page_ranges.append((current_depth, page_end))
-                current_depth = page_end
-
-    return page_ranges
-
-
-def calculate_page_breaks_by_stratum(
-    geology_data: List[Dict],
-    total_depth: float,
-    max_depth_per_page: float,
-    prefer_stratum_breaks: bool = True,
-) -> List[Tuple[float, float]]:
-    """
-    Calculate page breaks preferring geological stratum boundaries.
-
-    Args:
-        geology_data: List of geological strata with depth information
-        total_depth: Total borehole depth
-        max_depth_per_page: Maximum depth per page
-        prefer_stratum_breaks: Whether to prefer breaking at stratum boundaries
-
-    Returns:
-        list: Page depth ranges as (start_depth, end_depth) tuples
-    """
-    try:
-        if not prefer_stratum_breaks or not geology_data:
-            return _calculate_optimal_page_breaks(total_depth, max_depth_per_page, 5.0)
-
-        # Extract stratum boundaries
-        stratum_boundaries = _extract_stratum_boundaries(geology_data)
-
-        # Calculate page breaks considering boundaries
-        page_ranges = []
-        current_depth = 0.0
-
-        while current_depth < total_depth:
-            remaining_depth = total_depth - current_depth
-
-            if remaining_depth <= max_depth_per_page:
-                page_ranges.append((current_depth, total_depth))
-                break
-
-            # Find best break point near max page depth
-            target_break = current_depth + max_depth_per_page
-            best_break = _find_best_stratum_break(
-                stratum_boundaries, target_break, current_depth, total_depth
-            )
-
-            page_ranges.append((current_depth, best_break))
-            current_depth = best_break
-
-        return page_ranges
-
-    except Exception as e:
-        logger.error(f"Error calculating stratum-based page breaks: {e}")
-        return _calculate_optimal_page_breaks(total_depth, max_depth_per_page, 5.0)
-
-
-def _extract_stratum_boundaries(geology_data: List[Dict]) -> List[float]:
-    """Extract depth boundaries from geological strata data."""
-    boundaries = []
-
-    for stratum in geology_data:
-        if "GEOL_TOP" in stratum and stratum["GEOL_TOP"] is not None:
-            try:
-                boundaries.append(float(stratum["GEOL_TOP"]))
-            except (ValueError, TypeError):
-                continue
-
-        if "GEOL_BASE" in stratum and stratum["GEOL_BASE"] is not None:
-            try:
-                boundaries.append(float(stratum["GEOL_BASE"]))
-            except (ValueError, TypeError):
-                continue
-
-    # Remove duplicates and sort
-    boundaries = sorted(list(set(boundaries)))
-    return boundaries
-
-
-def _find_best_stratum_break(
-    boundaries: List[float],
-    target_depth: float,
-    min_depth: float,
-    max_depth: float,
-    tolerance: float = 2.0,
-) -> float:
-    """Find the best stratum boundary near the target depth for page break."""
-
-    # Filter boundaries within reasonable range
-    candidates = [
-        b
-        for b in boundaries
-        if min_depth + 2.0 <= b <= max_depth - 2.0  # Leave some margin
-    ]
-
-    if not candidates:
-        return min(target_depth, max_depth)
-
-    # Find boundary closest to target within tolerance
-    close_boundaries = [b for b in candidates if abs(b - target_depth) <= tolerance]
-
-    if close_boundaries:
-        # Choose the closest boundary to target
-        return min(close_boundaries, key=lambda x: abs(x - target_depth))
-
-    # If no boundaries within tolerance, find the best compromise
-    # Prefer boundaries before target depth to avoid overshooting
-    before_target = [b for b in candidates if b <= target_depth]
-
-    if before_target:
-        return max(before_target)  # Latest boundary before target
-    else:
-        return min(candidates)  # Earliest boundary after target
-
-
-def get_page_depth_range(
-    page_number: int, page_ranges: List[Tuple[float, float]]
-) -> Tuple[float, float]:
-    """
-    Get the depth range for a specific page.
-
-    Args:
-        page_number: Page number (1-indexed)
-        page_ranges: List of page depth ranges
-
-    Returns:
-        tuple: (start_depth, end_depth) for the page
-    """
-    try:
-        if 1 <= page_number <= len(page_ranges):
-            return page_ranges[page_number - 1]
-        else:
-            logger.warning(f"Invalid page number {page_number}, returning full range")
-            return page_ranges[0] if page_ranges else (0.0, 0.0)
-    except Exception as e:
-        logger.error(f"Error getting page depth range: {e}")
-        return (0.0, 0.0)
-
-
-def filter_data_for_page(
-    data_list: List[Dict],
-    page_start_depth: float,
-    page_end_depth: float,
-    depth_field: str = "GEOL_TOP",
-    depth_field_end: Optional[str] = "GEOL_BASE",
-) -> List[Dict]:
-    """
-    Filter geological/sample data for a specific page depth range.
-
-    Args:
-        data_list: List of data records
-        page_start_depth: Page start depth
-        page_end_depth: Page end depth
-        depth_field: Field name for depth start
-        depth_field_end: Field name for depth end (optional)
-
-    Returns:
-        list: Filtered data records for the page
-    """
-    filtered_data = []
-
-    for record in data_list:
-        try:
-            # Get record depth
-            record_top = record.get(depth_field)
-            if record_top is None:
-                continue
-
-            record_top = float(record_top)
-
-            # Get record base depth if available
-            record_base = record_top
-            if depth_field_end and record.get(depth_field_end) is not None:
-                try:
-                    record_base = float(record.get(depth_field_end))
-                except (ValueError, TypeError):
-                    record_base = record_top
-
-            # Check if record overlaps with page range
-            if _record_overlaps_page(
-                record_top, record_base, page_start_depth, page_end_depth
-            ):
-                filtered_data.append(record)
-
-        except (ValueError, TypeError) as e:
-            logger.warning(f"Skipping record with invalid depth: {e}")
-            continue
-
-    return filtered_data
-
-
-def _record_overlaps_page(
-    record_top: float, record_base: float, page_start: float, page_end: float
-) -> bool:
-    """Check if a record overlaps with the page depth range."""
-
-    # Ensure record_base >= record_top
-    if record_base < record_top:
-        record_base = record_top
-
-    # Check for overlap
-    return not (record_base < page_start or record_top > page_end)
-
-
-def calculate_continuation_indicators(
-    page_ranges: List[Tuple[float, float]], page_number: int
-) -> Dict[str, bool]:
-    """
-    Calculate whether continuation indicators are needed for a page.
-
-    Args:
-        page_ranges: List of all page depth ranges
-        page_number: Current page number (1-indexed)
-
-    Returns:
-        dict: Continuation indicators {'continues_above': bool, 'continues_below': bool}
-    """
-    indicators = {"continues_above": False, "continues_below": False}
-
-    try:
-        if 1 <= page_number <= len(page_ranges):
-            page_start, page_end = page_ranges[page_number - 1]
-
-            # Check if there are pages above
-            indicators["continues_above"] = page_number > 1
-
-            # Check if there are pages below
-            indicators["continues_below"] = page_number < len(page_ranges)
-
-    except Exception as e:
-        logger.error(f"Error calculating continuation indicators: {e}")
-
-    return indicators
-
-
-def get_overflow_summary(
-    total_depth: float, page_ranges: List[Tuple[float, float]]
-) -> Dict:
-    """
-    Get summary information about multi-page overflow layout.
-
-    Args:
-        total_depth: Total borehole depth
-        page_ranges: List of page depth ranges
-
-    Returns:
-        dict: Summary information
-    """
-    summary = {
-        "total_depth": total_depth,
-        "total_pages": len(page_ranges),
-        "requires_overflow": len(page_ranges) > 1,
-        "average_page_depth": 0.0,
-        "page_depths": [],
-        "depth_distribution": {},
+    def depth_to_y_abs(depth):
+        """Convert depth to absolute Y position on page"""
+        return log_area_in * (1 - (float(depth) - page_top) / (page_bot - page_top))
+
+    results = {
+        "on_page_boxes": [],  # Text boxes that fit on current page
+        "layer_continues_overflow": [],  # Text boxes for layers continuing to next page
+        "layer_complete_overflow": [],  # Text boxes for layers ending on page but text too long
+        "overflow_page_needed": False,  # Whether an overflow page is needed
     }
 
-    try:
-        if page_ranges:
-            page_depths = [end - start for start, end in page_ranges]
-            summary["page_depths"] = page_depths
-            summary["average_page_depth"] = sum(page_depths) / len(page_depths)
+    for i, text_pos in enumerate(text_positions):
+        if i >= len(intervals):
+            continue
 
-            # Depth distribution
-            summary["depth_distribution"] = {
-                f"page_{i+1}": {
-                    "start_depth": start,
-                    "end_depth": end,
-                    "depth_range": end - start,
+        interval = intervals[i]
+        layer_bottom_depth = interval["orig_Depth_Base"]
+
+        # Check if text box extends below toe line (page boundary)
+        if text_pos["y_bottom"] < toe_y:
+            # Text box overflows page boundary
+
+            # Strategy 1: Check if layer continues to next page
+            if layer_bottom_depth > page_bot:
+                # Layer continues beyond current page - defer to next page
+                results["layer_continues_overflow"].append(
+                    {
+                        "text_pos": text_pos,
+                        "interval": interval,
+                        "overflow_type": "layer_continues",
+                        "original_interval_idx": interval["orig_idx"],
+                    }
+                )
+            else:
+                # Strategy 2: Layer ends on current page but text doesn't fit
+                # This needs an overflow page
+                results["layer_complete_overflow"].append(
+                    {
+                        "text_pos": text_pos,
+                        "interval": interval,
+                        "overflow_type": "layer_complete",
+                        "original_interval_idx": interval["orig_idx"],
+                    }
+                )
+                results["overflow_page_needed"] = True
+        else:
+            # Text box fits on current page
+            results["on_page_boxes"].append(
+                {
+                    "text_pos": text_pos,
+                    "interval": interval,
+                    "original_interval_idx": interval["orig_idx"],
                 }
-                for i, (start, end) in enumerate(page_ranges)
-            }
+            )
 
-    except Exception as e:
-        logger.error(f"Error creating overflow summary: {e}")
-
-    return summary
+    return results
 
 
-def validate_page_layout(
-    page_ranges: List[Tuple[float, float]],
-    total_depth: float,
-    min_page_depth: float = 2.0,
-) -> Tuple[bool, List[str]]:
+def create_overflow_page(
+    overflow_boxes,
+    page_num,
+    borehole_id,
+    ground_level,
+    hole_type,
+    coords_str,
+    figsize,
+    dpi,
+    color_alpha,
+    hatch_alpha,
+):
     """
-    Validate multi-page layout for consistency and reasonableness.
+    Create a dedicated overflow page for text boxes that don't fit on regular pages.
+
+    Exact copy from monolithic borehole_log_professional.py implementation.
 
     Args:
-        page_ranges: List of page depth ranges
-        total_depth: Total expected depth
-        min_page_depth: Minimum acceptable page depth
+        overflow_boxes: List of overflow text box dictionaries
+        page_num: Base page number for overflow page
+        borehole_id: Borehole identifier
+        ground_level: Ground level for the borehole
+        hole_type: Type of hole
+        coords_str: Coordinates string
+        figsize: Figure size tuple
+        dpi: Resolution
+        color_alpha: Color transparency
+        hatch_alpha: Hatch transparency
 
     Returns:
-        tuple: (is_valid, list_of_warnings)
+        str: Base64-encoded PNG image
     """
-    warnings = []
 
-    try:
-        if not page_ranges:
-            warnings.append("No page ranges defined")
-            return False, warnings
+    a4_width_in = figsize[0]
+    a4_height_in = figsize[1]
+    left_margin_in = 0.5
+    right_margin_in = 0.5
+    top_margin_in = 0.3
+    header_height_in = 2.0
+    bottom_margin_in = 0.3
+    log_area_in = a4_height_in - (top_margin_in + header_height_in + bottom_margin_in)
 
-        # Check continuity
-        for i in range(len(page_ranges) - 1):
-            current_end = page_ranges[i][1]
-            next_start = page_ranges[i + 1][0]
+    # Column setup
+    total_col_width = sum(log_col_widths_in)
+    a4_usable_width = a4_width_in - left_margin_in - right_margin_in
+    scale = a4_usable_width / total_col_width
+    log_col_widths = [w * scale for w in log_col_widths_in]
+    log_col_x = [0]
+    for w in log_col_widths:
+        log_col_x.append(log_col_x[-1] + w)
 
-            if abs(current_end - next_start) > 0.01:  # Allow small rounding errors
-                warnings.append(f"Gap or overlap between pages {i+1} and {i+2}")
+    fig = plt.figure(figsize=(a4_width_in, a4_height_in))
 
-        # Check total depth coverage
-        if page_ranges:
-            first_start = page_ranges[0][0]
-            last_end = page_ranges[-1][1]
+    # Header axes - special header for overflow page
+    header_ax = fig.add_axes(
+        [
+            left_margin_in / a4_width_in,
+            (a4_height_in - top_margin_in - header_height_in) / a4_height_in,
+            a4_usable_width / a4_width_in,
+            header_height_in / a4_height_in,
+        ]
+    )
 
-            if first_start > 0.01:
-                warnings.append(
-                    f"Pages don't start from surface (start: {first_start})"
-                )
+    # Draw overflow page header
+    draw_header(
+        header_ax,
+        f"{page_num} Overflow",  # Special overflow page numbering
+        f"{page_num} Overflow",  # Total pages will be updated later
+        borehole_id,
+        ground_level,
+        hole_type=hole_type,
+        coords_str=coords_str,
+    )
+    header_ax.set_xlim(0, 1)
+    header_ax.set_ylim(0, 1)
+    header_ax.axis("off")
 
-            if abs(last_end - total_depth) > 0.01:
-                warnings.append(
-                    f"Pages don't cover full depth (end: {last_end}, total: {total_depth})"
-                )
+    # Log area axes
+    log_ax = fig.add_axes(
+        [
+            left_margin_in / a4_width_in,
+            bottom_margin_in / a4_height_in,
+            a4_usable_width / a4_width_in,
+            log_area_in / a4_height_in,
+        ]
+    )
+    log_ax.set_xlim(0, a4_usable_width)
+    log_ax.set_ylim(0, log_area_in)
+    log_ax.axis("off")
 
-        # Check page depth reasonableness
-        for i, (start, end) in enumerate(page_ranges):
-            page_depth = end - start
-            if page_depth < min_page_depth:
-                warnings.append(
-                    f"Page {i+1} depth ({page_depth:.1f}m) below minimum ({min_page_depth}m)"
-                )
+    # Draw log area bounding box
+    log_box = [0, 0, a4_usable_width, log_area_in]
+    rect = Rectangle(
+        (log_box[0], log_box[1]),
+        log_box[2],
+        log_box[3],
+        fill=False,
+        edgecolor="black",
+        linewidth=1.5,
+    )
+    log_ax.add_patch(rect)
 
-            if page_depth <= 0:
-                warnings.append(
-                    f"Page {i+1} has invalid depth range ({start} to {end})"
-                )
+    # Draw columns
+    for idx, x_val in enumerate(log_col_x[1:-1], start=1):
+        log_ax.plot([x_val, x_val], [0, log_area_in], color="black", linewidth=1)
 
-    except Exception as e:
-        warnings.append(f"Error during validation: {e}")
+    # Top line of log area
+    log_ax.plot(
+        [0, a4_usable_width], [log_area_in, log_area_in], color="black", linewidth=1
+    )
 
-    is_valid = len(warnings) == 0
-    return is_valid, warnings
+    # Add overflow page title
+    log_ax.text(
+        a4_usable_width / 2,
+        log_area_in * 0.95,
+        f"Page {page_num} - Text Descriptions Overflow",
+        ha="center",
+        va="top",
+        fontsize=12,
+        fontweight="bold",
+        fontname="Arial",
+        zorder=10,
+    )
+
+    # Position overflow text boxes vertically with proper spacing
+    desc_left = log_col_x[7]
+    desc_width = log_col_widths[7]
+
+    current_y = log_area_in * 0.85  # Start below title
+    spacing = 0.1  # Space between boxes
+
+    for box_info in overflow_boxes:
+        text_pos = box_info["text_pos"].copy()
+        interval = box_info["interval"]
+
+        # Calculate required height for this text box
+        required_height = text_pos["original_text_height"]
+
+        # Position text box
+        text_pos["y_top"] = current_y
+        text_pos["y_bottom"] = current_y - required_height
+        text_pos["x_left"] = desc_left
+        text_pos["x_width"] = desc_width
+        text_pos["text_height"] = required_height
+
+        # Check if box fits on page
+        if text_pos["y_bottom"] > 0:
+            # Draw layer reference information
+            ref_text = (
+                f"Depth {interval['orig_Depth_Top']:.2f}-{interval['orig_Depth_Base']:.2f}m "
+                f"(Code: {interval['Geology_Code']})"
+            )
+            log_ax.text(
+                desc_left + desc_width * 0.02,
+                current_y + 0.05,
+                ref_text,
+                va="bottom",
+                ha="left",
+                fontsize=7,
+                color="blue",
+                fontweight="bold",
+                fontname="Arial",
+                zorder=4,
+            )
+
+            # Draw text box (no connector lines on overflow page)
+            draw_text_box(log_ax, text_pos, interval)
+
+            # Move to next position
+            current_y = text_pos["y_bottom"] - spacing
+        else:
+            # Box doesn't fit - would need another overflow page
+            # For now, just note this in the log
+            logger.warning(
+                f"Overflow text box for interval {interval['orig_idx']} doesn't fit on overflow page"
+            )
+
+    # Convert to base64 image
+    buf = io.BytesIO()
+    fig.savefig(buf, format="png", dpi=dpi, bbox_inches=None)
+    plt.close(fig)
+    buf.seek(0)
+    img_bytes = buf.read()
+    img_b64 = base64.b64encode(img_bytes).decode("utf-8")
+
+    return img_b64

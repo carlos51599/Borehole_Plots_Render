@@ -228,7 +228,6 @@ class ErrorHandler:
             severity=severity,
             details=str(exception),
             exception=exception,
-            technical_details=technical_details,
         )
 
         return error

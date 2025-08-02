@@ -637,7 +637,7 @@ def plot_professional_borehole_sections(
                 facecolor=color,
                 edgecolor="black",
                 linewidth=0.5,
-                alpha=color_alpha,
+                alpha=color_alpha,  # <-- Borehole layer color transparency (alpha) is set here
                 label=legend_label,
             )
             # Draw hatch overlay (transparent face, only hatch) with hatch_alpha

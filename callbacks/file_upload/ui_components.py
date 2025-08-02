@@ -114,9 +114,9 @@ def create_file_breakdown_summary(
 
     # Import config for styling
     try:
-        import config
+        from config_modules import SUCCESS_MESSAGE_STYLE
 
-        style = config.SUCCESS_MESSAGE_STYLE
+        style = SUCCESS_MESSAGE_STYLE
     except (ImportError, AttributeError):
         style = {"color": "#28a745"}
 
@@ -147,7 +147,7 @@ def create_map_status_info(
         [
             html.H4(
                 "📍 Map Status:",
-                style={"color": "#28a745", "margin-top": "10px"},
+                style={"color": "#28a745", "marginTop": "10px"},
             ),
             html.P(f"• Loaded {marker_count} borehole markers"),
             html.P(f"• Map centered: ({map_center[0]:.6f}, {map_center[1]:.6f})"),
@@ -155,10 +155,10 @@ def create_map_status_info(
             html.P(f"• Auto-zoom level: {map_zoom}"),
         ],
         style={
-            "background-color": "#f8f9fa",
+            "backgroundColor": "#f8f9fa",
             "padding": "10px",
-            "border-radius": "5px",
-            "margin-top": "10px",
+            "borderRadius": "5px",
+            "marginTop": "10px",
         },
     )
 
@@ -183,9 +183,9 @@ def create_processing_error_message(error_details: str) -> html.Div:
             ),
         ],
         style={
-            "background-color": "#ffe6e6",
+            "backgroundColor": "#ffe6e6",
             "padding": "15px",
-            "border-radius": "5px",
+            "borderRadius": "5px",
             "border": "1px solid red",
             "margin": "10px 0",
         },
